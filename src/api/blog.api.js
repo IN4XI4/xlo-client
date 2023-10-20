@@ -5,4 +5,4 @@ const blogApi = axios.create({
 })
 
 
-export const getTopics = () => blogApi.get('topics/')
+

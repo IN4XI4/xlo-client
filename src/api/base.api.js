@@ -1,7 +1,8 @@
 import axios from "axios";
 
-const usersApi = axios.create({
+const baseApi = axios.create({
     baseURL: 'http://localhost:8000/'
 })
 
-export const login = (data) => usersApi.post('api-token-auth/', data)
+export const login = (data) => baseApi.post('api-token-auth/', data)
+export const getTopics = () => baseApi.get('base/topics/')
