@@ -3,8 +3,8 @@ import { Login } from '../components/Login'
 
 export function HomePage() {
   return (
-    <div className="grid grid-cols-2 pt-28 lg:px-40 md:px-20">
-      <div className='col-span-2 md:col-auto'>
+    <div className="grid grid-cols-2 pt-24 md:pt-32 px-4 md:px-16 lg:px-32 xl:px-44">
+      <div className='col-span-2 md:col-auto pb-4 px-2'>
         <div className="text-6xl font-bold pb-4">
           Welcome to Mixelo Forum
         </div>
@@ -32,7 +32,7 @@ export function HomePage() {
           </svg>
         </div>
       </div>
-      <div className='col-span-2 md:col-auto'>
+      <div className='col-span-2 md:col-auto pb-4 sm:px-24 md:px-0'>
         <Login />
       </div>
 

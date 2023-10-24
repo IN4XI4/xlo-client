@@ -5,9 +5,9 @@ import { FaFacebook, FaTwitter, FaLinkedin } from 'react-icons/fa';
 export function Footer() {
   const currentYear = new Date().getFullYear();
   return (
-    <footer className="bg-white shadow w-full py-4">
+    <footer className="bg-white shadow w-full py-4 px-4 md:px-16 lg:px-32 xl:px-44">
       <div className="grid grid-cols-6 justify-between items-center">
-        <div className="col-span-6 md:col-span-2 text-center text-gray-500">
+        <div className="col-span-6 md:col-span-2 text-center md:text-start text-gray-500">
           &copy; {currentYear} Inaxia Project | All Rights Reserved
         </div>
         <div className="col-span-3 md:col-span-2 flex text-center justify-evenly items-center">
@@ -23,16 +23,22 @@ export function Footer() {
             </svg>
           </div>
         </div>
-        <div className="col-span-3 md:col-span-2 flex justify-evenly items-center pt-2 px-1 md:px-10 lg:px-28">
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-            <FaFacebook className="text-stone-700" />
-          </a>
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-            <FaTwitter className="text-stone-700" />
-          </a>
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-            <FaLinkedin className="text-stone-700" />
-          </a>
+        <div className="col-span-3 md:col-span-2 flex justify-center md:justify-end pt-2 px-1">
+          <div className="pr-8">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+              <FaFacebook className="text-stone-700" />
+            </a>
+          </div>
+          <div className="pr-8">
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+              <FaTwitter className="text-stone-700" />
+            </a>
+          </div>
+          <div className="">
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+              <FaLinkedin className="text-stone-700" />
+            </a>
+          </div>
         </div>
       </div>
     </footer>

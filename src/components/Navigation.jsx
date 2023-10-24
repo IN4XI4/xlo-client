@@ -2,7 +2,7 @@ import React from 'react';
 
 export function Navigation() {
     return (
-        <div className="bg-white shadow p-4 fixed top-0 w-full flex justify-between items-center lg:px-40 md:px-20">
+        <div className="bg-white shadow p-4 fixed top-0 w-full flex justify-between items-center px-4 md:px-16 lg:px-32 xl:px-44">
             <div className="flex items-center space-x-4">
                 <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="18" cy="18" r="18" fill="#3DB1FF" />
