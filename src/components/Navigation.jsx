@@ -1,6 +1,8 @@
 import React from 'react';
 
 export function Navigation() {
+    const token = localStorage.getItem("token");
+    // TODO: Validate if token is correct and add user picture...
     return (
         <div className="bg-white shadow p-4 fixed top-0 w-full flex justify-between items-center px-4 md:px-16 lg:px-32 xl:px-44">
             <div className="flex items-center space-x-4">
@@ -14,7 +16,8 @@ export function Navigation() {
             </div>
             <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
-                    <button className="text-blue-500 hover:underline">Login</button>
+                    {token ? <button className="text-blue-300">Logout</button> : <button className="text-blue-300">Register</button>}
+
                 </div>
             </div>
         </div>
