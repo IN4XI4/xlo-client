@@ -16,10 +16,10 @@ export function HomePage() {
   const renderNoToken = () => (
     <>
       <div className="grid grid-cols-2 pt-24 md:pt-32 px-4 md:px-16 lg:px-32 xl:px-44">
-        <div className='col-span-2 md:col-auto pb-4 px-2'>
+        <div className='col-span-2 md:col-auto pb-6 px-2'>
           <Welcome />
         </div>
-        <div className='col-span-2 md:col-auto pb-4 sm:px-24 md:px-0'>
+        <div className='col-span-2 md:col-auto pb-8 sm:px-24 md:px-0'>
           <Login />
         </div>
       </div>
