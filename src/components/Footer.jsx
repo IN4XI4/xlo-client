@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaFacebook, FaTwitter, FaLinkedin } from 'react-icons/fa';
+import { FaTwitter, FaLinkedinIn, FaFacebookF } from 'react-icons/fa';
 
 
 export function Footer() {
@@ -26,7 +26,7 @@ export function Footer() {
         <div className="col-span-3 md:col-span-2 flex justify-center md:justify-end pt-2 px-1">
           <div className="pr-8">
             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-              <FaFacebook className="text-stone-700" />
+              <FaFacebookF className="text-stone-700" />
             </a>
           </div>
           <div className="pr-8">
@@ -36,7 +36,7 @@ export function Footer() {
           </div>
           <div className="">
             <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-              <FaLinkedin className="text-stone-700" />
+              <FaLinkedinIn className="text-stone-700" />
             </a>
           </div>
         </div>

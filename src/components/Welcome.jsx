@@ -1,13 +1,33 @@
 import React from 'react'
+import { useLocation } from 'react-router-dom';
 
 export function Welcome() {
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const view = queryParams.get('view');
+    const messages = {
+        default: {
+            header: "Welcome to Mixelo Forum",
+            description: "This text spot explains what ‘Mixelo Forum’ stands for..."
+        },
+        forgotpassword: {
+            header: "Forgot your password?",
+            description: "Don’t fret! Just type in your email and we will send you a code to reset your password!"
+        },
+        resetpassword: {
+            header: "Reset your password",
+            description: ""
+        }
+    };
+
+    const currentMessages = messages[view] || messages.default;
     return (
         <div>
             <div className="text-6xl font-bold pb-4">
-                Welcome to Mixelo Forum
+            {currentMessages.header}
             </div>
             <div className="text-xl pb-6">
-                “This text spot explain what ‘Mixelo Forum’ stand for...”
+            {currentMessages.description}
             </div>
             <div className="text-xl inline-flex items-center cursor-pointer pb-4">
                 <span className="text-[#3DB1FF] pr-3">
