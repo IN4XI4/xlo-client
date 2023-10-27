@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Button, Label, TextInput } from 'flowbite-react';
+import { Button, Checkbox, Label, TextInput } from 'flowbite-react';
 import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../../api/users.api';
+import { login } from '../../api/base.api';
+
 
 export function Register() {
   const {
@@ -21,6 +23,7 @@ export function Register() {
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
   const onSubmit = async (data) => {
+    data.username = data.email
     try {
       const response = await registerUser(data);
       try {
@@ -133,12 +136,12 @@ export function Register() {
           <p className="text-red-500 text-center">{serverError}</p>
         )}
         <div className="flex items-center mb-4">
-          <div>
-            <input id="remember" type="checkbox" className="rounded" />
-            <label htmlFor="remember" className="ml-2 text-sm">
-              I accept the 
+          <div className="flex items-center gap-2">
+            <Checkbox id="accept" className='rounded' required />
+            <Label htmlFor="accept">
+              I accept the
               <span className="text-[#3DB1FF] font-semibold"> Terms of service and privacy</span>
-            </label>
+            </Label>
           </div>
         </div>
         <div >

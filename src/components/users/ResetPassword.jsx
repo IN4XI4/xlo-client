@@ -133,8 +133,8 @@ export function ResetPassword() {
         )}
         <div className="flex items-center mb-4">
           <div>
-            <input id="remember" type="checkbox" className="rounded" />
-            <label htmlFor="remember" className="ml-2 text-sm">
+            <input id="accept_terms" type="checkbox" className="rounded" />
+            <label htmlFor="accept_terms" className="ml-2 text-sm">
               I accept the 
               <span className="text-[#3DB1FF] font-semibold"> Terms of service and privacy</span>
             </label>
