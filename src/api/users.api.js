@@ -5,3 +5,4 @@ const usersApi = axios.create({
 })
 
 export const registerUser = (data) => usersApi.post('users/', data)
+export const lostPassword = (data) => usersApi.post('users/send_reset_code/', data)
