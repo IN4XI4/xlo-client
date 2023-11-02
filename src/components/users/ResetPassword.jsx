@@ -1,130 +1,106 @@
 import React, { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { Button, Label, TextInput } from 'flowbite-react';
 import { useNavigate } from 'react-router-dom';
-import { registerUser } from '../../api/users.api';
+import { resetPassword } from '../../api/users.api';
+import { login } from '../../api/base.api';
+
 
 export function ResetPassword() {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    getValues
-  } = useForm({
-    defaultValues: {
-      email: '',
-      password: '',
-      password2: ''
-    }
-  });
-  const [serverError, setServerError] = useState('');
-  const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm();
+  const [serverError, setServerError] = useState('');
   const onSubmit = async (data) => {
     try {
-      const response = await registerUser(data);
-      try {
-        const loginResponse = await login({
-          username: data.email,
-          password: data.password
-        });
-        localStorage.setItem('token', loginResponse.data.token);
-        navigate('/');
-        window.location.reload();
+      const response = await resetPassword(data);
 
-      } catch (loginError) {
-        console.error('Login error:', loginError);
-        setServerError('Registration successful, but login failed. Please try logging in.');
+      if (response.status === 200 && response.data) {
+        const loginData = {
+          username: response.data.email,
+          password: data.password,
+        };
+        console.log(loginData);
+        const loginResponse = await login(loginData);
+        if (loginResponse.data && loginResponse.data.token) {
+          localStorage.setItem('token', loginResponse.data.token);
+          navigate('/');
+          window.location.reload();
+        } else {
+          setServerError('Password was reset successfully, but there was an issue with logging in.');
+        }
+      } else {
+        setServerError('There was an issue with resetting your password. Please try again.');
       }
     } catch (error) {
-      console.error('Registration error:', error);
-      let errorMessage = 'An error occurred during registration.';
       if (error.response && error.response.data) {
-        errorMessage = extractErrorMessage(error.response.data);
+        const errorData = error.response.data;
+        if (typeof errorData === 'string') {
+          setServerError(errorData);
+        } else if (errorData.non_field_errors) {
+          setServerError(errorData.non_field_errors.join(' '));
+        } else if (errorData.password) {
+          setServerError(errorData.password.join(' '));
+        } else if (errorData.detail) {
+          setServerError(errorData.detail);
+        } else {
+          setServerError('An error occurred while trying to reset the password. Please try again.');
+        }
+      } else {
+        setServerError('An error occurred while trying to reset the password. Please try again.');
       }
-      setServerError(errorMessage);
-    } finally {
-      setSubmitting(false);
     }
   };
-  const extractErrorMessage = (errorData) => {
-    if (errorData.non_field_errors) {
-      return errorData.non_field_errors.join(' ');
-    }
-    const firstErrorKey = Object.keys(errorData)[0];
-    return errorData[firstErrorKey].join(' ');
-  };
+
   return (
     <form className="grid grid-cols-4" onSubmit={handleSubmit(onSubmit)}>
       <div className="hidden lg:block"></div>
       <div className="bg-white p-8 rounded-md shadow-md col-span-full xl:col-span-3">
         <div className="mb-4">
           <div className='pb-2'>
-            <Label htmlFor="email" className="text-gray-900" value="Your email" />
+            <Label htmlFor="email" className="text-gray-900" value="Your code" />
           </div>
-          <Controller
-            name="email"
-            control={control}
-            rules={{
-              required: "Email is required",
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                message: "Invalid email address",
-              },
-            }}
-            render={({ field }) =>
-              <TextInput
-                {...field}
-                placeholder="Email"
-                type="email"
-                color={errors.email ? 'failure' : 'gray'}
-                helperText={errors.email?.message}
-              />
-            }
+          <TextInput
+            label="Your Code"
+            placeholder="Enter your reset code"
+            name="reset_code"
+            {...register('reset_code', {
+              required: "Reset code is required",
+            })}
+            color={errors.reset_code ? 'failure' : 'gray'}
+            helpertext={errors.reset_code ? errors.reset_code.message : undefined}
           />
         </div>
 
         <div className="mb-4">
           <label htmlFor="password" className="block text-sm font-medium text-gray-900 mb-2">Password</label>
-          <Controller
+          <TextInput
+            label="Password"
+            placeholder="Enter password"
             name="password"
-            control={control}
-            rules={{ required: "Password is required" }}
-            render={({ field }) =>
-              <TextInput
-                {...field}
-                placeholder="Password"
-                type="password"
-                color={errors.password ? 'failure' : 'gray'}
-                helperText={errors.password?.message}
-              />
-            }
+            type="password"
+            {...register('password', {
+              required: "Password is required",
+            })}
+            color={errors.password ? 'failure' : 'gray'}
+            helpertext={errors.password ? errors.password.message : undefined}
           />
         </div>
         <div className="mb-4">
           <label htmlFor="password2" className="block text-sm font-medium text-gray-900 mb-2">Confirm password</label>
-          <Controller
+          <TextInput
+            label="Confirm Password"
+            placeholder="Confirm password"
             name="password2"
-            control={control}
-            rules={{
-              required: "Confirm Password is required",
-              validate: (value) => {
-                return (
-                  value === '' ||
-                  value === getValues().password ||
-                  "Passwords must match"
-                );
-              },
-            }}
-            render={({ field }) =>
-              <TextInput
-                {...field}
-                placeholder="Confirm Password"
-                type="password"
-                color={errors.password2 ? 'failure' : 'gray'}
-                helperText={errors.password2?.message}
-              />
-            }
+            type="password"
+            {...register('password2', {
+              required: "Password confirmation is required",
+            })}
+            color={errors.password2 ? 'failure' : 'gray'}
+            helpertext={errors.password2 ? errors.password2.message : undefined}
           />
         </div>
 
@@ -133,9 +109,9 @@ export function ResetPassword() {
         )}
         <div className="flex items-center mb-4">
           <div>
-            <input id="accept_terms" type="checkbox" className="rounded" />
+            <input id="accept_terms" type="checkbox" className="rounded" required />
             <label htmlFor="accept_terms" className="ml-2 text-sm">
-              I accept the 
+              I accept the
               <span className="text-[#3DB1FF] font-semibold"> Terms of service and privacy</span>
             </label>
           </div>
