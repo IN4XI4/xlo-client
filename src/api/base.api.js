@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const baseApi = axios.create({
-    baseURL: 'http://localhost:8000/'
+    baseURL: import.meta.env.VITE_API_BASE_URL
 })
 
 export const login = (data) => baseApi.post('api-token-auth/', data)
