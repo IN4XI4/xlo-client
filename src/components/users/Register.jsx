@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Button, Checkbox, Label, TextInput } from 'flowbite-react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { registerUser } from '../../api/users.api';
 import { login } from '../../api/base.api';
 
@@ -146,6 +146,10 @@ export function Register() {
         </div>
         <div >
           <Button type="submit" className='w-full bg-[#3DB1FF]'>Create account</Button>
+        </div>
+        <div className="mt-4">
+          <span className="text-sm text-gray-900 font-bold">Already have an account? </span>
+          <Link to="" className="text-sm text-blue-500 hover:underline">Login</Link>
         </div>
       </div>
     </form>
