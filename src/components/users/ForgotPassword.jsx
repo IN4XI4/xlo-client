@@ -23,7 +23,11 @@ export function ForgotPassword() {
                 setMessage('');
             }
         } catch (err) {
-            setError('There was an error sending the reset code.');
+            if (err.response?.status === 404 && err.response?.data?.error === "User not found.") {
+                setError('This email address is not recorded in our database! Please provide another email address.');
+            } else {
+                setError('There was an error sending the reset code.');
+            }
             setMessage('');
         }
     };
@@ -51,7 +55,7 @@ export function ForgotPassword() {
                         helpertext={errors.email ? errors.email.message : undefined} />
                 </div>
                 {message && <p className="text-green-500 text-center">{message}</p>}
-                {error && <p className="text-red-500 text-center">{error}</p>}
+                {error && <p className="text-red-500 text-center pb-4">{error}</p>}
                 <div >
                     <Button type="submit" className='w-full bg-[#3DB1FF]'>Recover password</Button>
                 </div>

@@ -1,17 +1,18 @@
 import React from 'react';
 import { FaBell, FaUser } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 
 export function Navigation() {
     const navigate = useNavigate();
+    const location = useLocation();
     const token = localStorage.getItem("token");
     const handleLogout = () => {
         localStorage.removeItem('token');
         navigate('/');
         window.location.reload();
     };
-    // TODO: Validate if token is correct and add user picture...
+    const isRegisterPage = location.search.includes("view=register");
     return (
         <div className="bg-white shadow p-4 fixed top-0 w-full flex justify-between items-center px-4 md:px-16 lg:px-32 xl:px-44">
             <div className="flex items-center space-x-4">
@@ -35,6 +36,8 @@ export function Navigation() {
                             </div>
                         </div>
                     </>
+                ) : isRegisterPage ? (
+                    <Link to="/" className="text-blue-300">Login</Link>
                 ) : (
                     <Link to="/?view=register" className="text-blue-300">Register</Link>
                 )}
