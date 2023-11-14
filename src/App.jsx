@@ -6,16 +6,17 @@ import { Footer } from './components/Footer'
 
 
 function App() {
+  const token = localStorage.getItem("token");
   return (
     <BrowserRouter>
       <div className="flex flex-col min-h-screen bg-gray-50">
-        <Navigation />
+      {token && <Navigation />}
         <div className="flex-grow">
           <Routes>
             <Route path="/" element={<HomePage />} />
           </Routes>
         </div>
-        <Footer />
+        {token && <Footer />}
       </div>
     </BrowserRouter>
   )

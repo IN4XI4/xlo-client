@@ -1,17 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaBell, FaUser } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
+import { getUser } from '../api/users.api';
 
 
 export function Navigation() {
     const navigate = useNavigate();
+    const [user, setUser] = useState({ data: {} });
+    const [error, setError] = useState(null);
+    
+    useEffect(() => {
+        loadUser();
+    }, []);
     const token = localStorage.getItem("token");
+    async function loadUser() {
+        console.log("token", token);
+        if (!token) {
+            setError(new Error("No authentication token available."));
+            return;
+        }
+        try {
+            const res = await getUser();
+            setUser(res.data);
+        } catch (error) {
+            setError(error);
+            localStorage.removeItem("token");
+        }
+    }
+
     const handleLogout = () => {
         localStorage.removeItem('token');
         navigate('/');
         window.location.reload();
     };
-    // TODO: Validate if token is correct and add user picture...
     return (
         <div className="bg-white shadow p-4 fixed top-0 w-full flex justify-between items-center px-4 md:px-16 lg:px-32 xl:px-44">
             <div className="flex items-center space-x-4">
@@ -25,19 +46,17 @@ export function Navigation() {
                 <span className="text-gray-500 hidden sm:block">Title</span>
             </div>
             <div className="flex items-center space-x-4">
-                {token ? (
-                    <>
-                        <FaBell size={20} color="currentColor" />
-                        <div className="flex items-center space-x-2">
-                            <FaUser size={20} color="currentColor" />
-                            <div className="border-l-2 border-gray-300 pl-3">
-                                <button onClick={handleLogout} className="text-blue-300">Logout</button>
-                            </div>
-                        </div>
-                    </>
-                ) : (
-                    <Link to="/?view=register" className="text-blue-300">Register</Link>
-                )}
+                <FaBell size={20} color="currentColor" />
+                <div className="flex items-center space-x-2">
+                    {user && user.picture ? (
+                        <img src={user.picture} alt="Profile" style={{ width: '20px', height: '20px' }} />
+                    ) : (
+                        <FaUser size={20} color="currentColor" />
+                    )}
+                    <div className="border-l-2 border-gray-300 pl-3">
+                        <button onClick={handleLogout} className="text-blue-300">Logout</button>
+                    </div>
+                </div>
             </div>
         </div>
     );
