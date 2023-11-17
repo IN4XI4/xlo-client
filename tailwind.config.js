@@ -6,7 +6,14 @@ export default {
     'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}'
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+      },
+      colors: {
+        'yellow-opacity': 'rgba(255, 199, 0, 0.5)', // Cambia '0.5' para ajustar la opacidad
+      },
+    },
   },
   plugins: [require('flowbite/plugin')],
 }

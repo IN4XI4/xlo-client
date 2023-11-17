@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FaBell, FaUser } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { getUser } from '../api/users.api';
+import { Avatar } from 'flowbite-react';
 
 
 export function Navigation() {
@@ -34,7 +35,7 @@ export function Navigation() {
         window.location.reload();
     };
     return (
-        <div className="bg-white shadow p-4 fixed top-0 w-full flex justify-between items-center px-4 md:px-16 lg:px-32 xl:px-44">
+        <div className="bg-white z-10 shadow p-4 fixed top-0 w-full flex justify-between items-center px-4 md:px-16 lg:px-32 xl:px-44">
             <div className="flex items-center space-x-4">
                 <Link to="/">
                     <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -47,13 +48,13 @@ export function Navigation() {
             </div>
             <div className="flex items-center space-x-4">
                 <FaBell size={20} color="currentColor" />
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-4">
                     {user && user.picture ? (
-                        <img src={user.picture} alt="Profile" style={{ width: '20px', height: '20px' }} />
+                        <Avatar img={user.picture} alt="Profile" rounded/>
                     ) : (
                         <FaUser size={20} color="currentColor" />
                     )}
-                    <div className="border-l-2 border-gray-300 pl-3">
+                    <div className="border-l-2 border-gray-300 pl-4">
                         <button onClick={handleLogout} className="text-blue-300">Logout</button>
                     </div>
                 </div>

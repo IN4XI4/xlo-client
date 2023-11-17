@@ -5,6 +5,8 @@ import { Register } from '../components/users/Register';
 import { ResetPassword } from '../components/users/ResetPassword';
 import { Welcome } from '../components/Welcome';
 import { useLocation } from 'react-router-dom';
+import { TopicTags } from '../components/topics/TopicsTags';
+
 
 export function HomePage() {
   const location = useLocation();
@@ -18,11 +20,10 @@ export function HomePage() {
     setCurrentView(getViewFromQuery());
   }, [location.search]);
 
-  // TODO: Validate if token is correct bringing all topics...
   const renderToken = () => (
     <>
-      <div className="pt-24 md:pt-32 px-4 md:px-16 lg:px-32 xl:px-44">
-        <div className='text-4xl'>All Topics</div>
+      <div className="pt-20 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
+        <TopicTags />
       </div>
     </>
   );
