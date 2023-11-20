@@ -8,3 +8,7 @@
   .slick-slide > div {
     padding: 0 5px;
   }
+  .custom-focus-input:focus, 
+  div .custom-focus-input:focus {
+    border-color: red !important;
+  }
