@@ -3,8 +3,8 @@ import { getTopicTags } from '../../api/base.api';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { FaHeart, FaRegHeart } from 'react-icons/fa';
-
+import { FaRegHeart } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 export function TopicTags() {
   const [topicTags, setTopicTags] = useState([]);
@@ -110,7 +110,7 @@ export function TopicTags() {
             <div className='col-span-4 md:col-span-10'>
               <Slider ref={el => setSliderRef(topictag.id, el)} {...settings} className='z-0 px-4'>
                 {topictag.topics.map(topic => (
-                  <div key={topic.id} className="px-6 py-4 sm:p-4 rounded-lg bg-white shadow-md h-[16.5rem] z-0 my-2 border-[6px] border-transparent hover:border-yellow-opacity">
+                  <Link to={`topic/${topic.id}`} key={topic.id} className="px-6 py-4 sm:p-4 rounded-lg bg-white shadow-md h-[16.5rem] z-0 my-2 border-[6px] border-transparent hover:border-yellow-opacity">
                     <div className='flex justify-center'>
                       {topic.image && <img src={topic.image} alt={topic.title} className='w-full h-20 rounded-lg' />}
                     </div>
@@ -118,7 +118,7 @@ export function TopicTags() {
                     <div className='flex justify-center py-2'>
                       <FaRegHeart className='text-gray-500 text-xl' />
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </Slider>
             </div>
