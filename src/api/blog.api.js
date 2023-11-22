@@ -9,4 +9,10 @@ const getAuthHeaders = () => {
     return token ? { Authorization: `Token ${token}` } : {};
 };
 
-export const getStoriesByTopic = (topic_id) => blogApi.get(`stories/?topic=${topic_id}`, { headers: getAuthHeaders() })
+export const getStoriesByTopic = (topic_id, ordering = null) => {
+    let url = `stories/?topic=${topic_id}`;
+    if (ordering) {
+        url += `&ordering=${ordering}`;
+    }
+    return blogApi.get(url, { headers: getAuthHeaders() });
+};

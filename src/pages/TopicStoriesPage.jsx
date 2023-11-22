@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { getTopic } from '../api/base.api';
 import { FaArrowLeft, FaPlus, FaRegBell, FaSearch } from 'react-icons/fa';
-import { TextInput } from 'flowbite-react';
+import { TextInput, Tooltip } from 'flowbite-react';
 import { StoriesList } from '../components/topics/StoriesList';
 
 
@@ -30,17 +30,21 @@ export function TopicStoriesPage() {
       <div className='text-xl py-3'>"Text block"...</div>
       <div className='flex items-stretch py-4 border-b-4 border-[#D9D9D9]'>
         <div className='flex-none pe-3 md:pe-6'>
-          <button className="p-3 md:p-4 bg-gray-200 rounded-lg border">
-            <FaArrowLeft className='text-[#6B7280]' />
-          </button>
+          <Link to="/">
+            <button className="p-3 md:p-4 bg-gray-200 rounded-lg border">
+              <FaArrowLeft className='text-[#6B7280]' />
+            </button>
+          </Link>
         </div>
         <div className='grow pe-3 md:pe-6 self-center'>
-          <TextInput id="search_story" type="text" icon={FaSearch} placeholder="Quick search for a story" color="white"/>
+          <TextInput id="search_story" type="text" icon={FaSearch} placeholder="Quick search for a story" color="white" />
         </div>
         <div className='flex-none pe-3 md:pe-6'>
+          <Tooltip content="Notification bell" style="light">
           <button className="p-3 md:p-4 bg-gray-200 rounded-lg border">
             <FaRegBell className='text-[#6B7280]' />
           </button>
+          </Tooltip>
         </div>
         <div className='flex items-stretch'>
           <button className="hidden md:flex items-center p-3 rounded-md bg-gray-200 text-[#6B7280]">
@@ -52,7 +56,7 @@ export function TopicStoriesPage() {
         </div>
       </div>
       <div className='py-4'>
-        <StoriesList topicId={id}/>
+        <StoriesList topicId={id} />
       </div>
     </div>
   )
