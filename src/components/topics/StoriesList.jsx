@@ -74,7 +74,7 @@ export function StoriesList({ topicId }) {
       </div>
       {stories.map((story, index) => (
         <div key={index} className='grid grid-cols-10 py-3'>
-          <div className='col-span-7 bg-gray-50 p-3 rounded-lg'>
+          <Link to={`/story/${story.id}`} className='col-span-7 bg-gray-50 p-3 rounded-lg'>
             <div className='font-bold text-black text-xl truncate'>{story.title}</div>
             <div className='flex justify-between'>
               <div className='text-sm truncate pe-2'>{story.subtitle}</div>
@@ -86,7 +86,7 @@ export function StoriesList({ topicId }) {
                 ))}
               </div>
             </div>
-          </div>
+          </Link>
           <div className='text-center text-[#3DB1FF] self-center'>{story.comments_count}</div>
           <div className='text-center text-[#3DB1FF] self-center'>{story.views_count}</div>
           <div className='text-center text-[#3DB1FF] self-center'>{story.likes_count}</div>

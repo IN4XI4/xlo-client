@@ -12,7 +12,7 @@ export function TopicStoriesPage() {
   const [error, setError] = useState(null);
   useEffect(() => {
     loadTopic();
-  }, []);
+  }, [id]);
 
   async function loadTopic() {
     try {
