@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getCardsByStory, getStory } from '../api/blog.api';
 import { BlocksList } from '../components/topics/BlocksList';
 import { FaAngleDoubleLeft, FaAngleDoubleRight, FaAngleLeft, FaAngleRight, FaArrowLeft, FaSync, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 import { Progress } from 'flowbite-react';
+import { InteractBox } from '../components/topics/InteractBox';
 
-FaSync
+
 export function StoryPage() {
   const { id } = useParams();
   const [story, setStory] = useState([]);
@@ -13,6 +14,7 @@ export function StoryPage() {
   const [error, setError] = useState(null);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const progressPercentage = cards.length > 0 ? (currentCardIndex + 1) / cards.length * 100 : 0;
+
 
   const goToNextCard = () => {
     if (currentCardIndex < cards.length - 1) {
@@ -61,10 +63,10 @@ export function StoryPage() {
           <div className='md:px-16 lg:px-24 mb-3'>
             <BlocksList card={cards[currentCardIndex]} />
           </div>
-          <div className='flex justify-center items-center p-2 mt-4 '>
+          <div className='flex justify-center items-center p-2 mt-4 md:mt-8 '>
             <div className='flex items-center'>
               <div className='p-2 md:p-3 text-gray-500 bg-white border rounded-l-lg hover:text-[#3DB1FF] hover:bg-[#D8EFFF] hover:cursor-pointer'>
-                <FaThumbsDown className='text-base md:text-xl' />
+                <FaThumbsDown className='text-lg md:text-xl' />
               </div>
               <div className='flex items-center p-2 md:p-3 text-gray-500 bg-white border hover:text-[#3DB1FF] hover:bg-[#D8EFFF] hover:cursor-pointer'
                 onClick={goToFirstCard}>
@@ -76,9 +78,9 @@ export function StoryPage() {
                 <span className='text-sm md:text-base hidden md:block' style={{ lineHeight: '1' }}>Previous</span>
               </div>
             </div>
-            <div className='mx-2 md:mx-6'>
+            <Link to={`/topic/${story.topic}`} className='mx-2 md:mx-6'>
               <div className='p-2 md:p-3 text-gray-500 bg-gray-200 border rounded-lg'><FaArrowLeft className='text-base md:text-xl' /></div>
-            </div>
+            </Link>
             <div className='flex items-center'>
               <div className='flex items-center justify-center p-2 md:p-3 text-gray-500 bg-white border rounded-l-lg hover:text-[#3DB1FF] hover:bg-[#D8EFFF] hover:cursor-pointer'
                 onClick={goToNextCard}>
@@ -90,7 +92,7 @@ export function StoryPage() {
                 <FaAngleDoubleRight className='text-lg md:text-xl' />
               </div>
               <div className='p-2 md:p-3 text-gray-500 bg-white border rounded-r-lg hover:text-[#3DB1FF] hover:bg-[#D8EFFF] hover:cursor-pointer'>
-                <FaThumbsUp className='text-base md:text-xl' />
+                <FaThumbsUp className='text-lg md:text-xl' />
               </div>
             </div>
           </div>
@@ -106,6 +108,10 @@ export function StoryPage() {
                 <Progress progress={progressPercentage.toFixed(0)} />
               </div>
             </div>
+          </div>
+          <InteractBox />
+          <div className='flex justify-center text-gray-500 mb-4 border-b-4 border-[#D9D9D9] pb-4'>
+            Story Rating
           </div>
         </>
       )}
