@@ -23,7 +23,6 @@ export function ResetPassword() {
           username: response.data.email,
           password: data.password,
         };
-        console.log(loginData);
         const loginResponse = await login(loginData);
         if (loginResponse.data && loginResponse.data.token) {
           localStorage.setItem('token', loginResponse.data.token);

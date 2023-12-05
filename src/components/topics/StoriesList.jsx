@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { getStoriesByTopic } from '../../api/blog.api';
-import { getTopics } from '../../api/base.api';
+import { getTopicsByCategory } from '../../api/base.api';
 import { FaAngleDown, FaRegSquare } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 
 
-export function StoriesList({ topicId }) {
+export function StoriesList({ topicId, categoryId }) {
   const [stories, setStories] = useState([]);
   const [topics, setTopics] = useState([]);
   const [error, setError] = useState(null);
@@ -30,7 +30,7 @@ export function StoriesList({ topicId }) {
 
   async function loadTopics() {
     try {
-      const res = await getTopics();
+      const res = await getTopicsByCategory(categoryId);
       setTopics(res.data.results);
     } catch (error) {
       setError(error);

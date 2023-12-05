@@ -15,7 +15,6 @@ export function Navigation() {
     }, []);
     const token = localStorage.getItem("token");
     async function loadUser() {
-        console.log("token", token);
         if (!token) {
             setError(new Error("No authentication token available."));
             return;

@@ -10,16 +10,20 @@ export function TopicStoriesPage() {
   const { id } = useParams();
   const [topic, setTopic] = useState([]);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     loadTopic();
   }, [id]);
 
   async function loadTopic() {
     try {
+      setIsLoading(true);
       const res = await getTopic(id);
       setTopic(res.data);
+      setIsLoading(false);
     } catch (error) {
       setError(error);
+      setIsLoading(false);
     }
   }
   return (
@@ -41,9 +45,9 @@ export function TopicStoriesPage() {
         </div>
         <div className='flex-none pe-3 md:pe-6'>
           <Tooltip content="Notification bell" style="light">
-          <button className="p-3 md:p-4 bg-gray-200 rounded-lg border">
-            <FaRegBell className='text-[#6B7280]' />
-          </button>
+            <button className="p-3 md:p-4 bg-gray-200 rounded-lg border">
+              <FaRegBell className='text-[#6B7280]' />
+            </button>
           </Tooltip>
         </div>
         <div className='flex items-stretch'>
@@ -56,7 +60,11 @@ export function TopicStoriesPage() {
         </div>
       </div>
       <div className='py-4'>
-        <StoriesList topicId={id} />
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : (
+          <StoriesList topicId={id} categoryId={topic.tag} />
+        )}
       </div>
     </div>
   )
