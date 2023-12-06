@@ -5,6 +5,7 @@ import { BlocksList } from '../components/topics/BlocksList';
 import { FaAngleDoubleLeft, FaAngleDoubleRight, FaAngleLeft, FaAngleRight, FaArrowLeft, FaSync, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 import { Progress } from 'flowbite-react';
 import { InteractBox } from '../components/topics/InteractBox';
+import { Comments } from '../components/topics/Comments';
 
 
 export function StoryPage() {
@@ -13,6 +14,7 @@ export function StoryPage() {
   const [cards, setCards] = useState([]);
   const [error, setError] = useState(null);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [isCardsLoaded, setIsCardsLoaded] = useState(false);
   const progressPercentage = cards.length > 0 ? (currentCardIndex + 1) / cards.length * 100 : 0;
 
 
@@ -25,15 +27,18 @@ export function StoryPage() {
   const goToPreviousCard = () => {
     if (currentCardIndex > 0) {
       setCurrentCardIndex(currentCardIndex - 1);
+      window.scrollTo(0, 0); 
     }
   };
 
   const goToFirstCard = () => {
     setCurrentCardIndex(0);
+    window.scrollTo(0, 0); 
   };
 
   const goToLastCard = () => {
     setCurrentCardIndex(cards.length - 1);
+    window.scrollTo(0, 0); 
   };
 
   useEffect(() => {
@@ -45,7 +50,7 @@ export function StoryPage() {
       setStory(res.data);
       const cardsResponse = await getCardsByStory(id);
       setCards(cardsResponse.data.results);
-      console.log("cards", cardsResponse.data.results);
+      setIsCardsLoaded(true); 
     } catch (error) {
       setError(error);
     }
@@ -114,6 +119,11 @@ export function StoryPage() {
             Story Rating
           </div>
         </>
+      )}
+      {isCardsLoaded && (
+        <div className='py-4'>
+          <Comments storyId={id}/>
+        </div>
       )}
     </div>
   )

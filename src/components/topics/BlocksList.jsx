@@ -21,9 +21,9 @@ const ImageContainer = ({ image, color }) => (
   ) : null
 );
 
-const BlockContainer = ({ children, color }) => (
+const BlockContainer = ({ children, color, additionalClass }) => (
   <div className='mb-3'>
-    <div className="p-4 bg-gray-50 shadow rounded-[2.5rem] border-[6px]" style={{ borderColor: color || "#3DB1FF" }}>
+    <div className={`p-4 bg-gray-50 shadow rounded-[2.5rem] border-[6px] ${additionalClass}`} style={{ borderColor: color || "#3DB1FF" }}>
       {children}
     </div>
     <ActionIcons />
@@ -43,10 +43,12 @@ function NormalBlock({ content, image, color }) {
 function AttackBlock({ content, color, image, monster_image, monster_name }) {
   return (
     <div className='flex'>
-      <BlockContainer color={color}>
-        <div className='font-bold text-end text-gray-700'>{monster_name}</div>
-        {content}
-      </BlockContainer>
+      <div className="flex-grow">
+        <BlockContainer color={color} additionalClass="rounded-tr-none">
+          <div className='font-bold text-end text-gray-700'>{monster_name}</div>
+          {content}
+        </BlockContainer>
+      </div>
       <div className='flex-none pt-1'>
         {monster_image ? (
           <img src={monster_image} alt="Monster" className="h-14 w-14 rounded-full mx-3 border-[3px]" style={{ borderColor: color }} />
@@ -65,31 +67,31 @@ function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor
           <img src={mentor_image} alt="Mentor" className="h-14 w-14 rounded-full mx-3 border-[3px]" style={{ borderColor: color }} />
         ) : <FaUser />}
       </div>
-      <BlockContainer color={color}>
-        <div className='font-bold text-gray-700 ps-1'>{mentor_name}</div>
-        <div className='font-bold text-gray-700 pb-1 ps-1'>{mentor_job}</div>
-        {content}
-      </BlockContainer>
+      <div className='flex-grow'>
+        <BlockContainer color={color} additionalClass="rounded-tl-none">
+          <div className='font-bold text-gray-700 ps-1'>{mentor_name}</div>
+          <div className='font-bold text-gray-700 pb-1 ps-1'>{mentor_job}</div>
+          {content}
+        </BlockContainer>
+      </div>
       <ImageContainer image={image} color={color} />
     </div>
   );
 }
 
 function getBlockComponent(block, card) {
-  const props = { content: block.content, image: block.image, color: card.soft_skill_color };
-  console.log("props", props);
+  const commonProps = { content: block.content, image: block.image };
   switch (block.block_type_name.toLowerCase()) {
     case 'attack':
-      return <AttackBlock {...props} monster_image={card.soft_skill_monster_picture} monster_name={card.soft_skill_monster_name} />;
+      return <AttackBlock {...commonProps} color={card.soft_skill_color} monster_image={card.soft_skill_monster_picture} monster_name={card.soft_skill_monster_name} />;
     case 'defense':
-      return <DefenseBlock {...props} mentor_image={card.mentor_picture} mentor_name={card.mentor_name} mentor_job={card.mentor_job} />;
+      return <DefenseBlock {...commonProps} color={card.mentor_color} mentor_image={card.mentor_picture} mentor_name={card.mentor_name} mentor_job={card.mentor_job} />;
     default:
-      return <NormalBlock {...props} />;
+      return <NormalBlock {...commonProps} color={card.soft_skill_color} />;
   }
 }
 
 export function BlocksList({ card }) {
-  console.log("card", card);
   const [blocks, setBlocks] = useState([]);
   const [error, setError] = useState(null);
   useEffect(() => {
@@ -102,7 +104,6 @@ export function BlocksList({ card }) {
     try {
       const res = await getBlocksByCard(card.id);
       setBlocks(res.data.results);
-      console.log(res.data.results);
     } catch (error) {
       setError(error);
     }

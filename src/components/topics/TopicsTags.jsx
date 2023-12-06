@@ -19,7 +19,6 @@ export function TopicTags() {
     try {
       const res = await getTopicTags();
       setTopicTags(res.data.results);
-      console.log(res.data.results);
     } catch (error) {
       setError(error);
     }
