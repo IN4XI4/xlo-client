@@ -21,6 +21,7 @@ export function StoryPage() {
   const goToNextCard = () => {
     if (currentCardIndex < cards.length - 1) {
       setCurrentCardIndex(currentCardIndex + 1);
+      window.scrollTo(0, 0); 
     }
   };
 
