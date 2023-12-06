@@ -13,13 +13,13 @@ const ActionIcons = () => (
 
 export function CommentCard({ comment }) {
     return (
-        <div className='flex my-3 p-4 rounded-lg'>
+        <div className='flex my-3 p-4'>
             <div className='flex-none me-3'>
                 {comment.user_picture ? (
                     <img src={comment.user_picture} alt="Mentor" className="h-12 w-12 rounded-full" />
                 ) : <div className=' p-4 rounded-full bg-blue-50 text-gray-500'><FaUser /></div>}
             </div>
-            <div className='flex-grow bg-[#F5FBFF] rounded-lg p-4'>
+            <div className='flex-grow bg-[#F5FBFF] rounded-lg p-4 rounded-tl-none'>
                 <div className=''>
                     <div className="">
                         <span className='font-bold'>{comment.user_name}</span> <span className='text-gray-500'>{comment.formatted_created_time}</span>

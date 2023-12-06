@@ -14,6 +14,7 @@ export function StoryPage() {
   const [cards, setCards] = useState([]);
   const [error, setError] = useState(null);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [isCardsLoaded, setIsCardsLoaded] = useState(false);
   const progressPercentage = cards.length > 0 ? (currentCardIndex + 1) / cards.length * 100 : 0;
 
 
@@ -49,6 +50,7 @@ export function StoryPage() {
       setStory(res.data);
       const cardsResponse = await getCardsByStory(id);
       setCards(cardsResponse.data.results);
+      setIsCardsLoaded(true); 
     } catch (error) {
       setError(error);
     }
@@ -118,9 +120,11 @@ export function StoryPage() {
           </div>
         </>
       )}
-      <div className='py-4'>
-        <Comments storyId={id}/>
-      </div>
+      {isCardsLoaded && (
+        <div className='py-4'>
+          <Comments storyId={id}/>
+        </div>
+      )}
     </div>
   )
 }

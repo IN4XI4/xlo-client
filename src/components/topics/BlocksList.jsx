@@ -21,9 +21,9 @@ const ImageContainer = ({ image, color }) => (
   ) : null
 );
 
-const BlockContainer = ({ children, color }) => (
+const BlockContainer = ({ children, color, additionalClass }) => (
   <div className='mb-3'>
-    <div className="p-4 bg-gray-50 shadow rounded-[2.5rem] border-[6px]" style={{ borderColor: color || "#3DB1FF" }}>
+    <div className={`p-4 bg-gray-50 shadow rounded-[2.5rem] border-[6px] ${additionalClass}`} style={{ borderColor: color || "#3DB1FF" }}>
       {children}
     </div>
     <ActionIcons />
@@ -44,7 +44,7 @@ function AttackBlock({ content, color, image, monster_image, monster_name }) {
   return (
     <div className='flex'>
       <div className="flex-grow">
-        <BlockContainer color={color}>
+        <BlockContainer color={color} additionalClass="rounded-tr-none">
           <div className='font-bold text-end text-gray-700'>{monster_name}</div>
           {content}
         </BlockContainer>
@@ -68,7 +68,7 @@ function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor
         ) : <FaUser />}
       </div>
       <div className='flex-grow'>
-        <BlockContainer color={color}>
+        <BlockContainer color={color} additionalClass="rounded-tl-none">
           <div className='font-bold text-gray-700 ps-1'>{mentor_name}</div>
           <div className='font-bold text-gray-700 pb-1 ps-1'>{mentor_job}</div>
           {content}
