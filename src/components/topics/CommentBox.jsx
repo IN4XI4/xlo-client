@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import Picker from '@emoji-mart/react'
 import { FaLaugh, FaPaperPlane, } from 'react-icons/fa';
+import { createComment } from '../../api/blog.api';
 
 
-export function CommentBox() {
+export function CommentBox({ storyId, onCommentSubmit }) {
   const [text, setText] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const handleEmojiSelect = (emoji) => {
     setText(text => text + emoji.native);
@@ -13,6 +15,27 @@ export function CommentBox() {
 
   const toggleEmojiPicker = () => {
     setShowEmojiPicker(show => !show);
+  };
+
+  const handleSubmit = async () => {
+    if (text.trim()) {
+      const commentData = {
+        story: storyId,
+        comment_text: text,
+        is_active: true
+      };
+
+      try {
+        await createComment(commentData);
+        setText('');
+        setErrors({});
+        onCommentSubmit();
+        window.scrollTo(0, 0);
+      } catch (error) {
+        console.error('Error al crear comentario', error);
+        setErrors(error.response.data);
+      }
+    }
   };
 
   return (
@@ -32,7 +55,10 @@ export function CommentBox() {
       </div>
       <div className='bg-gray-50 p-3 flex justify-between items-center rounded-b-lg border-b-2 border-l-2 border-r-2 border-gray-300'>
         <div>
-          <button className='bg-[#3DB1FF] text-white flex py-2 px-3 rounded-lg items-center'>
+          <button
+            onClick={handleSubmit}
+            className={`${text ? 'bg-[#3DB1FF]' : 'bg-gray-500 opacity-50 cursor-not-allowed'} flex py-2 px-3 rounded-lg items-center text-white`}
+            disabled={!text}>
             <FaPaperPlane /><span className='ms-3'>Send message</span>
           </button>
         </div>
@@ -43,6 +69,13 @@ export function CommentBox() {
         </div>
 
       </div>
+      {Object.keys(errors).length > 0 && (
+        <div className='text-red-500 text-sm mt-2'>
+          {Object.entries(errors).map(([key, value]) => (
+            <p key={key}>{value}</p>
+          ))}
+        </div>
+      )}
       <div className='flex justify-end py-1'>
         {showEmojiPicker && (
           <Picker
@@ -55,7 +88,6 @@ export function CommentBox() {
           />
         )}
       </div>
-
     </div>
   );
 }

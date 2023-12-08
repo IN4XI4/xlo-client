@@ -20,3 +20,4 @@ export const getStory = (storyId) => blogApi.get(`stories/${storyId}/`, { header
 export const getCardsByStory = (storyId) => blogApi.get(`cards/?story=${storyId}`, { headers: getAuthHeaders() })
 export const getCommentsByStory = (storyId, page) => blogApi.get(`comments/?story=${storyId}&page=${page}`, { headers: getAuthHeaders() })
 export const getBlocksByCard = (cardId) => blogApi.get(`blocks/?card=${cardId}`, { headers: getAuthHeaders() })
+export const createComment = (data) => blogApi.post(`comments/`, data, { headers: getAuthHeaders() })
