@@ -13,15 +13,38 @@ export function Comments({ storyId }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [isCommentor, setIsCommentor] = useState(false);
 
+  const reloadComments = () => {
+    setCurrentPage(1);
+    loadComments(1);
+  };
+
   useEffect(() => {
-    loadComments();
     checkIfUserIsCommentor();
+    loadInitialComments();
+  }, []);
+
+  const loadInitialComments = async () => {
+    setCurrentPage(1);
+    await loadComments(1);
+  };
+
+  useEffect(() => {
+    if (currentPage > 1) {
+      loadComments(currentPage);
+    }
   }, [currentPage]);
 
-  async function loadComments() {
-    const res = await getCommentsByStory(storyId, currentPage);
-    setComments([...comments].concat(res.data.results));
-    if (!res.data.next) {
+  async function loadComments(page) {
+    try {
+      const res = await getCommentsByStory(storyId, currentPage);
+      if (res.data.results.length > 0) {
+        setComments(prevComments => page === 1 ? res.data.results : [...prevComments, ...res.data.results]);
+        setHasMore(!!res.data.next);
+      } else {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error('Error al cargar comentarios', error);
       setHasMore(false);
     }
   }
@@ -62,7 +85,7 @@ export function Comments({ storyId }) {
         </InfiniteScroll>
       </div>
       <div>
-        {isCommentor && <CommentBox />}
+        {isCommentor && <CommentBox storyId={storyId} onCommentSubmit={reloadComments} />}
       </div>
     </div>
   )
