@@ -13,6 +13,7 @@ export function CommentsList({ storyId }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [isCommentor, setIsCommentor] = useState(false);
   const [replyToCommentId, setReplyToCommentId] = useState(null);
+  const [replyingToText, setReplyingToText] = useState('');
 
   const reloadComments = () => {
     setCurrentPage(1);
@@ -50,13 +51,14 @@ export function CommentsList({ storyId }) {
     }
   }
 
-  const handleReplyClick = (parentId) => {
+  const handleReplyClick = (parentId, parentText) => {
     setReplyToCommentId(parentId);
+    setReplyingToText(parentText);
     scrollToCommentBox();
   };
 
   const scrollToCommentBox = () => {
-    const navbarHeight = 130;
+    const navbarHeight = 120;
     const element = document.getElementById("commentArea");
     if (element) {
       const position = element.getBoundingClientRect().top + window.scrollY - navbarHeight;
@@ -83,7 +85,12 @@ export function CommentsList({ storyId }) {
   return (
     <div className=' bg-white rounded-lg p-4' id='commentBox'>
       <div>
-        {isCommentor && <CommentBox storyId={storyId} parentCommentId={replyToCommentId} onCommentSubmit={reloadComments} />}
+        {isCommentor && <CommentBox storyId={storyId}
+          parentCommentId={replyToCommentId}
+          setParentCommentId={setReplyToCommentId}
+          replyingToText={replyingToText}
+          setReplyingToText={setReplyingToText}
+          onCommentSubmit={reloadComments} />}
       </div>
       <div className="flex justify-between">
         <div className='font-bold'>Story comments</div>

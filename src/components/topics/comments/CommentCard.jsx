@@ -8,7 +8,7 @@ const ActionIcons = ({ onReplyClick }) => (
     <FaRegHeart className='md:text-xl' />
     <FaRegBookmark className='md:text-xl' />
     <FaReply className='md:text-xl cursor-pointer' onClick={onReplyClick} />
-    <div>Comment</div>
+    <div className='cursor-pointer' onClick={onReplyClick}>Comment</div>
   </div>
 );
 
@@ -17,7 +17,7 @@ export function CommentCard({ comment, isReply, onReply }) {
 
   const handleReplyClick = () => {
     const parentId = isReply ? comment.parent : comment.id;
-    onReply(parentId);
+    onReply(parentId, comment.comment_text);
   };
 
   const toggleReplies = () => {

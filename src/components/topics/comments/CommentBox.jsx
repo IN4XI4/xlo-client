@@ -1,13 +1,21 @@
 import React, { useState } from 'react'
 import Picker from '@emoji-mart/react'
-import { FaLaugh, FaPaperPlane, } from 'react-icons/fa';
+import { FaTimes, FaLaugh, FaPaperPlane, } from 'react-icons/fa';
 import { createComment } from '../../../api/blog.api';
 
 
-export function CommentBox({ storyId, parentCommentId, onCommentSubmit }) {
+function truncateText(text, maxLength) {
+  if (text.length > maxLength) {
+    return text.substring(0, maxLength) + '...';
+  }
+  return text;
+}
+
+export function CommentBox({ storyId, parentCommentId, setParentCommentId,replyingToText, setReplyingToText, onCommentSubmit }) {
   const [text, setText] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [errors, setErrors] = useState({});
+  const truncatedReplyingToText = replyingToText ? truncateText(replyingToText, 60) : '';
 
   const handleEmojiSelect = (emoji) => {
     setText(text => text + emoji.native);
@@ -15,6 +23,11 @@ export function CommentBox({ storyId, parentCommentId, onCommentSubmit }) {
 
   const toggleEmojiPicker = () => {
     setShowEmojiPicker(show => !show);
+  };
+
+  const handleCancelReply = () => {
+    setParentCommentId(null);
+    setReplyingToText('');
   };
 
   const handleSubmit = async () => {
@@ -30,6 +43,8 @@ export function CommentBox({ storyId, parentCommentId, onCommentSubmit }) {
         await createComment(commentData);
         setText('');
         setErrors({});
+        setParentCommentId(null);
+        setReplyingToText('');
         onCommentSubmit();
         if (showEmojiPicker === true) {
           toggleEmojiPicker()
@@ -44,11 +59,17 @@ export function CommentBox({ storyId, parentCommentId, onCommentSubmit }) {
 
   return (
     <div className='pt-4 pb-6'>
-      <div className="flex justify-between">
+      <div className="flex justify-between pb-3">
         <div className='font-bold'>Your message</div>
         <div className='flex justify-center items-center text-gray-500 text-sm'>A note for extra info</div>
       </div>
-      <div className='pt-3 flex items-end'>
+      {replyingToText && (
+        <div className="flex justify-between items-center p-2 text-sm text-white bg-[#3DB1FF] rounded-lg">
+          Replying to: {truncatedReplyingToText}
+          <FaTimes onClick={handleCancelReply} className="cursor-pointer"/>
+        </div>
+      )}
+      <div className='pt-1 flex items-end'>
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
