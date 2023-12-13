@@ -3,15 +3,29 @@ import { getBlocksByCard } from '../../api/blog.api';
 import { FaRegBookmark, FaRegCommentDots, FaRegHeart, FaReply, FaUser } from 'react-icons/fa';
 
 
-const ActionIcons = () => (
-  <div className='flex justify-end space-x-2 items-center text-gray-500 py-2'>
-    <FaRegHeart className='text-xl' />
-    <FaRegBookmark className='text-xl' />
-    <FaRegCommentDots className='text-xl' />
-    <FaReply className='text-xl' />
-    <div>Comment</div>
-  </div>
-);
+const ActionIcons = () => {
+  const navbarHeight = 130;
+
+  const scrollToCommentBox = () => {
+    const element = document.getElementById("commentArea");
+    if (element) {
+      const position = element.getBoundingClientRect().top + window.scrollY - navbarHeight;
+      window.scrollTo({
+        top: position,
+        behavior: 'smooth'
+      });
+      setTimeout(() => element.focus(), 500);
+    }
+  };
+  return (
+    <div className='flex justify-end space-x-2 items-center text-gray-500 py-2'>
+      <FaRegHeart className='text-xl' />
+      <FaRegBookmark className='text-xl' />
+      <FaReply className='text-xl cursor-pointer' onClick={scrollToCommentBox} />
+      <div className='cursor-pointer' onClick={scrollToCommentBox}>Comment</div>
+    </div>
+  );
+};
 
 const ImageContainer = ({ image, color }) => (
   image ? (
