@@ -5,8 +5,7 @@ import { BlocksList } from '../components/topics/BlocksList';
 import { FaAngleDoubleLeft, FaAngleDoubleRight, FaAngleLeft, FaAngleRight, FaArrowLeft, FaSync, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 import { Progress } from 'flowbite-react';
 import { InteractBox } from '../components/topics/InteractBox';
-import { Comments } from '../components/topics/Comments';
-
+import { CommentsList } from '../components/topics/comments/CommentsList';
 
 export function StoryPage() {
   const { id } = useParams();
@@ -123,7 +122,7 @@ export function StoryPage() {
       )}
       {isCardsLoaded && (
         <div className='py-4'>
-          <Comments storyId={id}/>
+          <CommentsList storyId={id}/>
         </div>
       )}
     </div>
