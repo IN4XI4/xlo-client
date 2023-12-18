@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { FaAngleDown } from 'react-icons/fa'
+import { FaAngleDown, FaAngleUp } from 'react-icons/fa'
 import InfiniteScroll from "react-infinite-scroll-component";
 import { getCommentsByStory } from '../../../api/blog.api';
 import { CommentCard } from './CommentCard';
@@ -7,17 +7,18 @@ import { CommentBox } from './CommentBox';
 import { getUser } from '../../../api/users.api';
 
 
-export function CommentsList({ storyId }) {
+export function CommentsList({ storyId, commentContentTypeId }) {
   const [comments, setComments] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [isCommentor, setIsCommentor] = useState(false);
   const [replyToCommentId, setReplyToCommentId] = useState(null);
   const [replyingToText, setReplyingToText] = useState('');
-
-  const reloadComments = () => {
+  const [newest, setNewest] = useState(false);
+  const [icon, setIcon] = useState(<FaAngleUp />);
+  const reloadComments = (newestValue) => {
     setCurrentPage(1);
-    loadComments(1);
+    loadComments(1, newestValue);
   };
 
   useEffect(() => {
@@ -36,9 +37,16 @@ export function CommentsList({ storyId }) {
     }
   }, [currentPage]);
 
-  async function loadComments(page) {
+  const toggleNewness = () => {
+    const newNewestValue = !newest;
+    setNewest(newNewestValue);
+    setIcon(newNewestValue ? <FaAngleDown /> : <FaAngleUp />);
+    reloadComments(newNewestValue);
+  }
+
+  async function loadComments(page, newestValue = newest) {
     try {
-      const res = await getCommentsByStory(storyId, page);
+      const res = await getCommentsByStory(storyId, page, newestValue);
       if (res.data.results.length > 0) {
         setComments(prevComments => page === 1 ? res.data.results : [...prevComments, ...res.data.results]);
         setHasMore(!!res.data.next);
@@ -94,7 +102,9 @@ export function CommentsList({ storyId }) {
       </div>
       <div className="flex justify-between">
         <div className='font-bold'>Story comments</div>
-        <div className='flex justify-center items-center text-gray-500'>Newness <span><FaAngleDown /></span></div>
+        <div className='flex justify-center items-center text-gray-500 cursor-pointer' onClick={toggleNewness}>
+          Newness <span>{icon}</span>
+        </div>
       </div>
       <div>
         <InfiniteScroll
@@ -110,7 +120,12 @@ export function CommentsList({ storyId }) {
           }
         >
           {comments.map(comment => (
-            <CommentCard key={comment.id} comment={comment} isReply={false} onReply={handleReplyClick} />
+            <CommentCard
+              key={comment.id}
+              comment={comment}
+              isReply={false}
+              onReply={handleReplyClick}
+              commentContentTypeId={commentContentTypeId} />
           ))}
         </InfiniteScroll>
       </div>

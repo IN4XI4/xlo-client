@@ -12,7 +12,7 @@ const ActionIcons = ({ onReplyClick }) => (
   </div>
 );
 
-export function CommentCard({ comment, isReply, onReply }) {
+export function CommentCard({ comment, isReply, onReply, commentContentTypeId }) {
   const [showReplies, setShowReplies] = useState(false);
 
   const handleReplyClick = () => {
