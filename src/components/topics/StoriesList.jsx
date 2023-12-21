@@ -16,6 +16,10 @@ export function StoriesList({ topicId, categoryId }) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    loadTopics();
+  }, []);
+
+  useEffect(() => {
     loadStories();
   }, [currentPage]);
 
