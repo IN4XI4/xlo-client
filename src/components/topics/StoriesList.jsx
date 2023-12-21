@@ -3,6 +3,7 @@ import { getStoriesByTopic } from '../../api/blog.api';
 import { getTopicsByCategory } from '../../api/base.api';
 import { FaAngleDown, FaRegSquare } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 
 export function StoriesList({ topicId, categoryId }) {
@@ -10,21 +11,32 @@ export function StoriesList({ topicId, categoryId }) {
   const [topics, setTopics] = useState([]);
   const [error, setError] = useState(null);
   const [selectedButton, setSelectedButton] = useState('Stories');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const navigate = useNavigate();
+
   useEffect(() => {
-    if (topicId) {
-      loadStories();
-    }
     loadTopics();
+  }, []);
+
+  useEffect(() => {
+    loadStories();
+  }, [currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+    loadStories();
   }, [topicId, selectedButton]);
 
   async function loadStories() {
     try {
       const ordering = selectedButton === 'Latest' ? '-created_time' : null;
-      const res = await getStoriesByTopic(topicId, ordering);
-      setStories(res.data.results);
+      const res = await getStoriesByTopic(topicId, currentPage, ordering);
+      setStories(prevStories => currentPage === 1 ? res.data.results : [...prevStories, ...res.data.results]);
+      setHasMore(!!res.data.next);
     } catch (error) {
       setError(error);
+      setHasMore(false);
     }
   }
 
@@ -72,26 +84,40 @@ export function StoriesList({ topicId, categoryId }) {
         <div className='flex justify-center items-center text-[0.55rem] sm:text-[0.85rem] md:text-base'>Views <span><FaAngleDown /></span></div>
         <div className='flex justify-center items-center text-[0.55rem] sm:text-[0.85rem] md:text-base'>Likes <span><FaAngleDown /></span></div>
       </div>
-      {stories.map((story, index) => (
-        <div key={index} className='grid grid-cols-10 py-3'>
-          <Link to={`/story/${story.id}`} className='col-span-7 bg-gray-50 p-3 rounded-lg'>
-            <div className='font-bold text-black text-xl truncate'>{story.title}</div>
-            <div className='flex justify-between'>
-              <div className='text-sm truncate pe-2'>{story.subtitle}</div>
-              <div className='flex'>
-                {story.card_colors.map((color, colorIndex) => (
-                  <div key={colorIndex} className="pe-1" style={{ color: color || "#3DB1FF" }}>
-                    <FaRegSquare />
+      <div>
+        <InfiniteScroll
+          dataLength={stories.length}
+          next={() => setCurrentPage(prevPage => prevPage + 1)}
+          hasMore={hasMore}
+          loader={<h4>Loading...</h4>}
+          endMessage={
+            <p>
+              <b>You have seen it all...</b>
+            </p>
+          }
+        >
+          {stories.map((story, index) => (
+            <div key={index} className='grid grid-cols-10 py-3'>
+              <Link to={`/story/${story.id}`} className='col-span-7 bg-gray-50 p-3 rounded-lg'>
+                <div className='font-bold text-black text-xl truncate'>{story.title}</div>
+                <div className='flex justify-between'>
+                  <div className='text-sm truncate pe-2'>{story.subtitle}</div>
+                  <div className='flex'>
+                    {story.card_colors.map((color, colorIndex) => (
+                      <div key={colorIndex} className="pe-1" style={{ color: color || "#3DB1FF" }}>
+                        <FaRegSquare />
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </div>
+              </Link>
+              <div className='text-center text-[#3DB1FF] self-center'>{story.comments_count}</div>
+              <div className='text-center text-[#3DB1FF] self-center'>{story.views_count}</div>
+              <div className='text-center text-[#3DB1FF] self-center'>{story.likes_count}</div>
             </div>
-          </Link>
-          <div className='text-center text-[#3DB1FF] self-center'>{story.comments_count}</div>
-          <div className='text-center text-[#3DB1FF] self-center'>{story.views_count}</div>
-          <div className='text-center text-[#3DB1FF] self-center'>{story.likes_count}</div>
-        </div>
-      ))}
+          ))}
+        </InfiniteScroll>
+      </div>
       {error && <p className='text-red-500'>Error loading stories: {error.message}</p>}
       <div className='flex flex-wrap text-gray-900 py-3 items-center'>
         <div className='mr-3 mb-3 font-bold'>

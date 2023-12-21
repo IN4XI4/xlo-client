@@ -28,7 +28,7 @@ export function TopicStoriesPage() {
   }
   return (
     <div className="pt-20 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
-      <div className='text-4xl font-extrabold'>
+      <div className='text-3xl md:text-4xl font-extrabold'>
         {topic.title}
       </div>
       <div className='text-xl py-3'>"Text block"...</div>

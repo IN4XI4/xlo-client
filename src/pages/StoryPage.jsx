@@ -6,6 +6,7 @@ import { FaAngleDoubleLeft, FaAngleDoubleRight, FaAngleLeft, FaAngleRight, FaArr
 import { Progress } from 'flowbite-react';
 import { InteractBox } from '../components/topics/InteractBox';
 import { CommentsList } from '../components/topics/comments/CommentsList';
+import { getContentTypes } from '../api/base.api';
 
 export function StoryPage() {
   const { id } = useParams();
@@ -15,30 +16,32 @@ export function StoryPage() {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isCardsLoaded, setIsCardsLoaded] = useState(false);
   const progressPercentage = cards.length > 0 ? (currentCardIndex + 1) / cards.length * 100 : 0;
+  const [blockContentTypeId, setBlockContentTypeId] = useState(null);
+  const [commentContentTypeId, setCommentContentTypeId] = useState(null);
 
 
   const goToNextCard = () => {
     if (currentCardIndex < cards.length - 1) {
       setCurrentCardIndex(currentCardIndex + 1);
-      window.scrollTo(0, 0); 
+      window.scrollTo(0, 0);
     }
   };
 
   const goToPreviousCard = () => {
     if (currentCardIndex > 0) {
       setCurrentCardIndex(currentCardIndex - 1);
-      window.scrollTo(0, 0); 
+      window.scrollTo(0, 0);
     }
   };
 
   const goToFirstCard = () => {
     setCurrentCardIndex(0);
-    window.scrollTo(0, 0); 
+    window.scrollTo(0, 0);
   };
 
   const goToLastCard = () => {
     setCurrentCardIndex(cards.length - 1);
-    window.scrollTo(0, 0); 
+    window.scrollTo(0, 0);
   };
 
   useEffect(() => {
@@ -50,9 +53,25 @@ export function StoryPage() {
       setStory(res.data);
       const cardsResponse = await getCardsByStory(id);
       setCards(cardsResponse.data.results);
-      setIsCardsLoaded(true); 
+      setIsCardsLoaded(true);
     } catch (error) {
       setError(error);
+    }
+  }
+  useEffect(() => {
+    loadContentTypes();
+  }, []);
+
+  async function loadContentTypes() {
+    try {
+      const res = await getContentTypes();
+      const contentTypes = res.data;
+      const blockType = contentTypes.find(ct => ct.model === 'block');
+      const commentType = contentTypes.find(ct => ct.model === 'comment');
+      if (blockType) setBlockContentTypeId(blockType.id);
+      if (commentType) setCommentContentTypeId(commentType.id);
+    } catch (error) {
+      console.error('Error al cargar los ContentTypes', error);
     }
   }
   return (
@@ -66,7 +85,7 @@ export function StoryPage() {
             {cards[currentCardIndex].title}
           </div>
           <div className='md:px-16 lg:px-24 mb-3'>
-            <BlocksList card={cards[currentCardIndex]} />
+            <BlocksList card={cards[currentCardIndex]} blockContentTypeId={blockContentTypeId} />
           </div>
           <div className='flex justify-center items-center p-2 mt-4 md:mt-8 '>
             <div className='flex items-center'>
@@ -122,7 +141,7 @@ export function StoryPage() {
       )}
       {isCardsLoaded && (
         <div className='py-4'>
-          <CommentsList storyId={id}/>
+          <CommentsList storyId={id} commentContentTypeId={commentContentTypeId} />
         </div>
       )}
     </div>

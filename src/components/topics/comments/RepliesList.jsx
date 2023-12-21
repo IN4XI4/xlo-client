@@ -4,7 +4,7 @@ import { CommentCard } from './CommentCard';
 import { getReplies } from '../../../api/blog.api';
 
 
-export function RepliesList({ commentId, onReply }) {
+export function RepliesList({ commentId, onReply, commentContentTypeId }) {
   const [replies, setReplies] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -42,7 +42,7 @@ export function RepliesList({ commentId, onReply }) {
           }
         >
           {replies.map(reply => (
-            <CommentCard key={reply.id} comment={reply} isReply={true} onReply={onReply}/>
+            <CommentCard key={reply.id} comment={reply} isReply={true} onReply={onReply} commentContentTypeId={commentContentTypeId} />
           ))}
         </InfiniteScroll>
       </div>

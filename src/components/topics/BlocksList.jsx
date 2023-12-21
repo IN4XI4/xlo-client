@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getBlocksByCard } from '../../api/blog.api';
-import { FaRegBookmark, FaRegCommentDots, FaRegHeart, FaReply, FaUser } from 'react-icons/fa';
+import { FaRegBookmark, FaRegHeart, FaReply, FaUser } from 'react-icons/fa';
 
 
 const ActionIcons = () => {
@@ -105,7 +105,7 @@ function getBlockComponent(block, card) {
   }
 }
 
-export function BlocksList({ card }) {
+export function BlocksList({ card, blockContentTypeId }) {
   const [blocks, setBlocks] = useState([]);
   const [error, setError] = useState(null);
   useEffect(() => {
@@ -113,7 +113,6 @@ export function BlocksList({ card }) {
       loadBlocks(card);
     }
   }, [card]);
-
   async function loadBlocks(card) {
     try {
       const res = await getBlocksByCard(card.id);
