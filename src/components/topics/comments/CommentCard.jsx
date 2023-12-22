@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { FaRegBookmark, FaRegHeart, FaHeart, FaReply, FaUser } from 'react-icons/fa';
 import { RepliesList } from './RepliesList';
 import { deleteLike, likeSomething } from '../../../api/blog.api';
@@ -40,8 +40,8 @@ export function CommentCard({ comment, isReply, onReply, commentContentTypeId })
           object_id: comment.id,
           is_active: true
         };
-        await likeSomething(data);
-        setUserHasLiked(true);
+        const response = await likeSomething(data);
+        setUserHasLiked(response.data.id);
         console.log("Comment liked!");
       }
     } catch (error) {
