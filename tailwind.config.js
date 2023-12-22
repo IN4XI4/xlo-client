@@ -13,6 +13,9 @@ export default {
       colors: {
         'yellow-opacity': 'rgba(255, 199, 0, 0.5)', // Cambia '0.5' para ajustar la opacidad
       },
+      lineClamp: {
+        8: '8',
+      },
     },
   },
   plugins: [require('flowbite/plugin')],

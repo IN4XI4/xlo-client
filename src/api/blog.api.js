@@ -29,3 +29,4 @@ export const getCommentsByStory = (storyId, page, newest = false) => {
 export const getReplies = (commentId, page) => blogApi.get(`comments/?parent=${commentId}&page=${page}`, { headers: getAuthHeaders() })
 export const createComment = (data) => blogApi.post(`comments/`, data, { headers: getAuthHeaders() })
 export const likeSomething = (data) => blogApi.post(`likes/`, data, { headers: getAuthHeaders() })
+export const deleteLike = (likeId) => blogApi.delete(`likes/${likeId}/`, { headers: getAuthHeaders() })

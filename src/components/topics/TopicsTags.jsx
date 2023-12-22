@@ -28,21 +28,21 @@ export function TopicTags() {
     infinite: false,
     arrows: false,
     speed: 500,
-    slidesToShow: 8,
-    slidesToScroll: 8,
+    slidesToShow: 7,
+    slidesToScroll: 7,
     responsive: [
       {
         breakpoint: 1780,
         settings: {
-          slidesToShow: 6,
-          slidesToScroll: 6,
+          slidesToShow: 5,
+          slidesToScroll: 5,
         }
       },
       {
         breakpoint: 1536,
         settings: {
-          slidesToShow: 5,
-          slidesToScroll: 5,
+          slidesToShow: 4,
+          slidesToScroll: 4,
         }
       },
       {
@@ -107,17 +107,19 @@ export function TopicTags() {
               </button>
             </div>
             <div className='col-span-4 md:col-span-10'>
-              <Slider ref={el => setSliderRef(topictag.id, el)} {...settings} className='z-0 px-4'>
+              <Slider ref={el => setSliderRef(topictag.id, el)} {...settings} className='z-0'>
                 {topictag.topics.map(topic => (
-                  <Link to={`topic/${topic.id}`} key={topic.id} className="px-6 py-4 sm:p-4 rounded-lg bg-white shadow-md h-[16.5rem] z-0 my-2 border-[6px] border-transparent hover:border-yellow-opacity">
-                    <div className='flex justify-center'>
-                      {topic.image && <img src={topic.image} alt={topic.title} className='w-full h-20 rounded-lg' />}
-                    </div>
-                    <div className="pt-3 text-center overflow-hidden h-32 text-gray-500">{topic.title}</div>
-                    <div className='flex justify-center py-2'>
-                      <FaRegHeart className='text-gray-500 text-xl' />
-                    </div>
-                  </Link>
+                  <div key={topic.id}>
+                    <Link to={`topic/${topic.id}`} className="flex flex-col justify-between p-4 rounded-lg bg-white shadow-md h-[17.5rem] z-0 my-2 border-[6px] border-transparent hover:border-yellow-opacity">
+                      {topic.image && <div className='flex justify-center'><img src={topic.image} alt={topic.title} className='w-full h-20 rounded-lg' /></div>}
+                      <div className={topic.image ? "line-clamp-5 text-center overflow-hidden text-gray-500 py-1" : "line-clamp-8 text-center overflow-hidden text-gray-500 py-1"}>
+                        {topic.title}
+                      </div>
+                      <div className='flex justify-center pt-2 pb-1' >
+                        <FaRegHeart className='text-gray-500 text-xl' />
+                      </div>
+                    </Link>
+                  </div>
                 ))}
               </Slider>
             </div>
