@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaRegBookmark, FaRegHeart, FaHeart, FaReply, FaUser } from 'react-icons/fa';
 import { RepliesList } from './RepliesList';
+import { deleteLike, likeSomething } from '../../../api/blog.api';
 
 
-const ActionIcons = ({ onReplyClick, userHasLiked }) => (
+const ActionIcons = ({ onReplyClick, userHasLiked, onLikeClick }) => (
   <div className='flex justify-end space-x-2 items-center text-gray-500'>
-    {userHasLiked ? <FaHeart className='md:text-xl cursor-pointer' /> 
-                 : <FaRegHeart className='md:text-xl cursor-pointer' />}
+    {userHasLiked ? <FaHeart className='md:text-xl cursor-pointer' onClick={onLikeClick} />
+      : <FaRegHeart className='md:text-xl cursor-pointer' onClick={onLikeClick} />}
     <FaRegBookmark className='md:text-xl' />
     <FaReply className='md:text-xl cursor-pointer' onClick={onReplyClick} />
     <div className='cursor-pointer' onClick={onReplyClick}>Comment</div>
@@ -15,6 +16,7 @@ const ActionIcons = ({ onReplyClick, userHasLiked }) => (
 
 export function CommentCard({ comment, isReply, onReply, commentContentTypeId }) {
   const [showReplies, setShowReplies] = useState(false);
+  const [userHasLiked, setUserHasLiked] = useState(comment.user_has_liked);
   const handleReplyClick = () => {
     const parentId = isReply ? comment.parent : comment.id;
     onReply(parentId, comment.comment_text);
@@ -24,6 +26,28 @@ export function CommentCard({ comment, isReply, onReply, commentContentTypeId })
     setShowReplies(!showReplies);
   };
   const cardBackgroundClass = isReply ? 'bg-white' : 'bg-[#F5FBFF]';
+
+  const handleLikeClick = async () => {
+    try {
+      if (typeof userHasLiked === 'number') {
+        await deleteLike(userHasLiked);
+        setUserHasLiked(false);
+        console.log("Like removed");
+      } else {
+        const data = {
+          liked: true,
+          content_type: commentContentTypeId,
+          object_id: comment.id,
+          is_active: true
+        };
+        await likeSomething(data);
+        setUserHasLiked(true);
+        console.log("Comment liked!");
+      }
+    } catch (error) {
+      console.error("Error processing like/unlike:", error);
+    }
+  };
 
   return (
     <div className='flex my-3 text-sm md:text-base'>
@@ -40,7 +64,7 @@ export function CommentCard({ comment, isReply, onReply, commentContentTypeId })
           <div className='pb-3 break-all'>
             {comment.comment_text}
           </div>
-          <ActionIcons onReplyClick={handleReplyClick} userHasLiked={comment.user_has_liked}/>
+          <ActionIcons onReplyClick={handleReplyClick} userHasLiked={userHasLiked} onLikeClick={handleLikeClick} />
           {comment.replies_count > 0 && (
             <div className="pt-2 flex justify-end">
               <button
@@ -51,7 +75,7 @@ export function CommentCard({ comment, isReply, onReply, commentContentTypeId })
               </button>
             </div>
           )}
-          {showReplies && <RepliesList commentId={comment.id} onReply={onReply} commentContentTypeId={commentContentTypeId}/>}
+          {showReplies && <RepliesList commentId={comment.id} onReply={onReply} commentContentTypeId={commentContentTypeId} />}
         </div>
       </div>
     </div>
