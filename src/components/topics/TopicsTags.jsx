@@ -3,13 +3,16 @@ import { getTopicTags } from '../../api/base.api';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { FaRegHeart } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { deleteLike, likeSomething } from '../../api/blog.api';
+
 
 export function TopicTags() {
   const [topicTags, setTopicTags] = useState([]);
   const [error, setError] = useState(null);
   const sliderRefs = useRef({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadTopicTags();
@@ -18,11 +21,49 @@ export function TopicTags() {
   async function loadTopicTags() {
     try {
       const res = await getTopicTags();
+      console.log("res", res.data.results);
       setTopicTags(res.data.results);
     } catch (error) {
       setError(error);
     }
   }
+
+  const updateTopicLikeState = (topicId, likeState) => {
+    setTopicTags(currentTopicTags => currentTopicTags.map(topicTag => ({
+      ...topicTag,
+      topics: topicTag.topics.map(topic => {
+        if (topic.id === topicId) {
+          return { ...topic,  user_has_liked: likeState };
+        }
+        return topic;
+      })
+    })));
+  };
+
+  const handleLikeClick = async (topicId, userHasLiked) => {
+    console.log("entra", userHasLiked);
+    try {
+      if (typeof userHasLiked === 'number') {
+        await deleteLike(userHasLiked);
+        updateTopicLikeState(topicId, false);
+        console.log("Like removed");
+      } else {
+        console.log(topicTags[0].topic_content_type_id);
+        const data = {
+          liked: true,
+          content_type: topicTags[0].topic_content_type_id,
+          object_id: topicId,
+          is_active: true
+        };
+        const response = await likeSomething(data);
+        updateTopicLikeState(topicId, response.data.id);
+        console.log("Topic liked!");
+      }
+    } catch (error) {
+      console.error("Error processing like/unlike:", error);
+    }
+  };
+
   const settings = {
     dots: false,
     infinite: false,
@@ -110,15 +151,37 @@ export function TopicTags() {
               <Slider ref={el => setSliderRef(topictag.id, el)} {...settings} className='z-0'>
                 {topictag.topics.map(topic => (
                   <div key={topic.id}>
-                    <Link to={`topic/${topic.id}`} className="flex flex-col justify-between p-4 rounded-lg bg-white shadow-md h-[17.5rem] z-0 my-2 border-[6px] border-transparent hover:border-yellow-opacity">
+                    <div className="flex flex-col justify-between p-4 rounded-lg bg-white 
+                    shadow-md h-[17.5rem] z-0 my-2 border-[6px] border-transparent
+                     hover:border-yellow-opacity cursor-pointer" onClick={(e) => {
+                        navigate(`topic/${topic.id}`);
+                      }}>
                       {topic.image && <div className='flex justify-center'><img src={topic.image} alt={topic.title} className='w-full h-20 rounded-lg' /></div>}
                       <div className={topic.image ? "line-clamp-5 text-center overflow-hidden text-gray-500 py-1" : "line-clamp-8 text-center overflow-hidden text-gray-500 py-1"}>
                         {topic.title}
                       </div>
                       <div className='flex justify-center pt-2 pb-1' >
-                        <FaRegHeart className='text-gray-500 text-xl' />
+                        {topic.user_has_liked ? (
+                          <FaHeart
+                            className='text-gray-500 text-xl'
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              console.log("clickeado");
+                              handleLikeClick(topic.id, topic.user_has_liked);
+                            }}
+                          />
+                        ) : (
+                          <FaRegHeart
+                            className='text-gray-500 text-xl'
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              console.log("clickeado");
+                              handleLikeClick(topic.id, false);
+                            }}
+                          />
+                        )}
                       </div>
-                    </Link>
+                    </div>
                   </div>
                 ))}
               </Slider>

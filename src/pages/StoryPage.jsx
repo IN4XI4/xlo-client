@@ -8,6 +8,7 @@ import { InteractBox } from '../components/topics/InteractBox';
 import { CommentsList } from '../components/topics/comments/CommentsList';
 import { getContentTypes } from '../api/base.api';
 
+
 export function StoryPage() {
   const { id } = useParams();
   const [story, setStory] = useState([]);
@@ -16,8 +17,12 @@ export function StoryPage() {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isCardsLoaded, setIsCardsLoaded] = useState(false);
   const progressPercentage = cards.length > 0 ? (currentCardIndex + 1) / cards.length * 100 : 0;
+  const [cardContentTypeId, setCardContentTypeId] = useState(null);
   const [blockContentTypeId, setBlockContentTypeId] = useState(null);
   const [commentContentTypeId, setCommentContentTypeId] = useState(null);
+  const currentCardLikeInfo = cards[currentCardIndex]?.user_has_liked;
+  const currentCardHasLiked = currentCardLikeInfo?.liked;
+  const currentCardHasDisliked = currentCardLikeInfo?.disliked;
 
 
   const goToNextCard = () => {
@@ -66,8 +71,10 @@ export function StoryPage() {
     try {
       const res = await getContentTypes();
       const contentTypes = res.data;
+      const cardType = contentTypes.find(ct => ct.model === 'card');
       const blockType = contentTypes.find(ct => ct.model === 'block');
       const commentType = contentTypes.find(ct => ct.model === 'comment');
+      if (cardType) setCardContentTypeId(cardType.id);
       if (blockType) setBlockContentTypeId(blockType.id);
       if (commentType) setCommentContentTypeId(commentType.id);
     } catch (error) {
@@ -89,7 +96,7 @@ export function StoryPage() {
           </div>
           <div className='flex justify-center items-center p-2 mt-4 md:mt-8 '>
             <div className='flex items-center'>
-              <div className='p-2 md:p-3 text-gray-500 bg-white border rounded-l-lg hover:text-[#3DB1FF] hover:bg-[#D8EFFF] hover:cursor-pointer'>
+            <div className={`p-2 md:p-3 ${currentCardHasDisliked ? 'text-[#3DB1FF] bg-[#D8EFFF]' : 'text-gray-500 bg-white'} border rounded-r-lg hover:text-[#3DB1FF] hover:bg-[#D8EFFF] hover:cursor-pointer`}>
                 <FaThumbsDown className='text-lg md:text-xl' />
               </div>
               <div className='flex items-center p-2 md:p-3 text-gray-500 bg-white border hover:text-[#3DB1FF] hover:bg-[#D8EFFF] hover:cursor-pointer'
@@ -115,7 +122,7 @@ export function StoryPage() {
                 onClick={goToLastCard}>
                 <FaAngleDoubleRight className='text-lg md:text-xl' />
               </div>
-              <div className='p-2 md:p-3 text-gray-500 bg-white border rounded-r-lg hover:text-[#3DB1FF] hover:bg-[#D8EFFF] hover:cursor-pointer'>
+              <div className={`p-2 md:p-3 ${currentCardHasLiked ? 'text-[#3DB1FF] bg-[#D8EFFF]' : 'text-gray-500 bg-white'} border rounded-r-lg hover:text-[#3DB1FF] hover:bg-[#D8EFFF] hover:cursor-pointer`}>
                 <FaThumbsUp className='text-lg md:text-xl' />
               </div>
             </div>
