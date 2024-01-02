@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { getBlocksByCard } from '../../api/blog.api';
-import { FaRegBookmark, FaRegHeart, FaReply, FaUser } from 'react-icons/fa';
+import { deleteLike, getBlocksByCard, likeSomething } from '../../api/blog.api';
+import { FaHeart, FaRegBookmark, FaRegHeart, FaReply, FaUser } from 'react-icons/fa';
 
 
-const ActionIcons = () => {
+const ActionIcons = ({ hasLiked, onLikeClick }) => {
   const navbarHeight = 130;
 
   const scrollToCommentBox = () => {
@@ -19,7 +19,8 @@ const ActionIcons = () => {
   };
   return (
     <div className='flex justify-end space-x-2 items-center text-gray-500 py-2'>
-      <FaRegHeart className='text-xl' />
+      {hasLiked ? <FaHeart className='text-xl cursor-pointer' onClick={onLikeClick} />
+        : <FaRegHeart className='text-xl cursor-pointer' onClick={onLikeClick} />}
       <FaRegBookmark className='text-xl' />
       <FaReply className='text-xl cursor-pointer' onClick={scrollToCommentBox} />
       <div className='cursor-pointer' onClick={scrollToCommentBox}>Comment</div>
@@ -35,30 +36,32 @@ const ImageContainer = ({ image, color }) => (
   ) : null
 );
 
-const BlockContainer = ({ children, color, additionalClass }) => (
+const BlockContainer = ({ children, color, additionalClass, hasLiked, onLikeClick }) => (
   <div className='mb-3'>
     <div className={`p-4 bg-gray-50 shadow rounded-[2.5rem] border-[6px] ${additionalClass}`} style={{ borderColor: color || "#3DB1FF" }}>
       {children}
     </div>
-    <ActionIcons />
+    <ActionIcons hasLiked={hasLiked} onLikeClick={onLikeClick}/>
   </div>
 );
 
-function NormalBlock({ content, image, color }) {
+function NormalBlock({ content, image, color, user_has_liked, onLikeClick }) {
+  const hasLiked = user_has_liked !== false;
+  console.log(hasLiked);
   return (
     <div>
-      <BlockContainer color={color}>{content}</BlockContainer>
+      <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick}>{content}</BlockContainer>
       <ImageContainer image={image} color={color} />
     </div>
   )
-  return;
 }
 
-function AttackBlock({ content, color, image, monster_image, monster_name }) {
+function AttackBlock({ content, color, image, monster_image, monster_name, user_has_liked, onLikeClick }) {
+  const hasLiked = user_has_liked !== false;
   return (
     <div className='flex'>
       <div className="flex-grow">
-        <BlockContainer color={color} additionalClass="rounded-tr-none">
+        <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} additionalClass="rounded-tr-none">
           <div className='font-bold text-end text-gray-700'>{monster_name}</div>
           {content}
         </BlockContainer>
@@ -73,7 +76,8 @@ function AttackBlock({ content, color, image, monster_image, monster_name }) {
   );
 }
 
-function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor_job }) {
+function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor_job, user_has_liked, onLikeClick }) {
+  const hasLiked = user_has_liked !== false;
   return (
     <div className='flex'>
       <div className='flex-none pt-1'>
@@ -82,7 +86,7 @@ function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor
         ) : <FaUser />}
       </div>
       <div className='flex-grow'>
-        <BlockContainer color={color} additionalClass="rounded-tl-none">
+        <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} additionalClass="rounded-tl-none">
           <div className='font-bold text-gray-700 ps-1'>{mentor_name}</div>
           <div className='font-bold text-gray-700 pb-1 ps-1'>{mentor_job}</div>
           {content}
@@ -93,8 +97,13 @@ function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor
   );
 }
 
-function getBlockComponent(block, card) {
-  const commonProps = { content: block.content, image: block.image };
+function getBlockComponent(block, card, handleLikeClick) {
+  const commonProps = {
+    content: block.content,
+    image: block.image,
+    user_has_liked: block.user_has_liked,
+    onLikeClick: () => handleLikeClick(block.id, block.user_has_liked)
+  };
   switch (block.block_type_name.toLowerCase()) {
     case 'attack':
       return <AttackBlock {...commonProps} color={card.soft_skill_color} monster_image={card.soft_skill_monster_picture} monster_name={card.soft_skill_monster_name} />;
@@ -113,6 +122,7 @@ export function BlocksList({ card, blockContentTypeId }) {
       loadBlocks(card);
     }
   }, [card]);
+
   async function loadBlocks(card) {
     try {
       const res = await getBlocksByCard(card.id);
@@ -121,11 +131,43 @@ export function BlocksList({ card, blockContentTypeId }) {
       setError(error);
     }
   }
+
+  const handleLikeClick = async (blockId, userHasLiked) => {
+    try {
+      if (typeof userHasLiked === 'number') {
+        await deleteLike(userHasLiked);
+        updateBlockLikeState(blockId, false);
+        console.log("Like removed");
+      } else {
+        const data = {
+          liked: true,
+          content_type: blockContentTypeId,
+          object_id: blockId,
+          is_active: true
+        };
+        const response = await likeSomething(data);
+        updateBlockLikeState(blockId, response.data.id);
+        console.log("Block liked!");
+      }
+    } catch (error) {
+      console.error("Error processing like/unlike:", error);
+    }
+  };
+
+  const updateBlockLikeState = (blockId, likeState) => {
+    setBlocks(blocks.map(block => {
+      if (block.id === blockId) {
+        return { ...block, user_has_liked: likeState };
+      }
+      return block;
+    }));
+  };
+
   return (
     <div className='bg-white rounded-lg p-4 md:p-8 lg:p-12'>
       {blocks.map((block, index) => (
         <React.Fragment key={index}>
-          {getBlockComponent(block, card)}
+          {getBlockComponent(block, card, handleLikeClick)}
         </React.Fragment>
       ))}
     </div>
