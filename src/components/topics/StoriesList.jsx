@@ -20,25 +20,28 @@ export function StoriesList({ topicId, categoryId, searchText }) {
   }, []);
 
   useEffect(() => {
-    loadStories();
+    loadStories(currentPage);
   }, [currentPage]);
 
   useEffect(() => {
-    setCurrentPage(1);
-    loadStories();
-  }, [topicId, selectedButton]);
+    loadStories(1);
+  }, [topicId, selectedButton, searchText]);
 
-  useEffect(() => {
-    setCurrentPage(1);
-    loadStories();
-  }, [searchText]);
-
-  async function loadStories() {
+  async function loadStories(page) {
     try {
       const ordering = selectedButton === 'Latest' ? '-created_time' : null;
-      const res = await getStoriesByTopic(topicId, currentPage, ordering, searchText);
-      setStories(prevStories => currentPage === 1 ? res.data.results : [...prevStories, ...res.data.results]);
+      const res = await getStoriesByTopic(topicId, page, ordering, searchText);
+
+      if (page === 1) {
+        setStories(res.data.results);
+      } else {
+        setStories(prevStories => [...prevStories, ...res.data.results]);
+      }
+
       setHasMore(!!res.data.next);
+      if (page === 1) {
+        setCurrentPage(1); // Actualiza currentPage a 1 solo si se carga la primera página
+      }
     } catch (error) {
       setError(error);
       setHasMore(false);
