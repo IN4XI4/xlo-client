@@ -9,10 +9,13 @@ const getAuthHeaders = () => {
     return token ? { Authorization: `Token ${token}` } : {};
 };
 
-export const getStoriesByTopic = (topic_id, page, ordering = null) => {
+export const getStoriesByTopic = (topic_id, page, ordering = null, searchText = '') => {
     let url = `stories/?topic=${topic_id}&page=${page}`;
     if (ordering) {
         url += `&ordering=${ordering}`;
+    }
+    if (searchText) {
+        url += `&title__icontains=${encodeURIComponent(searchText)}`;
     }
     return blogApi.get(url, { headers: getAuthHeaders() });
 };

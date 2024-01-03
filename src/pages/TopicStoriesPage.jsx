@@ -11,6 +11,9 @@ export function TopicStoriesPage() {
   const [topic, setTopic] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [inputText, setInputText] = useState('');
+  const [searchText, setSearchText] = useState('');
+
   useEffect(() => {
     loadTopic();
   }, [id]);
@@ -26,6 +29,17 @@ export function TopicStoriesPage() {
       setIsLoading(false);
     }
   }
+
+  const handleTextInputChange = (event) => {
+    setInputText(event.target.value);
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      setSearchText(inputText);
+    }
+  };
+
   return (
     <div className="pt-20 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
       <div className='text-3xl md:text-4xl font-extrabold'>
@@ -41,7 +55,14 @@ export function TopicStoriesPage() {
           </Link>
         </div>
         <div className='grow pe-3 md:pe-6 self-center'>
-          <TextInput id="search_story" type="text" icon={FaSearch} placeholder="Quick search for a story" color="white" />
+          <TextInput id="search_story"
+            type="text"
+            icon={FaSearch}
+            placeholder="Quick search for a story"
+            color="white"
+            value={inputText}
+            onChange={handleTextInputChange}
+            onKeyDown={handleKeyPress} />
         </div>
         <div className='flex-none pe-3 md:pe-6'>
           <Tooltip content="Notification bell" style="light">
@@ -63,7 +84,7 @@ export function TopicStoriesPage() {
         {isLoading ? (
           <div>Loading...</div>
         ) : (
-          <StoriesList topicId={id} categoryId={topic.tag} />
+          <StoriesList topicId={id} categoryId={topic.tag} searchText={searchText}/>
         )}
       </div>
     </div>
