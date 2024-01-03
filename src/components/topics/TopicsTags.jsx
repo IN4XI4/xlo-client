@@ -21,7 +21,6 @@ export function TopicTags() {
   async function loadTopicTags() {
     try {
       const res = await getTopicTags();
-      console.log("res", res.data.results);
       setTopicTags(res.data.results);
     } catch (error) {
       setError(error);

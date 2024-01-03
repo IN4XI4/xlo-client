@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 
-export function StoriesList({ topicId, categoryId }) {
+export function StoriesList({ topicId, categoryId, searchText }) {
   const [stories, setStories] = useState([]);
   const [topics, setTopics] = useState([]);
   const [error, setError] = useState(null);
@@ -28,10 +28,15 @@ export function StoriesList({ topicId, categoryId }) {
     loadStories();
   }, [topicId, selectedButton]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+    loadStories();
+  }, [searchText]);
+
   async function loadStories() {
     try {
       const ordering = selectedButton === 'Latest' ? '-created_time' : null;
-      const res = await getStoriesByTopic(topicId, currentPage, ordering);
+      const res = await getStoriesByTopic(topicId, currentPage, ordering, searchText);
       setStories(prevStories => currentPage === 1 ? res.data.results : [...prevStories, ...res.data.results]);
       setHasMore(!!res.data.next);
     } catch (error) {
