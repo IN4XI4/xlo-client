@@ -51,19 +51,22 @@ export function Navigation() {
             </div>
             <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-4">
-                    {user && user.picture ? (
-                        <Dropdown label="" dismissOnClick={true} renderTrigger={() => <span className='cursor-pointer'><Avatar img={user.picture} alt="Profile" rounded /></span>}>
-                            <Dropdown.Header>
-                                <span className="block pb-1 font-semibold">{user.first_name}</span>
-                                <span className="block">{user.email}</span>
-                            </Dropdown.Header>
-                            <Dropdown.Item onClick={goToSettings}>Settings</Dropdown.Item>
-                            <Dropdown.Item onClick={handleLogout} >Logout</Dropdown.Item>
-                        </Dropdown>
-
-                    ) : (
-                        <FaUser size={20} color="currentColor" />
-                    )}
+                    <Dropdown label="" dismissOnClick={true} renderTrigger={() => (
+                        <span className='cursor-pointer'>
+                            {user && user.picture ? (
+                                <Avatar img={user.picture} alt="Profile" rounded />
+                            ) : (
+                                <FaUser size={20} color="currentColor" />
+                            )}
+                        </span>
+                    )}>
+                        <Dropdown.Header>
+                            <span className="block pb-1 font-semibold">{user.first_name}</span>
+                            <span className="block">{user.email}</span>
+                        </Dropdown.Header>
+                        <Dropdown.Item onClick={goToSettings}>Settings</Dropdown.Item>
+                        <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+                    </Dropdown>
                 </div>
             </div>
         </div>
