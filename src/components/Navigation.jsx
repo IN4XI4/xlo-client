@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { FaBell, FaUser } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { getUser } from '../api/users.api';
-import { Avatar } from 'flowbite-react';
+import { Avatar, Dropdown } from 'flowbite-react';
 
 
 export function Navigation() {
     const navigate = useNavigate();
     const [user, setUser] = useState({ data: {} });
     const [error, setError] = useState(null);
-    
+
     useEffect(() => {
         loadUser();
     }, []);
@@ -28,6 +28,11 @@ export function Navigation() {
         }
     }
 
+    const goToSettings = () => {
+        navigate(`/profile/`);
+        window.scrollTo(0, 0);
+    };
+
     const handleLogout = () => {
         localStorage.removeItem('token');
         navigate('/');
@@ -43,19 +48,22 @@ export function Navigation() {
                     </svg>
                 </Link>
                 <span className="text-xl font-semibold">Mixelo</span>
-                <span className="text-gray-500 hidden sm:block">Title</span>
             </div>
             <div className="flex items-center space-x-4">
-                <FaBell size={20} color="currentColor" />
                 <div className="flex items-center space-x-4">
                     {user && user.picture ? (
-                        <Avatar img={user.picture} alt="Profile" rounded/>
+                        <Dropdown label="" dismissOnClick={true} renderTrigger={() => <span className='cursor-pointer'><Avatar img={user.picture} alt="Profile" rounded /></span>}>
+                            <Dropdown.Header>
+                                <span className="block pb-1 font-semibold">{user.first_name}</span>
+                                <span className="block">{user.email}</span>
+                            </Dropdown.Header>
+                            <Dropdown.Item onClick={goToSettings}>Settings</Dropdown.Item>
+                            <Dropdown.Item onClick={handleLogout} >Logout</Dropdown.Item>
+                        </Dropdown>
+
                     ) : (
                         <FaUser size={20} color="currentColor" />
                     )}
-                    <div className="border-l-2 border-gray-300 pl-4">
-                        <button onClick={handleLogout} className="text-blue-300">Logout</button>
-                    </div>
                 </div>
             </div>
         </div>

@@ -5,6 +5,7 @@ import { Navigation } from './components/Navigation'
 import { Footer } from './components/Footer'
 import { TopicStoriesPage } from './pages/TopicStoriesPage'
 import { StoryPage } from './pages/StoryPage'
+import { ProfilePage } from './pages/ProfilePage'
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/topic/:id" element={<TopicStoriesPage />} />
             <Route path="/story/:id" element={<StoryPage />} />
+            <Route path="/profile/" element={<ProfilePage />} />
           </Routes>
         </div>
         {token && <Footer />}

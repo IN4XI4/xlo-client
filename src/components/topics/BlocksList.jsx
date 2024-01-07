@@ -47,7 +47,6 @@ const BlockContainer = ({ children, color, additionalClass, hasLiked, onLikeClic
 
 function NormalBlock({ content, image, color, user_has_liked, onLikeClick }) {
   const hasLiked = user_has_liked !== false;
-  console.log(hasLiked);
   return (
     <div>
       <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick}>{content}</BlockContainer>
