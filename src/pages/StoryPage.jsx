@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom';
-import { getCardsByStory, getStory } from '../api/blog.api';
+import { deleteLike, getCardsByStory, getStory, likeSomething, updateLike } from '../api/blog.api';
 import { BlocksList } from '../components/topics/BlocksList';
 import { FaAngleDoubleLeft, FaAngleDoubleRight, FaAngleLeft, FaAngleRight, FaArrowLeft, FaSync, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 import { Progress } from 'flowbite-react';
@@ -17,13 +17,9 @@ export function StoryPage() {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isCardsLoaded, setIsCardsLoaded] = useState(false);
   const progressPercentage = cards.length > 0 ? (currentCardIndex + 1) / cards.length * 100 : 0;
-  const [cardContentTypeId, setCardContentTypeId] = useState(null);
+  const [storyContentTypeId, setStoryContentTypeId] = useState(null);
   const [blockContentTypeId, setBlockContentTypeId] = useState(null);
   const [commentContentTypeId, setCommentContentTypeId] = useState(null);
-  const currentCardLikeInfo = cards[currentCardIndex]?.user_has_liked;
-  const currentCardHasLiked = currentCardLikeInfo?.liked;
-  const currentCardHasDisliked = currentCardLikeInfo?.disliked;
-
 
   const goToNextCard = () => {
     if (currentCardIndex < cards.length - 1) {
@@ -71,16 +67,61 @@ export function StoryPage() {
     try {
       const res = await getContentTypes();
       const contentTypes = res.data;
-      const cardType = contentTypes.find(ct => ct.model === 'card');
+      const storyType = contentTypes.find(ct => ct.model === 'story');
       const blockType = contentTypes.find(ct => ct.model === 'block');
       const commentType = contentTypes.find(ct => ct.model === 'comment');
-      if (cardType) setCardContentTypeId(cardType.id);
+      if (storyType) setStoryContentTypeId(storyType.id);
       if (blockType) setBlockContentTypeId(blockType.id);
       if (commentType) setCommentContentTypeId(commentType.id);
     } catch (error) {
       console.error('Error al cargar los ContentTypes', error);
     }
   }
+
+  const handleLikeOrDislike = async (isLike) => {
+    const alreadyLiked = story.user_has_liked.liked;
+    const alreadyDisliked = story.user_has_liked.disliked;
+
+    if ((isLike && alreadyLiked) || (!isLike && alreadyDisliked)) {
+      try {
+        await deleteLike(story.user_has_liked.like_id);
+        setStory({
+          ...story,
+          user_has_liked: { ...story.user_has_liked, liked: false, disliked: false, like_id: null }
+        });
+      } catch (error) {
+        console.error('Error removing like/dislike', error);
+      }
+    } else if ((isLike && alreadyDisliked) || (!isLike && alreadyLiked)) {
+      const data = { liked: isLike };
+      try {
+        await updateLike(story.user_has_liked.like_id, data);
+        setStory({
+          ...story,
+          user_has_liked: { ...story.user_has_liked, liked: isLike, disliked: !isLike }
+        });
+      } catch (error) {
+        console.error('Error updating like/dislike', error);
+      }
+    } else {
+      const data = {
+        liked: isLike,
+        content_type: storyContentTypeId,
+        object_id: story.id,
+        is_active: true
+      };
+      try {
+        const response = await likeSomething(data);
+        setStory({
+          ...story,
+          user_has_liked: { ...story.user_has_liked, liked: isLike, disliked: !isLike, like_id: response.data.id }
+        });
+      } catch (error) {
+        console.error('Error adding like/dislike', error);
+      }
+    }
+  };
+
   return (
     <div className="pt-20 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
       <div className='text-4xl font-extrabold pb-2'>
@@ -96,7 +137,8 @@ export function StoryPage() {
           </div>
           <div className='flex justify-center items-center p-2 mt-4 md:mt-8 '>
             <div className='flex items-center'>
-            <div className={`p-2 md:p-3 ${currentCardHasDisliked ? 'text-[#3DB1FF] bg-[#D8EFFF]' : 'text-gray-500 bg-white'} border rounded-r-lg hover:text-[#3DB1FF] hover:bg-[#D8EFFF] hover:cursor-pointer`}>
+              <div className={`p-2 md:p-3 ${story.user_has_liked.disliked ? 'text-[#3DB1FF] bg-[#D8EFFF]' : 'text-gray-500 bg-white'} border rounded-l-lg hover:text-[#3DB1FF] hover:bg-[#D8EFFF] hover:cursor-pointer`}
+                onClick={() => handleLikeOrDislike(false)}>
                 <FaThumbsDown className='text-lg md:text-xl' />
               </div>
               <div className='flex items-center p-2 md:p-3 text-gray-500 bg-white border hover:text-[#3DB1FF] hover:bg-[#D8EFFF] hover:cursor-pointer'
@@ -122,7 +164,8 @@ export function StoryPage() {
                 onClick={goToLastCard}>
                 <FaAngleDoubleRight className='text-lg md:text-xl' />
               </div>
-              <div className={`p-2 md:p-3 ${currentCardHasLiked ? 'text-[#3DB1FF] bg-[#D8EFFF]' : 'text-gray-500 bg-white'} border rounded-r-lg hover:text-[#3DB1FF] hover:bg-[#D8EFFF] hover:cursor-pointer`}>
+              <div className={`p-2 md:p-3 ${story.user_has_liked.liked ? 'text-[#3DB1FF] bg-[#D8EFFF]' : 'text-gray-500 bg-white'} border rounded-r-lg hover:text-[#3DB1FF] hover:bg-[#D8EFFF] hover:cursor-pointer`}
+                onClick={() => handleLikeOrDislike(true)}>
                 <FaThumbsUp className='text-lg md:text-xl' />
               </div>
             </div>
