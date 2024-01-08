@@ -10,6 +10,7 @@ const getAuthHeaders = () => {
 };
 
 export const getUser = () => usersApi.get(`users/me/`, { headers: getAuthHeaders() })
+export const getUserProfile = () => usersApi.get(`users/profile/`, { headers: getAuthHeaders() })
 export const registerUser = (data) => usersApi.post('users/', data)
 export const lostPassword = (data) => usersApi.post('users/send_reset_code/', data)
 export const resetPassword = (data) => usersApi.post('users/reset_password/', data)

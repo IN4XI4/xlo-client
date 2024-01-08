@@ -40,7 +40,7 @@ export function StoriesList({ topicId, categoryId, searchText }) {
 
       setHasMore(!!res.data.next);
       if (page === 1) {
-        setCurrentPage(1); // Actualiza currentPage a 1 solo si se carga la primera página
+        setCurrentPage(1);
       }
     } catch (error) {
       setError(error);
