@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { getStoriesByTopic } from '../../api/blog.api';
 import { getTopicsByCategory } from '../../api/base.api';
-import { FaAngleDown, FaRegSquare } from 'react-icons/fa';
+import { FaAngleDown, FaCommentDots, FaEye, FaRegSquare, FaThumbsUp } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -88,9 +88,21 @@ export function StoriesList({ topicId, categoryId, searchText }) {
             Latest
           </button>
         </div>
-        <div className='flex justify-center items-center text-[0.55rem] sm:text-[0.85rem] md:text-base'>Replies <span><FaAngleDown /></span></div>
-        <div className='flex justify-center items-center text-[0.55rem] sm:text-[0.85rem] md:text-base'>Views <span><FaAngleDown /></span></div>
-        <div className='flex justify-center items-center text-[0.55rem] sm:text-[0.85rem] md:text-base'>Likes <span><FaAngleDown /></span></div>
+        <div className='flex justify-center items-center text-[0.8rem] sm:text-[0.85rem] md:text-base'>
+          <span className='hidden md:block'>Replies</span>
+          <span className='md:hidden'><FaCommentDots /></span>
+          <span><FaAngleDown /></span>
+        </div>
+        <div className='flex justify-center items-center text-[0.8rem] sm:text-[0.85rem] md:text-base'>
+          <span className='hidden md:block'>Views</span>
+          <span className='md:hidden'><FaEye /></span>
+          <span><FaAngleDown /></span>
+        </div>
+        <div className='flex justify-center items-center text-[0.8rem]  sm:text-[0.85rem] md:text-base'>
+          <span className='hidden md:block'>Likes</span>
+          <span className='md:hidden'><FaThumbsUp /></span>
+          <span><FaAngleDown /></span>
+        </div>
       </div>
       <div>
         <InfiniteScroll

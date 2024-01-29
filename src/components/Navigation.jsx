@@ -28,6 +28,17 @@ export function Navigation() {
         }
     }
 
+    useEffect(() => {
+        const handleProfilePictureUpdate = (event) => {
+            setUser(currentUserInfo => ({ ...currentUserInfo, picture: event.detail }));
+        };
+
+        window.addEventListener('profilePictureUpdated', handleProfilePictureUpdate);
+        return () => {
+            window.removeEventListener('profilePictureUpdated', handleProfilePictureUpdate);
+        };
+    }, []);
+
     const goToSettings = () => {
         navigate(`/profile/`);
         window.scrollTo(0, 0);
