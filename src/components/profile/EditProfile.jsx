@@ -86,7 +86,7 @@ export function EditProfile({ profileInfo }) {
       if (file.size > MAX_FILE_SIZE) {
         alert("The file is too large. Maximum allowed size: 4 MB.");
         return;
-    }
+      }
       let reader = new FileReader();
       reader.onload = (e) => {
         setSelectedImage(e.target.result);
@@ -376,8 +376,9 @@ export function EditProfile({ profileInfo }) {
             <Select
               id="experience"
               className='mb-3'
-              value={selectedExperience}
+              value={selectedExperience || ""}
               onChange={(e) => setSelectedExperience(e.target.value)}>
+              <option value="" disabled>Select Experience</option>
               {experience && experience.map((exp, index) => (
                 <option key={exp.id} value={exp.id}>
                   {exp.experience}
@@ -403,8 +404,9 @@ export function EditProfile({ profileInfo }) {
             <Select
               id="gender"
               className='mb-3'
-              value={selectedGender}
+              value={selectedGender || ""}
               onChange={(e) => setSelectedGender(e.target.value)}>
+              <option value="" disabled>Select Gender</option>
               {genders && genders.map((gender, index) => (
                 <option key={gender.id} value={gender.id}>
                   {gender.gender}
@@ -426,8 +428,9 @@ export function EditProfile({ profileInfo }) {
             <Select
               id="country"
               className='mb-3'
-              value={selectedCountry}
+              value={selectedCountry || ""}
               onChange={(e) => setSelectedCountry(e.target.value)}>
+              <option value="" disabled>Select Country</option>
               {countryOptions && countryOptions.map((country, index) => (
                 <option key={index} value={country.code}>
                   {country.name}
