@@ -78,9 +78,15 @@ export function EditProfile({ profileInfo }) {
     loadCountries();
   }, []);
 
+  const MAX_FILE_SIZE = 4 * 1024 * 1024;
   const handleImageChange = async (event) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
+
+      if (file.size > MAX_FILE_SIZE) {
+        alert("The file is too large. Maximum allowed size: 4 MB.");
+        return;
+    }
       let reader = new FileReader();
       reader.onload = (e) => {
         setSelectedImage(e.target.result);
