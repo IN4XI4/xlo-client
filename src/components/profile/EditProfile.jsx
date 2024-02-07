@@ -191,19 +191,23 @@ export function EditProfile({ profileInfo }) {
       console.error("User ID is missing");
       return;
     }
-
-    const updatedInfo = {
+    console.log("date", birthday);
+    let updatedInfo = {
       first_name: firstName,
       last_name: lastName,
       gender: selectedGender,
-      birthday: birthday,
       profession: profession,
-      country: selectedCountry,
       experience: selectedExperience,
       website: website,
       linkedin_profile: linkedInProfile,
       show_info: showInfo
     };
+    if (birthday) {
+      updatedInfo = { ...updatedInfo, birthday: birthday };
+    }
+    if (selectedCountry) {
+      updatedInfo = { ...updatedInfo, country: selectedCountry };
+    }
 
     try {
       console.log("info:::", updatedInfo);
@@ -469,8 +473,8 @@ export function EditProfile({ profileInfo }) {
               </div>
             </div>
           </div>
-          {updateInfoSuccess && <div className="text-green-500 mt-2">Updated successfully!</div>}
         </div>
+        {updateInfoSuccess && <div className="text-green-500 mt-2">Updated successfully!</div>}
       </div>
     </div>
   )

@@ -16,6 +16,7 @@ export const getUserExperience = () => usersApi.get(`experience/`, { headers: ge
 export const getUserGenders = () => usersApi.get(`genders/`, { headers: getAuthHeaders() })
 export const getCountries = () => usersApi.get(`countries/`, { headers: getAuthHeaders() })
 export const registerUser = (data) => usersApi.post('users/', data)
+export const updatePassword = (data) => usersApi.put(`users/update_password/`, data, { headers: getAuthHeaders() })
 export const updateUser = (userId, data) => {
     const headers = getAuthHeaders();
     delete headers['Content-Type'];
