@@ -6,24 +6,27 @@ import { Footer } from './components/Footer'
 import { TopicStoriesPage } from './pages/TopicStoriesPage'
 import { StoryPage } from './pages/StoryPage'
 import { ProfilePage } from './pages/ProfilePage'
+import { AppStateProvider } from './context/ScrollContext'
 
 
 function App() {
   const token = localStorage.getItem("token");
   return (
     <BrowserRouter>
-      <div className="flex flex-col min-h-screen bg-gray-50">
-      {token && <Navigation />}
-        <div className="flex-grow">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/topic/:id" element={<TopicStoriesPage />} />
-            <Route path="/story/:id" element={<StoryPage />} />
-            <Route path="/profile/" element={<ProfilePage />} />
-          </Routes>
+      <AppStateProvider>
+        <div className="flex flex-col min-h-screen bg-gray-50">
+          {token && <Navigation />}
+          <div className="flex-grow">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/topic/:id" element={<TopicStoriesPage />} />
+              <Route path="/story/:id" element={<StoryPage />} />
+              <Route path="/profile/" element={<ProfilePage />} />
+            </Routes>
+          </div>
+          {token && <Footer />}
         </div>
-        {token && <Footer />}
-      </div>
+      </AppStateProvider>
     </BrowserRouter>
   )
 }
