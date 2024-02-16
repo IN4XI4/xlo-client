@@ -7,6 +7,8 @@ import { Progress } from 'flowbite-react';
 import { InteractBox } from '../components/topics/InteractBox';
 import { CommentsList } from '../components/topics/comments/CommentsList';
 import { getContentTypes } from '../api/base.api';
+import { useAppState } from '../context/ScrollContext';
+import { RateStory } from '../components/topics/RateStory';
 
 
 export function StoryPage() {
@@ -20,6 +22,9 @@ export function StoryPage() {
   const [storyContentTypeId, setStoryContentTypeId] = useState(null);
   const [blockContentTypeId, setBlockContentTypeId] = useState(null);
   const [commentContentTypeId, setCommentContentTypeId] = useState(null);
+
+  const { setIsScrolled, updateTitles } = useAppState();
+
 
   const goToNextCard = () => {
     if (currentCardIndex < cards.length - 1) {
@@ -62,6 +67,24 @@ export function StoryPage() {
   useEffect(() => {
     loadContentTypes();
   }, []);
+
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const position = window.scrollY;
+      setIsScrolled(position > 100);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [setIsScrolled]);
+
+  useEffect(() => {
+    if (story && cards.length > 0) {
+      updateTitles(story.title, cards[currentCardIndex].title);
+    }
+  }, [story, cards, currentCardIndex, updateTitles]);
 
   async function loadContentTypes() {
     try {
@@ -184,9 +207,7 @@ export function StoryPage() {
             </div>
           </div>
           <InteractBox />
-          <div className='flex justify-center text-gray-500 mb-4 border-b-4 border-[#D9D9D9] pb-4'>
-            Story Rating
-          </div>
+          <RateStory />
         </>
       )}
       {isCardsLoaded && (

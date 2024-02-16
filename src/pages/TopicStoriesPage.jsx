@@ -4,6 +4,7 @@ import { getTopic } from '../api/base.api';
 import { FaArrowLeft, FaPlus, FaRegBell, FaSearch } from 'react-icons/fa';
 import { TextInput, Tooltip } from 'flowbite-react';
 import { StoriesList } from '../components/topics/StoriesList';
+import { ComingSoonModal } from '../components/ComingSoonModal';
 
 
 export function TopicStoriesPage() {
@@ -13,6 +14,9 @@ export function TopicStoriesPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [inputText, setInputText] = useState('');
   const [searchText, setSearchText] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalContext, setModalContext] = useState('');
 
   useEffect(() => {
     loadTopic();
@@ -38,6 +42,12 @@ export function TopicStoriesPage() {
     if (event.key === 'Enter') {
       setSearchText(inputText);
     }
+  };
+
+  const openModal = (title, context) => {
+    setModalTitle(title);
+    setModalContext(context);
+    setIsModalOpen(true);
   };
 
   return (
@@ -66,16 +76,20 @@ export function TopicStoriesPage() {
         </div>
         <div className='flex-none pe-3 md:pe-6'>
           <Tooltip content="Notification bell" style="light">
-            <button className="p-3 md:p-4 bg-gray-200 rounded-lg border">
+            <button className="p-3 md:p-4 bg-gray-200 rounded-lg border"
+              onClick={() => openModal('Mes Nouvelles histories', 'Le mode qui vous permet de consulter toutes nouvelles histoires provenant des sujets marqués à l’aide de la cloche de notification sera disponible prochainement.')}>
               <FaRegBell className='text-[#6B7280]' />
             </button>
           </Tooltip>
         </div>
         <div className='flex items-stretch'>
-          <button className="hidden md:flex items-center p-3 rounded-md bg-gray-200 text-[#6B7280]">
-            <FaPlus className="mr-2" /> New Story
+          <button className="hidden md:flex items-center p-3 rounded-md bg-gray-200 text-[#6B7280]"
+            onClick={() => openModal('Créer une histoire',
+              'Plusieurs manières de supporter la plateforme seront bientôt disponibles. Vous pouvez toujours nous contacter sur contact@mixelo.io si vous souhaitez nous aider de quelconque façon.')}>
+            <FaPlus className="mr-2" /> Créer une histoire
           </button>
-          <button className="md:hidden flex items-center p-3 rounded-md bg-gray-200 text-[#6B7280]">
+          <button className="md:hidden flex items-center p-3 rounded-md bg-gray-200 text-[#6B7280]"
+            onClick={() => openModal('Créer une histoire', 'Plusieurs manières de supporter la plateforme seront bientôt disponibles. Vous pouvez toujours nous contacter sur contact@mixelo.io si vous souhaitez nous aider de quelconque façon.')}>
             <FaPlus className="md:mr-2" />
           </button>
         </div>
@@ -84,9 +98,10 @@ export function TopicStoriesPage() {
         {isLoading ? (
           <div>Loading...</div>
         ) : (
-          <StoriesList topicId={id} categoryId={topic.tag} searchText={searchText}/>
+          <StoriesList topicId={id} categoryId={topic.tag} searchText={searchText} />
         )}
       </div>
+      {isModalOpen && <ComingSoonModal title={modalTitle} context={modalContext} onClose={() => setIsModalOpen(false)} />}
     </div>
   )
 }
