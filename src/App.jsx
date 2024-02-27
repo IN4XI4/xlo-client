@@ -6,6 +6,7 @@ import { Footer } from './components/Footer'
 import { TopicStoriesPage } from './pages/TopicStoriesPage'
 import { StoryPage } from './pages/StoryPage'
 import { ProfilePage } from './pages/ProfilePage'
+import { MyNewStoriesPage } from './pages/MyNewStoriesPage'
 import { AppStateProvider } from './context/ScrollContext'
 
 
@@ -22,6 +23,7 @@ function App() {
               <Route path="/topic/:id" element={<TopicStoriesPage />} />
               <Route path="/story/:id" element={<StoryPage />} />
               <Route path="/profile/" element={<ProfilePage />} />
+              <Route path="/new-stories/" element={<MyNewStoriesPage key="mystories-page" />} />
             </Routes>
           </div>
           {token && <Footer />}
