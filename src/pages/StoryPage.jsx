@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom';
-import { deleteLike, getCardsByStory, getStory, likeSomething, updateLike } from '../api/blog.api';
+import { deleteLike, getCardsByStory, getStory, likeSomething, updateLike, userViewStory } from '../api/blog.api';
 import { BlocksList } from '../components/topics/BlocksList';
 import { FaAngleDoubleLeft, FaAngleDoubleRight, FaAngleLeft, FaAngleRight, FaArrowLeft, FaSync, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 import { Progress } from 'flowbite-react';
@@ -53,10 +53,14 @@ export function StoryPage() {
   useEffect(() => {
     loadStory();
   }, [id]);
+
   async function loadStory() {
     try {
       const res = await getStory(id);
       setStory(res.data);
+      if (!res.data.user_has_viewed) {
+        await userViewStory({ story: id });
+      }
       const cardsResponse = await getCardsByStory(id);
       setCards(cardsResponse.data.results);
       setIsCardsLoaded(true);
@@ -64,6 +68,7 @@ export function StoryPage() {
       setError(error);
     }
   }
+
   useEffect(() => {
     loadContentTypes();
   }, []);

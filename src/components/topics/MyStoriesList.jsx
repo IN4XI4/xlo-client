@@ -1,43 +1,35 @@
 import React, { useEffect, useState } from 'react'
-import { getStoriesByTopic } from '../../api/blog.api';
-import { getTopicsByCategory } from '../../api/base.api';
-import { FaAngleDown, FaCommentDots, FaEye, FaRegSquare, FaThumbsUp } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
+import { FaAngleDown, FaCommentDots, FaEye, FaLayerGroup, FaRegSquare, FaTags, FaThumbsUp } from 'react-icons/fa';
+import { getLikedTopicStories } from '../../api/blog.api';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { Link } from 'react-router-dom';
 
 
-export function StoriesList({ topicId, categoryId, searchText }) {
+export function MyStoriesList({ searchText }) {
   const [stories, setStories] = useState([]);
-  const [topics, setTopics] = useState([]);
-  const [error, setError] = useState(null);
-  const [selectedButton, setSelectedButton] = useState('Stories');
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedButton, setSelectedButton] = useState('Latest');
   const [hasMore, setHasMore] = useState(true);
-  const navigate = useNavigate();
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    loadTopics();
+    setCurrentPage(1);
+    loadStories(1);
   }, []);
 
   useEffect(() => {
-    loadStories(currentPage);
-  }, [currentPage]);
-
-  useEffect(() => {
     loadStories(1);
-  }, [topicId, selectedButton, searchText]);
+  }, [selectedButton, searchText]);
 
   async function loadStories(page) {
     try {
-      const ordering = selectedButton === 'Latest' ? '-created_time' : null;
-      const res = await getStoriesByTopic(topicId, page, ordering, searchText);
-
+      const ordering = selectedButton === 'Latest' ? 'desc' : 'asc';
+      const res = await getLikedTopicStories(page, ordering, searchText);
       if (page === 1) {
         setStories(res.data.results);
       } else {
         setStories(prevStories => [...prevStories, ...res.data.results]);
       }
-
       setHasMore(!!res.data.next);
       if (page === 1) {
         setCurrentPage(1);
@@ -48,44 +40,23 @@ export function StoriesList({ topicId, categoryId, searchText }) {
     }
   }
 
-  async function loadTopics() {
-    try {
-      const res = await getTopicsByCategory(categoryId);
-      setTopics(res.data.results);
-    } catch (error) {
-      setError(error);
-    }
-  }
-
   const handleButtonClick = (buttonName) => {
     setSelectedButton(buttonName);
   }
-
-  const handleTopicClick = (topicId) => {
-    navigate(`/topic/${topicId}`);
-    window.scrollTo(0, 0);
-  };
-
-  const truncateText = (text) => {
-    if (text.length > 26) {
-      return text.substring(0, 26) + '...';
-    }
-    return text;
-  };
 
   return (
     <div className='bg-white border rounded p-3 text-gray-500'>
       <div className='grid grid-cols-10 pb-3'>
         <div className='col-span-7 flex'>
-          <button className={`mr-3 ${selectedButton === 'Stories' ? '' : 'text-[#3DB1FF] underline'}`}
-            onClick={() => handleButtonClick('Stories')}
-            disabled={selectedButton === 'Stories'}>
-            Stories
-          </button>
-          <button className={`${selectedButton === 'Latest' ? '' : 'text-[#3DB1FF] underline'}`}
+          <button className={`mr-3 ${selectedButton === 'Latest' ? '' : 'text-[#3DB1FF] underline'}`}
             onClick={() => handleButtonClick('Latest')}
-            disabled={selectedButton === 'Latest'} >
+            disabled={selectedButton === 'Latest'}>
             Latest
+          </button>
+          <button className={`${selectedButton === 'Oldest' ? '' : 'text-[#3DB1FF] underline'}`}
+            onClick={() => handleButtonClick('Oldest')}
+            disabled={selectedButton === 'Oldest'} >
+            Oldest
           </button>
         </div>
         <div className='flex justify-center items-center text-[0.8rem] sm:text-[0.85rem] md:text-base'>
@@ -130,6 +101,22 @@ export function StoriesList({ topicId, categoryId, searchText }) {
                     ))}
                   </div>
                 </div>
+                <div className='flex items-center'>
+                  <div className='mr-2'>
+                    <FaTags />
+                  </div>
+                  <div className='truncate'>
+                    {story.topic_title}
+                  </div>
+                </div>
+                <div className='flex items-center'>
+                  <div className='mr-2'>
+                    <FaLayerGroup />
+                  </div>
+                  <div className='truncate'>
+                    {story.tag_name}
+                  </div>
+                </div>
               </Link>
               <div className='text-center text-[#3DB1FF] self-center'>{story.comments_count}</div>
               <div className='text-center text-[#3DB1FF] self-center'>{story.views_count}</div>
@@ -139,20 +126,6 @@ export function StoriesList({ topicId, categoryId, searchText }) {
         </InfiniteScroll>
       </div>
       {error && <p className='text-red-500'>Error loading stories: {error.message}</p>}
-      <div className='flex flex-wrap text-gray-900 py-3 items-center'>
-        <div className='mr-3 mb-3 font-bold'>
-          There are no other stories to display in this topic.
-          <Link to="/" className='text-[#3DB1FF]'> Browse all topics</Link>, or view top topics:
-        </div>
-        {topics.map((topic, index) => (
-          <button
-            key={index}
-            onClick={() => handleTopicClick(topic.id)}
-            className='text-[#818282] p-3 md:p-4 bg-gray-200 rounded-lg border mr-3 mb-3'>
-            {truncateText(topic.title)}
-          </button>
-        ))}
-      </div>
     </div>
   )
 }

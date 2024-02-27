@@ -102,7 +102,7 @@ export function Navigation() {
                         </Dropdown.Header>
                         <Dropdown.Item onClick={goToSettings} className='text-gray-500'>Profil & Paramètres</Dropdown.Item>
                         <Dropdown.Divider />
-                        <Dropdown.Item onClick={() => openModal('Mes Nouvelles histories', 'Le mode qui vous permet de consulter toutes nouvelles histoires provenant des sujets marqués à l’aide de la cloche de notification sera disponible prochainement.')}>
+                        <Dropdown.Item onClick={() => navigate('/new-stories/')}>
                             <span className='text-gray-500 flex items-center justify-items-center'>
                                 <BiSolidBellRing className='me-3 text-[#3DB1FF]' />
                                 Mes nouvelles histoires

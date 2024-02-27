@@ -19,6 +19,16 @@ export const getStoriesByTopic = (topic_id, page, ordering = null, searchText = 
     }
     return blogApi.get(url, { headers: getAuthHeaders() });
 };
+export const getLikedTopicStories = (page, ordering = null, searchText = '') => {
+    let url = `stories/liked_topics_stories/?page=${page}`;
+    if (ordering) {
+        url += `&order=${ordering}`;
+    }
+    if (searchText) {
+        url += `&search=${encodeURIComponent(searchText)}`;
+    }
+    return blogApi.get(url, { headers: getAuthHeaders() });
+};
 export const getStory = (storyId) => blogApi.get(`stories/${storyId}/`, { headers: getAuthHeaders() })
 export const getCardsByStory = (storyId) => blogApi.get(`cards/?story=${storyId}`, { headers: getAuthHeaders() })
 export const getBlocksByCard = (cardId) => blogApi.get(`blocks/?card=${cardId}`, { headers: getAuthHeaders() })
@@ -29,6 +39,7 @@ export const getCommentsByStory = (storyId, page, newest = false) => {
     }
     return blogApi.get(url, { headers: getAuthHeaders() });
 };
+export const userViewStory = (data) => blogApi.post(`user-view-story/`, data, { headers: getAuthHeaders() })
 export const getReplies = (commentId, page) => blogApi.get(`comments/?parent=${commentId}&page=${page}`, { headers: getAuthHeaders() })
 export const createComment = (data) => blogApi.post(`comments/`, data, { headers: getAuthHeaders() })
 export const likeSomething = (data) => blogApi.post(`likes/`, data, { headers: getAuthHeaders() })
