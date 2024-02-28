@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { HomePage } from './pages/HomePage'
 import { Navigation } from './components/Navigation'
 import { Footer } from './components/Footer'
@@ -9,7 +9,13 @@ import { ProfilePage } from './pages/ProfilePage'
 import { MyNewStoriesPage } from './pages/MyNewStoriesPage'
 import { AppStateProvider } from './context/ScrollContext'
 
-
+function ProtectedRoute({ children }) {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    return <Navigate to="/" />;
+  }
+  return children;
+}
 function App() {
   const token = localStorage.getItem("token");
   return (
@@ -20,10 +26,10 @@ function App() {
           <div className="flex-grow">
             <Routes>
               <Route path="/" element={<HomePage />} />
-              <Route path="/topic/:id" element={<TopicStoriesPage />} />
-              <Route path="/story/:id" element={<StoryPage />} />
-              <Route path="/profile/" element={<ProfilePage />} />
-              <Route path="/new-stories/" element={<MyNewStoriesPage key="mystories-page" />} />
+              <Route path="/topic/:id" element={<ProtectedRoute><TopicStoriesPage /></ProtectedRoute>} />
+              <Route path="/story/:id" element={<ProtectedRoute><StoryPage /></ProtectedRoute>} />
+              <Route path="/profile/" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+              <Route path="/new-stories/" element={<ProtectedRoute><MyNewStoriesPage key="mystories-page" /></ProtectedRoute>} />
             </Routes>
           </div>
           {token && <Footer />}
