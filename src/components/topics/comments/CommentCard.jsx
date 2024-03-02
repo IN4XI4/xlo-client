@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { FaRegBookmark, FaRegHeart, FaHeart, FaReply, FaUser } from 'react-icons/fa';
 import { RepliesList } from './RepliesList';
 import { deleteLike, likeSomething } from '../../../api/blog.api';
+import { ProfileModal } from '../../ProfileModal';
 
 
 const ActionIcons = ({ onReplyClick, userHasLiked, onLikeClick }) => (
@@ -17,6 +18,7 @@ const ActionIcons = ({ onReplyClick, userHasLiked, onLikeClick }) => (
 export function CommentCard({ comment, isReply, onReply, commentContentTypeId }) {
   const [showReplies, setShowReplies] = useState(false);
   const [userHasLiked, setUserHasLiked] = useState(comment.user_has_liked);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const handleReplyClick = () => {
     const parentId = isReply ? comment.parent : comment.id;
     onReply(parentId, comment.comment_text);
@@ -49,17 +51,26 @@ export function CommentCard({ comment, isReply, onReply, commentContentTypeId })
     }
   };
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className='flex my-3 text-sm md:text-base'>
       <div className='flex-none me-1 md:me-3'>
         {comment.user_picture ? (
-          <img src={comment.user_picture} alt="Mentor" className="h-8 w-8 md:h-12 md:w-12 rounded-full" />
-        ) : <div className='p-2 md:p-4 rounded-full bg-gray-200 text-gray-500'><FaUser /></div>}
+          <img src={comment.user_picture} alt="Mentor" className="h-8 w-8 md:h-12 md:w-12 rounded-full cursor-pointer"
+            onClick={() => openModal()} />
+        ) : <div className='p-2 md:p-4 rounded-full bg-gray-200 text-gray-500 cursor-pointer' onClick={() => openModal()}><FaUser /></div>}
       </div>
       <div className={`flex-grow ${cardBackgroundClass} rounded-lg p-4 rounded-tl-none`}>
         <div className=''>
           <div className="">
-            <span className='font-bold'>{comment.user_name}</span> <span className='text-gray-500'>{comment.formatted_created_time}</span>
+            <span className='font-bold cursor-pointer' onClick={() => openModal()}>{comment.user_name}</span> <span className='text-gray-500'>{comment.formatted_created_time}</span>
           </div>
           <div className='pb-3 break-all'>
             {comment.comment_text}
@@ -78,6 +89,7 @@ export function CommentCard({ comment, isReply, onReply, commentContentTypeId })
           {showReplies && <RepliesList commentId={comment.id} onReply={onReply} commentContentTypeId={commentContentTypeId} />}
         </div>
       </div>
+      {isModalOpen && <ProfileModal userId={comment.user} onClose={closeModal} />}
     </div>
   )
 }

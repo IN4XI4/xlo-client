@@ -86,8 +86,12 @@ export function StoryPage() {
   }, [setIsScrolled]);
 
   useEffect(() => {
-    if (story && cards.length > 0) {
-      updateTitles(story.title, cards[currentCardIndex].title);
+    if (story) {
+      if (cards.length > 0) {
+        updateTitles(story.title, cards[currentCardIndex].title);
+      } else {
+        updateTitles(story.title, '');
+      }
     }
   }, [story, cards, currentCardIndex, updateTitles]);
 

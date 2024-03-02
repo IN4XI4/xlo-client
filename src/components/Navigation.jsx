@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { FaUser } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { getUser } from '../api/users.api';
 import { Avatar, Dropdown } from 'flowbite-react';
 import { useAppState } from '../context/ScrollContext';
 import { BiSolidBellRing } from "react-icons/bi";
 import { ComingSoonModal } from './ComingSoonModal';
 
-
+useLocation
 export function Navigation() {
     const navigate = useNavigate();
+    const location = useLocation();
     const [user, setUser] = useState({ data: {} });
     const [error, setError] = useState(null);
-    const { isScrolled, storyTitle, currentCardTitle } = useAppState();
+    const { isScrolled, storyTitle, currentCardTitle, setIsScrolled } = useAppState();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalTitle, setModalTitle] = useState('');
     const [modalContext, setModalContext] = useState('');
@@ -20,6 +21,11 @@ export function Navigation() {
     useEffect(() => {
         loadUser();
     }, []);
+
+    useEffect(() => {
+        setIsScrolled(false);
+    }, [location, setIsScrolled]);
+
     const token = localStorage.getItem("token");
     async function loadUser() {
         if (!token) {
