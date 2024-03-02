@@ -18,10 +18,8 @@ export function PasswordInfo() {
 
     try {
       const response = await updatePassword(data);
-      console.log(response);
       setError('');
     } catch (error) {
-      console.log("errorrr", error);
       setError(error.response.data.error);
       console.error("Error updating password:", error);
     }

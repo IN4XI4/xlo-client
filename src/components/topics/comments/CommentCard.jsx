@@ -34,7 +34,6 @@ export function CommentCard({ comment, isReply, onReply, commentContentTypeId })
       if (typeof userHasLiked === 'number') {
         await deleteLike(userHasLiked);
         setUserHasLiked(false);
-        console.log("Like removed");
       } else {
         const data = {
           liked: true,
@@ -44,7 +43,6 @@ export function CommentCard({ comment, isReply, onReply, commentContentTypeId })
         };
         const response = await likeSomething(data);
         setUserHasLiked(response.data.id);
-        console.log("Comment liked!");
       }
     } catch (error) {
       console.error("Error processing like/unlike:", error);

@@ -16,7 +16,6 @@ export function ProfilePage() {
   async function loadProfileInfo() {
     try {
       const res = await getUserProfile();
-      console.log(res.data);
       setProfileInfo(res.data);
     } catch (error) {
       setError(error);
