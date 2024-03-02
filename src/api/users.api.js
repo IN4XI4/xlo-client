@@ -11,6 +11,7 @@ const getAuthHeaders = () => {
 
 export const getUser = () => usersApi.get(`users/me/`, { headers: getAuthHeaders() })
 export const getUserProfile = () => usersApi.get(`users/profile/`, { headers: getAuthHeaders() })
+export const getUserModal = (userId) => usersApi.get(`users/${userId}/`, { headers: getAuthHeaders() })
 export const getUserProfileColors = () => usersApi.get(`profile_colors/`, { headers: getAuthHeaders() })
 export const getUserExperience = () => usersApi.get(`experience/`, { headers: getAuthHeaders() })
 export const getUserGenders = () => usersApi.get(`genders/`, { headers: getAuthHeaders() })
