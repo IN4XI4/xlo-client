@@ -136,7 +136,6 @@ export function BlocksList({ card, blockContentTypeId }) {
       if (typeof userHasLiked === 'number') {
         await deleteLike(userHasLiked);
         updateBlockLikeState(blockId, false);
-        console.log("Like removed");
       } else {
         const data = {
           liked: true,
@@ -146,7 +145,6 @@ export function BlocksList({ card, blockContentTypeId }) {
         };
         const response = await likeSomething(data);
         updateBlockLikeState(blockId, response.data.id);
-        console.log("Block liked!");
       }
     } catch (error) {
       console.error("Error processing like/unlike:", error);

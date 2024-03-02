@@ -21,7 +21,6 @@ export function ProfileModal({ userId, onClose }) {
   async function loadUser() {
     try {
       const res = await getUserModal(userId);
-      console.log("user:", res.data);
       setUser(res.data);
     } catch (error) {
       setError(error);
@@ -68,13 +67,13 @@ export function ProfileModal({ userId, onClose }) {
           <div className='flex py-3 text-gray-500 border-b'>
             {user.biography}
           </div>
-          <div className='flex pt-3 text-gray-500'>
+          <div className='flex pt-3 text-gray-500 items-center'>
             <span className='text-xl pe-3'>
               <IoLogoLinkedin />
             </span>
             <span>{user.linkedin_profile}</span>
           </div>
-          <div className='flex pt-2 pb-3 text-gray-500 border-b'>
+          <div className='flex pt-2 pb-3 text-gray-500 border-b items-center'>
             <span className='text-xl pe-3'>
               <BiWorld />
             </span>

@@ -105,7 +105,6 @@ export function EditProfile({ profileInfo }) {
         const newProfilePictureUrl = response.data.profile_picture;
         const event = new CustomEvent('profilePictureUpdated', { detail: newProfilePictureUrl });
         window.dispatchEvent(event);
-        console.log("Imagen actualizada:", response);
       } catch (error) {
         console.error("Error al actualizar la imagen:", error);
       }
@@ -177,7 +176,6 @@ export function EditProfile({ profileInfo }) {
 
     try {
       const response = await updateUser(profileInfo.id, updatedInfo);
-      console.log("Biografía actualizada:", response);
       setUpdateBioSuccess(true);
       setTimeout(() => setUpdateBioSuccess(false), 5000);
     } catch (error) {
@@ -191,7 +189,6 @@ export function EditProfile({ profileInfo }) {
       console.error("User ID is missing");
       return;
     }
-    console.log("date", birthday);
     let updatedInfo = {
       first_name: firstName,
       last_name: lastName,
@@ -210,9 +207,7 @@ export function EditProfile({ profileInfo }) {
     }
 
     try {
-      console.log("info:::", updatedInfo);
       const response = await updateUser(profileInfo.id, updatedInfo);
-      console.log("Información general actualizada:", response);
       setUpdateInfoSuccess(true);
       setTimeout(() => setUpdateInfoSuccess(false), 5000);
     } catch (error) {
@@ -224,7 +219,6 @@ export function EditProfile({ profileInfo }) {
   async function loadProfileColors() {
     try {
       const res = await getUserProfileColors();
-      console.log(res.data);
       setProfileColors(res.data);
       if (profileInfo && profileInfo.profile_color) {
         setSelectedProfileColor(profileInfo.profile_color);
@@ -237,7 +231,6 @@ export function EditProfile({ profileInfo }) {
   async function loadExperience() {
     try {
       const res = await getUserExperience();
-      console.log(res.data);
       setExperience(res.data);
     } catch (error) {
       setError(error);
@@ -247,7 +240,6 @@ export function EditProfile({ profileInfo }) {
   async function loadGenders() {
     try {
       const res = await getUserGenders();
-      console.log(res.data);
       setGenders(res.data);
     } catch (error) {
       setError(error);
@@ -257,7 +249,6 @@ export function EditProfile({ profileInfo }) {
   async function loadCountries() {
     try {
       const res = await getCountries();
-      console.log(res.data);
       setCountries(res.data);
     } catch (error) {
       setError(error);

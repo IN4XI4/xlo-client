@@ -40,14 +40,11 @@ export function TopicTags() {
   };
 
   const handleLikeClick = async (topicId, userHasLiked) => {
-    console.log("entra", userHasLiked);
     try {
       if (typeof userHasLiked === 'number') {
         await deleteLike(userHasLiked);
         updateTopicLikeState(topicId, false);
-        console.log("Like removed");
       } else {
-        console.log(topicTags[0].topic_content_type_id);
         const data = {
           liked: true,
           content_type: topicTags[0].topic_content_type_id,
@@ -56,7 +53,6 @@ export function TopicTags() {
         };
         const response = await likeSomething(data);
         updateTopicLikeState(topicId, response.data.id);
-        console.log("Topic liked!");
       }
     } catch (error) {
       console.error("Error processing like/unlike:", error);
@@ -165,7 +161,6 @@ export function TopicTags() {
                             className='text-gray-500 text-xl'
                             onClick={(e) => {
                               e.stopPropagation();
-                              console.log("clickeado");
                               handleLikeClick(topic.id, topic.user_has_liked);
                             }}
                           />
@@ -174,7 +169,6 @@ export function TopicTags() {
                             className='text-gray-500 text-xl'
                             onClick={(e) => {
                               e.stopPropagation();
-                              console.log("clickeado");
                               handleLikeClick(topic.id, false);
                             }}
                           />
