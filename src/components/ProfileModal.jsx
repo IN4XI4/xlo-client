@@ -31,12 +31,16 @@ export function ProfileModal({ userId, onClose }) {
   return (
     <div className="fixed inset-0 bg-gray-300 bg-opacity-50 overflow-y-auto h-full w-full" onClick={onClose}>
       <div id="principal" className="relative top-32 mx-auto px-6 pt-4 border w-80 md:w-1/2 lg:w-1/3 2xl:w-1/4 shadow-lg rounded-md bg-white" onClick={handleModalClick}>
-        <div id="relativo" className='relative -top-8 md:-top-16'>
+        <div id="relativo" className='relative -top-10 md:-top-16'>
           <div className='flex items-end border-b pb-3 '>
             <div className='ps-2'>
               {user.profile_picture ? (
-                <img src={user.profile_picture} alt="Mentor" className="h-16 w-16 md:h-24 md:w-24 rounded-full border-2" style={{ borderColor: user.profile_color_value }} />
-              ) : <div className='p-2 md:p-4 rounded-full bg-gray-200 text-gray-500'><FaUser /></div>}
+                <img src={user.profile_picture} alt="Mentor" className="h-20 w-20 md:h-24 md:w-24 rounded-full border-2"
+                  style={{ borderColor: user.profile_color_value }} />
+              ) : <div className='p-8 md:p-10 rounded-full bg-gray-300 text-gray-500 border-2'
+                style={{ borderColor: user.profile_color_value }}>
+                <FaUser />
+              </div>}
             </div>
             <div className="hidden md:flex text-gray-500 flex-col items-center ps-1">
               {user.gender === 2 ? <IoMale size="20" /> : user.gender === 1 ? <IoFemale size="20" /> : null}
@@ -58,14 +62,14 @@ export function ProfileModal({ userId, onClose }) {
             <div className='md:hidden pe-2'>
               {user.birth_year}
             </div>
-            <div>{user.country}</div>
+            <div>{user.country} &nbsp;</div>
           </div>
           <div className='flex flex-col md:flex-row py-3 text-gray-500 border-b md:items-center'>
             <div className='md:pe-3 font-semibold'>{user.profession}</div>
             <div className='text-sm'>{user.experience_value} pro. experience</div>
           </div>
           <div className='flex py-3 text-gray-500 border-b'>
-            {user.biography}
+            {user.biography} &nbsp;
           </div>
           <div className='flex pt-3 text-gray-500 items-center'>
             <span className='text-xl pe-3'>
@@ -86,7 +90,7 @@ export function ProfileModal({ userId, onClose }) {
             </button>
           </div>
         </div>
-        <div  className="mb-[-1rem] md:mb-[-3rem]">
+        <div className="mb-[-1rem] md:mb-[-3rem]">
         </div>
       </div>
     </div>
