@@ -41,7 +41,7 @@ const BlockContainer = ({ children, color, additionalClass, hasLiked, onLikeClic
     <div className={`p-4 bg-gray-50 shadow rounded-[2.5rem] border-[6px] ${additionalClass}`} style={{ borderColor: color || "#3DB1FF" }}>
       {children}
     </div>
-    <ActionIcons hasLiked={hasLiked} onLikeClick={onLikeClick}/>
+    <ActionIcons hasLiked={hasLiked} onLikeClick={onLikeClick} />
   </div>
 );
 
@@ -58,17 +58,19 @@ function NormalBlock({ content, image, color, user_has_liked, onLikeClick }) {
 function AttackBlock({ content, color, image, monster_image, monster_name, user_has_liked, onLikeClick }) {
   const hasLiked = user_has_liked !== false;
   return (
-    <div className='flex'>
-      <div className="flex-grow">
-        <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} additionalClass="rounded-tr-none">
-          <div className='font-bold text-end text-gray-700'>{monster_name}</div>
-          {content}
-        </BlockContainer>
-      </div>
-      <div className='flex-none pt-1'>
-        {monster_image ? (
-          <img src={monster_image} alt="Monster" className="h-14 w-14 rounded-full mx-3 border-[3px]" style={{ borderColor: color }} />
-        ) : <FaUser />}
+    <div>
+      <div className='flex'>
+        <div className="flex-grow">
+          <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} additionalClass="rounded-tr-none">
+            <div className='font-bold text-end text-gray-700'>{monster_name}</div>
+            {content}
+          </BlockContainer>
+        </div>
+        <div className='flex-none pt-1'>
+          {monster_image ? (
+            <img src={monster_image} alt="Monster" className="h-14 w-14 rounded-full mx-3 border-[3px]" style={{ borderColor: color }} />
+          ) : <FaUser />}
+        </div>
       </div>
       <ImageContainer image={image} color={color} />
     </div>
@@ -78,18 +80,20 @@ function AttackBlock({ content, color, image, monster_image, monster_name, user_
 function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor_job, user_has_liked, onLikeClick }) {
   const hasLiked = user_has_liked !== false;
   return (
-    <div className='flex'>
-      <div className='flex-none pt-1'>
-        {mentor_image ? (
-          <img src={mentor_image} alt="Mentor" className="h-14 w-14 rounded-full mx-3 border-[3px]" style={{ borderColor: color }} />
-        ) : <FaUser />}
-      </div>
-      <div className='flex-grow'>
-        <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} additionalClass="rounded-tl-none">
-          <div className='font-bold text-gray-700 ps-1'>{mentor_name}</div>
-          <div className='font-bold text-gray-700 pb-1 ps-1'>{mentor_job}</div>
-          {content}
-        </BlockContainer>
+    <div>
+      <div className='flex'>
+        <div className='flex-none pt-1'>
+          {mentor_image ? (
+            <img src={mentor_image} alt="Mentor" className="h-14 w-14 rounded-full mx-3 border-[3px]" style={{ borderColor: color }} />
+          ) : <FaUser />}
+        </div>
+        <div className='flex-grow'>
+          <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} additionalClass="rounded-tl-none">
+            <div className='font-bold text-gray-700 ps-1'>{mentor_name}</div>
+            <div className='font-bold text-gray-700 pb-1 ps-1'>{mentor_job}</div>
+            {content}
+          </BlockContainer>
+        </div>
       </div>
       <ImageContainer image={image} color={color} />
     </div>

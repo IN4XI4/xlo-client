@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { getTopic } from '../api/base.api';
 import { FaArrowLeft, FaHeart, FaPlus, FaRegHeart, FaSearch } from 'react-icons/fa';
-import { TextInput } from 'flowbite-react';
+import { Alert, TextInput } from 'flowbite-react';
 import { StoriesList } from '../components/topics/StoriesList';
 import { ComingSoonModal } from '../components/ComingSoonModal';
 import { deleteLike, likeSomething } from '../api/blog.api';
+import { HiInformationCircle } from 'react-icons/hi';
 
 
 export function TopicStoriesPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [topic, setTopic] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -18,6 +22,18 @@ export function TopicStoriesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalContext, setModalContext] = useState('');
+
+  useEffect(() => {
+    if (location.state?.storyCreated) {
+      setShowSuccessMessage(true);
+      const timer = setTimeout(() => {
+        setShowSuccessMessage(false);
+        navigate(location.pathname, { replace: true, state: {} });
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [location]);
 
   useEffect(() => {
     loadTopic();
@@ -77,8 +93,18 @@ export function TopicStoriesPage() {
     setIsModalOpen(true);
   };
 
+  const createStoryHandler = () => {
+    if (topic.is_creator) {
+      navigate(`/create-story/${id}`);
+    }
+  };
   return (
     <div className="pt-20 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
+      {showSuccessMessage && (
+        <Alert color="success" icon={HiInformationCircle} className='mb-4'>
+          <span className="font-medium">Story created successfully!</span>
+        </Alert>
+      )}
       <div className='text-2xl md:text-4xl font-extrabold'>
         {topic.title}
       </div>
@@ -109,12 +135,11 @@ export function TopicStoriesPage() {
         </div>
         <div className='flex-none items-stretch'>
           <button className="hidden md:flex items-center p-3 rounded-full bg-gray-200 text-[#6B7280]"
-            onClick={() => openModal('Créer une histoire',
-              'Plusieurs manières de supporter la plateforme seront bientôt disponibles. Vous pouvez toujours nous contacter sur contact@mixelo.io si vous souhaitez nous aider de quelconque façon.')}>
+            onClick={createStoryHandler}>
             <FaPlus className="mr-2" /> Créer une histoire
           </button>
           <button className="md:hidden p-2 rounded-full bg-gray-200 text-[#6B7280] border"
-            onClick={() => openModal('Créer une histoire', 'Plusieurs manières de supporter la plateforme seront bientôt disponibles. Vous pouvez toujours nous contacter sur contact@mixelo.io si vous souhaitez nous aider de quelconque façon.')}>
+            onClick={createStoryHandler}>
             <FaPlus className='text-[#3DB1FF]' />
           </button>
         </div>

@@ -32,6 +32,7 @@ export const getLikedTopicStories = (page, ordering = null, searchText = '') => 
 export const getStory = (storyId) => blogApi.get(`stories/${storyId}/`, { headers: getAuthHeaders() })
 export const getCardsByStory = (storyId) => blogApi.get(`cards/?story=${storyId}`, { headers: getAuthHeaders() })
 export const getBlocksByCard = (cardId) => blogApi.get(`blocks/?card=${cardId}`, { headers: getAuthHeaders() })
+export const getBlockTypes = () => blogApi.get(`blocktypes/`, { headers: getAuthHeaders() })
 export const getCommentsByStory = (storyId, page, newest = false) => {
     let url = `comments/?story=${storyId}&parent__isnull=true&page=${page}`;
     if (newest) {
@@ -45,3 +46,5 @@ export const createComment = (data) => blogApi.post(`comments/`, data, { headers
 export const likeSomething = (data) => blogApi.post(`likes/`, data, { headers: getAuthHeaders() })
 export const deleteLike = (likeId) => blogApi.delete(`likes/${likeId}/`, { headers: getAuthHeaders() })
 export const updateLike = (likeId, data) => blogApi.patch(`likes/${likeId}/`, data, { headers: getAuthHeaders() })
+
+export const createStoryFull = (data) => blogApi.post(`stories/create-story-full/`, data, { headers: getAuthHeaders() })

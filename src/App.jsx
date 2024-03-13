@@ -8,6 +8,8 @@ import { StoryPage } from './pages/StoryPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { MyNewStoriesPage } from './pages/MyNewStoriesPage'
 import { AppStateProvider } from './context/ScrollContext'
+import { CreateStoryPage } from './pages/CreateStoryPage'
+
 
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("token");
@@ -30,6 +32,8 @@ function App() {
               <Route path="/story/:id" element={<ProtectedRoute><StoryPage /></ProtectedRoute>} />
               <Route path="/profile/" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
               <Route path="/new-stories/" element={<ProtectedRoute><MyNewStoriesPage key="mystories-page" /></ProtectedRoute>} />
+              <Route path="/create-story/:id" element={<ProtectedRoute><CreateStoryPage key="create-story-page" /></ProtectedRoute>} />
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </div>
           {token && <Footer />}
