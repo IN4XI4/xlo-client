@@ -78,6 +78,62 @@ export function CreateStoryPage() {
     loadUserMe();
   }, []);
 
+  function updateImagePreviewsForCards(imagePreviews, cardIndexToRemove) {
+    const newImagePreviews = {};
+    Object.keys(imagePreviews).forEach(key => {
+      const match = key.match(/^cards\.(\d+)\.blocks\.(\d+)\.image$/);
+      if (match) {
+        const [_, cardIndex, blockIndex] = match.map(Number);
+        if (cardIndex > cardIndexToRemove) {
+          const newKey = `cards.${cardIndex - 1}.blocks.${blockIndex}.image`;
+          newImagePreviews[newKey] = imagePreviews[key];
+        } else if (cardIndex < cardIndexToRemove) {
+          newImagePreviews[key] = imagePreviews[key];
+        }
+      }
+    });
+    return newImagePreviews;
+  }
+
+  function updateImagePreviewsForBlocks(imagePreviews, cardIndex, blockIndexToRemove) {
+    const newImagePreviews = {};
+    Object.keys(imagePreviews).forEach(key => {
+      const match = key.match(/^cards\.(\d+)\.blocks\.(\d+)\.image$/);
+      if (match) {
+        const [_, matchedCardIndex, blockIndex] = match.map(Number);
+        if (matchedCardIndex === cardIndex) {
+          if (blockIndex > blockIndexToRemove) {
+            const newKey = `cards.${cardIndex}.blocks.${blockIndex - 1}.image`;
+            newImagePreviews[newKey] = imagePreviews[key];
+          } else if (blockIndex < blockIndexToRemove) {
+            newImagePreviews[key] = imagePreviews[key];
+          }
+        } else {
+          newImagePreviews[key] = imagePreviews[key];
+        }
+      }
+    });
+    return newImagePreviews;
+  }
+
+  const handleRemoveBlock = (cardIndex, blockIndex) => {
+    const currentCards = getValues('cards');
+    currentCards[cardIndex].blocks.splice(blockIndex, 1);
+    setValue('cards', currentCards);
+
+    const updatedImagePreviews = updateImagePreviewsForBlocks(imagePreviews, cardIndex, blockIndex);
+    setImagePreviews(updatedImagePreviews);
+  };
+
+  const handleRemoveCard = (cardIndex) => {
+    const currentCards = [...getValues('cards')];
+    currentCards.splice(cardIndex, 1);
+    setValue('cards', currentCards);
+
+    const updatedImagePreviews = updateImagePreviewsForCards(imagePreviews, cardIndex);
+    setImagePreviews(updatedImagePreviews);
+  };
+
   const onSubmit = async (data) => {
     setIsLoading(true);
     const formData = new FormData();
@@ -271,12 +327,8 @@ export function CreateStoryPage() {
                   </div>
 
                   {field.blocks.length > 1 && (
-                    <button type="button" onClick={() => {
-                      const currentCards = getValues('cards');
-                      const updatedBlocks = currentCards[index].blocks.filter((_, i) => i !== blockIndex);
-                      currentCards[index].blocks = updatedBlocks;
-                      setValue('cards', [...currentCards]);
-                    }} className="bg-red-500 text-white px-3 py-2 rounded-md">Remove Block</button>
+                    <button type="button" onClick={() => handleRemoveBlock(index, blockIndex)}
+                      className="bg-red-500 text-white px-3 py-2 rounded-md">Remove Block</button>
                   )}
                 </div>
               ))}
@@ -292,7 +344,7 @@ export function CreateStoryPage() {
               <div className='pb-1 flex justify-end'>
                 <button type="button"
                   className='bg-red-500 px-3 py-2 rounded-lg text-white'
-                  onClick={() => remove(index)}>Remove Card</button>
+                  onClick={() => handleRemoveCard(index)} >Remove Card</button>
               </div>
             )}
           </div>
