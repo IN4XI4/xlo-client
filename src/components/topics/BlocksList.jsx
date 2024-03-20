@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { deleteLike, getBlocksByCard, likeSomething } from '../../api/blog.api';
 import { FaHeart, FaRegBookmark, FaRegHeart, FaReply, FaUser } from 'react-icons/fa';
+import { MonsterMentorProfileModal } from './MonsterMentorProfileModal';
 
 
 const ActionIcons = ({ hasLiked, onLikeClick }) => {
@@ -55,8 +56,16 @@ function NormalBlock({ content, image, color, user_has_liked, onLikeClick }) {
   )
 }
 
-function AttackBlock({ content, color, image, monster_image, monster_name, user_has_liked, onLikeClick }) {
+function AttackBlock({ content, color, image, monster_image, monster_name, monster_profile, user_has_liked, onLikeClick }) {
   const hasLiked = user_has_liked !== false;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   return (
     <div>
       <div className='flex'>
@@ -68,23 +77,43 @@ function AttackBlock({ content, color, image, monster_image, monster_name, user_
         </div>
         <div className='flex-none pt-1'>
           {monster_image ? (
-            <img src={monster_image} alt="Monster" className="h-14 w-14 rounded-full mx-3 border-[3px]" style={{ borderColor: color }} />
+            <img src={monster_image} alt="Monster"
+              className="h-14 w-14 rounded-full mx-3 border-[3px] cursor-pointer"
+              style={{ borderColor: color }}
+              onClick={() => openModal()} />
           ) : <FaUser />}
         </div>
       </div>
       <ImageContainer image={image} color={color} />
+      {isModalOpen && <MonsterMentorProfileModal
+        image={monster_image}
+        name={monster_name}
+        profile={monster_profile}
+        color={color}
+        onClose={closeModal} />}
     </div>
   );
 }
 
-function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor_job, user_has_liked, onLikeClick }) {
+function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor_job, mentor_profile, user_has_liked, onLikeClick }) {
   const hasLiked = user_has_liked !== false;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   return (
     <div>
       <div className='flex'>
         <div className='flex-none pt-1'>
           {mentor_image ? (
-            <img src={mentor_image} alt="Mentor" className="h-14 w-14 rounded-full mx-3 border-[3px]" style={{ borderColor: color }} />
+            <img src={mentor_image} alt="Mentor"
+              className="h-14 w-14 rounded-full mx-3 border-[3px] cursor-pointer"
+              onClick={() => openModal()}
+              style={{ borderColor: color }} />
           ) : <FaUser />}
         </div>
         <div className='flex-grow'>
@@ -96,6 +125,13 @@ function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor
         </div>
       </div>
       <ImageContainer image={image} color={color} />
+      {isModalOpen && <MonsterMentorProfileModal
+        image={mentor_image}
+        name={mentor_name}
+        job={mentor_job}
+        profile={mentor_profile}
+        color={color}
+        onClose={closeModal} />}
     </div>
   );
 }
@@ -109,9 +145,18 @@ function getBlockComponent(block, card, handleLikeClick) {
   };
   switch (block.block_type_name.toLowerCase()) {
     case 'attack':
-      return <AttackBlock {...commonProps} color={card.soft_skill_color} monster_image={card.soft_skill_monster_picture} monster_name={card.soft_skill_monster_name} />;
+      return <AttackBlock {...commonProps}
+        color={card.soft_skill_color}
+        monster_image={card.soft_skill_monster_picture}
+        monster_name={card.soft_skill_monster_name}
+        monster_profile={card.soft_skill_monster_profile} />;
     case 'defense':
-      return <DefenseBlock {...commonProps} color={card.mentor_color} mentor_image={card.mentor_picture} mentor_name={card.mentor_name} mentor_job={card.mentor_job} />;
+      return <DefenseBlock {...commonProps}
+        color={card.mentor_color}
+        mentor_image={card.mentor_picture}
+        mentor_name={card.mentor_name}
+        mentor_job={card.mentor_job}
+        mentor_profile={card.mentor_profile} />;
     default:
       return <NormalBlock {...commonProps} color={card.soft_skill_color} />;
   }
@@ -120,6 +165,7 @@ function getBlockComponent(block, card, handleLikeClick) {
 export function BlocksList({ card, blockContentTypeId }) {
   const [blocks, setBlocks] = useState([]);
   const [error, setError] = useState(null);
+
   useEffect(() => {
     if (card) {
       loadBlocks(card);
@@ -163,6 +209,8 @@ export function BlocksList({ card, blockContentTypeId }) {
       return block;
     }));
   };
+
+
 
   return (
     <div className='bg-white rounded-lg p-4 md:p-8 lg:p-12'>
