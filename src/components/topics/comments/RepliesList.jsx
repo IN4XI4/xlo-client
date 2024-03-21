@@ -10,7 +10,6 @@ export function RepliesList({ commentId, onReply, commentContentTypeId }) {
 
   useEffect(() => {
     const loadReplies = async () => {
-      if (isLoading) return;
       setIsLoading(true);
 
       try {
