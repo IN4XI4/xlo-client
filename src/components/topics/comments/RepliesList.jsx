@@ -50,7 +50,7 @@ export function RepliesList({ commentId, onReply, commentContentTypeId }) {
       {hasMore && !isLoading && (
         <div className="pt-2 flex justify-end">
           <button className="text-blue-500" onClick={handleShowMore}>
-            -- Show 5 more --
+            -- Show more --
           </button>
         </div>
       )}
