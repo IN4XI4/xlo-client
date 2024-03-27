@@ -51,3 +51,4 @@ export const createStoryFull = (data) => blogApi.post(`stories/create-story-full
 
 export const recallCard = (data) => blogApi.post(`recalls/`, data, { headers: getAuthHeaders() })
 export const deleteRecallCard = (recallId) => blogApi.delete(`recalls/${recallId}/`, { headers: getAuthHeaders() })
+export const getMyRecallCards = () => blogApi.get(`recalls/user-recall-cards`, { headers: getAuthHeaders() })
