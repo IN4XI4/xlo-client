@@ -5,6 +5,7 @@ import { getMyRecallCards } from '../api/blog.api';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BlocksList } from '../components/topics/BlocksList';
 import { getContentTypes } from '../api/base.api';
+import { useAppState } from '../context/ScrollContext';
 
 
 export function RecallsPage() {
@@ -15,6 +16,7 @@ export function RecallsPage() {
   const [blockContentTypeId, setBlockContentTypeId] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const { setIsScrolled, updateTitles } = useAppState();
 
   useEffect(() => {
     loadRecallCards();
@@ -46,10 +48,25 @@ export function RecallsPage() {
     loadContentTypes();
   }, []);
 
-  const goToNextCard = () => {
+  const goToNextCard = async () => {
     if (currentCardIndex < recallCards.length - 1) {
       setCurrentCardIndex(currentCardIndex + 1);
       window.scrollTo(0, 0);
+    } else {
+      setIsCardsLoaded(false);
+      try {
+        const res = await getMyRecallCards();
+        if (res && res.data) {
+          setRecallCards(res.data);
+          setCurrentCardIndex(0);
+        } else {
+          console.error('No se pudieron recargar las tarjetas.');
+        }
+      } catch (error) {
+        setError(error);
+      } finally {
+        setIsCardsLoaded(true);
+      }
     }
   };
 
@@ -67,6 +84,25 @@ export function RecallsPage() {
       navigate('/');
     }
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const position = window.scrollY;
+      setIsScrolled(position > 100);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [setIsScrolled]);
+
+  useEffect(() => {
+    if (recallCards.length > 0) {
+      updateTitles('', recallCards[currentCardIndex].card.title);
+    } else {
+      updateTitles('', '');
+    }
+  }, [recallCards, currentCardIndex, updateTitles]);
 
   return (
     <div className="pb-20 pt-24 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
