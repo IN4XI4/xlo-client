@@ -48,3 +48,7 @@ export const deleteLike = (likeId) => blogApi.delete(`likes/${likeId}/`, { heade
 export const updateLike = (likeId, data) => blogApi.patch(`likes/${likeId}/`, data, { headers: getAuthHeaders() })
 
 export const createStoryFull = (data) => blogApi.post(`stories/create-story-full/`, data, { headers: getAuthHeaders() })
+
+export const recallCard = (data) => blogApi.post(`recalls/`, data, { headers: getAuthHeaders() })
+export const deleteRecallCard = (recallId) => blogApi.delete(`recalls/${recallId}/`, { headers: getAuthHeaders() })
+export const getMyRecallCards = () => blogApi.get(`recalls/user-recall-cards`, { headers: getAuthHeaders() })

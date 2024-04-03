@@ -154,6 +154,24 @@ export function StoryPage() {
     }
   };
 
+  const updateCardRecallStatus = (updatedRecallId, updatedRecallLevel, userHasRecalled) => {
+    const updatedCards = cards.map((card, index) => {
+      if (index === currentCardIndex) {
+        return {
+          ...card,
+          user_has_recalled: {
+            ...card.user_has_recalled,
+            recall_id: updatedRecallId,
+            level: updatedRecallLevel,
+            recall: userHasRecalled,
+          },
+        };
+      }
+      return card;
+    });
+    setCards(updatedCards);
+  };
+
   return (
     <div className="pt-20 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
       <div className='text-4xl font-extrabold pb-2'>
@@ -215,7 +233,11 @@ export function StoryPage() {
               </div>
             </div>
           </div>
-          <InteractBox />
+          <InteractBox user_has_recalled={cards[currentCardIndex].user_has_recalled.recall}
+            recall_level={cards[currentCardIndex].user_has_recalled.level}
+            recall_id={cards[currentCardIndex].user_has_recalled.recall_id}
+            card_id={cards[currentCardIndex].id}
+            onUpdateRecall={updateCardRecallStatus} />
           <RateStory />
         </>
       )}
