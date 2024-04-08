@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { FaRegBookmark, FaRegTimesCircle } from 'react-icons/fa'
+import { FaBookmark, FaRegTimesCircle } from 'react-icons/fa'
 import { HiOutlineArrowLeftCircle, HiOutlineArrowRightCircle } from "react-icons/hi2";
-import { getMyRecallCards } from '../api/blog.api';
+import { deleteRecallCard, getMyRecallCards } from '../api/blog.api';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BlocksList } from '../components/topics/BlocksList';
 import { getContentTypes } from '../api/base.api';
@@ -102,7 +102,41 @@ export function RecallsPage() {
     } else {
       updateTitles('', '');
     }
-  }, [recallCards, currentCardIndex, updateTitles]);
+  }, [currentCardIndex, updateTitles]);
+
+  const handleBookmarkClick = async () => {
+    const currentCardId = recallCards[currentCardIndex].id;
+    try {
+      const res_delete = await deleteRecallCard(currentCardId)
+      if (!res_delete && res_delete.status != 204) {
+        console.error('Did not delete recall.');
+      }
+    } catch {
+      setError(error);
+    }
+    const updatedCards = recallCards.filter(recallCard => recallCard.id !== currentCardId);
+    setRecallCards(updatedCards);
+    if (currentCardIndex < updatedCards.length) {
+      setCurrentCardIndex(currentCardIndex);
+    } else {
+      setIsCardsLoaded(false);
+      try {
+        const res = await getMyRecallCards();
+        if (res && res.data) {
+          setRecallCards(res.data);
+          setCurrentCardIndex(0);
+        } else {
+          console.error('Did not load cards.');
+        }
+      } catch (error) {
+        setError(error);
+      } finally {
+        setIsCardsLoaded(true);
+      }
+    }
+
+    window.scrollTo(0, 0);
+  };
 
   return (
     <div className="pb-20 pt-24 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
@@ -128,7 +162,7 @@ export function RecallsPage() {
         </div>
         <div className='bg-[#3DB1FF] px-4 flex py-1'>
           <div className='flex-none flex items-center'>
-            <FaRegBookmark />
+            <FaBookmark className='cursor-pointer' onClick={handleBookmarkClick} />
           </div>
           <div className='flex-grow items-center flex justify-center space-x-4 '>
             <div>
