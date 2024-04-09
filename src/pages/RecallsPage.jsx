@@ -161,10 +161,11 @@ export function RecallsPage() {
           Vous êtes en mode “Rappel”
         </div>
         <div className='bg-[#3DB1FF] px-4 flex py-1'>
-          <div className='flex-none flex items-center'>
+          <div className='flex-none flex items-center w-1/4'>
             <FaBookmark className='cursor-pointer' onClick={handleBookmarkClick} />
+            <span className="ml-2 font-thin text-sm">{recallCards.length} {recallCards.length === 1 ? 'card' : 'cards'}</span>
           </div>
-          <div className='flex-grow items-center flex justify-center space-x-4 '>
+          <div className='flex-grow items-center flex justify-center space-x-4 w-1/2'>
             <div>
               <HiOutlineArrowLeftCircle className='text-4xl cursor-pointer' onClick={goToPreviousCard} />
             </div>
@@ -172,7 +173,7 @@ export function RecallsPage() {
               <HiOutlineArrowRightCircle className='text-4xl cursor-pointer' onClick={goToNextCard} />
             </div>
           </div>
-          <div className='flex-none  flex items-center'>
+          <div className='flex-none  flex items-center w-1/4 justify-end'>
             <FaRegTimesCircle className='text-xl cursor-pointer' onClick={handleBackClick} />
           </div>
         </div>
