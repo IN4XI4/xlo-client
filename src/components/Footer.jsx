@@ -21,22 +21,22 @@ export function Footer() {
         </div>
         <div className="col-span-3 md:col-span-2 flex justify-end items-center px-1 order-2 md:order-3">
           <div className="pr-4 md:pr-8 items-center">
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.facebook.com/mixelo.community" target="_blank" rel="noopener noreferrer">
               <FaFacebookF className="text-gray-500" />
             </a>
           </div>
           <div className="pr-4 md:pr-8">
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.instagram.com/mixelopro" target="_blank" rel="noopener noreferrer">
               <FaInstagram className="text-gray-500" />
             </a>
           </div>
           <div className="pr-4 md:pr-8">
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.linkedin.com/company/mixelo" target="_blank" rel="noopener noreferrer">
               <FaLinkedinIn className="text-gray-500" />
             </a>
           </div>
           <div className="">
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.twitter.com/mixelopro" target="_blank" rel="noopener noreferrer">
               <FaTwitter className="text-gray-500" />
             </a>
           </div>
