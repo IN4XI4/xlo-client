@@ -142,8 +142,8 @@ export function RecallsPage() {
     <div className="pb-20 pt-24 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
       {!isCardsLoaded ? (
         <div>Loading...</div>
-      ) : recallCards.length === 0 && currentCardIndex < recallCards.length ? (
-        <div>You have no recall cards.</div>
+      ) : recallCards.length === 0 ? (
+        <div className='text-2xl text-gray-500'>You have no recall cards.</div>
       ) : (
         <div>
           <div className='text-xl text-gray-500 pb-3'>

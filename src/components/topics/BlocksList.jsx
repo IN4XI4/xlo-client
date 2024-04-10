@@ -56,7 +56,8 @@ function NormalBlock({ content, image, color, user_has_liked, onLikeClick }) {
   )
 }
 
-function AttackBlock({ content, color, image, monster_image, monster_name, monster_profile, user_has_liked, onLikeClick }) {
+function AttackBlock({ content, color, image, monster_image, monster_name, monster_profile, user_has_liked,
+  onLikeClick, soft_skill_name, soft_skill_description, soft_skill_logo }) {
   const hasLiked = user_has_liked !== false;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => {
@@ -90,7 +91,12 @@ function AttackBlock({ content, color, image, monster_image, monster_name, monst
         name={monster_name}
         profile={monster_profile}
         color={color}
-        onClose={closeModal} />}
+        onClose={closeModal} 
+        soft_skill_name={soft_skill_name} 
+        soft_skill_description={soft_skill_description} 
+        soft_skill_logo={soft_skill_logo}
+        isMonster={true} 
+        />}
     </div>
   );
 }
@@ -131,7 +137,8 @@ function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor
         job={mentor_job}
         profile={mentor_profile}
         color={color}
-        onClose={closeModal} />}
+        onClose={closeModal}
+        isMonster={false} />}
     </div>
   );
 }
@@ -149,7 +156,10 @@ function getBlockComponent(block, card, handleLikeClick) {
         color={card.soft_skill_color}
         monster_image={card.soft_skill_monster_picture}
         monster_name={card.soft_skill_monster_name}
-        monster_profile={card.soft_skill_monster_profile} />;
+        monster_profile={card.soft_skill_monster_profile}
+        soft_skill_name={card.soft_skill_name}
+        soft_skill_description={card.soft_skill_description}
+        soft_skill_logo={card.soft_skill_logo} />;
     case 'defense':
       return <DefenseBlock {...commonProps}
         color={card.mentor_color}

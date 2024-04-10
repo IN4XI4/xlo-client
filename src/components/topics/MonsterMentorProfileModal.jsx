@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
+import { FaArrowRightLong } from "react-icons/fa6";
 
-
-export function MonsterMentorProfileModal({ image, name, job, profile, color, onClose }) {
+export function MonsterMentorProfileModal({ image, name, job, profile, color, soft_skill_name, soft_skill_description,
+  soft_skill_logo, onClose, isMonster }) {
   const [isOpen, setIsOpen] = useState(true);
   const handleModalClick = (event) => {
     event.stopPropagation();
@@ -31,9 +32,24 @@ export function MonsterMentorProfileModal({ image, name, job, profile, color, on
           {job && <div className='flex flex-col md:flex-row py-3 text-gray-500 border-b md:items-center'>
             <div className='md:pe-3 font-semibold'>{job}</div>
           </div>}
-          <div className='flex py-3 text-gray-500'>
+          <div className={`flex py-3 text-gray-500 text-sm ${isMonster ? 'border-b ' : ''}`}>
             {profile} &nbsp;
           </div>
+          {isMonster && (<div>
+            <div className='flex py-3 text-gray-500 items-center'>
+              <div className='pe-2'>
+                <img src={soft_skill_logo} alt="" className='h-8 w-8' />
+              </div>
+              {soft_skill_name}
+            </div>
+            <div className='flex py-3 text-gray-500 text-sm'>
+              {soft_skill_description}
+            </div>
+            <div className='flex py-2 items-center text-sm space-x-2 text-[#3DB1FF] underline cursor-pointer'>
+              <div><FaArrowRightLong /></div>
+              <div>Découvrez-en davantage sur cette Soft Skill</div>
+            </div>
+          </div>)}
         </div>
         <div className="mb-[-1rem] md:mb-[-3rem]">
         </div>
