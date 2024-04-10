@@ -37,9 +37,9 @@ export function MonsterMentorProfileModal({ image, name, job, profile, color, so
           </div>
           {isMonster && (<div>
             <div className='flex py-3 text-gray-500 items-center'>
-              <div className='pe-2'>
+              {soft_skill_logo && <div className='pe-2'>
                 <img src={soft_skill_logo} alt="" className='h-8 w-8' />
-              </div>
+              </div>}
               {soft_skill_name}
             </div>
             <div className='flex py-3 text-gray-500 text-sm'>
