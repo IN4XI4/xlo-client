@@ -156,7 +156,7 @@ export function RecallsPage() {
           </div>
         </div>
       )}
-      <div className="fixed inset-x-0 bottom-0 text-white text-center z-50">
+      <div className="fixed inset-x-0 bottom-0 text-white text-center z-40">
         <div className='bg-[#0098FF] text-end px-4 text-sm'>
           Vous êtes en mode “Rappel”
         </div>
