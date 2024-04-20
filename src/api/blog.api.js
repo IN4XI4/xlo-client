@@ -52,3 +52,7 @@ export const createStoryFull = (data) => blogApi.post(`stories/create-story-full
 export const recallCard = (data) => blogApi.post(`recalls/`, data, { headers: getAuthHeaders() })
 export const deleteRecallCard = (recallId) => blogApi.delete(`recalls/${recallId}/`, { headers: getAuthHeaders() })
 export const getMyRecallCards = () => blogApi.get(`recalls/user-recall-cards`, { headers: getAuthHeaders() })
+
+export const listLikeNotifications = (page) => blogApi.get(`notifications/?notification_type=like&page=${page}`, { headers: getAuthHeaders() })
+export const listReplyNotifications = (page) => blogApi.get(`notifications/?notification_type=reply&page=${page}`, { headers: getAuthHeaders() })
+export const updateNotification = (id, data) => blogApi.patch(`notifications/${id}/`, data, { headers: getAuthHeaders() })

@@ -6,6 +6,7 @@ import { Avatar, Dropdown } from 'flowbite-react';
 import { useAppState } from '../context/ScrollContext';
 import { BiSolidBellRing } from "react-icons/bi";
 import { ComingSoonModal } from './ComingSoonModal';
+import { NotificationsModal } from './NotificationsModal';
 
 
 export function Navigation() {
@@ -15,8 +16,10 @@ export function Navigation() {
   const [error, setError] = useState(null);
   const { isScrolled, storyTitle, currentCardTitle, setIsScrolled } = useAppState();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalContext, setModalContext] = useState('');
+  const [modalNotificationType, setModalNotificationType] = useState('');
 
   useEffect(() => {
     loadUser();
@@ -62,6 +65,7 @@ export function Navigation() {
     navigate('/');
     window.location.reload();
   };
+
   const openModal = (title, context) => {
     setModalTitle(title);
     setModalContext(context);
@@ -70,6 +74,16 @@ export function Navigation() {
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const openNotificationModal = (notificationType) => {
+    setModalNotificationType(notificationType);
+    setIsNotificationModalOpen(true);
+  };
+
+  const closeNotificationModal = (notificationType) => {
+    setModalNotificationType(notificationType);
+    setIsNotificationModalOpen(false);
   };
 
   const handleRecallsClick = () => {
@@ -124,13 +138,13 @@ export function Navigation() {
                 <BiSolidBellRing className='me-3 text-[#3DB1FF]' />
                 Mes rappels</span>
             </Dropdown.Item>
-            <Dropdown.Item onClick={() => openModal('Mes engagements', "Le mode qui vous permet de revoir vos histoires les plus importantes, marquées par l'icône du signet, sera prochainement disponible.")}>
+            <Dropdown.Item onClick={() => openNotificationModal('like')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
                 <BiSolidBellRing className='me-3 text-[#3DB1FF]' />
                 Mes engagements
               </span>
             </Dropdown.Item>
-            <Dropdown.Item onClick={() => openModal('Mes Conversations', 'Le mode qui vous permet de consulter les réponses de vos messages et l’activité des conversations que vous suivez sera bientôt disponible.')}>
+            <Dropdown.Item onClick={() => openNotificationModal('reply')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
                 <BiSolidBellRing className='me-3 text-[#3DB1FF]' />
                 Mes conversations
@@ -148,6 +162,7 @@ export function Navigation() {
         </div>
       </div>
       {isModalOpen && <ComingSoonModal title={modalTitle} context={modalContext} onClose={closeModal} />}
+      {isNotificationModalOpen && <NotificationsModal notificationType={modalNotificationType} onClose={closeNotificationModal} />}
     </div >
   );
 }
