@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react'
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { deleteLike, getCardsByStory, getStory, likeSomething, updateLike, userViewStory } from '../api/blog.api';
 import { BlocksList } from '../components/topics/BlocksList';
 import { FaAngleDoubleLeft, FaAngleDoubleRight, FaAngleLeft, FaAngleRight, FaArrowLeft, FaSync, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
@@ -13,6 +13,8 @@ import { RateStory } from '../components/topics/RateStory';
 
 export function StoryPage() {
   const { id } = useParams();
+  const location = useLocation();
+  const commentsRef = useRef(null);
   const [story, setStory] = useState([]);
   const [cards, setCards] = useState([]);
   const [error, setError] = useState(null);
@@ -24,7 +26,6 @@ export function StoryPage() {
   const [commentContentTypeId, setCommentContentTypeId] = useState(null);
 
   const { setIsScrolled, updateTitles } = useAppState();
-
 
   const goToNextCard = () => {
     if (currentCardIndex < cards.length - 1) {
@@ -73,6 +74,17 @@ export function StoryPage() {
     loadContentTypes();
   }, []);
 
+  useEffect(() => {
+    if (isCardsLoaded && location.state?.scrollToComments && commentsRef.current) {
+      console.log(commentsRef.current.offsetTop);
+      setTimeout(() => {
+        window.scrollTo({
+          top: commentsRef.current.offsetTop + 280,
+          behavior: 'smooth'
+        });
+      }, 200);
+    }
+  }, [isCardsLoaded, location.state]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -242,7 +254,7 @@ export function StoryPage() {
         </>
       )}
       {isCardsLoaded && (
-        <div className='py-4'>
+        <div ref={commentsRef} className='py-4'>
           <CommentsList storyId={id} commentContentTypeId={commentContentTypeId} />
         </div>
       )}
