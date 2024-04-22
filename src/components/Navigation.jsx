@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { FaUser } from 'react-icons/fa';
+import { FaBookmark, FaHeart, FaReply, FaUser } from 'react-icons/fa';
+import { AiFillFire } from "react-icons/ai";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { getUser } from '../api/users.api';
 import { Avatar, Dropdown } from 'flowbite-react';
@@ -135,29 +136,29 @@ export function Navigation() {
             </Dropdown.Item>
             <Dropdown.Item onClick={handleRecallsClick}>
               <span className='text-gray-500 flex items-center justify-items-center'>
-                <BiSolidBellRing className='me-3 text-[#3DB1FF]' />
+                <FaBookmark className='me-3 text-[#3DB1FF]' />
                 Mes rappels</span>
             </Dropdown.Item>
             <Dropdown.Item onClick={() => openNotificationModal('like')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
-                <BiSolidBellRing className='me-3 text-[#3DB1FF]' />
+                <FaHeart className='me-3 text-[#3DB1FF]' />
                 Mes engagements
               </span>
             </Dropdown.Item>
             <Dropdown.Item onClick={() => openNotificationModal('reply')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
-                <BiSolidBellRing className='me-3 text-[#3DB1FF]' />
+                <FaReply className='me-3 text-[#3DB1FF]' />
                 Mes conversations
               </span>
             </Dropdown.Item>
             <Dropdown.Item onClick={() => openModal('Soutenez-Nous', 'Plusieurs manières de supporter la plateforme seront bientôt disponibles. Vous pouvez toujours nous contacter sur contact@mixelo.io si vous souhaitez nous aider de quelconque façon.')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
-                <BiSolidBellRing className='me-3 text-[#3DB1FF]' />
+                <AiFillFire className='me-3 text-[#3DB1FF]' />
                 Soutenez-nous
               </span>
             </Dropdown.Item>
             <Dropdown.Divider />
-            <Dropdown.Item onClick={handleLogout} className='text-gray-500'>Logout</Dropdown.Item>
+            <Dropdown.Item onClick={handleLogout} className='text-gray-500'>Me déconnecter</Dropdown.Item>
           </Dropdown>
         </div>
       </div>
