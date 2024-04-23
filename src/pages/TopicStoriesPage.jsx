@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
-import { getTopic } from '../api/base.api';
+import { getTopic, getTopicBySlug } from '../api/base.api';
 import { FaArrowLeft, FaHeart, FaPlus, FaRegHeart, FaSearch } from 'react-icons/fa';
 import { Alert, TextInput } from 'flowbite-react';
 import { StoriesList } from '../components/topics/StoriesList';
@@ -10,7 +10,7 @@ import { HiInformationCircle } from 'react-icons/hi';
 
 
 export function TopicStoriesPage() {
-  const { id } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
@@ -37,12 +37,12 @@ export function TopicStoriesPage() {
 
   useEffect(() => {
     loadTopic();
-  }, [id]);
+  }, [slug]);
 
   async function loadTopic() {
     try {
       setIsLoading(true);
-      const res = await getTopic(id);
+      const res = await getTopicBySlug(slug);
       setTopic(res.data);
       setIsLoading(false);
     } catch (error) {
@@ -55,7 +55,7 @@ export function TopicStoriesPage() {
     const data = {
       liked: true,
       content_type: topic.topic_content_type_id,
-      object_id: id,
+      object_id: topic.id,
       is_active: true
     };
 
@@ -95,7 +95,7 @@ export function TopicStoriesPage() {
 
   const createStoryHandler = () => {
     if (topic.is_creator) {
-      navigate(`/create-story/${id}`);
+      navigate(`/create-story/${topic.id}`);
     }
   };
   return (
@@ -148,7 +148,7 @@ export function TopicStoriesPage() {
         {isLoading ? (
           <div>Loading...</div>
         ) : (
-          <StoriesList topicId={id} categoryId={topic.tag} searchText={searchText} />
+          <StoriesList topicId={topic.id} categoryId={topic.tag} searchText={searchText} />
         )}
       </div>
       {isModalOpen && <ComingSoonModal title={modalTitle} context={modalContext} onClose={() => setIsModalOpen(false)} />}

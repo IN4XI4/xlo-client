@@ -149,7 +149,7 @@ export function TopicTags() {
                     <div className="flex flex-col justify-between p-4 rounded-lg bg-white 
                     shadow-md h-[17.5rem] z-0 my-2 border-[6px] border-transparent
                      hover:border-yellow-opacity cursor-pointer" onClick={(e) => {
-                        navigate(`topic/${topic.id}`);
+                        navigate(`topic/${topic.slug}`);
                       }}>
                       {topic.image && <div className='flex justify-center'><img src={topic.image} alt={topic.title} className='w-full h-20 rounded-lg' /></div>}
                       <div className={topic.image ? "line-clamp-5 text-center overflow-hidden text-gray-500 py-1" : "line-clamp-8 text-center overflow-hidden text-gray-500 py-1"}>

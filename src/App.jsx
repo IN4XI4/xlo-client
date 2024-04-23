@@ -38,8 +38,8 @@ function App() {
           <div className="flex-grow">
             <Routes>
               <Route path="/" element={<HomePage />} />
-              <Route path="/topic/:id" element={<ProtectedRoute><TopicStoriesPage /></ProtectedRoute>} />
-              <Route path="/story/:id" element={<ProtectedRoute><StoryPage /></ProtectedRoute>} />
+              <Route path="/topic/:slug" element={<ProtectedRoute><TopicStoriesPage /></ProtectedRoute>} />
+              <Route path="/story/:slug" element={<ProtectedRoute><StoryPage /></ProtectedRoute>} />
               <Route path="/profile/" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
               <Route path="/new-stories/" element={<ProtectedRoute><MyNewStoriesPage key="mystories-page" /></ProtectedRoute>} />
               <Route path="/recall-cards/" element={<ProtectedRoute><RecallsPage key="recalls-page" /></ProtectedRoute>} />
