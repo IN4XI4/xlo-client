@@ -61,8 +61,8 @@ export function StoriesList({ topicId, categoryId, searchText }) {
     setSelectedButton(buttonName);
   }
 
-  const handleTopicClick = (topicId) => {
-    navigate(`/topic/${topicId}`);
+  const handleTopicClick = (topicSlug) => {
+    navigate(`/topic/${topicSlug}`);
     window.scrollTo(0, 0);
   };
 
@@ -118,7 +118,7 @@ export function StoriesList({ topicId, categoryId, searchText }) {
         >
           {stories.map((story, index) => (
             <div key={index} className='grid grid-cols-10 py-3'>
-              <Link to={`/story/${story.id}`} className={`col-span-7 ${story.user_has_viewed ? 'bg-gray-50' : 'bg-[#FFCE80]'} p-3 rounded-lg`}>
+              <Link to={`/story/${story.slug}`} className={`col-span-7 ${story.user_has_viewed ? 'bg-gray-50' : 'bg-[#FFCE80]'} p-3 rounded-lg`}>
                 <div className='font-bold text-black text-xl truncate'>{story.title}</div>
                 <div className='flex justify-between'>
                   <div className='text-sm truncate pe-2'>{story.subtitle}</div>
@@ -147,7 +147,7 @@ export function StoriesList({ topicId, categoryId, searchText }) {
         {topics.map((topic, index) => (
           <button
             key={index}
-            onClick={() => handleTopicClick(topic.id)}
+            onClick={() => handleTopicClick(topic.slug)}
             className='text-[#818282] p-3 md:p-4 bg-gray-200 rounded-lg border mr-3 mb-3'>
             {truncateText(topic.title)}
           </button>

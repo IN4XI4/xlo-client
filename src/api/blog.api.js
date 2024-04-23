@@ -30,6 +30,7 @@ export const getLikedTopicStories = (page, ordering = null, searchText = '') => 
     return blogApi.get(url, { headers: getAuthHeaders() });
 };
 export const getStory = (storyId) => blogApi.get(`stories/${storyId}/`, { headers: getAuthHeaders() })
+export const getStoryBySlug = (slug) => blogApi.get(`stories/find-by-slug/${slug}/`, { headers: getAuthHeaders() })
 export const getCardsByStory = (storyId) => blogApi.get(`cards/?story=${storyId}`, { headers: getAuthHeaders() })
 export const getBlocksByCard = (cardId) => blogApi.get(`blocks/?card=${cardId}`, { headers: getAuthHeaders() })
 export const getBlockTypes = () => blogApi.get(`blocktypes/`, { headers: getAuthHeaders() })

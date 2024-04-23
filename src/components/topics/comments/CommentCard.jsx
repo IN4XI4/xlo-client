@@ -70,7 +70,7 @@ export function CommentCard({ comment, isReply, onReply, commentContentTypeId })
           <div className="">
             <span className='font-bold cursor-pointer' onClick={() => openModal()}>{comment.user_name}</span> <span className='text-gray-500'>{comment.formatted_created_time}</span>
           </div>
-          <div className='pb-3 break-all'>
+          <div className='pb-3'>
             {comment.comment_text}
           </div>
           <ActionIcons onReplyClick={handleReplyClick} userHasLiked={userHasLiked} onLikeClick={handleLikeClick} />

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { deleteLike, getCardsByStory, getStory, likeSomething, updateLike, userViewStory } from '../api/blog.api';
+import { deleteLike, getCardsByStory, getStoryBySlug, likeSomething, updateLike, userViewStory } from '../api/blog.api';
 import { BlocksList } from '../components/topics/BlocksList';
 import { FaAngleDoubleLeft, FaAngleDoubleRight, FaAngleLeft, FaAngleRight, FaArrowLeft, FaSync, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 import { Progress } from 'flowbite-react';
@@ -12,7 +12,7 @@ import { RateStory } from '../components/topics/RateStory';
 
 
 export function StoryPage() {
-  const { id } = useParams();
+  const { slug } = useParams();
   const location = useLocation();
   const commentsRef = useRef(null);
   const [story, setStory] = useState([]);
@@ -53,16 +53,16 @@ export function StoryPage() {
 
   useEffect(() => {
     loadStory();
-  }, [id]);
+  }, [slug]);
 
   async function loadStory() {
     try {
-      const res = await getStory(id);
+      const res = await getStoryBySlug(slug);
       setStory(res.data);
       if (!res.data.user_has_viewed) {
-        await userViewStory({ story: id });
+        await userViewStory({ story: res.data.id });
       }
-      const cardsResponse = await getCardsByStory(id);
+      const cardsResponse = await getCardsByStory(res.data.id);
       setCards(cardsResponse.data.results);
       setIsCardsLoaded(true);
     } catch (error) {
@@ -255,7 +255,7 @@ export function StoryPage() {
       )}
       {isCardsLoaded && (
         <div ref={commentsRef} className='py-4'>
-          <CommentsList storyId={id} commentContentTypeId={commentContentTypeId} />
+          <CommentsList storyId={story.id} commentContentTypeId={commentContentTypeId} />
         </div>
       )}
     </div>
