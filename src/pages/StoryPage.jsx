@@ -24,8 +24,13 @@ export function StoryPage() {
   const [storyContentTypeId, setStoryContentTypeId] = useState(null);
   const [blockContentTypeId, setBlockContentTypeId] = useState(null);
   const [commentContentTypeId, setCommentContentTypeId] = useState(null);
-
   const { setIsScrolled, updateTitles } = useAppState();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsAuthenticated(!!token);
+  }, []);
 
   const goToNextCard = () => {
     if (currentCardIndex < cards.length - 1) {
@@ -58,8 +63,9 @@ export function StoryPage() {
   async function loadStory() {
     try {
       const res = await getStoryBySlug(slug);
+      const token = localStorage.getItem('token');
       setStory(res.data);
-      if (!res.data.user_has_viewed) {
+      if (!res.data.user_has_viewed && token) {
         await userViewStory({ story: res.data.id });
       }
       const cardsResponse = await getCardsByStory(res.data.id);
@@ -71,7 +77,10 @@ export function StoryPage() {
   }
 
   useEffect(() => {
-    loadContentTypes();
+    const token = localStorage.getItem('token');
+    if (token) {
+      loadContentTypes();
+    }
   }, []);
 
   useEffect(() => {
@@ -123,6 +132,9 @@ export function StoryPage() {
   }
 
   const handleLikeOrDislike = async (isLike) => {
+    if (!isAuthenticated) {
+      return
+    }
     const alreadyLiked = story.user_has_liked.liked;
     const alreadyDisliked = story.user_has_liked.disliked;
 
@@ -183,6 +195,12 @@ export function StoryPage() {
     });
     setCards(updatedCards);
   };
+
+  if (error) {
+    return <div className="text-center p-10 text-xl text-gray-700">
+      Story not found or you do not have permission to view it.
+    </div>;
+  }
 
   return (
     <div className="pt-20 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
@@ -245,12 +263,16 @@ export function StoryPage() {
               </div>
             </div>
           </div>
-          <InteractBox user_has_recalled={cards[currentCardIndex].user_has_recalled.recall}
-            recall_level={cards[currentCardIndex].user_has_recalled.level}
-            recall_id={cards[currentCardIndex].user_has_recalled.recall_id}
-            card_id={cards[currentCardIndex].id}
-            onUpdateRecall={updateCardRecallStatus} />
-          <RateStory />
+          {isAuthenticated && (
+            <>
+              <InteractBox user_has_recalled={cards[currentCardIndex].user_has_recalled.recall}
+                recall_level={cards[currentCardIndex].user_has_recalled.level}
+                recall_id={cards[currentCardIndex].user_has_recalled.recall_id}
+                card_id={cards[currentCardIndex].id}
+                onUpdateRecall={updateCardRecallStatus} />
+              <RateStory />
+            </>
+          )}
         </>
       )}
       {isCardsLoaded && (
