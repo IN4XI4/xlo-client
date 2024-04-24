@@ -108,7 +108,6 @@ export function TopicStoriesPage() {
       <div className='text-2xl md:text-4xl font-extrabold'>
         {topic.title}
       </div>
-      <div className='text-xl py-3'>"Text block"...</div>
       <div className='flex items-center py-4 border-b-4 border-[#D9D9D9]'>
         <div className='flex-none pe-2 md:pe-6'>
           <Link to="/">

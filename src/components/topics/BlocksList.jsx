@@ -37,27 +37,27 @@ const ImageContainer = ({ image, color }) => (
   ) : null
 );
 
-const BlockContainer = ({ children, color, additionalClass, hasLiked, onLikeClick }) => (
+const BlockContainer = ({ children, color, additionalClass, hasLiked, onLikeClick, isAuthenticated }) => (
   <div className='mb-3'>
     <div className={`p-4 bg-gray-50 shadow rounded-[2.5rem] border-[6px] ${additionalClass}`} style={{ borderColor: color || "#3DB1FF" }}>
       {children}
     </div>
-    <ActionIcons hasLiked={hasLiked} onLikeClick={onLikeClick} />
+    {isAuthenticated && <ActionIcons hasLiked={hasLiked} onLikeClick={onLikeClick} />}
   </div>
 );
 
-function NormalBlock({ content, image, color, user_has_liked, onLikeClick }) {
+function NormalBlock({ content, image, color, user_has_liked, onLikeClick, isAuthenticated }) {
   const hasLiked = user_has_liked !== false;
   return (
     <div>
-      <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick}>{content}</BlockContainer>
+      <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} isAuthenticated={isAuthenticated}>{content}</BlockContainer>
       <ImageContainer image={image} color={color} />
     </div>
   )
 }
 
 function AttackBlock({ content, color, image, monster_image, monster_name, monster_profile, user_has_liked,
-  onLikeClick, soft_skill_name, soft_skill_description, soft_skill_logo }) {
+  onLikeClick, soft_skill_name, soft_skill_description, soft_skill_logo, isAuthenticated }) {
   const hasLiked = user_has_liked !== false;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => {
@@ -71,7 +71,8 @@ function AttackBlock({ content, color, image, monster_image, monster_name, monst
     <div>
       <div className='flex'>
         <div className="flex-grow">
-          <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} additionalClass="rounded-tr-none">
+          <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} additionalClass="rounded-tr-none"
+          isAuthenticated={isAuthenticated}>
             <div className='font-bold text-end text-gray-700'>{monster_name}</div>
             {content}
           </BlockContainer>
@@ -91,17 +92,18 @@ function AttackBlock({ content, color, image, monster_image, monster_name, monst
         name={monster_name}
         profile={monster_profile}
         color={color}
-        onClose={closeModal} 
-        soft_skill_name={soft_skill_name} 
-        soft_skill_description={soft_skill_description} 
+        onClose={closeModal}
+        soft_skill_name={soft_skill_name}
+        soft_skill_description={soft_skill_description}
         soft_skill_logo={soft_skill_logo}
-        isMonster={true} 
-        />}
+        isMonster={true}
+      />}
     </div>
   );
 }
 
-function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor_job, mentor_profile, user_has_liked, onLikeClick }) {
+function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor_job, mentor_profile, user_has_liked,
+  onLikeClick, isAuthenticated }) {
   const hasLiked = user_has_liked !== false;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => {
@@ -123,7 +125,8 @@ function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor
           ) : <FaUser />}
         </div>
         <div className='flex-grow'>
-          <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} additionalClass="rounded-tl-none">
+          <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} additionalClass="rounded-tl-none"
+          isAuthenticated={isAuthenticated}>
             <div className='font-bold text-gray-700 ps-1'>{mentor_name}</div>
             <div className='font-bold text-gray-700 pb-1 ps-1'>{mentor_job}</div>
             {content}
@@ -143,12 +146,13 @@ function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor
   );
 }
 
-function getBlockComponent(block, card, handleLikeClick) {
+function getBlockComponent(block, card, handleLikeClick, isAuthenticated) {
   const commonProps = {
     content: block.content,
     image: block.image,
     user_has_liked: block.user_has_liked,
-    onLikeClick: () => handleLikeClick(block.id, block.user_has_liked)
+    onLikeClick: () => handleLikeClick(block.id, block.user_has_liked),
+    isAuthenticated
   };
   switch (block.block_type_name.toLowerCase()) {
     case 'attack':
@@ -175,6 +179,7 @@ function getBlockComponent(block, card, handleLikeClick) {
 export function BlocksList({ card, blockContentTypeId }) {
   const [blocks, setBlocks] = useState([]);
   const [error, setError] = useState(null);
+  const isAuthenticated = Boolean(localStorage.getItem('token'));
 
   useEffect(() => {
     if (card) {
@@ -226,7 +231,7 @@ export function BlocksList({ card, blockContentTypeId }) {
     <div className='bg-white rounded-lg p-4 md:p-8 lg:p-12'>
       {blocks.map((block, index) => (
         <React.Fragment key={index}>
-          {getBlockComponent(block, card, handleLikeClick)}
+          {getBlockComponent(block, card, handleLikeClick, isAuthenticated)}
         </React.Fragment>
       ))}
     </div>

@@ -32,7 +32,7 @@ export function TopicTags() {
       ...topicTag,
       topics: topicTag.topics.map(topic => {
         if (topic.id === topicId) {
-          return { ...topic,  user_has_liked: likeState };
+          return { ...topic, user_has_liked: likeState };
         }
         return topic;
       })
@@ -129,8 +129,12 @@ export function TopicTags() {
 
   return (
     <div>
-      <div className='text-4xl font-extrabold pb-4 '>"Heading"...</div>
-      <div className='text-2xl '>"Text block"...</div>
+      <div className='text-4xl font-extrabold pb-4 '>Choisissez une carte</div>
+      <div className='text-xl text-gray-500'>Afin de vous offrir la meilleure expérience possible, choisissez parmi l’une des trois catégories [1]; [2]; [3], celle qui correspond à votre besoin en ce moment précis !
+        </div>
+        <div className='text-xl text-gray-500'>
+        Puis, sélectionnez la carte qui reflète le mieux votre état d’esprit.
+        </div>
       {topicTags.map(topictag => (
         <div key={topictag.id} className='py-4'>
           <div className={`text-3xl font-semibold py-3 border-b-4`} style={{ borderBottomColor: topictag.color || "#FFC700" }}>{topictag.name}</div>

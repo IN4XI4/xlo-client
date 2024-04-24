@@ -22,7 +22,10 @@ export function CommentsList({ storyId, commentContentTypeId }) {
   };
 
   useEffect(() => {
-    checkIfUserIsCommentor();
+    const isAuthenticated = Boolean(localStorage.getItem('token'));
+    if (isAuthenticated) {
+      checkIfUserIsCommentor();
+    }
     loadInitialComments();
   }, []);
 

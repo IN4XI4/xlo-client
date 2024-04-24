@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { getStoriesByTopic } from '../../api/blog.api';
 import { getTopicsByCategory } from '../../api/base.api';
-import { FaAngleDown, FaCommentDots, FaEye, FaRegSquare, FaThumbsUp } from 'react-icons/fa';
+import { FaAngleDown, FaCommentDots, FaEye, FaThumbsUp } from 'react-icons/fa';
+import { CgShapeCircle } from "react-icons/cg";
 import { Link, useNavigate } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
-
 
 export function StoriesList({ topicId, categoryId, searchText }) {
   const [stories, setStories] = useState([]);
@@ -125,7 +125,7 @@ export function StoriesList({ topicId, categoryId, searchText }) {
                   <div className='flex'>
                     {story.card_colors.map((color, colorIndex) => (
                       <div key={colorIndex} className="pe-1" style={{ color: color || "#3DB1FF" }}>
-                        <FaRegSquare />
+                        <CgShapeCircle />
                       </div>
                     ))}
                   </div>
