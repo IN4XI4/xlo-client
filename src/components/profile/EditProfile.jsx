@@ -269,7 +269,7 @@ export function EditProfile({ profileInfo }) {
     <div className='grid grid-cols-1 md:grid-cols-3'>
       <div className='md:pe-2'>
         <div className='bg-white rounded px-3 py-4 flex items-center border border-gray-100 mb-3'>
-          <div className='bg-gray-200 rounded-full flex items-center justify-center h-24 w-24'>
+          <div className='bg-gray-100 rounded-full flex items-center justify-center h-24 w-24'>
             {selectedImage ? (
               <img src={selectedImage} alt="Selected" className="h-24 w-24 border-4 rounded-full" style={{ borderColor: currentProfileColor }} />
             ) : profileInfo.profile_picture ? (

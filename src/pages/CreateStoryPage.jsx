@@ -8,7 +8,7 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
 
 export function CreateStoryPage() {
-  const { id: topicId } = useParams();
+  const { id: topicId, slug } = useParams();
   const navigate = useNavigate();
   const [isCreator, setIsCreator] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -164,7 +164,7 @@ export function CreateStoryPage() {
     try {
       const response = await createStoryFull(formData);
       setIsSubmitError(false);
-      navigate(`/topic/${topicId}`, { state: { storyCreated: true } });
+      navigate(`/topic/${slug}`, { state: { storyCreated: true } });
     } catch (error) {
       console.error("Error creating story:", error.response?.data || error.message);
       setSubmitMessage('Failed to create story. Please try again.');

@@ -33,8 +33,7 @@ export function ForgotPassword() {
     };
     return (
         <form className="grid grid-cols-4" onSubmit={handleSubmit(onSubmit)}>
-            <div className="hidden lg:block"></div>
-            <div className="bg-white p-8 rounded-md shadow-md col-span-full xl:col-span-3">
+            <div className="bg-white p-8 rounded-md shadow-md col-span-full xl:col-span-4">
                 <div className="mb-4">
                     <div className='pb-2'>
                         <Label htmlFor="email" className="text-gray-900" value="Your email" />

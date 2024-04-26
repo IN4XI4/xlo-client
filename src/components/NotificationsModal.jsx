@@ -3,11 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { listLikeNotifications, listReplyNotifications, updateNotification } from '../api/blog.api';
 import { FaHeart, FaReply, FaChevronDown } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
+import { useAppState } from '../context/ScrollContext';
+
 import '../App.css'
 import user_image from '../assets/user_image.svg';
 
 export function NotificationsModal({ notificationType: initialNotificationType, onClose }) {
   const navigate = useNavigate();
+  const { refreshNavigation } = useAppState();  
   const [isOpen, setIsOpen] = useState(true);
   const [error, setError] = useState(null);
   const [likeNotifications, setLikeNotifications] = useState([]);
@@ -89,8 +92,9 @@ export function NotificationsModal({ notificationType: initialNotificationType, 
       await updateNotification(notification.id, { has_viewed: true });
     }
     onClose();
+    refreshNavigation();
     setTimeout(() => {
-      navigate(`/story/${notification.comment_details.story_id}`, { state: { scrollToComments: true } });
+      navigate(`/story/${notification.comment_details.story_slug}`, { state: { scrollToComments: true }, key: Date.now() });
     }, 150);
   };
   if (!isOpen) return null;

@@ -13,9 +13,8 @@ export function MyStoriesList({ searchText }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setCurrentPage(1);
-    loadStories(1);
-  }, []);
+    loadStories(currentPage);
+  }, [currentPage]);
 
   useEffect(() => {
     loadStories(1);
@@ -89,7 +88,7 @@ export function MyStoriesList({ searchText }) {
         >
           {stories.map((story, index) => (
             <div key={index} className='grid grid-cols-10 py-3'>
-              <Link to={`/story/${story.id}`} className={`col-span-7 ${story.user_has_viewed ? 'bg-gray-50' : 'bg-[#FFCE80]'} p-3 rounded-lg`}>
+              <Link to={`/story/${story.slug}`} className={`col-span-7 ${story.user_has_viewed ? 'bg-gray-50' : 'bg-[#FFCE80]'} p-3 rounded-lg`}>
                 <div className='font-bold text-black text-xl truncate'>{story.title}</div>
                 <div className='flex justify-between'>
                   <div className='text-sm truncate pe-2'>{story.subtitle}</div>
