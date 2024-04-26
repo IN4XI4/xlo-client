@@ -41,8 +41,7 @@ export function Login() {
   };
   return (
     <form className="grid grid-cols-4" onSubmit={handleSubmit(onSubmit)}>
-      <div className="hidden lg:block"></div>
-      <div className="bg-white p-8 rounded-md shadow-md col-span-full xl:col-span-3">
+      <div className="bg-white p-8 rounded-md shadow-md col-span-full xl:col-span-4">
         <div className="text-3xl font-bold mb-4">Sign In</div>
         <div className="mb-4">
           <div className='pb-2'>

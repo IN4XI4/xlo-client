@@ -9,13 +9,14 @@ import { BiSolidBellRing } from "react-icons/bi";
 import { ComingSoonModal } from './ComingSoonModal';
 import { NotificationsModal } from './NotificationsModal';
 import logo from '../assets/Logo.svg';
+import profile_pic from '../assets/Profile-pic.svg';
 
 export function Navigation() {
   const navigate = useNavigate();
   const location = useLocation();
   const [user, setUser] = useState({ data: {} });
   const [error, setError] = useState(null);
-  const { isScrolled, storyTitle, currentCardTitle, setIsScrolled } = useAppState();
+  const { isScrolled, storyTitle, currentCardTitle, setIsScrolled, navigationKey } = useAppState();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
@@ -24,7 +25,7 @@ export function Navigation() {
 
   useEffect(() => {
     loadUser();
-  }, []);
+  }, [navigationKey]);
 
   useEffect(() => {
     setIsScrolled(false);
@@ -113,9 +114,11 @@ export function Navigation() {
           <Dropdown label="" dismissOnClick={true} renderTrigger={() => (
             <span className='cursor-pointer'>
               {user && user.picture ? (
-                <Avatar img={user.picture} alt="Profile" rounded />
+                <Avatar img={user.picture} alt="Profile" rounded  
+                status={user.notifications && user.notifications.has_unread ? "busy" : undefined}
+                statusPosition="top-right" />
               ) : (
-                <FaUser size={20} color="currentColor" />
+                <Avatar img={profile_pic} rounded />
               )}
             </span>
           )}>
@@ -127,25 +130,25 @@ export function Navigation() {
             <Dropdown.Divider />
             <Dropdown.Item onClick={() => navigate('/new-stories/')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
-                <BiSolidBellRing className='me-3 text-[#3DB1FF]' />
+                <BiSolidBellRing className='me-3' />
                 Mes nouvelles histoires
               </span>
             </Dropdown.Item>
             <Dropdown.Item onClick={handleRecallsClick}>
               <span className='text-gray-500 flex items-center justify-items-center'>
-                <FaBookmark className='me-3 text-[#3DB1FF]' />
+                <FaBookmark className='me-3' />
                 Mes rappels</span>
             </Dropdown.Item>
             <Dropdown.Item onClick={() => openNotificationModal('like')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
-                <FaHeart className='me-3 text-[#3DB1FF]' />
-                Mes engagements
+                <FaHeart className={`me-3 ${user.notifications && user.notifications.like_count > 0 ? "text-[#3DB1FF]": ""}`} />
+                Mes engagements {user.notifications && user.notifications.like_count > 0 && <span>&nbsp;({user.notifications.like_count})</span>}
               </span>
             </Dropdown.Item>
             <Dropdown.Item onClick={() => openNotificationModal('reply')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
-                <FaReply className='me-3 text-[#3DB1FF]' />
-                Mes conversations
+                <FaReply className={`me-3 ${user.notifications && user.notifications.reply_count > 0 ? "text-[#3DB1FF]": ""}`} />
+                Mes conversations {user.notifications && user.notifications.reply_count > 0 && <span>&nbsp;({user.notifications.like_count})</span>}
               </span>
             </Dropdown.Item>
             <Dropdown.Item onClick={() => openModal('Soutenez-Nous', 'Plusieurs manières de supporter la plateforme seront bientôt disponibles. Vous pouvez toujours nous contacter sur contact@mixelo.io si vous souhaitez nous aider de quelconque façon.')}>

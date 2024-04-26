@@ -95,7 +95,7 @@ export function TopicStoriesPage() {
 
   const createStoryHandler = () => {
     if (topic.is_creator) {
-      navigate(`/create-story/${topic.id}`);
+      navigate(`/create-story/${topic.id}/${topic.slug}`);
     }
   };
   return (

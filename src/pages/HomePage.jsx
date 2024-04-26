@@ -47,11 +47,11 @@ export function HomePage() {
     }
 
     return (
-      <div className="grid grid-cols-2 pt-24 md:pt-32 px-4 md:px-16 lg:px-32 xl:px-44">
-        <div className='col-span-2 md:col-auto pb-6 px-2'>
+      <div className="grid lg:grid-cols-5 pt-24 md:pt-32 px-4 md:px-16 lg:px-32 xl:px-44">
+        <div className='lg:col-span-3 pb-6 px-4'>
           <Welcome />
         </div>
-        <div className='col-span-2 md:col-auto pb-8 sm:px-24 md:px-0'>
+        <div className='lg:col-span-2 pb-8 sm:px-24 md:px-0 xl:px-4'>
           {viewComponent}
         </div>
       </div>
