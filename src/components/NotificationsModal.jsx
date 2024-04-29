@@ -126,7 +126,7 @@ export function NotificationsModal({ notificationType: initialNotificationType, 
                   <div className='flex items-center justify-center px-1 custom-scrollbar'>
                     {notification.user_picture ?
                       <img src={notification.user_picture} className='h-6 w-6 rounded-full' alt="" /> :
-                      <img src="src/assets/user_image.svg" className='h-6 w-6' alt="" />}
+                      <img src={user_image} className='h-6 w-6' alt="" />}
                   </div>
                   <div className='flex-1 truncate'>
                     <span className='font-bold pe-1'>{notification.user_action}</span>
