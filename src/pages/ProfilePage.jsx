@@ -26,7 +26,7 @@ export function ProfilePage() {
       <div className='font-bold text-3xl pb-5'>PROFIL & PARAMÈTRES</div>
       {profileInfo && <EditProfile profileInfo={profileInfo} />}
       <PasswordInfo />
-      <Alerts />
+      {profileInfo && (profileInfo.email_info !== undefined) && <Alerts profileInfo={profileInfo} />}
     </div>
   )
 }

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { FaAngleDown, FaCommentDots, FaEye, FaLayerGroup, FaRegSquare, FaTags, FaThumbsUp } from 'react-icons/fa';
+import { FaAngleDown, FaCommentDots, FaEye, FaLayerGroup, FaTags, FaThumbsUp } from 'react-icons/fa';
 import { getLikedTopicStories } from '../../api/blog.api';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link } from 'react-router-dom';
+import { CgShapeCircle } from "react-icons/cg";
 
 
 export function MyStoriesList({ searchText }) {
@@ -95,7 +96,7 @@ export function MyStoriesList({ searchText }) {
                   <div className='flex'>
                     {story.card_colors.map((color, colorIndex) => (
                       <div key={colorIndex} className="pe-1" style={{ color: color || "#3DB1FF" }}>
-                        <FaRegSquare />
+                        <CgShapeCircle />
                       </div>
                     ))}
                   </div>
