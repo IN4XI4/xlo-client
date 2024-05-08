@@ -114,11 +114,13 @@ export function Navigation() {
           <Dropdown label="" dismissOnClick={true} renderTrigger={() => (
             <span className='cursor-pointer'>
               {user && user.picture ? (
-                <Avatar img={user.picture} alt="Profile" rounded  
-                status={user.notifications && user.notifications.has_unread ? "busy" : undefined}
-                statusPosition="top-right" />
+                <Avatar img={user.picture} alt="Profile" rounded
+                  status={user.notifications && user.notifications.has_unread ? "busy" : undefined}
+                  statusPosition="top-right" />
               ) : (
-                <Avatar img={profile_pic} rounded />
+                <Avatar img={profile_pic} rounded
+                  status={user.notifications && user.notifications.has_unread ? "busy" : undefined}
+                  statusPosition="top-right" />
               )}
             </span>
           )}>
@@ -141,13 +143,13 @@ export function Navigation() {
             </Dropdown.Item>
             <Dropdown.Item onClick={() => openNotificationModal('like')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
-                <FaHeart className={`me-3 ${user.notifications && user.notifications.like_count > 0 ? "text-[#3DB1FF]": ""}`} />
+                <FaHeart className={`me-3 ${user.notifications && user.notifications.like_count > 0 ? "text-[#3DB1FF]" : ""}`} />
                 Mes engagements {user.notifications && user.notifications.like_count > 0 && <span>&nbsp;({user.notifications.like_count})</span>}
               </span>
             </Dropdown.Item>
             <Dropdown.Item onClick={() => openNotificationModal('reply')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
-                <FaReply className={`me-3 ${user.notifications && user.notifications.reply_count > 0 ? "text-[#3DB1FF]": ""}`} />
+                <FaReply className={`me-3 ${user.notifications && user.notifications.reply_count > 0 ? "text-[#3DB1FF]" : ""}`} />
                 Mes conversations {user.notifications && user.notifications.reply_count > 0 && <span>&nbsp;({user.notifications.like_count})</span>}
               </span>
             </Dropdown.Item>
