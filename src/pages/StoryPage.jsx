@@ -203,7 +203,7 @@ export function StoryPage() {
   }
 
   return (
-    <div className="pt-20 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
+    <div className="pt-24 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
       <div className='text-4xl font-extrabold pb-2'>
         {story.title}
       </div>
