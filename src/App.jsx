@@ -15,6 +15,9 @@ import { RecallsPage } from './pages/RecallsPage'
 ReactGA.initialize('G-RNZFYR8DPV');
 
 function formatTitle(pathname) {
+  if (pathname === '/') {
+    return 'Mixelo';
+  }
   return pathname
     .split('/')
     .filter(Boolean)
