@@ -34,33 +34,38 @@ function ProtectedRoute({ children }) {
 }
 function App() {
   const location = useLocation();
+
   useEffect(() => {
     ReactGA.send({ hitType: "pageview", page: location.pathname });
   }, [location]);
 
   const token = localStorage.getItem("token");
   return (
-    <BrowserRouter>
-      <AppStateProvider>
-        <div className="flex flex-col min-h-screen bg-gray-50">
-          {token && <Navigation />}
-          <div className="flex-grow">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/topic/:slug" element={<ProtectedRoute><TopicStoriesPage /></ProtectedRoute>} />
-              <Route path="/story/:slug" element={<StoryPage />} />
-              <Route path="/profile/" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-              <Route path="/new-stories/" element={<ProtectedRoute><MyNewStoriesPage key="mystories-page" /></ProtectedRoute>} />
-              <Route path="/recall-cards/" element={<ProtectedRoute><RecallsPage key="recalls-page" /></ProtectedRoute>} />
-              <Route path="/create-story/:id/:slug" element={<ProtectedRoute><CreateStoryPage key="create-story-page" /></ProtectedRoute>} />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </div>
-          <ConditionalFooter />
-        </div>
-      </AppStateProvider>
-    </BrowserRouter>
-  )
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      {token && <Navigation />}
+      <div className="flex-grow">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/topic/:slug" element={<ProtectedRoute><TopicStoriesPage /></ProtectedRoute>} />
+          <Route path="/story/:slug" element={<StoryPage />} />
+          <Route path="/profile/" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+          <Route path="/new-stories/" element={<ProtectedRoute><MyNewStoriesPage key="mystories-page" /></ProtectedRoute>} />
+          <Route path="/recall-cards/" element={<ProtectedRoute><RecallsPage key="recalls-page" /></ProtectedRoute>} />
+          <Route path="/create-story/:id/:slug" element={<ProtectedRoute><CreateStoryPage key="create-story-page" /></ProtectedRoute>} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
+      <ConditionalFooter />
+    </div>
+  );
 }
 
-export default App
+export default function Root() {
+  return (
+    <BrowserRouter>
+      <AppStateProvider>
+        <App />
+      </AppStateProvider>
+    </BrowserRouter>
+  );
+}
