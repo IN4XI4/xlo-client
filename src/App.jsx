@@ -34,9 +34,9 @@ function ProtectedRoute({ children }) {
 }
 function App() {
   const location = useLocation();
-
+  console.log(location.pathname);
   useEffect(() => {
-    ReactGA.send({ hitType: "pageview", page: location.pathname });
+    ReactGA.send({ hitType: "pageview", page: location.pathname, title: location.pathname });
   }, [location]);
 
   const token = localStorage.getItem("token");
