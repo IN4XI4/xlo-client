@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import ReactGA from "react-ga4";
 import { HomePage } from './pages/HomePage'
 import { Navigation } from './components/Navigation'
 import { Footer } from './components/Footer'
@@ -10,6 +11,9 @@ import { MyNewStoriesPage } from './pages/MyNewStoriesPage'
 import { AppStateProvider } from './context/ScrollContext'
 import { CreateStoryPage } from './pages/CreateStoryPage'
 import { RecallsPage } from './pages/RecallsPage'
+
+ReactGA.initialize('G-RNZFYR8DPV');
+
 
 function ConditionalFooter() {
   const location = useLocation();
@@ -29,6 +33,11 @@ function ProtectedRoute({ children }) {
   return children;
 }
 function App() {
+  const location = useLocation();
+  useEffect(() => {
+    ReactGA.send({ hitType: "pageview", page: location.pathname });
+  }, [location]);
+
   const token = localStorage.getItem("token");
   return (
     <BrowserRouter>
