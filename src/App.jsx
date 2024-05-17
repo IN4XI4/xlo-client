@@ -14,6 +14,13 @@ import { RecallsPage } from './pages/RecallsPage'
 
 ReactGA.initialize('G-RNZFYR8DPV');
 
+function formatTitle(pathname) {
+  return pathname
+    .split('/')
+    .filter(Boolean)
+    .map(segment => segment.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '))
+    .join(' - ');
+}
 
 function ConditionalFooter() {
   const location = useLocation();
@@ -34,9 +41,9 @@ function ProtectedRoute({ children }) {
 }
 function App() {
   const location = useLocation();
-  console.log(location.pathname);
+  const title = formatTitle(location.pathname);
   useEffect(() => {
-    ReactGA.send({ hitType: "pageview", page: location.pathname, title: location.pathname });
+    ReactGA.send({ hitType: "pageview", page: location.pathname, title: title });
   }, [location]);
 
   const token = localStorage.getItem("token");
