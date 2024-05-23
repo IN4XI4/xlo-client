@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import ReactGA from "react-ga4";
 import { HomePage } from './pages/HomePage'
@@ -13,6 +13,19 @@ import { CreateStoryPage } from './pages/CreateStoryPage'
 import { RecallsPage } from './pages/RecallsPage'
 import { LearnSoftSkillsPage } from './pages/LearnSoftSkillsPage'
 import { LearningProgramPage } from './pages/LearningProgramPage'
+
+ReactGA.initialize('G-RNZFYR8DPV');
+
+function formatTitle(pathname) {
+  if (pathname === '/') {
+    return 'Mixelo';
+  }
+  return pathname
+    .split('/')
+    .filter(Boolean)
+    .map(segment => segment.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '))
+    .join(' - ');
+}
 
 ReactGA.initialize('G-RNZFYR8DPV');
 
@@ -57,31 +70,23 @@ function App() {
 
   const token = localStorage.getItem("token");
   return (
-    <BrowserRouter>
-      <AppStateProvider>
-        <div className="flex flex-col min-h-screen bg-gray-50">
-          {token && <Navigation />}
-          <div className="flex-grow">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/topic/:slug" element={<ProtectedRoute><TopicStoriesPage /></ProtectedRoute>} />
-              <Route path="/story/:slug" element={<StoryPage />} />
-              <Route path="/profile/" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-              <Route path="/new-stories/" element={<ProtectedRoute><MyNewStoriesPage key="mystories-page" /></ProtectedRoute>} />
-              <Route path="/recall-cards/" element={<ProtectedRoute><RecallsPage key="recalls-page" /></ProtectedRoute>} />
-              <Route path="/create-story/:id/:slug"
-                element={<ProtectedRoute><CreateStoryPage key="create-story-page" /></ProtectedRoute>} />
-              <Route path="/learn-softskills/" element={<ProtectedRoute><LearnSoftSkillsPage key="learn-page" /></ProtectedRoute>} />
-              <Route path="/practice-softskills/:softskill"
-                element={<ProtectedRoute><LearningProgramPage key="practice-page" /></ProtectedRoute>} />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </div>
-          <ConditionalFooter />
-        </div>
-      </AppStateProvider>
-    </BrowserRouter>
-  )
+    <div className="flex flex-col min-h-screen bg-gray-50">
+      {token && <Navigation />}
+      <div className="flex-grow">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/topic/:slug" element={<ProtectedRoute><TopicStoriesPage /></ProtectedRoute>} />
+          <Route path="/story/:slug" element={<StoryPage />} />
+          <Route path="/profile/" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+          <Route path="/new-stories/" element={<ProtectedRoute><MyNewStoriesPage key="mystories-page" /></ProtectedRoute>} />
+          <Route path="/recall-cards/" element={<ProtectedRoute><RecallsPage key="recalls-page" /></ProtectedRoute>} />
+          <Route path="/create-story/:id/:slug" element={<ProtectedRoute><CreateStoryPage key="create-story-page" /></ProtectedRoute>} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
+      <ConditionalFooter />
+    </div>
+  );
 }
 
 export default function Root() {
