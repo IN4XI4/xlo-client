@@ -11,6 +11,21 @@ import { MyNewStoriesPage } from './pages/MyNewStoriesPage'
 import { AppStateProvider } from './context/ScrollContext'
 import { CreateStoryPage } from './pages/CreateStoryPage'
 import { RecallsPage } from './pages/RecallsPage'
+import { LearnSoftSkillsPage } from './pages/LearnSoftSkillsPage'
+import { LearningProgramPage } from './pages/LearningProgramPage'
+
+ReactGA.initialize('G-RNZFYR8DPV');
+
+function formatTitle(pathname) {
+  if (pathname === '/') {
+    return 'Mixelo';
+  }
+  return pathname
+    .split('/')
+    .filter(Boolean)
+    .map(segment => segment.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '))
+    .join(' - ');
+}
 
 ReactGA.initialize('G-RNZFYR8DPV');
 
@@ -29,7 +44,11 @@ function ConditionalFooter() {
   const location = useLocation();
   const token = localStorage.getItem("token");
 
-  if (token && location.pathname !== "/recall-cards/") {
+  if (
+    token &&
+    location.pathname !== "/recall-cards/" &&
+    !location.pathname.startsWith("/practice-softskills/")
+  ) {
     return <Footer />;
   }
   return null;

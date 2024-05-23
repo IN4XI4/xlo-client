@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
-import { getTopic, getTopicBySlug } from '../api/base.api';
+import { getTopicBySlug } from '../api/base.api';
 import { FaArrowLeft, FaHeart, FaPlus, FaRegHeart, FaSearch } from 'react-icons/fa';
 import { Alert, TextInput } from 'flowbite-react';
 import { StoriesList } from '../components/topics/StoriesList';
@@ -99,7 +99,7 @@ export function TopicStoriesPage() {
     }
   };
   return (
-    <div className="pt-20 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
+    <div className="pt-24 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
       {showSuccessMessage && (
         <Alert color="success" icon={HiInformationCircle} className='mb-4'>
           <span className="font-medium">Story created successfully!</span>

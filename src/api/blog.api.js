@@ -32,6 +32,7 @@ export const getLikedTopicStories = (page, ordering = null, searchText = '') => 
 export const getStory = (storyId) => blogApi.get(`stories/${storyId}/`, { headers: getAuthHeaders() })
 export const getStoryBySlug = (slug) => blogApi.get(`stories/find-by-slug/${slug}/`, { headers: getAuthHeaders() })
 export const getCardsByStory = (storyId) => blogApi.get(`cards/?story=${storyId}`, { headers: getAuthHeaders() })
+export const getCardsBySoftSkill = (data, page) => blogApi.post(`cards/random-by-softskill/?page=${page}`, data, { headers: getAuthHeaders() })
 export const getBlocksByCard = (cardId) => blogApi.get(`blocks/?card=${cardId}`, { headers: getAuthHeaders() })
 export const getBlockTypes = () => blogApi.get(`blocktypes/`, { headers: getAuthHeaders() })
 export const getCommentsByStory = (storyId, page, newest = false) => {

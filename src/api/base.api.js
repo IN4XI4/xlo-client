@@ -18,5 +18,6 @@ export const getTopicsByTopicTag = (tagId) => baseApi.get(`base/topics/?tag=${ta
 export const getTopicTags = () => baseApi.get('base/topictags/', { headers: getAuthHeaders() })
 export const getContentTypes = () => baseApi.get('base/contenttypes/', { headers: getAuthHeaders() })
 export const getSoftSkills = () => baseApi.get('base/softskills/', { headers: getAuthHeaders() })
+export const listSoftSkillsDetailed = () => baseApi.get('base/softskills/detailed_list/', { headers: getAuthHeaders() })
 export const getMentors = () => baseApi.get('base/mentors/', { headers: getAuthHeaders() })
 

@@ -175,14 +175,14 @@ export function CreateStoryPage() {
   };
 
   if (isLoading) {
-    return <div className="pt-20 md:pt-24 px-4 md:px-16 lg:px-32 xl:px-44">Loading...</div>;
+    return <div className="pt-24 px-4 md:px-16 lg:px-32 xl:px-44">Loading...</div>;
   }
 
   if (!isCreator) {
     return <Navigate to="/" />;
   }
   return (
-    <div className="pt-20 md:pt-24 px-4 md:px-16 lg:px-32 xl:px-44">
+    <div className="pt-24 px-4 md:px-16 lg:px-32 xl:px-44">
       <div className='text-2xl md:text-4xl font-extrabold pb-6'>
         Create story
       </div>
