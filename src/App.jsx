@@ -68,6 +68,9 @@ function App() {
           <Route path="/new-stories/" element={<ProtectedRoute><MyNewStoriesPage key="mystories-page" /></ProtectedRoute>} />
           <Route path="/recall-cards/" element={<ProtectedRoute><RecallsPage key="recalls-page" /></ProtectedRoute>} />
           <Route path="/create-story/:id/:slug" element={<ProtectedRoute><CreateStoryPage key="create-story-page" /></ProtectedRoute>} />
+          <Route path="/learn-softskills/" element={<ProtectedRoute><LearnSoftSkillsPage key="learn-page" /></ProtectedRoute>} />
+          <Route path="/practice-softskills/:softskill"
+            element={<ProtectedRoute><LearningProgramPage key="practice-page" /></ProtectedRoute>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
