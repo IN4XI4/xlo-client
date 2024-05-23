@@ -1,5 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import ReactGA from "react-ga4";
 import { HomePage } from './pages/HomePage'
 import { Navigation } from './components/Navigation'
 import { Footer } from './components/Footer'
@@ -13,6 +14,18 @@ import { RecallsPage } from './pages/RecallsPage'
 import { LearnSoftSkillsPage } from './pages/LearnSoftSkillsPage'
 import { LearningProgramPage } from './pages/LearningProgramPage'
 
+ReactGA.initialize('G-RNZFYR8DPV');
+
+function formatTitle(pathname) {
+  if (pathname === '/') {
+    return 'Mixelo';
+  }
+  return pathname
+    .split('/')
+    .filter(Boolean)
+    .map(segment => segment.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '))
+    .join(' - ');
+}
 
 function ConditionalFooter() {
   const location = useLocation();
@@ -36,6 +49,12 @@ function ProtectedRoute({ children }) {
   return children;
 }
 function App() {
+  const location = useLocation();
+  const title = formatTitle(location.pathname);
+  useEffect(() => {
+    ReactGA.send({ hitType: "pageview", page: location.pathname, title: title });
+  }, [location]);
+
   const token = localStorage.getItem("token");
   return (
     <BrowserRouter>
@@ -65,4 +84,12 @@ function App() {
   )
 }
 
-export default App
+export default function Root() {
+  return (
+    <BrowserRouter>
+      <AppStateProvider>
+        <App />
+      </AppStateProvider>
+    </BrowserRouter>
+  );
+}
