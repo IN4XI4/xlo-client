@@ -27,19 +27,6 @@ function formatTitle(pathname) {
     .join(' - ');
 }
 
-ReactGA.initialize('G-RNZFYR8DPV');
-
-function formatTitle(pathname) {
-  if (pathname === '/') {
-    return 'Mixelo';
-  }
-  return pathname
-    .split('/')
-    .filter(Boolean)
-    .map(segment => segment.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '))
-    .join(' - ');
-}
-
 function ConditionalFooter() {
   const location = useLocation();
   const token = localStorage.getItem("token");
