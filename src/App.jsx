@@ -11,13 +11,18 @@ import { AppStateProvider } from './context/ScrollContext'
 import { CreateStoryPage } from './pages/CreateStoryPage'
 import { RecallsPage } from './pages/RecallsPage'
 import { LearnSoftSkillsPage } from './pages/LearnSoftSkillsPage'
+import { LearningProgramPage } from './pages/LearningProgramPage'
 
 
 function ConditionalFooter() {
   const location = useLocation();
   const token = localStorage.getItem("token");
 
-  if (token && location.pathname !== "/recall-cards/") {
+  if (
+    token &&
+    location.pathname !== "/recall-cards/" &&
+    !location.pathname.startsWith("/practice-softskills/")
+  ) {
     return <Footer />;
   }
   return null;
@@ -45,8 +50,11 @@ function App() {
               <Route path="/profile/" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
               <Route path="/new-stories/" element={<ProtectedRoute><MyNewStoriesPage key="mystories-page" /></ProtectedRoute>} />
               <Route path="/recall-cards/" element={<ProtectedRoute><RecallsPage key="recalls-page" /></ProtectedRoute>} />
-              <Route path="/create-story/:id/:slug" element={<ProtectedRoute><CreateStoryPage key="create-story-page" /></ProtectedRoute>} />
+              <Route path="/create-story/:id/:slug"
+                element={<ProtectedRoute><CreateStoryPage key="create-story-page" /></ProtectedRoute>} />
               <Route path="/learn-softskills/" element={<ProtectedRoute><LearnSoftSkillsPage key="learn-page" /></ProtectedRoute>} />
+              <Route path="/practice-softskills/:softskill"
+                element={<ProtectedRoute><LearningProgramPage key="practice-page" /></ProtectedRoute>} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </div>

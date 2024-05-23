@@ -92,6 +92,10 @@ export function Navigation() {
     navigate('/recall-cards/', { state: { fromNavigation: true } });
   };
 
+  const handleLearningProgramClick = () => {
+    navigate('/learn-softskills/', { state: { fromNavigation: true } });
+  };
+
   return (
     <div className="bg-white z-10 shadow p-4 fixed top-0 w-full flex justify-between items-center px-4 md:px-16 lg:px-32 xl:px-44">
       <div className="flex items-center space-x-4">
@@ -153,7 +157,7 @@ export function Navigation() {
                 Mes conversations {user.notifications && user.notifications.reply_count > 0 && <span>&nbsp;({user.notifications.like_count})</span>}
               </span>
             </Dropdown.Item>
-            <Dropdown.Item onClick={() => navigate('/learn-softskills/')}>
+            <Dropdown.Item onClick={handleLearningProgramClick}>
               <span className='text-gray-500 flex items-center justify-items-center'>
                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className='text-[#3DB1FF] h-[0.9rem] w-[0.9rem] me-3'>
                   <path d="M25.8519 16.963H21.8193L12.5186 26.2637C12.1128 26.6659 11.6659 27.0244 11.1853 27.3333H25.8519C26.2448 27.3333 26.6217 27.1772 26.8995 26.8994C27.1773 26.6216 27.3334 26.2448 27.3334 25.8518V18.4444C27.3334 18.0515 27.1773 17.6747 26.8995 17.3969C26.6217 17.119 26.2448 16.963 25.8519 16.963Z" fill="currentColor" />

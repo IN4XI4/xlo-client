@@ -85,7 +85,6 @@ export function StoryPage() {
 
   useEffect(() => {
     if (isCardsLoaded && location.state?.scrollToComments && commentsRef.current) {
-      console.log(commentsRef.current.offsetTop);
       setTimeout(() => {
         window.scrollTo({
           top: commentsRef.current.offsetTop + 280,
