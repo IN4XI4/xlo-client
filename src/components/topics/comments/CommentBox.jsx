@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Picker from '@emoji-mart/react'
 import { FaTimes, FaLaugh, FaPaperPlane, } from 'react-icons/fa';
 import { createComment } from '../../../api/blog.api';
+import { Tooltip } from 'flowbite-react';
 
 
 function truncateText(text, maxLength) {
@@ -11,10 +12,11 @@ function truncateText(text, maxLength) {
   return text;
 }
 
-export function CommentBox({ storyId, parentCommentId, setParentCommentId,replyingToText, setReplyingToText, onCommentSubmit }) {
+export function CommentBox({ storyId, parentCommentId, setParentCommentId, replyingToText, setReplyingToText, onCommentSubmit }) {
   const [text, setText] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [errors, setErrors] = useState({});
+  const [askForHelp, setAskForHelp] = useState(false);
   const truncatedReplyingToText = replyingToText ? truncateText(replyingToText, 60) : '';
 
   const handleEmojiSelect = (emoji) => {
@@ -36,6 +38,7 @@ export function CommentBox({ storyId, parentCommentId, setParentCommentId,replyi
         story: storyId,
         comment_text: text,
         is_active: true,
+        ask_for_help: askForHelp,
         ...(parentCommentId && { parent: parentCommentId })
       };
 
@@ -66,7 +69,7 @@ export function CommentBox({ storyId, parentCommentId, setParentCommentId,replyi
       {replyingToText && (
         <div className="flex justify-between items-center p-2 text-sm text-white bg-[#3DB1FF] rounded-lg">
           Replying to: {truncatedReplyingToText}
-          <FaTimes onClick={handleCancelReply} className="cursor-pointer"/>
+          <FaTimes onClick={handleCancelReply} className="cursor-pointer" />
         </div>
       )}
       <div className='pt-1 flex items-end'>
@@ -80,13 +83,24 @@ export function CommentBox({ storyId, parentCommentId, setParentCommentId,replyi
         />
       </div>
       <div className='bg-gray-50 p-3 flex justify-between items-center rounded-b-lg border-b-2 border-l-2 border-r-2 border-gray-300'>
-        <div>
+        <div className='flex items-center'>
           <button
             onClick={handleSubmit}
-            className={`${text ? 'bg-[#3DB1FF]' : 'bg-gray-500 opacity-50 cursor-not-allowed'} flex py-2 px-3 rounded-lg items-center text-white`}
+            className={`${text ? 'bg-[#3DB1FF]' : 'bg-gray-500 opacity-50 cursor-not-allowed'} flex py-2 px-3 rounded-lg items-center text-white mr-3`}
             disabled={!text}>
             <FaPaperPlane /><span className='ms-3'>Send message</span>
           </button>
+          <Tooltip content="Send this message to admins so they can help you" style="dark">
+            <input
+              type="checkbox"
+              id="askForHelp"
+              checked={askForHelp}
+              onChange={(e) => setAskForHelp(e.target.checked)}
+              className="mr-1 rounded cursor-pointer"
+            />
+            <label htmlFor="askForHelp">Ask for help!</label>
+
+          </Tooltip>
         </div>
         <div className='flex items-center'>
           <button onClick={toggleEmojiPicker} className="text-gray-500">
