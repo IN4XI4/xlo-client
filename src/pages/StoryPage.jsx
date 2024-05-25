@@ -230,7 +230,7 @@ export function StoryPage() {
                 <span className='text-sm md:text-base hidden md:block' style={{ lineHeight: '1' }}>Previous</span>
               </div>
             </div>
-            <Link to={`/topic/${story.topic}`} className='mx-2 md:mx-6'>
+            <Link to={`/topic/${story.topic_slug}`} className='mx-2 md:mx-6'>
               <div className='p-2 md:p-3 text-gray-500 bg-gray-200 border rounded-lg'><FaArrowLeft className='text-base md:text-xl' /></div>
             </Link>
             <div className='flex items-center'>
