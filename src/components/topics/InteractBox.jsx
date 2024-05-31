@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { FaCheck, FaRegBell, FaRegCopy, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
+import { FaCheck, FaRegBell, FaRegCopy, FaRegThumbsDown, FaRegThumbsUp, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 import { deleteLike, likeSomething, updateLike } from '../../api/blog.api';
 
 
@@ -64,24 +64,24 @@ export function InteractBox({ story, setStory, storyContentTypeId }) {
 
   return (
     <div className='flex items-center justify-center md:px-16 lg:px-24 mt-2 mb-4 space-x-2 md:space-x-3 py-3'>
-      <div className={`w-8 h-8 md:w-12 md:h-12 p-2 rounded-full flex items-center justify-center ${story.user_has_liked.disliked ? 'text-[#3DB1FF] bg-[#D8EFFF]' : 'text-gray-500 bg-white'} cursor-pointer`}
+      <div className={`w-10 h-10 md:w-12 md:h-12 p-2 rounded-full flex items-center justify-center ${story.user_has_liked.disliked ? 'text-[#3DB1FF] bg-[#D8EFFF]' : 'text-gray-500 bg-white'} cursor-pointer`}
         onClick={() => handleLikeOrDislike(false)}>
-        <FaThumbsDown className='text-sm md:text-lg' />
+        <FaRegThumbsDown className='text-sm md:text-lg' />
       </div>
-      <div className='w-8 h-8 md:w-12 md:h-12 p-2 bg-white rounded-full text-sm text-gray-500 flex justify-center items-center cursor-pointer'
+      <div className='w-10 h-10 md:w-12 md:h-12 p-2 bg-white rounded-full text-sm text-gray-500 flex justify-center items-center cursor-pointer'
         onClick={copyToClipboard}>
         <div>
           {isCopied ? <FaCheck className='md:text-xl' /> : <FaRegCopy className='md:text-xl' />}
         </div>
       </div>
-      <div className='w-8 h-8 md:w-12 md:h-12 p-2 bg-white rounded-full text-sm text-gray-500 flex justify-center items-center cursor-pointer'>
+      <div className='w-10 h-10 md:w-12 md:h-12 p-2 bg-white rounded-full text-sm text-gray-500 flex justify-center items-center cursor-pointer'>
         <div>
           <FaRegBell className='md:text-xl' />
         </div>
       </div>
-      <div className={`w-8 h-8 md:w-12 md:h-12 p-2 rounded-full flex items-center justify-center ${story.user_has_liked.liked ? 'text-[#3DB1FF] bg-[#D8EFFF]' : 'text-gray-500 bg-white'} cursor-pointer`}
+      <div className={`w-10 h-10 md:w-12 md:h-12 p-2 rounded-full flex items-center justify-center ${story.user_has_liked.liked ? 'text-[#3DB1FF] bg-[#D8EFFF]' : 'text-gray-500 bg-white'} cursor-pointer`}
         onClick={() => handleLikeOrDislike(true)}>
-        <FaThumbsUp className='text-sm md:text-lg' />
+        <FaRegThumbsUp className='text-sm md:text-lg' />
       </div>
     </div>
   )
