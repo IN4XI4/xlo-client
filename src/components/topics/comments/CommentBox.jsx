@@ -83,24 +83,25 @@ export function CommentBox({ storyId, parentCommentId, setParentCommentId, reply
         />
       </div>
       <div className='bg-gray-50 p-3 flex justify-between items-center rounded-b-lg border-b-2 border-l-2 border-r-2 border-gray-300'>
-        <div className='flex items-center'>
+        <div className='flex flex-col md:flex-row md:items-center'>
           <button
             onClick={handleSubmit}
             className={`${text ? 'bg-[#3DB1FF]' : 'bg-gray-500 opacity-50 cursor-not-allowed'} flex py-2 px-3 rounded-lg items-center text-white mr-3`}
             disabled={!text}>
             <FaPaperPlane /><span className='ms-3'>Send message</span>
           </button>
-          <Tooltip content="Send this message to admins so they can help you" style="dark">
-            <input
-              type="checkbox"
-              id="askForHelp"
-              checked={askForHelp}
-              onChange={(e) => setAskForHelp(e.target.checked)}
-              className="mr-1 rounded cursor-pointer"
-            />
-            <label htmlFor="askForHelp">Ask for help!</label>
-
-          </Tooltip>
+          <div className='pt-2 md:pt-0'>
+            <Tooltip content="Send this message to admins so they can help you" style="dark">
+              <input
+                type="checkbox"
+                id="askForHelp"
+                checked={askForHelp}
+                onChange={(e) => setAskForHelp(e.target.checked)}
+                className="mr-1 rounded cursor-pointer"
+              />
+              <label htmlFor="askForHelp">Ask for help!</label>
+            </Tooltip>
+          </div>
         </div>
         <div className='flex items-center'>
           <button onClick={toggleEmojiPicker} className="text-gray-500">
