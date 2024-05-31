@@ -1,14 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Link, useLocation, useParams } from 'react-router-dom';
-import { deleteLike, getCardsByStory, getStoryBySlug, likeSomething, updateLike, userViewStory } from '../api/blog.api';
+import { useLocation, useParams } from 'react-router-dom';
+import { getCardsByStory, getStoryBySlug, userViewStory } from '../api/blog.api';
 import { BlocksList } from '../components/topics/BlocksList';
-import { FaAngleDoubleLeft, FaAngleDoubleRight, FaAngleLeft, FaAngleRight, FaArrowLeft, FaSync, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 import { Progress } from 'flowbite-react';
 import { InteractBox } from '../components/topics/InteractBox';
 import { CommentsList } from '../components/topics/comments/CommentsList';
 import { getContentTypes } from '../api/base.api';
 import { useAppState } from '../context/ScrollContext';
 import { RateStory } from '../components/topics/RateStory';
+import { StoryNavBar } from '../components/topics/StoryNavBar';
+import { FaSync } from 'react-icons/fa';
 
 
 export function StoryPage() {
@@ -48,11 +49,6 @@ export function StoryPage() {
 
   const goToFirstCard = () => {
     setCurrentCardIndex(0);
-    window.scrollTo(0, 0);
-  };
-
-  const goToLastCard = () => {
-    setCurrentCardIndex(cards.length - 1);
     window.scrollTo(0, 0);
   };
 
@@ -130,53 +126,6 @@ export function StoryPage() {
     }
   }
 
-  const handleLikeOrDislike = async (isLike) => {
-    if (!isAuthenticated) {
-      return
-    }
-    const alreadyLiked = story.user_has_liked.liked;
-    const alreadyDisliked = story.user_has_liked.disliked;
-
-    if ((isLike && alreadyLiked) || (!isLike && alreadyDisliked)) {
-      try {
-        await deleteLike(story.user_has_liked.like_id);
-        setStory({
-          ...story,
-          user_has_liked: { ...story.user_has_liked, liked: false, disliked: false, like_id: null }
-        });
-      } catch (error) {
-        console.error('Error removing like/dislike', error);
-      }
-    } else if ((isLike && alreadyDisliked) || (!isLike && alreadyLiked)) {
-      const data = { liked: isLike };
-      try {
-        await updateLike(story.user_has_liked.like_id, data);
-        setStory({
-          ...story,
-          user_has_liked: { ...story.user_has_liked, liked: isLike, disliked: !isLike }
-        });
-      } catch (error) {
-        console.error('Error updating like/dislike', error);
-      }
-    } else {
-      const data = {
-        liked: isLike,
-        content_type: storyContentTypeId,
-        object_id: story.id,
-        is_active: true
-      };
-      try {
-        const response = await likeSomething(data);
-        setStory({
-          ...story,
-          user_has_liked: { ...story.user_has_liked, liked: isLike, disliked: !isLike, like_id: response.data.id }
-        });
-      } catch (error) {
-        console.error('Error adding like/dislike', error);
-      }
-    }
-  };
-
   const updateCardRecallStatus = (updatedRecallId, updatedRecallLevel, userHasRecalled) => {
     const updatedCards = cards.map((card, index) => {
       if (index === currentCardIndex) {
@@ -214,41 +163,6 @@ export function StoryPage() {
           <div className='md:px-16 lg:px-24 mb-3'>
             <BlocksList card={cards[currentCardIndex]} blockContentTypeId={blockContentTypeId} />
           </div>
-          <div className='flex justify-center items-center p-2 mt-4 md:mt-8 '>
-            <div className='flex items-center'>
-              <div className={`p-2 md:p-3 ${story.user_has_liked.disliked ? 'text-[#3DB1FF] bg-[#D8EFFF]' : 'text-gray-500 bg-white'} border rounded-l-lg hover:text-[#3DB1FF] hover:bg-[#D8EFFF] hover:cursor-pointer`}
-                onClick={() => handleLikeOrDislike(false)}>
-                <FaThumbsDown className='text-lg md:text-xl' />
-              </div>
-              <div className='flex items-center p-2 md:p-3 text-gray-500 bg-white border hover:text-[#3DB1FF] hover:bg-[#D8EFFF] hover:cursor-pointer'
-                onClick={goToFirstCard}>
-                <FaAngleDoubleLeft className='text-lg md:text-xl' />
-              </div>
-              <div className='flex items-center p-2 md:p-3 text-gray-500 bg-white border rounded-r-lg hover:text-[#3DB1FF] hover:bg-[#D8EFFF] hover:cursor-pointer'
-                onClick={goToPreviousCard}>
-                <FaAngleLeft className='text-lg md:text-xl md:mr-2' />
-                <span className='text-sm md:text-base hidden md:block' style={{ lineHeight: '1' }}>Previous</span>
-              </div>
-            </div>
-            <Link to={`/topic/${story.topic_slug}`} className='mx-2 md:mx-6'>
-              <div className='p-2 md:p-3 text-gray-500 bg-gray-200 border rounded-lg'><FaArrowLeft className='text-base md:text-xl' /></div>
-            </Link>
-            <div className='flex items-center'>
-              <div className='flex items-center justify-center p-2 md:p-3 text-gray-500 bg-white border rounded-l-lg hover:text-[#3DB1FF] hover:bg-[#D8EFFF] hover:cursor-pointer'
-                onClick={goToNextCard}>
-                <FaAngleRight className='text-lg md:text-xl md:mr-2' />
-                <span className='text-sm md:text-base hidden md:block' style={{ lineHeight: '1' }}>Next</span>
-              </div>
-              <div className='flex items-center p-2 md:p-3 text-gray-500 bg-white border hover:text-[#3DB1FF] hover:bg-[#D8EFFF] hover:cursor-pointer'
-                onClick={goToLastCard}>
-                <FaAngleDoubleRight className='text-lg md:text-xl' />
-              </div>
-              <div className={`p-2 md:p-3 ${story.user_has_liked.liked ? 'text-[#3DB1FF] bg-[#D8EFFF]' : 'text-gray-500 bg-white'} border rounded-r-lg hover:text-[#3DB1FF] hover:bg-[#D8EFFF] hover:cursor-pointer`}
-                onClick={() => handleLikeOrDislike(true)}>
-                <FaThumbsUp className='text-lg md:text-xl' />
-              </div>
-            </div>
-          </div>
           <div className='md:px-16 lg:px-24 mb-4'>
             <div className='text-end text-sm text-gray-500'>
               {progressPercentage.toFixed(0)}%
@@ -264,11 +178,7 @@ export function StoryPage() {
           </div>
           {isAuthenticated && (
             <>
-              <InteractBox user_has_recalled={cards[currentCardIndex].user_has_recalled.recall}
-                recall_level={cards[currentCardIndex].user_has_recalled.level}
-                recall_id={cards[currentCardIndex].user_has_recalled.recall_id}
-                card_id={cards[currentCardIndex].id}
-                onUpdateRecall={updateCardRecallStatus} />
+              <InteractBox story={story} setStory={setStory} storyContentTypeId={storyContentTypeId} />
               <RateStory />
             </>
           )}
@@ -278,6 +188,21 @@ export function StoryPage() {
         <div ref={commentsRef} className='py-4'>
           <CommentsList storyId={story.id} commentContentTypeId={commentContentTypeId} />
         </div>
+      )}
+      {isCardsLoaded && (
+        <StoryNavBar
+          topicSlug={story.topic_slug}
+          goToPreviousCard={goToPreviousCard}
+          goToNextCard={goToNextCard}
+          previousStorySlug={story.previous_story_slug}
+          nextStorySlug={story.next_story_slug}
+          user_has_recalled={cards[currentCardIndex].user_has_recalled.recall}
+          recall_level={cards[currentCardIndex].user_has_recalled.level}
+          recall_id={cards[currentCardIndex].user_has_recalled.recall_id}
+          card_id={cards[currentCardIndex].id}
+          onUpdateRecall={updateCardRecallStatus}
+          isAuthenticated={isAuthenticated}
+        />
       )}
     </div>
   )

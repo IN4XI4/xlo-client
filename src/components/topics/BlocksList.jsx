@@ -18,6 +18,7 @@ const ActionIcons = ({ hasLiked, onLikeClick }) => {
       setTimeout(() => element.focus(), 500);
     }
   };
+
   return (
     <div className='flex justify-end space-x-2 items-center text-gray-500 py-2'>
       {hasLiked ? <FaHeart className='text-xl cursor-pointer' onClick={onLikeClick} />
@@ -72,7 +73,7 @@ function AttackBlock({ content, color, image, monster_image, monster_name, monst
       <div className='flex'>
         <div className="flex-grow">
           <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} additionalClass="rounded-tr-none"
-          isAuthenticated={isAuthenticated}>
+            isAuthenticated={isAuthenticated}>
             <div className='font-bold text-end text-gray-700'>{monster_name}</div>
             {content}
           </BlockContainer>
@@ -126,7 +127,7 @@ function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor
         </div>
         <div className='flex-grow'>
           <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} additionalClass="rounded-tl-none"
-          isAuthenticated={isAuthenticated}>
+            isAuthenticated={isAuthenticated}>
             <div className='font-bold text-gray-700 ps-1'>{mentor_name}</div>
             <div className='font-bold text-gray-700 pb-1 ps-1'>{mentor_job}</div>
             {content}
