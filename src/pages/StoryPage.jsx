@@ -67,6 +67,7 @@ export function StoryPage() {
       const cardsResponse = await getCardsByStory(res.data.id);
       setCards(cardsResponse.data.results);
       setIsCardsLoaded(true);
+      window.scrollTo(0, 0); 
     } catch (error) {
       setError(error);
     }

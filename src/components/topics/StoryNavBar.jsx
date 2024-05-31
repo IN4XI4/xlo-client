@@ -82,7 +82,6 @@ export function StoryNavBar({ topicSlug, goToPreviousCard, goToNextCard, user_ha
   };
 
   const goToPreviousStory = () => {
-    console.log("entra", previousStorySlug);
     if (previousStorySlug) {
       navigate(`/story/${previousStorySlug}`);
     }

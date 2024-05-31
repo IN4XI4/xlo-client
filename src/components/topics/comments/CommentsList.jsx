@@ -16,10 +16,13 @@ export function CommentsList({ storyId, commentContentTypeId }) {
   const [replyingToText, setReplyingToText] = useState('');
   const [newest, setNewest] = useState(false);
   const [icon, setIcon] = useState(<FaAngleUp />);
-  const reloadComments = (newestValue) => {
+
+  useEffect(() => {
+    setComments([]);
     setCurrentPage(1);
-    loadComments(1, newestValue);
-  };
+    setHasMore(true);
+    loadComments(1);
+  }, [storyId]);
 
   useEffect(() => {
     const isAuthenticated = Boolean(localStorage.getItem('token'));
@@ -29,16 +32,22 @@ export function CommentsList({ storyId, commentContentTypeId }) {
     loadInitialComments();
   }, []);
 
-  const loadInitialComments = async () => {
-    setCurrentPage(1);
-    await loadComments(1);
-  };
-
   useEffect(() => {
     if (currentPage > 1) {
       loadComments(currentPage);
     }
   }, [currentPage]);
+
+  const reloadComments = (newestValue) => {
+    setCurrentPage(1);
+    loadComments(1, newestValue);
+  };
+
+  const loadInitialComments = async () => {
+    setCurrentPage(1);
+    await loadComments(1);
+  };
+
 
   const toggleNewness = () => {
     const newNewestValue = !newest;
