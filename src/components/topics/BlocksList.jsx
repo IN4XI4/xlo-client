@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { deleteLike, getBlocksByCard, likeSomething } from '../../api/blog.api';
-import { FaHeart, FaRegBookmark, FaRegHeart, FaReply, FaUser } from 'react-icons/fa';
+import { FaCheck, FaHeart, FaRegBookmark, FaRegCopy, FaRegHeart, FaReply, FaUser } from 'react-icons/fa';
 import { MonsterMentorProfileModal } from './MonsterMentorProfileModal';
+import { BsDot, BsThreeDotsVertical } from "react-icons/bs";
 
 
-const ActionIcons = ({ hasLiked, onLikeClick }) => {
+const ActionIcons = ({ hasLiked, onLikeClick, isCopied, copyToClipboard }) => {
   const navbarHeight = 130;
 
   const scrollToCommentBox = () => {
@@ -20,12 +21,13 @@ const ActionIcons = ({ hasLiked, onLikeClick }) => {
   };
 
   return (
-    <div className='flex justify-end space-x-2 items-center text-gray-500 py-2'>
-      {hasLiked ? <FaHeart className='text-xl cursor-pointer' onClick={onLikeClick} />
-        : <FaRegHeart className='text-xl cursor-pointer' onClick={onLikeClick} />}
-      <FaRegBookmark className='text-xl' />
-      <FaReply className='text-xl cursor-pointer' onClick={scrollToCommentBox} />
-      <div className='cursor-pointer' onClick={scrollToCommentBox}>Comment</div>
+    <div className='flex justify-end space-x-2 items-center text-gray-500 py-1'>
+      {isCopied ? <FaCheck className='md:text-xl cursor-pointer' onClick={copyToClipboard} /> :
+        <FaRegCopy className='md:text-xl cursor-pointer' onClick={copyToClipboard} />}
+      {/* {hasLiked ? <FaHeart className='text-xl cursor-pointer' onClick={onLikeClick} />
+        : <FaRegHeart className='text-xl cursor-pointer' onClick={onLikeClick} />} */}
+      <FaRegBookmark className='md:text-xl cursor-pointer' />
+      <FaReply className='md:text-xl cursor-pointer' onClick={scrollToCommentBox} />
     </div>
   );
 };
@@ -38,20 +40,54 @@ const ImageContainer = ({ image, color }) => (
   ) : null
 );
 
-const BlockContainer = ({ children, color, additionalClass, hasLiked, onLikeClick, isAuthenticated }) => (
-  <div className='mb-3'>
-    <div className={`p-4 bg-gray-50 shadow rounded-[2.5rem] border-[6px] ${additionalClass}`} style={{ borderColor: color || "#3DB1FF" }}>
-      {children}
+const BlockContainer = ({ children, color, additionalClass, hasLiked, onLikeClick, isAuthenticated, content }) => {
+
+  const [showActionIcons, setShowActionIcons] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleToggleActionIcons = () => {
+    setShowActionIcons(!showActionIcons);
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(content)
+      .then(() => {
+        setIsCopied(true);
+        setTimeout(() => setIsCopied(false), 5000);
+      })
+      .catch((error) => {
+        console.error('Error copying content to clipboard', error);
+      });
+  };
+
+  return (
+    <div className='pb-4'>
+      <div className="flex">
+        <div className='flex items-center '>
+          {showActionIcons ?
+            <BsDot className="text-2xl cursor-pointer text-gray-500" onClick={handleToggleActionIcons} /> :
+            <BsThreeDotsVertical className="text-2xl cursor-pointer text-gray-500" onClick={handleToggleActionIcons} />}
+        </div>
+        <div className={`flex-grow p-4 bg-gray-50 shadow rounded-[2.5rem] border-[6px] ${additionalClass}`} style={{ borderColor: color || "#3DB1FF" }}>
+          {children}
+        </div>
+      </div>
+      {isAuthenticated && showActionIcons &&
+        <ActionIcons hasLiked={hasLiked} onLikeClick={onLikeClick} isCopied={isCopied} copyToClipboard={copyToClipboard} />}
     </div>
-    {isAuthenticated && <ActionIcons hasLiked={hasLiked} onLikeClick={onLikeClick} />}
-  </div>
-);
+  )
+
+};
 
 function NormalBlock({ content, image, color, user_has_liked, onLikeClick, isAuthenticated }) {
   const hasLiked = user_has_liked !== false;
   return (
     <div>
-      <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} isAuthenticated={isAuthenticated}>{content}</BlockContainer>
+      <BlockContainer color={color}
+        hasLiked={hasLiked}
+        onLikeClick={onLikeClick}
+        isAuthenticated={isAuthenticated}
+        content={content}>{content}</BlockContainer>
       <ImageContainer image={image} color={color} />
     </div>
   )
@@ -71,14 +107,14 @@ function AttackBlock({ content, color, image, monster_image, monster_name, monst
   return (
     <div>
       <div className='flex'>
-        <div className="flex-grow">
+        <div className="flex-grow ">
           <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} additionalClass="rounded-tr-none"
-            isAuthenticated={isAuthenticated}>
+            isAuthenticated={isAuthenticated} content={content}>
             <div className='font-bold text-end text-gray-700'>{monster_name}</div>
             {content}
           </BlockContainer>
         </div>
-        <div className='flex-none pt-1'>
+        <div className='flex-none pt-1 '>
           {monster_image ? (
             <img src={monster_image} alt="Monster"
               className="h-14 w-14 rounded-full mx-3 border-[3px] cursor-pointer"
@@ -127,7 +163,7 @@ function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor
         </div>
         <div className='flex-grow'>
           <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} additionalClass="rounded-tl-none"
-            isAuthenticated={isAuthenticated}>
+            isAuthenticated={isAuthenticated} content={content}>
             <div className='font-bold text-gray-700 ps-1'>{mentor_name}</div>
             <div className='font-bold text-gray-700 pb-1 ps-1'>{mentor_job}</div>
             {content}
@@ -153,7 +189,7 @@ function getBlockComponent(block, card, handleLikeClick, isAuthenticated) {
     image: block.image,
     user_has_liked: block.user_has_liked,
     onLikeClick: () => handleLikeClick(block.id, block.user_has_liked),
-    isAuthenticated
+    isAuthenticated,
   };
   switch (block.block_type_name.toLowerCase()) {
     case 'attack':
