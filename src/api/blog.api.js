@@ -45,16 +45,22 @@ export const getCommentsByStory = (storyId, page, newest = false) => {
 export const userViewStory = (data) => blogApi.post(`user-view-story/`, data, { headers: getAuthHeaders() })
 export const getReplies = (commentId, page) => blogApi.get(`comments/?parent=${commentId}&page=${page}`, { headers: getAuthHeaders() })
 export const createComment = (data) => blogApi.post(`comments/`, data, { headers: getAuthHeaders() })
+export const createStoryFull = (data) => blogApi.post(`stories/create-story-full/`, data, { headers: getAuthHeaders() })
+
+// Likes
 export const likeSomething = (data) => blogApi.post(`likes/`, data, { headers: getAuthHeaders() })
 export const deleteLike = (likeId) => blogApi.delete(`likes/${likeId}/`, { headers: getAuthHeaders() })
 export const updateLike = (likeId, data) => blogApi.patch(`likes/${likeId}/`, data, { headers: getAuthHeaders() })
 
-export const createStoryFull = (data) => blogApi.post(`stories/create-story-full/`, data, { headers: getAuthHeaders() })
 
+// Recalls
 export const recallCard = (data) => blogApi.post(`recalls/`, data, { headers: getAuthHeaders() })
+export const recallBlock = (data) => blogApi.post(`recall-blocks/`, data, { headers: getAuthHeaders() })
 export const deleteRecallCard = (recallId) => blogApi.delete(`recalls/${recallId}/`, { headers: getAuthHeaders() })
+export const deleteRecallBlock = (recallId) => blogApi.delete(`recall-blocks/${recallId}/`, { headers: getAuthHeaders() })
 export const getMyRecallCards = () => blogApi.get(`recalls/user-recall-cards`, { headers: getAuthHeaders() })
 
+// Notifications
 export const listLikeNotifications = (page) => blogApi.get(`notifications/?notification_type=like&page=${page}`, { headers: getAuthHeaders() })
 export const listReplyNotifications = (page) => blogApi.get(`notifications/?notification_type=reply&page=${page}`, { headers: getAuthHeaders() })
 export const updateNotification = (id, data) => blogApi.patch(`notifications/${id}/`, data, { headers: getAuthHeaders() })
