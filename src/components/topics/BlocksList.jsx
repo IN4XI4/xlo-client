@@ -1,13 +1,25 @@
 import React, { useEffect, useState } from 'react'
-import { deleteLike, getBlocksByCard, likeSomething } from '../../api/blog.api';
-import { FaCheck, FaHeart, FaRegBookmark, FaRegCopy, FaRegHeart, FaReply, FaUser } from 'react-icons/fa';
+import { deleteLike, deleteRecallBlock, getBlocksByCard, likeSomething, recallBlock } from '../../api/blog.api';
+import { FaCheck, FaHeart, FaBookmark, FaRegBookmark, FaRegCopy, FaRegHeart, FaReply, FaUser } from 'react-icons/fa';
 import { MonsterMentorProfileModal } from './MonsterMentorProfileModal';
 import { BsDot, BsThreeDotsVertical } from "react-icons/bs";
+import { Dropdown } from 'flowbite-react';
 
 
-const ActionIcons = ({ hasLiked, onLikeClick, isCopied, copyToClipboard }) => {
+const ActionIcons = ({ hasLiked, onLikeClick, isCopied, copyToClipboard, userHasRecalled, block_id, onRecallUpdate }) => {
   const navbarHeight = 130;
+  const [userRecalled, setUserRecalled] = useState(userHasRecalled.recall);
+  const [selectedRecallLevel, setSelectedRecallLevel] = useState(userHasRecalled.level);
+  const [recallId, setRecallId] = useState(userHasRecalled.recall_id);
 
+  const getBookmarkColorClass = (level) => {
+    switch (level) {
+      case "1": return "text-[#FFCE80]";
+      case "2": return "text-[#EA929D]";
+      default: return "";
+    }
+  };
+  const bookmarkColorClass = getBookmarkColorClass(selectedRecallLevel);
   const scrollToCommentBox = () => {
     const element = document.getElementById("commentArea");
     if (element) {
@@ -20,13 +32,71 @@ const ActionIcons = ({ hasLiked, onLikeClick, isCopied, copyToClipboard }) => {
     }
   };
 
+  const handleRecallSelection = async (importanceLevel) => {
+    if (!userRecalled) {
+      const data = {
+        block: block_id,
+        importance_level: importanceLevel,
+      };
+      try {
+        const response = await recallBlock(data);
+        const newRecallId = response.data.id;
+        setUserRecalled(true);
+        setSelectedRecallLevel(importanceLevel);
+        setRecallId(newRecallId);
+        onRecallUpdate(block_id, true, importanceLevel, newRecallId);
+      } catch (error) {
+        console.error('Error al crear el recall:', error);
+      }
+    }
+  }
+
+  const handleDeleteRecall = async () => {
+    if (block_id && userRecalled) {
+      try {
+        await deleteRecallBlock(recallId);
+        setUserRecalled(false);
+        setRecallId(null);
+        onRecallUpdate(block_id, null, null, false);
+      } catch (error) {
+        console.error('Error al eliminar el recall:', error);
+      }
+    }
+  };
+
   return (
     <div className='flex justify-end space-x-2 items-center text-gray-500 py-1'>
       {isCopied ? <FaCheck className='md:text-xl cursor-pointer' onClick={copyToClipboard} /> :
         <FaRegCopy className='md:text-xl cursor-pointer' onClick={copyToClipboard} />}
-      {/* {hasLiked ? <FaHeart className='text-xl cursor-pointer' onClick={onLikeClick} />
-        : <FaRegHeart className='text-xl cursor-pointer' onClick={onLikeClick} />} */}
-      <FaRegBookmark className='md:text-xl cursor-pointer' />
+      {hasLiked ? <FaHeart className='md:text-xl cursor-pointer' onClick={onLikeClick} />
+        : <FaRegHeart className='md:text-xl cursor-pointer' onClick={onLikeClick} />}
+      {userRecalled ?
+        <FaBookmark className={`md:text-xl cursor-pointer ${bookmarkColorClass}`} onClick={handleDeleteRecall} /> : (
+          <Dropdown className='w-[280px]' label="" dismissOnClick={true} renderTrigger={() => (
+            <span className='text-gray-500 flex items-center justify-center cursor-pointer me-4 md:me-6'>
+              <FaRegBookmark className='md:text-xl' />
+            </span>
+          )}>
+            <Dropdown.Header>
+              <span className="block pb-1 font-semibold">Recall</span>
+              <span className="block text-gray-500 text-[0.85rem]">Select the “Recall” importance level!
+                This will impact the number of times you will see this card on the “Recall-Mode”.</span>
+            </Dropdown.Header>
+            <Dropdown.Item onClick={() => handleRecallSelection("1")}>
+              <span className='text-gray-500 flex items-center justify-items-center'>
+                <FaBookmark className='text-[#FFCE80] me-4 md:me-6' />
+                Important
+              </span>
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => handleRecallSelection("2")}>
+              <span className='text-gray-500 flex items-center justify-items-center'>
+                <FaBookmark className='text-[#EA929D] me-4 md:me-6' />
+                Very Important
+              </span>
+            </Dropdown.Item>
+          </Dropdown>
+        )
+      }
       <FaReply className='md:text-xl cursor-pointer' onClick={scrollToCommentBox} />
     </div>
   );
@@ -40,7 +110,7 @@ const ImageContainer = ({ image, color }) => (
   ) : null
 );
 
-const BlockContainer = ({ children, color, additionalClass, hasLiked, onLikeClick, isAuthenticated, content }) => {
+const BlockContainer = ({ children, color, additionalClass, hasLiked, userHasRecalled, onLikeClick, isAuthenticated, content, block_id, onRecallUpdate }) => {
 
   const [showActionIcons, setShowActionIcons] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
@@ -73,28 +143,35 @@ const BlockContainer = ({ children, color, additionalClass, hasLiked, onLikeClic
         </div>
       </div>
       {isAuthenticated && showActionIcons &&
-        <ActionIcons hasLiked={hasLiked} onLikeClick={onLikeClick} isCopied={isCopied} copyToClipboard={copyToClipboard} />}
+        <ActionIcons hasLiked={hasLiked} onLikeClick={onLikeClick} isCopied={isCopied} copyToClipboard={copyToClipboard}
+          userHasRecalled={userHasRecalled} block_id={block_id} onRecallUpdate={onRecallUpdate} />}
     </div>
   )
 
 };
 
-function NormalBlock({ content, image, color, user_has_liked, onLikeClick, isAuthenticated }) {
+function NormalBlock({ content, image, color, user_has_liked, user_has_recalled, onLikeClick, isAuthenticated, block_id,
+  onRecallUpdate }) {
   const hasLiked = user_has_liked !== false;
   return (
     <div>
       <BlockContainer color={color}
         hasLiked={hasLiked}
+        userHasRecalled={user_has_recalled}
         onLikeClick={onLikeClick}
         isAuthenticated={isAuthenticated}
-        content={content}>{content}</BlockContainer>
+        block_id={block_id}
+        onRecallUpdate={onRecallUpdate}
+        content={content}>{content}
+      </BlockContainer>
       <ImageContainer image={image} color={color} />
     </div>
   )
 }
 
 function AttackBlock({ content, color, image, monster_image, monster_name, monster_profile, user_has_liked,
-  onLikeClick, soft_skill_name, soft_skill_description, soft_skill_logo, isAuthenticated }) {
+  user_has_recalled, onLikeClick, soft_skill_name, soft_skill_description, soft_skill_logo, isAuthenticated, block_id,
+  onRecallUpdate }) {
   const hasLiked = user_has_liked !== false;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => {
@@ -109,7 +186,8 @@ function AttackBlock({ content, color, image, monster_image, monster_name, monst
       <div className='flex'>
         <div className="flex-grow ">
           <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} additionalClass="rounded-tr-none"
-            isAuthenticated={isAuthenticated} content={content}>
+            isAuthenticated={isAuthenticated} content={content} userHasRecalled={user_has_recalled} block_id={block_id}
+            onRecallUpdate={onRecallUpdate}>
             <div className='font-bold text-end text-gray-700'>{monster_name}</div>
             {content}
           </BlockContainer>
@@ -140,7 +218,7 @@ function AttackBlock({ content, color, image, monster_image, monster_name, monst
 }
 
 function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor_job, mentor_profile, user_has_liked,
-  onLikeClick, isAuthenticated }) {
+  user_has_recalled, onLikeClick, isAuthenticated, block_id, onRecallUpdate }) {
   const hasLiked = user_has_liked !== false;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => {
@@ -163,7 +241,8 @@ function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor
         </div>
         <div className='flex-grow'>
           <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} additionalClass="rounded-tl-none"
-            isAuthenticated={isAuthenticated} content={content}>
+            isAuthenticated={isAuthenticated} content={content} userHasRecalled={user_has_recalled} block_id={block_id}
+            onRecallUpdate={onRecallUpdate}>
             <div className='font-bold text-gray-700 ps-1'>{mentor_name}</div>
             <div className='font-bold text-gray-700 pb-1 ps-1'>{mentor_job}</div>
             {content}
@@ -183,13 +262,16 @@ function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor
   );
 }
 
-function getBlockComponent(block, card, handleLikeClick, isAuthenticated) {
+function getBlockComponent(block, card, handleLikeClick, isAuthenticated, onRecallUpdate) {
   const commonProps = {
     content: block.content,
+    block_id: block.id,
     image: block.image,
     user_has_liked: block.user_has_liked,
+    user_has_recalled: block.user_has_recalled,
     onLikeClick: () => handleLikeClick(block.id, block.user_has_liked),
     isAuthenticated,
+    onRecallUpdate
   };
   switch (block.block_type_name.toLowerCase()) {
     case 'attack':
@@ -262,13 +344,21 @@ export function BlocksList({ card, blockContentTypeId }) {
     }));
   };
 
+  const handleRecallUpdate = (blockId, recallState, recallLevel, recallId) => {
+    setBlocks(blocks.map(block => {
+      if (block.id === blockId) {
+        return { ...block, user_has_recalled: { recall: recallState, level: recallLevel, recall_id: recallId } };
+      }
+      return block;
+    }));
+  };
 
 
   return (
     <div className='bg-white rounded-lg p-4 md:p-8 lg:p-12'>
       {blocks.map((block, index) => (
         <React.Fragment key={index}>
-          {getBlockComponent(block, card, handleLikeClick, isAuthenticated)}
+          {getBlockComponent(block, card, handleLikeClick, isAuthenticated, handleRecallUpdate)}
         </React.Fragment>
       ))}
     </div>

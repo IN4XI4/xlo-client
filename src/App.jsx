@@ -14,7 +14,10 @@ import { RecallsPage } from './pages/RecallsPage'
 import { LearnSoftSkillsPage } from './pages/LearnSoftSkillsPage'
 import { LearningProgramPage } from './pages/LearningProgramPage'
 
-ReactGA.initialize('G-RNZFYR8DPV');
+const isProduction = import.meta.env.VITE_ENV === 'production';
+if (isProduction) {
+  ReactGA.initialize('G-RNZFYR8DPV');
+}
 
 function formatTitle(pathname) {
   if (pathname === '/') {
@@ -52,7 +55,9 @@ function App() {
   const location = useLocation();
   const title = formatTitle(location.pathname);
   useEffect(() => {
-    ReactGA.send({ hitType: "pageview", page: location.pathname, title: title });
+    if (isProduction) {
+      ReactGA.send({ hitType: "pageview", page: location.pathname, title: title });
+    }
   }, [location]);
 
   const token = localStorage.getItem("token");
