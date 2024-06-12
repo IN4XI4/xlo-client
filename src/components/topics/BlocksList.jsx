@@ -65,7 +65,7 @@ const ActionIcons = ({ hasLiked, onLikeClick, isCopied, copyToClipboard, userHas
   };
 
   return (
-    <div className='flex justify-end space-x-2 items-center text-gray-500 py-1'>
+    <div className='flex justify-end space-x-2 items-center text-gray-500 py-1 pe-6'>
       {isCopied ? <FaCheck className='md:text-xl cursor-pointer' onClick={copyToClipboard} /> :
         <FaRegCopy className='md:text-xl cursor-pointer' onClick={copyToClipboard} />}
       {hasLiked ? <FaHeart className='md:text-xl cursor-pointer' onClick={onLikeClick} />
@@ -133,13 +133,13 @@ const BlockContainer = ({ children, color, additionalClass, hasLiked, userHasRec
   return (
     <div className='pb-4'>
       <div className="flex">
-        <div className='flex items-center '>
+        <div className={`flex-grow p-4 bg-gray-50 shadow rounded-2xl border-[4px] ${additionalClass}`} style={{ borderColor: color || "#3DB1FF" }}>
+          {children}
+        </div>
+        <div className='flex items-center'>
           {showActionIcons ?
             <BsDot className="text-2xl cursor-pointer text-gray-500" onClick={handleToggleActionIcons} /> :
             <BsThreeDotsVertical className="text-2xl cursor-pointer text-gray-500" onClick={handleToggleActionIcons} />}
-        </div>
-        <div className={`flex-grow p-4 bg-gray-50 shadow rounded-[2.5rem] border-[6px] ${additionalClass}`} style={{ borderColor: color || "#3DB1FF" }}>
-          {children}
         </div>
       </div>
       {isAuthenticated && showActionIcons &&
@@ -183,22 +183,27 @@ function AttackBlock({ content, color, image, monster_image, monster_name, monst
   };
   return (
     <div>
-      <div className='flex'>
-        <div className="flex-grow ">
+      <div className=''>
+        <div className='pb-1 flex justify-end items-center'>
+          <div className='text-end text-sm md:text-base'>
+            <div className='font-bold'>{monster_name}</div>
+            <div className='text-gray-500'>{soft_skill_name}</div>
+          </div>
+          <div className=''>
+            {monster_image ? (
+              <img src={monster_image} alt="Monster"
+                className="h-10 w-10 md:h-14 md:w-14 rounded-full ms-2 border-[3px] cursor-pointer"
+                style={{ borderColor: color }}
+                onClick={() => openModal()} />
+            ) : <FaUser />}
+          </div>
+        </div>
+        <div className="pe-4 md:pe-6">
           <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} additionalClass="rounded-tr-none"
             isAuthenticated={isAuthenticated} content={content} userHasRecalled={user_has_recalled} block_id={block_id}
             onRecallUpdate={onRecallUpdate}>
-            <div className='font-bold text-end text-gray-700'>{monster_name}</div>
             {content}
           </BlockContainer>
-        </div>
-        <div className='flex-none pt-1 '>
-          {monster_image ? (
-            <img src={monster_image} alt="Monster"
-              className="h-14 w-14 rounded-full mx-3 border-[3px] cursor-pointer"
-              style={{ borderColor: color }}
-              onClick={() => openModal()} />
-          ) : <FaUser />}
         </div>
       </div>
       <ImageContainer image={image} color={color} />
@@ -230,21 +235,26 @@ function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor
   };
   return (
     <div>
-      <div className='flex'>
-        <div className='flex-none pt-1'>
-          {mentor_image ? (
-            <img src={mentor_image} alt="Mentor"
-              className="h-14 w-14 rounded-full mx-3 border-[3px] cursor-pointer"
-              onClick={() => openModal()}
-              style={{ borderColor: color }} />
-          ) : <FaUser />}
+      <div className=''>
+        <div className='pb-1 flex items-center'>
+          <div className=''>
+            {mentor_image ? (
+              <img src={mentor_image} alt="Mentor"
+                className="h-10 w-10 md:h-14 md:w-14 rounded-full me-2 border-[3px] cursor-pointer"
+                onClick={() => openModal()}
+                style={{ borderColor: color }} />
+            ) : <FaUser />}
+          </div>
+          <div className='text-sm md:text-base'>
+            <div className='font-bold'>{mentor_name}</div>
+            <div className='text-gray-500'>{mentor_job}</div>
+          </div>
         </div>
-        <div className='flex-grow'>
+
+        <div className='ps-8 md:ps-12'>
           <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} additionalClass="rounded-tl-none"
             isAuthenticated={isAuthenticated} content={content} userHasRecalled={user_has_recalled} block_id={block_id}
             onRecallUpdate={onRecallUpdate}>
-            <div className='font-bold text-gray-700 ps-1'>{mentor_name}</div>
-            <div className='font-bold text-gray-700 pb-1 ps-1'>{mentor_job}</div>
             {content}
           </BlockContainer>
         </div>
