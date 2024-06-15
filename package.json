@@ -12,6 +12,7 @@
   "dependencies": {
     "@emoji-mart/data": "^1.1.2",
     "@emoji-mart/react": "^1.1.1",
+    "@uiw/react-md-editor": "^4.0.4",
     "axios": "^1.5.1",
     "emoji-mart": "^5.5.2",
     "flowbite-react": "^0.6.4",
@@ -23,7 +24,10 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-router-dom": "^6.16.0",
     "react-slick": "^0.29.0",
-    "slick-carousel": "^1.8.1"
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.0",
+    "slick-carousel": "^1.8.1",
+    "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
