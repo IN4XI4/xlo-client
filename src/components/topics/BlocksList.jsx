@@ -4,6 +4,7 @@ import { FaCheck, FaHeart, FaBookmark, FaRegBookmark, FaRegCopy, FaRegHeart, FaR
 import { MonsterMentorProfileModal } from './MonsterMentorProfileModal';
 import { BsDot, BsThreeDotsVertical } from "react-icons/bs";
 import { Dropdown } from 'flowbite-react';
+import MarkdownRenderer from '../MardownRenderer'; 
 
 
 const ActionIcons = ({ hasLiked, onLikeClick, isCopied, copyToClipboard, userHasRecalled, block_id, onRecallUpdate }) => {
@@ -114,6 +115,10 @@ const BlockContainer = ({ children, color, additionalClass, hasLiked, userHasRec
 
   const [showActionIcons, setShowActionIcons] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+  
+  useEffect(() => {
+    setShowActionIcons(false);
+  }, [block_id]);
 
   const handleToggleActionIcons = () => {
     setShowActionIcons(!showActionIcons);
@@ -134,7 +139,7 @@ const BlockContainer = ({ children, color, additionalClass, hasLiked, userHasRec
     <div className='pb-4'>
       <div className="flex">
         <div className={`flex-grow p-4 bg-gray-50 shadow rounded-2xl border-[4px] ${additionalClass}`} style={{ borderColor: color || "#3DB1FF" }}>
-          {children}
+          <MarkdownRenderer content={children} />
         </div>
         <div className='flex items-center'>
           {showActionIcons ?

@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { getMentors, getSoftSkills } from '../api/base.api';
 import { createStoryFull, getBlockTypes } from '../api/blog.api';
-import { FileInput, Select, TextInput, Textarea } from 'flowbite-react';
+import { FileInput, Select, TextInput } from 'flowbite-react';
 import { getUser } from '../api/users.api';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import MDEditor from '@uiw/react-md-editor';
 
 
 export function CreateStoryPage() {
@@ -138,7 +139,6 @@ export function CreateStoryPage() {
     setIsLoading(true);
     const formData = new FormData();
 
-    // Agregar campos de texto
     formData.append('title', data.title);
     formData.append('subtitle', data.subtitle);
     formData.append('topic', topicId);
@@ -319,11 +319,25 @@ export function CreateStoryPage() {
                     <div className='pb-2'>
                       <label className="text-gray-900">Block Content</label>
                     </div>
-                    <Textarea {...register(`cards.${index}.blocks.${blockIndex}.content`,
-                      { required: 'Block content is required' })}
-                      className="mb-2"
-                      rows="4"></Textarea>
-                    {errors.cards?.[index]?.blocks?.[blockIndex]?.content && <p className="text-red-500">{errors.cards[index].blocks[blockIndex].content.message}</p>}
+                    <Controller
+                      control={control}
+                      name={`cards.${index}.blocks.${blockIndex}.content`}
+                      rules={{ required: 'Block content is required' }}
+                      render={({ field }) => (
+                        <>
+                          <MDEditor
+                            value={field.value}
+                            onChange={field.onChange}
+                            preview="edit"
+                            className="mb-2"
+                          />
+                        </>
+                      )}
+                    />
+                    {errors.cards?.[index]?.blocks?.[blockIndex]?.content &&
+                      <p className="text-red-500">
+                        {errors.cards[index].blocks[blockIndex].content.message}
+                      </p>}
                   </div>
 
                   {field.blocks.length > 1 && (
