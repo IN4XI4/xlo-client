@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { FaArrowRightLong } from "react-icons/fa6";
+import MarkdownRenderer from '../MardownRenderer';
+
 
 export function MonsterMentorProfileModal({ image, name, job, profile, color, soft_skill_name, soft_skill_description,
   soft_skill_logo, onClose, isMonster }) {
@@ -34,7 +36,7 @@ export function MonsterMentorProfileModal({ image, name, job, profile, color, so
             <div className='md:pe-3 font-semibold'>{job}</div>
           </div>}
           <div className={`flex py-3 text-gray-500 text-sm ${isMonster ? 'border-b ' : ''}`}>
-            {profile} &nbsp;
+            <MarkdownRenderer content={profile} /> &nbsp;
           </div>
           {isMonster && (<div>
             <div className='flex py-3 text-gray-500 items-center'>

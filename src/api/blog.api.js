@@ -33,6 +33,7 @@ export const getStory = (storyId) => blogApi.get(`stories/${storyId}/`, { header
 export const getStoryBySlug = (slug) => blogApi.get(`stories/find-by-slug/${slug}/`, { headers: getAuthHeaders() })
 export const getCardsByStory = (storyId) => blogApi.get(`cards/?story=${storyId}`, { headers: getAuthHeaders() })
 export const getCardsBySoftSkill = (data, page) => blogApi.post(`cards/random-by-softskill/?page=${page}`, data, { headers: getAuthHeaders() })
+export const getBlock = (blockId) => blogApi.get(`blocks/${blockId}/`, { headers: getAuthHeaders() })
 export const getBlocksByCard = (cardId) => blogApi.get(`blocks/?card=${cardId}`, { headers: getAuthHeaders() })
 export const getBlockTypes = () => blogApi.get(`blocktypes/`, { headers: getAuthHeaders() })
 export const getCommentsByStory = (storyId, page, newest = false) => {
@@ -56,9 +57,17 @@ export const updateLike = (likeId, data) => blogApi.patch(`likes/${likeId}/`, da
 // Recalls
 export const recallCard = (data) => blogApi.post(`recalls/`, data, { headers: getAuthHeaders() })
 export const recallBlock = (data) => blogApi.post(`recall-blocks/`, data, { headers: getAuthHeaders() })
+export const recallComment = (data) => blogApi.post(`recall-comments/`, data, { headers: getAuthHeaders() })
 export const deleteRecallCard = (recallId) => blogApi.delete(`recalls/${recallId}/`, { headers: getAuthHeaders() })
 export const deleteRecallBlock = (recallId) => blogApi.delete(`recall-blocks/${recallId}/`, { headers: getAuthHeaders() })
+export const deleteRecallComment = (recallId) => blogApi.delete(`recall-comments/${recallId}/`, { headers: getAuthHeaders() })
 export const getMyRecallCards = () => blogApi.get(`recalls/user-recall-cards`, { headers: getAuthHeaders() })
+// TODO: dynamic ordering and filtering for recallBlocks
+export const getMyRecallBlocksFocused = () => blogApi.get(`recall-blocks/random-recalled-block-ids`, { headers: getAuthHeaders() })
+export const getMyRecallBlocksSparked = (page, importanceOrder = '-importance_level', createdTimeOrder = '-created_time') => {
+    const ordering = `${importanceOrder},${createdTimeOrder}`;
+    return blogApi.get(`recall-blocks/?ordering=${ordering}&page=${page}`, { headers: getAuthHeaders() });
+};
 
 // Notifications
 export const listLikeNotifications = (page) => blogApi.get(`notifications/?notification_type=like&page=${page}`, { headers: getAuthHeaders() })
