@@ -10,6 +10,8 @@ import { ComingSoonModal } from './ComingSoonModal';
 import { NotificationsModal } from './NotificationsModal';
 import logo from '../assets/Logo.svg';
 import profile_pic from '../assets/Profile-pic.svg';
+import { SelectRecallsModal } from './SelectRecallsModal';
+
 
 export function Navigation() {
   const navigate = useNavigate();
@@ -18,6 +20,7 @@ export function Navigation() {
   const [error, setError] = useState(null);
   const { isScrolled, storyTitle, currentCardTitle, setIsScrolled, navigationKey } = useAppState();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRecallsModalOpen, setIsRecallsModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalContext, setModalContext] = useState('');
@@ -78,6 +81,14 @@ export function Navigation() {
     setIsModalOpen(false);
   };
 
+  const openRecallsModal = () => {
+    setIsRecallsModalOpen(true);
+  };
+
+  const closeRecallsModal = () => {
+    setIsRecallsModalOpen(false);
+  };
+
   const openNotificationModal = (notificationType) => {
     setModalNotificationType(notificationType);
     setIsNotificationModalOpen(true);
@@ -86,10 +97,6 @@ export function Navigation() {
   const closeNotificationModal = (notificationType) => {
     setModalNotificationType(notificationType);
     setIsNotificationModalOpen(false);
-  };
-
-  const handleRecallsClick = () => {
-    navigate('/recall-cards/', { state: { fromNavigation: true } });
   };
 
   const handleLearningProgramClick = () => {
@@ -140,7 +147,7 @@ export function Navigation() {
                 Mes nouvelles histoires
               </span>
             </Dropdown.Item>
-            <Dropdown.Item onClick={handleRecallsClick}>
+            <Dropdown.Item onClick={openRecallsModal}>
               <span className='text-gray-500 flex items-center justify-items-center'>
                 <FaBookmark className='me-3' />
                 Mes rappels</span>
@@ -177,6 +184,7 @@ export function Navigation() {
           </Dropdown>
         </div>
       </div>
+      {isRecallsModalOpen && <SelectRecallsModal onClose={closeRecallsModal} />}
       {isModalOpen && <ComingSoonModal title={modalTitle} context={modalContext} onClose={closeModal} />}
       {isNotificationModalOpen && <NotificationsModal notificationType={modalNotificationType} onClose={closeNotificationModal} />}
     </div >
