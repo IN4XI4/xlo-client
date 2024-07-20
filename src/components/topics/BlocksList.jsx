@@ -7,15 +7,15 @@ import MarkdownRenderer from '../MardownRenderer';
 import { ActionIcons } from './ActionIcons';
 
 
-const ImageContainer = ({ image, color }) => (
+const ImageContainer = ({ image }) => (
   image ? (
-    <div className='mb-3'>
-      <img src={image} alt="Block" className=" max-w-full rounded-lg p-2 border-[6px]" style={{ borderColor: color || "#3DB1FF" }} />
+    <div className='py-4 border-t-2 mt-4'>
+      <img src={image} alt="Block" className=" max-w-full rounded-xl"/>
     </div>
   ) : null
 );
 
-const BlockContainer = ({ children, color, additionalClass, hasLiked, userHasRecalled, onLikeClick, isAuthenticated, content, block_id, onRecallUpdate }) => {
+const BlockContainer = ({ children, color, additionalClass, hasLiked, userHasRecalled, onLikeClick, isAuthenticated, content, block_id, onRecallUpdate, image }) => {
 
   const [showActionIcons, setShowActionIcons] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
@@ -44,6 +44,7 @@ const BlockContainer = ({ children, color, additionalClass, hasLiked, userHasRec
       <div className="flex">
         <div className={`flex-grow p-4 bg-gray-50 shadow rounded-2xl border-[4px] ${additionalClass}`} style={{ borderColor: color || "#3DB1FF" }}>
           <MarkdownRenderer content={children} />
+          <ImageContainer image={image}/>
         </div>
         <div className='flex items-center'>
           {showActionIcons ?
@@ -70,10 +71,10 @@ function NormalBlock({ content, image, color, user_has_liked, user_has_recalled,
         onLikeClick={onLikeClick}
         isAuthenticated={isAuthenticated}
         block_id={block_id}
+        image={image}
         onRecallUpdate={onRecallUpdate}
         content={content}>{content}
       </BlockContainer>
-      <ImageContainer image={image} color={color} />
     </div>
   )
 }
@@ -110,12 +111,11 @@ function AttackBlock({ content, color, image, monster_image, monster_name, monst
         <div className="pe-4 md:pe-6">
           <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} additionalClass="rounded-tr-none"
             isAuthenticated={isAuthenticated} content={content} userHasRecalled={user_has_recalled} block_id={block_id}
-            onRecallUpdate={onRecallUpdate}>
+            onRecallUpdate={onRecallUpdate} image={image}> 
             {content}
           </BlockContainer>
         </div>
       </div>
-      <ImageContainer image={image} color={color} />
       {isModalOpen && <MonsterMentorProfileModal
         image={monster_image}
         name={monster_name}
@@ -163,12 +163,11 @@ function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor
         <div className='ps-8 md:ps-12'>
           <BlockContainer color={color} hasLiked={hasLiked} onLikeClick={onLikeClick} additionalClass="rounded-tl-none"
             isAuthenticated={isAuthenticated} content={content} userHasRecalled={user_has_recalled} block_id={block_id}
-            onRecallUpdate={onRecallUpdate}>
+            onRecallUpdate={onRecallUpdate} image={image}>
             {content}
           </BlockContainer>
         </div>
       </div>
-      <ImageContainer image={image} color={color} />
       {isModalOpen && <MonsterMentorProfileModal
         image={mentor_image}
         name={mentor_name}

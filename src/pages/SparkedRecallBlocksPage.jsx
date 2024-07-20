@@ -43,8 +43,7 @@ export function SparkedRecallBlocksPage() {
 
   async function loadBlocks(page) {
     try {
-      const res = await getMyRecallBlocksSparked(page, importanceOrder, createdTimeOrder);;
-      console.log(res);
+      const res = await getMyRecallBlocksSparked(page, importanceOrder, createdTimeOrder);
       if (page === 1) {
         setBlocks(res.data.results);
       } else {
@@ -150,7 +149,7 @@ export function SparkedRecallBlocksPage() {
                         {
                           image: block.block.soft_skill_monster_picture,
                           name: block.block.soft_skill_monster_name,
-                          profile: block.block.soft_skill_profile,
+                          profile: block.block.soft_skill_monster_profile,
                           color: block.block.soft_skill_color,
                           soft_skill_name: block.block.soft_skill_name,
                           soft_skill_description: block.block.soft_skill_description,
@@ -194,10 +193,7 @@ export function SparkedRecallBlocksPage() {
                       ? (block.block.mentor_color || "#3DB1FF")
                       : (block.block.soft_skill_color || "#3DB1FF")
                 }}>
-                <div>[Block Type: {block.block.block_type_name}]</div>
-                <div>[Soft-Skill: {block.block.soft_skill_name}]</div>
-                <div><span className='underline'>Block-ID</span>: {block.block.id}</div>
-                <div className='pb-2'> <MarkdownRenderer content={block.block.content} /></div>
+                <div className=''> <MarkdownRenderer content={block.block.content} /></div>
                 <div className={`py-3 flex justify-center ${block.block.image ? "border-t-2" : ""}`}>
                   {block.block.image ?
                     (<div><img className='rounded-lg md:max-h-[500px]' src={block.block.image} alt="" /></div>)
