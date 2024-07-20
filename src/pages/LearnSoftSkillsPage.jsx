@@ -18,7 +18,6 @@ export function LearnSoftSkillsPage() {
   async function loadSoftSkills() {
     try {
       const res = await listSoftSkillsDetailed();
-      console.log(res.data);
       setSoftskills(res.data);
       setLoading(false);
     } catch (error) {

@@ -62,7 +62,6 @@ export function StoryNavBar({ topicSlug, goToPreviousCard, goToNextCard, user_ha
         setUserHasRecalled(false);
         setRecallId(null);
         onUpdateRecall(null, null, false);
-        console.log('Recall eliminado con éxito');
       } catch (error) {
         console.error('Error al eliminar el recall:', error);
       }
@@ -94,7 +93,7 @@ export function StoryNavBar({ topicSlug, goToPreviousCard, goToNextCard, user_ha
   };
 
   return (
-    <div className='fixed bottom-0 left-0 right-0 flex justify-center items-center p-2 z-50'>
+    <div className='fixed bottom-0 left-0 right-0 flex justify-center items-center p-2 z-40'>
       <div className='flex justify-center items-center bg-white shadow-md rounded-full py-2 px-4'>
         {isAuthenticated && (
           <>

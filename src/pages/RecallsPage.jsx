@@ -25,7 +25,6 @@ export function RecallsPage() {
   async function loadRecallCards() {
     try {
       const res = await getMyRecallCards();
-      console.log(res.data);
       setRecallCards(res.data);
       setIsCardsLoaded(true);
     } catch (error) {

@@ -182,7 +182,7 @@ export function FocusedRecallBlocksPage() {
                         {
                           image: currentBlock.soft_skill_monster_picture,
                           name: currentBlock.soft_skill_monster_name,
-                          profile: currentBlock.soft_skill_profile,
+                          profile: currentBlock.soft_skill_monster_profile,
                           color: currentBlock.soft_skill_color,
                           soft_skill_name: currentBlock.soft_skill_name,
                           soft_skill_description: currentBlock.soft_skill_description,
@@ -219,21 +219,20 @@ export function FocusedRecallBlocksPage() {
               </div>
             ) : (<></>)}
             <div className={`flex items-center ${currentBlock.block_type_name === "DEFENSE" ? "ps-10" : ""}`}>
-              <div className='flex-grow bg-gray-50 rounded-2xl border-[4px] p-4'
+              <div className='flex-grow bg-gray-50 rounded-2xl border-[4px] px-4 py-6'
                 style={{
                   borderColor:
                     currentBlock.block_type_name === "DEFENSE"
                       ? (currentBlock.mentor_color || "#3DB1FF")
                       : (currentBlock.soft_skill_color || "#3DB1FF")
                 }}>
-                <div>[Block Type: {currentBlock.block_type_name}]</div>
-                <div>[Soft-Skill: {currentBlock.soft_skill_name}]</div>
-                <div><span className='underline'>Block-ID</span>: {currentBlock.id}</div>
-                <div className='pb-2'> <MarkdownRenderer content={currentBlock.content} /></div>
-                <div className={`py-3 flex justify-center ${currentBlock.image ? "border-t-2" : ""}`}>
-                  {currentBlock.image ?
-                    (<div><img className='rounded-lg md:max-h-[500px]' src={currentBlock.image} alt="" /></div>)
-                    : (<div></div>)}</div>
+                <div className=''> <MarkdownRenderer content={currentBlock.content} /></div>
+                {currentBlock.image ? 
+                <div className="my-4 pt-4 flex justify-center border-t-2">
+                  <div><img className='rounded-lg md:max-h-[500px]' src={currentBlock.image} alt="" /></div>
+                </div> 
+                : <div></div>}
+                
               </div>
               <div>
                 <div className='flex items-center'>
