@@ -6,6 +6,13 @@ import { FileInput, Select, TextInput } from 'flowbite-react';
 import { getUser } from '../api/users.api';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import MDEditor from '@uiw/react-md-editor';
+import { LuEye } from "react-icons/lu";
+import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+import { BsFileEarmarkPlusFill } from "react-icons/bs";
+import { IoDownload } from "react-icons/io5";
+import { HiMiniTrash } from "react-icons/hi2";
+
 
 
 export function CreateStoryPage() {
@@ -19,6 +26,8 @@ export function CreateStoryPage() {
   const [mentors, setMentors] = useState([]);
   const [blockTypes, setBlockTypes] = useState([]);
   const [imagePreviews, setImagePreviews] = useState({});
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [currentBlockIndex, setCurrentBlockIndex] = useState(0);
 
   const { control, register, handleSubmit, formState: { errors }, getValues, setValue } = useForm({
     defaultValues: {
@@ -124,15 +133,42 @@ export function CreateStoryPage() {
 
     const updatedImagePreviews = updateImagePreviewsForBlocks(imagePreviews, cardIndex, blockIndex);
     setImagePreviews(updatedImagePreviews);
+
+    setCurrentBlockIndex((prevIndex) => {
+      if (prevIndex >= currentCards[cardIndex].blocks.length - 1) {
+        return Math.max(currentCards[cardIndex].blocks.length - 1, 0);
+      } else if (prevIndex > 0 && prevIndex >= blockIndex) {
+        return prevIndex - 1;
+      }
+      return prevIndex;
+    });
+
+    if (blockIndex === 0 && currentCards[cardIndex].blocks.length > 0) {
+      setValue(`cards.${cardIndex}.blocks.0`, { ...currentCards[cardIndex].blocks[0] }, { shouldDirty: true, shouldTouch: true });
+    }
   };
 
   const handleRemoveCard = (cardIndex) => {
-    const currentCards = [...getValues('cards')];
+    const currentCards = getValues('cards');
     currentCards.splice(cardIndex, 1);
-    setValue('cards', currentCards);
+    setValue('cards', currentCards, { shouldDirty: true, shouldTouch: true });
 
     const updatedImagePreviews = updateImagePreviewsForCards(imagePreviews, cardIndex);
     setImagePreviews(updatedImagePreviews);
+
+    setCurrentCardIndex((prevIndex) => {
+      if (prevIndex >= currentCards.length - 1) {
+        return Math.max(currentCards.length - 1, 0);
+      } else if (prevIndex > 0 && prevIndex >= cardIndex) {
+        return prevIndex - 1;
+      }
+      return prevIndex;
+    });
+
+    if (cardIndex === 0 && currentCards.length > 0) {
+      setValue('cards.0', { ...currentCards[0] }, { shouldDirty: true, shouldTouch: true });
+    }
+    setCurrentBlockIndex(0);
   };
 
   const onSubmit = async (data) => {
@@ -178,199 +214,299 @@ export function CreateStoryPage() {
     return <div className="pt-24 px-4 md:px-16 lg:px-32 xl:px-44">Loading...</div>;
   }
 
+  const handleNextCard = () => {
+    setCurrentCardIndex((prevIndex) => Math.min(prevIndex + 1, fields.length - 1));
+    setCurrentBlockIndex(0);
+  };
+
+  const handlePreviousCard = () => {
+    setCurrentCardIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+    setCurrentBlockIndex(0);
+  };
+
+  const handleNextBlock = () => {
+    const currentBlocks = fields[currentCardIndex]?.blocks || [];
+    setCurrentBlockIndex((prevIndex) => Math.min(prevIndex + 1, currentBlocks.length - 1));
+  };
+
+  const handlePreviousBlock = () => {
+    setCurrentBlockIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+  };
+
   if (!isCreator) {
     return <Navigate to="/" />;
   }
   return (
     <div className="pt-24 px-4 md:px-16 lg:px-32 xl:px-44">
       <div className='text-2xl md:text-4xl font-extrabold pb-6'>
-        Create story
+        STORY CREATION MODULE
       </div>
-      <form onSubmit={handleSubmit(onSubmit)} className='bg-white p-3 rounded-lg'>
-        <div className='pb-2'>
-          <div className='pb-1'>
-            <label className="text-gray-900" htmlFor="title">Title</label>
+      <form onSubmit={handleSubmit(onSubmit)} className='bg-blue-50 px-3 py-6 rounded-lg'>
+        <div className='grid grid-cols-3 md:grid-cols-6 items-center pb-2'>
+          <div className='font-semibold'>Story Title</div>
+          <div className='col-span-2 md:col-span-5'>
+            <TextInput placeholder='Insert a “Title” to your story'
+              id="title" {...register('title', { required: 'Title is required' })} />
+            {errors.title && <p className="text-red-500">{errors.title.message}</p>}
           </div>
-          <TextInput id="title" {...register('title', { required: 'Title is required' })} />
-          {errors.title && <p className="text-red-500">{errors.title.message}</p>}
         </div>
-        <div className='pb-4'>
-          <div className='pb-1'>
-            <label className="text-gray-900" htmlFor="subtitle">Subtitle</label>
+        <div className='grid grid-cols-3 md:grid-cols-6 items-center pb-4'>
+          <div className='font-semibold'>Story Subtitle</div>
+          <div className='col-span-2 md:col-span-5'>
+            <TextInput placeholder='Insert a Subtitle to your story'
+              id="subtitle" {...register('subtitle', { required: 'Subtitle is required' })} />
+            {errors.subtitle && <p className="text-red-500">{errors.subtitle.message}</p>}
           </div>
-          <TextInput id="subtitle" {...register('subtitle', { required: 'Subtitle is required' })} />
-          {errors.subtitle && <p className="text-red-500">{errors.subtitle.message}</p>}
         </div>
-        {fields.map((field, index) => (
-          <div key={field.id} className='border p-3 rounded-lg mb-2'>
-            <div className='text-xl md:text-2xl font-semibold text-gray-500 pb-3'>Card {index + 1}</div>
-            <div className='pb-1'>
-              <label className="text-gray-900">Card Title</label>
+        {fields.length > 0 && (
+          <div className='border px-3 py-6 rounded-lg mb-2 bg-purple-100' key={currentCardIndex}>
+            <div className='flex justify-between md:grid md:grid-cols-6 items-center pb-3'>
+              <div className='text-xl md:text-2xl font-semibold text-gray-500'>
+                CARD {currentCardIndex + 1} / {fields.length}
+              </div>
+              <div className='md:col-span-5'>
+                <button type='button' className='bg-[#BD7DF4] py-2 px-3 rounded-lg flex items-center text-white'>
+                  <span className='pe-2'>CARD PREVIEW</span>
+                  <LuEye />
+                </button>
+              </div>
             </div>
-            <div className='pb-2'>
-              <TextInput {...register(`cards.${index}.cardTitle`, { required: 'Card title is required' })} />
-              {errors.cards?.[index]?.cardTitle && <p className="text-red-500">{errors.cards[index].cardTitle.message}</p>}
+            <div className='grid grid-cols-3 md:grid-cols-6 items-center pb-4'>
+              <div className='font-semibold'>Card Title</div>
+              <div className='col-span-2 md:col-span-5'>
+                <TextInput placeholder='Insert a “Title” to your card'
+                  {...register(`cards.${currentCardIndex}.cardTitle`, { required: 'Card title is required' })} />
+                {errors.cards?.[currentCardIndex]?.cardTitle &&
+                  <p className="text-red-500">{errors.cards[currentCardIndex].cardTitle.message}</p>}
+              </div>
             </div>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-x-2'>
-              <div className='pb-2'>
-                <div className='pb-1'>
-                  <label className="text-gray-900">Soft Skill</label>
-                </div>
+            <div className='grid grid-cols-3 md:grid-cols-6 items-center pb-4'>
+              <div className='font-semibold'>Soft Skill</div>
+              <div className='col-span-2 md:col-span-5'>
                 <Controller
                   control={control}
-                  name={`cards.${index}.selectedSoftSkill`}
+                  name={`cards.${currentCardIndex}.selectedSoftSkill`}
                   rules={{ required: 'Soft Skill is required' }}
                   render={({ field }) => (
                     <Select {...field}>
-                      <option value="" disabled>Select Soft Skill</option> {/* Opción inicial vacía */}
+                      <option value="" disabled>Select Soft Skill</option>
                       {softSkills.map(skill => (
                         <option key={skill.id} value={skill.id}>{skill.name}</option>
                       ))}
                     </Select>
                   )}
                 />
-                {errors.cards?.[index]?.selectedSoftSkill && <p className="text-red-500">A soft skill selection is required.</p>}
+                {errors.cards?.[currentCardIndex]?.selectedSoftSkill &&
+                  <p className="text-red-500">A soft skill selection is required.</p>}
               </div>
-              <div className='pb-3'>
-                <div className='pb-1'>
-                  <label className="text-gray-900">Mentor</label>
-                </div>
+            </div>
+            <div className='grid grid-cols-3 md:grid-cols-6 items-center pb-4'>
+              <div className='font-semibold'>Mentor</div>
+              <div className='col-span-2 md:col-span-5'>
                 <Controller
                   control={control}
-                  name={`cards.${index}.selectedMentor`}
+                  name={`cards.${currentCardIndex}.selectedMentor`}
                   rules={{ required: 'Mentor is required' }}
                   render={({ field }) => (
                     <Select {...field}>
-                      <option value="" disabled>Select Mentor</option> {/* Opción inicial vacía */}
+                      <option value="" disabled>Select Mentor</option>
                       {mentors.map(mentor => (
-                        <option key={mentor.id} value={mentor.id}>{mentor.name}</option>
+                        <option key={mentor.id} value={mentor.id}>{mentor.name} - {mentor.job}</option>
                       ))}
                     </Select>
                   )}
                 />
-                {errors.cards?.[index]?.selectedMentor && <p className="text-red-500">A mentor selection is required.</p>}
+                {errors.cards?.[currentCardIndex]?.selectedMentor &&
+                  <p className="text-red-500">A mentor selection is required.</p>}
               </div>
             </div>
-            <div className='grid md:grid-cols-2 gap-x-2'>
-              {field.blocks.map((block, blockIndex) => (
-                <div key={blockIndex} className="border p-3 rounded-lg mb-2">
-                  <div className='text-xl md:text-2xl font-semibold text-gray-500 pb-3'>Block {blockIndex + 1}</div>
-                  <div className='pb-2'>
-                    <div className='pb-2'>
-                      <label className="text-gray-900">Block Type</label>
-                    </div>
-                    <Controller
-                      control={control}
-                      name={`cards.${index}.blocks.${blockIndex}.blockType`}
-                      rules={{ required: 'Block type is required' }}
-                      render={({ field }) => (
-                        <Select {...field}>
-                          <option value="">Select Block Type</option>
-                          {blockTypes.map((type) => (
-                            <option key={type.id} value={type.id}>{type.name}</option>
-                          ))}
-                        </Select>
-                      )}
-                    />
-                    {errors.cards?.[index]?.blocks?.[blockIndex]?.blockType && <p className="text-red-500">Block type selection is required.</p>}
+            <div className='grid grid-cols-1 md:grid-cols-6 items-center pb-4'>
+              <div className='hidden md:block'></div>
+              <div className='md:col-span-5 flex items-center justify-between'>
+                <div className='flex items-center space-x-1 md:space-x-2'>
+                  <button type="button"
+                    className='bg-[#BD7DF4] px-2 md:px-3 py-2 rounded-full text-white flex items-center'
+                    disabled={currentCardIndex === 0} onClick={handlePreviousCard}>
+                    <FaAngleLeft /> <span className='px-1 text-sm md:text-base'>PREV</span>
+                  </button>
+                  <div className='text-sm text-[#BD7DF4] font-semibold'>
+                    {currentCardIndex + 1}/{fields.length}
                   </div>
-                  <div className="pb-2">
-                    <div className='pb-2'>
-                      <label className="text-gray-900">Image</label>
+                  <button type="button"
+                    className='bg-[#BD7DF4] px-2 md:px-3 py-2 rounded-full text-white flex items-center'
+                    disabled={currentCardIndex === fields.length - 1}
+                    onClick={handleNextCard}>
+                    <span className='px-1 text-sm md:text-base'>NEXT</span><FaAngleRight />
+                  </button>
+                </div>
+                <div className='flex items-center space-x-2 md:space-x-3'>
+                  {fields.length > 1 && (
+                    <div className='flex items-center'>
+                      <button type="button"
+                        className='bg-[#FD4E3F] px-2 md:px-4 py-2 rounded-full md:rounded-lg text-white flex items-center'
+                        onClick={() => handleRemoveCard(currentCardIndex)} >
+                        <span className='pe-3 hidden md:block'>DELETE CARD</span> <FaMinusCircle />
+                      </button>
                     </div>
-                    <div className="relative">
-                      {/* Input de archivo oculto pero funcional */}
+                  )}
+                  <div className='flex'>
+                    <button type="button"
+                      className='bg-[#BD7DF4] px-2 md:px-4 py-2 rounded-full md:rounded-lg text-white flex items-center'
+                      onClick={() => append({ cardTitle: '', selectedSoftSkill: '', selectedMentor: '', blocks: [{ content: '', blockType: '' }] })}>
+                      <span className='pe-3 hidden md:block'>ADD NEW CARD</span> <FaPlusCircle />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className='border p-3 rounded-lg mb-2 bg-[#EBFFEE]'>
+              {fields[currentCardIndex]?.blocks?.length > 0 && (
+                <div key={currentBlockIndex}>
+                  <div className='text-xl md:text-2xl font-semibold text-gray-500'>
+                    BLOCK {currentBlockIndex + 1} / {fields[currentCardIndex].blocks.length}
+                  </div>
+                  <div className='grid grid-cols-3 md:grid-cols-6 items-center pb-4'>
+                    <div>
+                      <div className="font-semibold">Block Type</div>
+                    </div>
+                    <div className='col-span-2 md:col-span-5'>
+                      <Controller
+                        control={control}
+                        name={`cards.${currentCardIndex}.blocks.${currentBlockIndex}.blockType`}
+                        rules={{ required: 'Block type is required' }}
+                        render={({ field }) => (
+                          <Select {...field}>
+                            <option value="">Select Block Type</option>
+                            {blockTypes.map((type) => (
+                              <option key={type.id} value={type.id}>{type.name}</option>
+                            ))}
+                          </Select>
+                        )}
+                      />
+                      {errors.cards?.[currentCardIndex]?.blocks?.[currentBlockIndex]?.blockType &&
+                        <p className="text-red-500">Block type selection is required.</p>}
+                    </div>
+
+                  </div>
+                  <div className='grid grid-cols-1 md:grid-cols-6 pb-4'>
+                    <div className='pb-3 md:pb-0'>
+                      <div className="font-semibold">Block Text</div>
+                    </div>
+                    <div className='md:col-span-5'>
+                      <Controller
+                        control={control}
+                        name={`cards.${currentCardIndex}.blocks.${currentBlockIndex}.content`}
+                        rules={{ required: 'Block content is required' }}
+                        render={({ field }) => (
+                          <>
+                            <MDEditor
+                              value={field.value}
+                              onChange={field.onChange}
+                              preview="edit"
+                            />
+                          </>
+                        )}
+                      />
+                    </div>
+                    {errors.cards?.[currentCardIndex]?.blocks?.[currentBlockIndex]?.content &&
+                      <p className="text-red-500">
+                        {errors.cards[currentCardIndex].blocks[currentBlockIndex].content.message}
+                      </p>}
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-6 items-center md:items-start">
+                    <div className="font-semibold mb-3">
+                      Block Image
+                    </div>
+                    <div className="relative mb-3">
                       <FileInput
                         type="file"
                         accept="image/png, image/jpeg, image/gif"
                         className='opacity-0 absolute w-full h-full'
-                        {...register(`cards.${index}.blocks.${blockIndex}.image`)}
+                        {...register(`cards.${currentCardIndex}.blocks.${currentBlockIndex}.image`)}
                         onChange={(e) => {
                           const file = e.target.files[0];
                           if (file) {
                             const reader = new FileReader();
                             reader.onloadend = () => {
-                              setImagePreviews(prev => ({ ...prev, [`cards.${index}.blocks.${blockIndex}.image`]: reader.result }));
+                              setImagePreviews(prev => ({ ...prev, [`cards.${currentCardIndex}.blocks.${currentBlockIndex}.image`]: reader.result }));
                             };
                             reader.readAsDataURL(file);
                           }
                         }}
                       />
-                      {/* Botón personalizado que aparece en lugar del FileInput */}
                       <button
                         type="button"
-                        className="bg-blue-500 text-white px-3 py-2 rounded-md"
-                        onClick={() => document.querySelector(`input[name='cards.${index}.blocks.${blockIndex}.image']`).click()}
+                        className="bg-[#43B29D] px-2 md:px-4 py-2 rounded-full md:rounded-lg text-white flex items-center"
+                        onClick={() => document.querySelector(`input[name='cards.${currentCardIndex}.blocks.${currentBlockIndex}.image']`).click()}
                       >
-                        Select image
+                        <span className='pe-3 hidden md:block'>ADD AN IMAGE</span> <BsFileEarmarkPlusFill className='text-xl' />
                       </button>
                     </div>
-                    {imagePreviews[`cards.${index}.blocks.${blockIndex}.image`] && (
-                      <div className='py-2 flex justify-center'>
+                    {imagePreviews[`cards.${currentCardIndex}.blocks.${currentBlockIndex}.image`] ? (
+                      <div className='col-span-2 md:col-span-4 flex items-center justify-center '>
                         <img
-                          src={imagePreviews[`cards.${index}.blocks.${blockIndex}.image`]}
+                          src={imagePreviews[`cards.${currentCardIndex}.blocks.${currentBlockIndex}.image`]}
                           alt="Preview"
-                          className='w-3/4 rounded-lg'
+                          className='max-h-[400px] rounded-lg'
                         />
+                      </div>
+                    ) : (
+                      <div className='col-span-2 md:col-span-4 bg-white h-[200px] border rounded-md md:ms-3 flex justify-center items-center text-gray-500'>
+                        Image Preview
                       </div>
                     )}
                   </div>
-                  <div className='pb-2'>
-                    <div className='pb-2'>
-                      <label className="text-gray-900">Block Content</label>
-                    </div>
-                    <Controller
-                      control={control}
-                      name={`cards.${index}.blocks.${blockIndex}.content`}
-                      rules={{ required: 'Block content is required' }}
-                      render={({ field }) => (
-                        <>
-                          <MDEditor
-                            value={field.value}
-                            onChange={field.onChange}
-                            preview="edit"
-                            className="mb-2"
-                          />
-                        </>
-                      )}
-                    />
-                    {errors.cards?.[index]?.blocks?.[blockIndex]?.content &&
-                      <p className="text-red-500">
-                        {errors.cards[index].blocks[blockIndex].content.message}
-                      </p>}
-                  </div>
 
-                  {field.blocks.length > 1 && (
-                    <button type="button" onClick={() => handleRemoveBlock(index, blockIndex)}
-                      className="bg-red-500 text-white px-3 py-2 rounded-md">Remove Block</button>
-                  )}
                 </div>
-              ))}
-            </div>
-            <div className='flex justify-end pb-4'>
-              <button type="button" onClick={() => {
-                const currentCards = getValues(`cards`);
-                currentCards[index].blocks.push({ content: '', blockType: '' });
-                setValue(`cards`, currentCards);
-              }} className="bg-green-500 text-white px-3 py-2 rounded-md">+ Add Block</button>
-            </div>
-            {fields.length > 1 && (
-              <div className='pb-1 flex justify-end'>
-                <button type="button"
-                  className='bg-red-500 px-3 py-2 rounded-lg text-white'
-                  onClick={() => handleRemoveCard(index)} >Remove Card</button>
+              )}
+              <div className='grid grid-cols-1 md:grid-cols-6 items-center pt-3 md:pt-6 md:pb-3'>
+                <div className='hidden md:block'></div>
+                <div className='md:col-span-5 flex items-center justify-between'>
+                  <div className='flex justify-between items-center'>
+                    <button type="button"
+                      className='bg-[#43B29D] px-2 md:px-3 py-2 rounded-full text-white flex items-center'
+                      disabled={currentBlockIndex === 0} onClick={handlePreviousBlock}>
+                      <FaAngleLeft /> <span className='px-1 text-sm md:text-base'>PREV</span>
+                    </button>
+                    <div className='text-sm text-[#43B29D] font-semibold px-1'>
+                      {currentBlockIndex + 1} / {fields[currentCardIndex].blocks.length}
+                    </div>
+                    <button type="button"
+                      className='bg-[#43B29D] px-2 md:px-3 py-2 rounded-full text-white flex items-center'
+                      disabled={currentBlockIndex === fields[currentCardIndex]?.blocks?.length - 1}
+                      onClick={handleNextBlock}>
+                      <span className='px-1 text-sm md:text-base'>NEXT</span><FaAngleRight />
+                    </button>
+                  </div>
+                  <div className='flex justify-end'>
+                    {fields[currentCardIndex].blocks.length > 1 && (
+                      <button type="button" onClick={() => handleRemoveBlock(currentCardIndex, currentBlockIndex)}
+                        className="bg-[#FD4E3F] px-2 md:px-4 py-2 rounded-full md:rounded-lg text-white flex items-center me-3">
+                        <span className='pe-3 hidden md:block'>DELETE BLOCK</span> <FaMinusCircle />
+                      </button>
+                    )}
+                    <button type="button" onClick={() => {
+                      const currentCards = getValues(`cards`);
+                      currentCards[currentCardIndex].blocks.push({ content: '', blockType: '' });
+                      setValue(`cards`, currentCards);
+                    }} className="bg-[#43B29D] px-2 md:px-4 py-2 rounded-full md:rounded-lg text-white flex items-center">
+                      <span className='pe-3 hidden md:block'>ADD NEW BLOCK</span> <FaPlusCircle />
+                    </button>
+                  </div>
+                </div>
               </div>
-            )}
+
+
+            </div>
           </div>
-        ))}
-        <div className='pb-4 flex justify-end'>
-          <button type="button" className='bg-[#3DB1FF] px-3 py-2 rounded-lg text-white'
-            onClick={() => append({ cardTitle: '', selectedSoftSkill: '', selectedMentor: '', blocks: [{ content: '', blockType: '' }] })}>
-            + Add Card
+        )}
+        <div className='flex justify-end pt-3'>
+          <button type='button' className='bg-[#FD4E3F] px-3 md:px-4 py-3 md:py-2 rounded-full md:rounded-lg text-white flex items-center me-3'>
+            <span className='pe-3 hidden md:block'>DELETE STORY</span> <HiMiniTrash />
           </button>
-        </div>
-        <div>
-          <button type="submit" className='bg-[#3DB1FF] px-3 py-2 rounded-lg text-white w-full'>Submit Story</button>
+          <button type="submit" className='bg-[#3DB1FF] px-2 md:px-4 md:py-2 rounded-lg text-white flex items-center'>
+            <span className='pe-3'>SUBMIT STORY</span> <IoDownload />
+          </button>
         </div>
         {submitMessage && (
           <div className={`mt-4 text-center ${isSubmitError ? 'text-red-500' : 'text-green-500'}`}>
