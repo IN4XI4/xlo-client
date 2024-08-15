@@ -61,14 +61,13 @@ export function LearnSoftSkillsPage() {
             <CgArrowTopLeft />
           </div>
         </div>
-
         <div className='flex-auto bg-white rounded-lg p-3'>
           {softskills.map((softskill, index) => (
             <div key={index} className='p-2 bg-gray-50 rounded-lg mb-3 cursor-pointer'>
               <Link to={`/practice-softskills/${softskill.name}`}>
                 <div className='flex justify-between items-center'>
-                  <div className='flex items-center'> {softskill.logo && <img src={softskill.logo} alt="" className='h-6 w-6 me-2' />}  {softskill.name} </div>
-                  <div className='bg-gray-200 px-10 rounded text-gray-500 text-sm'>Level [1]</div>
+                  <div className='flex items-center flex-1'> {softskill.logo && <img src={softskill.logo} alt="" className='h-6 w-6 me-2' />}  {softskill.name} </div>
+                  <div className='bg-gray-200 px-4 md:px-10 rounded text-gray-500 text-sm text-center'>Level [1]</div>
                 </div>
                 <div className='text-end text-gray-500 text-sm'>{softskill.cards_viewed_percentage}%</div>
                 <div className='bg-gray-200 rounded-lg h-2'>

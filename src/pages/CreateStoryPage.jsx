@@ -12,7 +12,7 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { BsFileEarmarkPlusFill } from "react-icons/bs";
 import { IoDownload } from "react-icons/io5";
 import { HiMiniTrash } from "react-icons/hi2";
-
+import { CardPreviewModal } from '../components/create_stories/CardPreviewModal';
 
 
 export function CreateStoryPage() {
@@ -28,6 +28,8 @@ export function CreateStoryPage() {
   const [imagePreviews, setImagePreviews] = useState({});
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [currentBlockIndex, setCurrentBlockIndex] = useState(0);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [previewCard, setPreviewCard] = useState(null);
 
   const { control, register, handleSubmit, formState: { errors }, getValues, setValue } = useForm({
     defaultValues: {
@@ -66,6 +68,8 @@ export function CreateStoryPage() {
       try {
         const blockTypesRes = await getBlockTypes();
         setBlockTypes(blockTypesRes.data.results);
+        console.log("types", blockTypesRes.data.results);
+        
       } catch (error) {
         console.error("Error loading block types:", error);
       }
@@ -233,6 +237,17 @@ export function CreateStoryPage() {
     setCurrentBlockIndex((prevIndex) => Math.max(prevIndex - 1, 0));
   };
 
+  const openPreviewModal = (card) => {
+    const currentCard = getValues(`cards.${currentCardIndex}`);
+    setPreviewCard(currentCard);
+    setIsPreviewModalOpen(true);
+  };
+
+  const closePreviewModal = () => {
+    setIsPreviewModalOpen(false);
+    setPreviewCard(null);
+  };
+
   if (!isCreator) {
     return <Navigate to="/" />;
   }
@@ -241,7 +256,7 @@ export function CreateStoryPage() {
       <div className='text-2xl md:text-4xl font-extrabold pb-6'>
         STORY CREATION MODULE
       </div>
-      <form onSubmit={handleSubmit(onSubmit)} className='bg-blue-50 px-3 py-6 rounded-lg'>
+      <form onSubmit={handleSubmit(onSubmit)} className='bg-blue-50 px-3 py-6 rounded-lg mb-4'>
         <div className='grid grid-cols-3 md:grid-cols-6 items-center pb-2'>
           <div className='font-semibold'>Story Title</div>
           <div className='col-span-2 md:col-span-5'>
@@ -255,7 +270,7 @@ export function CreateStoryPage() {
           <div className='col-span-2 md:col-span-5'>
             <TextInput placeholder='Insert a Subtitle to your story'
               id="subtitle" {...register('subtitle', { required: 'Subtitle is required' })} />
-            {errors.subtitle && <p className="text-red-500">{errors.subtitle.message}</p>}
+            {errors.subtitle && <p className="relative w-full-red-500">{errors.subtitle.message}</p>}
           </div>
         </div>
         {fields.length > 0 && (
@@ -265,7 +280,8 @@ export function CreateStoryPage() {
                 CARD {currentCardIndex + 1} / {fields.length}
               </div>
               <div className='md:col-span-5'>
-                <button type='button' className='bg-[#BD7DF4] py-2 px-3 rounded-lg flex items-center text-white'>
+                <button type='button' className='bg-[#BD7DF4] py-2 px-3 rounded-lg flex items-center text-white'
+                  onClick={() => openPreviewModal(fields[currentCardIndex])}>
                   <span className='pe-2'>CARD PREVIEW</span>
                   <LuEye />
                 </button>
@@ -352,7 +368,12 @@ export function CreateStoryPage() {
                   <div className='flex'>
                     <button type="button"
                       className='bg-[#BD7DF4] px-2 md:px-4 py-2 rounded-full md:rounded-lg text-white flex items-center'
-                      onClick={() => append({ cardTitle: '', selectedSoftSkill: '', selectedMentor: '', blocks: [{ content: '', blockType: '' }] })}>
+                      onClick={() => {
+                        const newCard = { cardTitle: '', selectedSoftSkill: '', selectedMentor: '', blocks: [{ content: '', blockType: '' }] };
+                        append(newCard);
+                        setCurrentCardIndex(fields.length);
+                        setCurrentBlockIndex(0);
+                      }}>
                       <span className='pe-3 hidden md:block'>ADD NEW CARD</span> <FaPlusCircle />
                     </button>
                   </div>
@@ -418,29 +439,32 @@ export function CreateStoryPage() {
                       Block Image
                     </div>
                     <div className="relative mb-3">
-                      <FileInput
-                        type="file"
-                        accept="image/png, image/jpeg, image/gif"
-                        className='opacity-0 absolute w-full h-full'
-                        {...register(`cards.${currentCardIndex}.blocks.${currentBlockIndex}.image`)}
-                        onChange={(e) => {
-                          const file = e.target.files[0];
-                          if (file) {
-                            const reader = new FileReader();
-                            reader.onloadend = () => {
-                              setImagePreviews(prev => ({ ...prev, [`cards.${currentCardIndex}.blocks.${currentBlockIndex}.image`]: reader.result }));
-                            };
-                            reader.readAsDataURL(file);
-                          }
-                        }}
-                      />
-                      <button
-                        type="button"
-                        className="bg-[#43B29D] px-2 md:px-4 py-2 rounded-full md:rounded-lg text-white flex items-center"
-                        onClick={() => document.querySelector(`input[name='cards.${currentCardIndex}.blocks.${currentBlockIndex}.image']`).click()}
-                      >
-                        <span className='pe-3 hidden md:block'>ADD AN IMAGE</span> <BsFileEarmarkPlusFill className='text-xl' />
-                      </button>
+                      <div className="relative inline-block">
+                        <FileInput
+                          type="file"
+                          accept="image/png, image/jpeg, image/gif"
+                          className='absolute opacity-0'
+                          {...register(`cards.${currentCardIndex}.blocks.${currentBlockIndex}.image`)}
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (file) {
+                              const reader = new FileReader();
+                              reader.onloadend = () => {
+                                setImagePreviews(prev => ({ ...prev, [`cards.${currentCardIndex}.blocks.${currentBlockIndex}.image`]: reader.result }));
+                              };
+                              reader.readAsDataURL(file);
+                            }
+                          }}
+                        />
+                        <button
+                          type="button"
+                          className="bg-[#43B29D] px-2 md:px-4 py-2 rounded-full md:rounded-lg text-white flex items-center"
+                          onClick={() => document.querySelector(`input[name='cards.${currentCardIndex}.blocks.${currentBlockIndex}.image']`).click()}
+                        >
+                          <span className='pe-3 hidden md:block'>ADD AN IMAGE</span> <BsFileEarmarkPlusFill className='text-xl' />
+                        </button>
+                      </div>
+
                     </div>
                     {imagePreviews[`cards.${currentCardIndex}.blocks.${currentBlockIndex}.image`] ? (
                       <div className='col-span-2 md:col-span-4 flex items-center justify-center '>
@@ -489,13 +513,13 @@ export function CreateStoryPage() {
                       const currentCards = getValues(`cards`);
                       currentCards[currentCardIndex].blocks.push({ content: '', blockType: '' });
                       setValue(`cards`, currentCards);
+                      setCurrentBlockIndex(currentCards[currentCardIndex].blocks.length - 1);
                     }} className="bg-[#43B29D] px-2 md:px-4 py-2 rounded-full md:rounded-lg text-white flex items-center">
                       <span className='pe-3 hidden md:block'>ADD NEW BLOCK</span> <FaPlusCircle />
                     </button>
                   </div>
                 </div>
               </div>
-
 
             </div>
           </div>
@@ -514,6 +538,7 @@ export function CreateStoryPage() {
           </div>
         )}
       </form>
+      {isPreviewModalOpen && <CardPreviewModal onClose={closePreviewModal} card={previewCard} />}
     </div>
   )
 }
