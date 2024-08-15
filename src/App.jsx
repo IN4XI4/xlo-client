@@ -15,7 +15,7 @@ import { LearnSoftSkillsPage } from './pages/LearnSoftSkillsPage'
 import { LearningProgramPage } from './pages/LearningProgramPage'
 import { FocusedRecallBlocksPage } from './pages/FocusedRecallBlocksPage';
 import { SparkedRecallBlocksPage } from './pages/SparkedRecallBlocksPage';
-import useBeforeInstallPrompt from './hooks/UseBeforeInstallPrompt';
+// import useBeforeInstallPrompt from './hooks/UseBeforeInstallPrompt';
 
 
 const isProduction = import.meta.env.VITE_ENV === 'production';
@@ -58,8 +58,8 @@ function ProtectedRoute({ children }) {
 function App() {
   const location = useLocation();
   const title = formatTitle(location.pathname);
-  const deferredPrompt = useBeforeInstallPrompt();
-  const [isInstallable, setIsInstallable] = useState(false);
+  // const deferredPrompt = useBeforeInstallPrompt();
+  // const [isInstallable, setIsInstallable] = useState(false);
 
   useEffect(() => {
     if (isProduction) {
@@ -67,38 +67,38 @@ function App() {
     }
   }, [location]);
 
-  useEffect(() => {
-    if (deferredPrompt) {
-      setIsInstallable(true);
-    }
-  }, [deferredPrompt]);
+  // useEffect(() => {
+  //   if (deferredPrompt) {
+  //     setIsInstallable(true);
+  //   }
+  // }, [deferredPrompt]);
 
-  const handleInstallClick = async () => {
-    if (deferredPrompt) {
-      console.log('Prompting installation...');
-      deferredPrompt.prompt();
-      const choiceResult = await deferredPrompt.userChoice;
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the install prompt');
-      } else {
-        console.log('User dismissed the install prompt');
-      }
-    } else {
-      console.log('No deferred prompt available');
-    }
-  };
+  // const handleInstallClick = async () => {
+  //   if (deferredPrompt) {
+  //     console.log('Prompting installation...');
+  //     deferredPrompt.prompt();
+  //     const choiceResult = await deferredPrompt.userChoice;
+  //     if (choiceResult.outcome === 'accepted') {
+  //       console.log('User accepted the install prompt');
+  //     } else {
+  //       console.log('User dismissed the install prompt');
+  //     }
+  //   } else {
+  //     console.log('No deferred prompt available');
+  //   }
+  // };
 
   const token = localStorage.getItem("token");
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       {token && <Navigation />}
       <div className="flex-grow">
-        {isInstallable && (
+        {/* {isInstallable && (
           <button onClick={handleInstallClick} 
           className="fixed bottom-4 right-4 z-40 p-2 border-2 rounded-lg border-[#3DB1FF] text-[#3DB1FF] shadow bg-white">
             Install App
           </button>
-        )}
+        )} */}
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/topic/:slug" element={<ProtectedRoute><TopicStoriesPage /></ProtectedRoute>} />
