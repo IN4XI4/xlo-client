@@ -1,22 +1,22 @@
-import { useState, useEffect } from 'react';
+// import { useState, useEffect } from 'react';
 
-const useBeforeInstallPrompt = () => {
-  const [deferredPrompt, setDeferredPrompt] = useState(null);
+// const useBeforeInstallPrompt = () => {
+//   const [deferredPrompt, setDeferredPrompt] = useState(null);
 
-  useEffect(() => {
-    const handler = (e) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-    };
+//   useEffect(() => {
+//     const handler = (e) => {
+//       e.preventDefault();
+//       setDeferredPrompt(e);
+//     };
 
-    window.addEventListener('beforeinstallprompt', handler);
+//     window.addEventListener('beforeinstallprompt', handler);
 
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handler);
-    };
-  }, []);
+//     return () => {
+//       window.removeEventListener('beforeinstallprompt', handler);
+//     };
+//   }, []);
 
-  return deferredPrompt;
-};
+//   return deferredPrompt;
+// };
 
-export default useBeforeInstallPrompt;
+// export default useBeforeInstallPrompt;
