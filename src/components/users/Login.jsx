@@ -22,7 +22,6 @@ export function Login() {
       if (response.data && response.data.token) {
         localStorage.setItem('token', response.data.token);
         navigate('/');
-        window.location.reload();
       } else {
         setServerError('Login was successful, but no token was received.');
       }
