@@ -104,7 +104,7 @@ export function Navigation() {
   };
 
   return (
-    <div className="bg-white z-10 shadow p-4 fixed top-0 w-full flex justify-between items-center px-4 md:px-16 lg:px-32 xl:px-44">
+    <div className="bg-white z-30 shadow p-4 fixed top-0 w-full flex justify-between items-center px-4 md:px-16 lg:px-32 xl:px-44">
       <div className="flex items-center space-x-4">
         <Link to="/">
           <img src={logo} alt="" />

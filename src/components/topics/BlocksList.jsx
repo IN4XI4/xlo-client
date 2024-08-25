@@ -99,7 +99,7 @@ function AttackBlock({ content, color, image, monster_image, monster_name, monst
             <div className='font-bold'>{monster_name}</div>
             <div className='text-gray-500'>{soft_skill_name}</div>
           </div>
-          <div className=''>
+          <div className=' flex-none'>
             {monster_image ? (
               <img src={monster_image} alt="Monster"
                 className="h-10 w-10 md:h-14 md:w-14 rounded-full ms-2 border-[3px] cursor-pointer"

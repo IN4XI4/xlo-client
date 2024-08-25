@@ -9,10 +9,11 @@ import MDEditor from '@uiw/react-md-editor';
 import { LuEye } from "react-icons/lu";
 import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-import { BsFileEarmarkPlusFill } from "react-icons/bs";
+import { BsFileEarmarkPlusFill, BsFillFileEarmarkMinusFill } from "react-icons/bs";
 import { IoDownload } from "react-icons/io5";
 import { HiMiniTrash } from "react-icons/hi2";
 import { CardPreviewModal } from '../components/create_stories/CardPreviewModal';
+import { CardBlockNavigation } from '../components/create_stories/CardBlockNavigation';
 
 
 export function CreateStoryPage() {
@@ -31,7 +32,7 @@ export function CreateStoryPage() {
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [previewCard, setPreviewCard] = useState(null);
 
-  const { control, register, handleSubmit, formState: { errors }, getValues, setValue } = useForm({
+  const { control, register, handleSubmit, formState: { errors }, getValues, setValue, trigger } = useForm({
     defaultValues: {
       title: '',
       subtitle: '',
@@ -68,8 +69,7 @@ export function CreateStoryPage() {
       try {
         const blockTypesRes = await getBlockTypes();
         setBlockTypes(blockTypesRes.data.results);
-        console.log("types", blockTypesRes.data.results);
-        
+
       } catch (error) {
         console.error("Error loading block types:", error);
       }
@@ -176,6 +176,24 @@ export function CreateStoryPage() {
   };
 
   const onSubmit = async (data) => {
+    let allValid = true;
+
+    for (let cardIndex = 0; cardIndex < data.cards.length; cardIndex++) {
+      if (!data.cards[cardIndex].cardTitle || !data.cards[cardIndex].selectedSoftSkill || !data.cards[cardIndex].selectedMentor) {
+        allValid = false;
+      }
+      for (let blockIndex = 0; blockIndex < data.cards[cardIndex].blocks.length; blockIndex++) {
+        if (!data.cards[cardIndex].blocks[blockIndex].blockType || !data.cards[cardIndex].blocks[blockIndex].content) {
+          allValid = false;
+        }
+      }
+    }
+    if (!allValid) {
+      setSubmitMessage('Please check all cards and blocks. Some of them have incomplete information.');
+      setIsSubmitError(true);
+      return;
+    }
+
     setIsLoading(true);
     const formData = new FormData();
 
@@ -214,10 +232,6 @@ export function CreateStoryPage() {
     }
   };
 
-  if (isLoading) {
-    return <div className="pt-24 px-4 md:px-16 lg:px-32 xl:px-44">Loading...</div>;
-  }
-
   const handleNextCard = () => {
     setCurrentCardIndex((prevIndex) => Math.min(prevIndex + 1, fields.length - 1));
     setCurrentBlockIndex(0);
@@ -248,6 +262,32 @@ export function CreateStoryPage() {
     setPreviewCard(null);
   };
 
+  const handleDeleteStory = () => {
+    setValue('title', '');
+    setValue('subtitle', '');
+    setValue('cards', [{
+      cardTitle: '',
+      selectedSoftSkill: '',
+      selectedMentor: '',
+      blocks: [{ content: '', blockType: '' }]
+    }]);
+
+    setImagePreviews({});
+    setCurrentCardIndex(0);
+    setCurrentBlockIndex(0);
+  };
+
+  const handleDeleteImage = (cardIndex, blockIndex) => {
+    const updatedImagePreviews = { ...imagePreviews };
+    delete updatedImagePreviews[`cards.${cardIndex}.blocks.${blockIndex}.image`];
+    setImagePreviews(updatedImagePreviews);
+    setValue(`cards.${cardIndex}.blocks.${blockIndex}.image`, null, { shouldDirty: true, shouldTouch: true });
+  };
+
+  if (isLoading) {
+    return <div className="pt-24 px-4 md:px-16 lg:px-32 xl:px-44">Loading...</div>;
+  }
+
   if (!isCreator) {
     return <Navigate to="/" />;
   }
@@ -270,7 +310,7 @@ export function CreateStoryPage() {
           <div className='col-span-2 md:col-span-5'>
             <TextInput placeholder='Insert a Subtitle to your story'
               id="subtitle" {...register('subtitle', { required: 'Subtitle is required' })} />
-            {errors.subtitle && <p className="relative w-full-red-500">{errors.subtitle.message}</p>}
+            {errors.subtitle && <p className="text-red-500">{errors.subtitle.message}</p>}
           </div>
         </div>
         {fields.length > 0 && (
@@ -417,7 +457,7 @@ export function CreateStoryPage() {
                       <Controller
                         control={control}
                         name={`cards.${currentCardIndex}.blocks.${currentBlockIndex}.content`}
-                        rules={{ required: 'Block content is required' }}
+                        rules={{ required: 'Block content is required.' }}
                         render={({ field }) => (
                           <>
                             <MDEditor
@@ -428,17 +468,18 @@ export function CreateStoryPage() {
                           </>
                         )}
                       />
-                    </div>
-                    {errors.cards?.[currentCardIndex]?.blocks?.[currentBlockIndex]?.content &&
+                      {errors.cards?.[currentCardIndex]?.blocks?.[currentBlockIndex]?.content &&
                       <p className="text-red-500">
                         {errors.cards[currentCardIndex].blocks[currentBlockIndex].content.message}
                       </p>}
+                    </div>
+                    
                   </div>
                   <div className="grid grid-cols-2 md:grid-cols-6 items-center md:items-start">
                     <div className="font-semibold mb-3">
                       Block Image
                     </div>
-                    <div className="relative mb-3">
+                    <div className="relative mb-3 flex md:block items-center">
                       <div className="relative inline-block">
                         <FileInput
                           type="file"
@@ -464,6 +505,17 @@ export function CreateStoryPage() {
                           <span className='pe-3 hidden md:block'>ADD AN IMAGE</span> <BsFileEarmarkPlusFill className='text-xl' />
                         </button>
                       </div>
+                      {imagePreviews[`cards.${currentCardIndex}.blocks.${currentBlockIndex}.image`] && (
+                        <div className='md:mt-4 ps-4 md:ps-0'>
+                          <button
+                            type="button"
+                            className="bg-[#FD4E3F] px-2 md:px-4 py-2 rounded-full md:rounded-lg text-white flex items-center"
+                            onClick={() => handleDeleteImage(currentCardIndex, currentBlockIndex)}
+                          >
+                            <span className='pe-3 hidden md:block'>DELETE IMAGE</span> <BsFillFileEarmarkMinusFill className='text-xl' />
+                          </button>
+                        </div>
+                      )}
 
                     </div>
                     {imagePreviews[`cards.${currentCardIndex}.blocks.${currentBlockIndex}.image`] ? (
@@ -485,47 +537,26 @@ export function CreateStoryPage() {
               )}
               <div className='grid grid-cols-1 md:grid-cols-6 items-center pt-3 md:pt-6 md:pb-3'>
                 <div className='hidden md:block'></div>
-                <div className='md:col-span-5 flex items-center justify-between'>
-                  <div className='flex justify-between items-center'>
-                    <button type="button"
-                      className='bg-[#43B29D] px-2 md:px-3 py-2 rounded-full text-white flex items-center'
-                      disabled={currentBlockIndex === 0} onClick={handlePreviousBlock}>
-                      <FaAngleLeft /> <span className='px-1 text-sm md:text-base'>PREV</span>
-                    </button>
-                    <div className='text-sm text-[#43B29D] font-semibold px-1'>
-                      {currentBlockIndex + 1} / {fields[currentCardIndex].blocks.length}
-                    </div>
-                    <button type="button"
-                      className='bg-[#43B29D] px-2 md:px-3 py-2 rounded-full text-white flex items-center'
-                      disabled={currentBlockIndex === fields[currentCardIndex]?.blocks?.length - 1}
-                      onClick={handleNextBlock}>
-                      <span className='px-1 text-sm md:text-base'>NEXT</span><FaAngleRight />
-                    </button>
-                  </div>
-                  <div className='flex justify-end'>
-                    {fields[currentCardIndex].blocks.length > 1 && (
-                      <button type="button" onClick={() => handleRemoveBlock(currentCardIndex, currentBlockIndex)}
-                        className="bg-[#FD4E3F] px-2 md:px-4 py-2 rounded-full md:rounded-lg text-white flex items-center me-3">
-                        <span className='pe-3 hidden md:block'>DELETE BLOCK</span> <FaMinusCircle />
-                      </button>
-                    )}
-                    <button type="button" onClick={() => {
-                      const currentCards = getValues(`cards`);
-                      currentCards[currentCardIndex].blocks.push({ content: '', blockType: '' });
-                      setValue(`cards`, currentCards);
-                      setCurrentBlockIndex(currentCards[currentCardIndex].blocks.length - 1);
-                    }} className="bg-[#43B29D] px-2 md:px-4 py-2 rounded-full md:rounded-lg text-white flex items-center">
-                      <span className='pe-3 hidden md:block'>ADD NEW BLOCK</span> <FaPlusCircle />
-                    </button>
-                  </div>
-                </div>
+                <CardBlockNavigation
+                  currentBlockIndex={currentBlockIndex}
+                  setCurrentBlockIndex={setCurrentBlockIndex}
+                  currentCardIndex={currentCardIndex}
+                  fields={fields}
+                  handlePreviousBlock={handlePreviousBlock}
+                  handleNextBlock={handleNextBlock}
+                  handleRemoveBlock={handleRemoveBlock}
+                  getValues={getValues}
+                  setValue={setValue}
+                />
               </div>
 
             </div>
           </div>
         )}
         <div className='flex justify-end pt-3'>
-          <button type='button' className='bg-[#FD4E3F] px-3 md:px-4 py-3 md:py-2 rounded-full md:rounded-lg text-white flex items-center me-3'>
+          <button type='button' onClick={handleDeleteStory}
+            className='bg-[#FD4E3F] px-3 md:px-4 py-3 md:py-2 rounded-full md:rounded-lg 
+          text-white flex items-center me-3'>
             <span className='pe-3 hidden md:block'>DELETE STORY</span> <HiMiniTrash />
           </button>
           <button type="submit" className='bg-[#3DB1FF] px-2 md:px-4 md:py-2 rounded-lg text-white flex items-center'>

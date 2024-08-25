@@ -4,14 +4,15 @@ import MarkdownRenderer from '../MardownRenderer';
 
 
 export function MonsterMentorProfileModal({ image, name, job, profile, color, soft_skill_name, soft_skill_description,
-  soft_skill_logo, onClose, isMonster }) {
+  soft_skill_logo, onClose, isMonster, isPreview=false }) {
   const [isOpen, setIsOpen] = useState(true);
   const handleModalClick = (event) => {
     event.stopPropagation();
   };
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 bg-gray-300 bg-opacity-50 overflow-y-auto h-full w-full z-50" onClick={onClose}>
+    <div className={`fixed inset-0 bg-gray-300 bg-opacity-50 overflow-y-auto h-full w-full z-50 
+    ${isPreview ? "pt-10" : ""}`} onClick={onClose}>
       <div id="principal" className="mt-24 mx-auto px-6 pt-4 border w-80 md:w-1/2 lg:w-1/3 2xl:w-1/4 shadow-lg
        rounded-md bg-white mb-6" onClick={handleModalClick}>
         <div id="relativo" className='relative -top-10 md:-top-16'>
@@ -40,7 +41,7 @@ export function MonsterMentorProfileModal({ image, name, job, profile, color, so
           </div>
           {isMonster && (<div>
             <div className='flex py-3 text-gray-500 items-center'>
-              {soft_skill_logo && <div className='pe-2'>
+              {soft_skill_logo && <div className='pe-2 flex-none'>
                 <img src={soft_skill_logo} alt="" className='h-8 w-8' />
               </div>}
               {soft_skill_name}
