@@ -11,6 +11,8 @@ import { NotificationsModal } from './NotificationsModal';
 import logo from '../assets/Logo.svg';
 import profile_pic from '../assets/Profile-pic.svg';
 import { SelectRecallsModal } from './SelectRecallsModal';
+import { PiTextAlignJustifyFill } from "react-icons/pi";
+
 
 
 export function Navigation() {
@@ -145,6 +147,12 @@ export function Navigation() {
               <span className='text-gray-500 flex items-center justify-items-center'>
                 <BiSolidBellRing className='me-3' />
                 Mes nouvelles histoires
+              </span>
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => navigate('/my-stories/')}>
+              <span className='text-gray-500 flex items-center justify-items-center'>
+                <PiTextAlignJustifyFill className='me-3' />
+                Mes histoires
               </span>
             </Dropdown.Item>
             <Dropdown.Item onClick={openRecallsModal}>

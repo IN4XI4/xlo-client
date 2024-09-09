@@ -1,18 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { getTopicTags } from '../../api/base.api';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { Alert } from 'flowbite-react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
-import { deleteLike, likeSomething } from '../../api/blog.api';
+import { HiInformationCircle } from 'react-icons/hi2';
 
+import { getTopicTags } from '../../api/base.api';
+import { deleteLike, likeSomething } from '../../api/blog.api';
 
 export function TopicTags() {
   const [topicTags, setTopicTags] = useState([]);
   const [error, setError] = useState(null);
   const sliderRefs = useRef({});
   const navigate = useNavigate();
+  const location = useLocation();
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   useEffect(() => {
     loadTopicTags();
@@ -26,6 +30,18 @@ export function TopicTags() {
       setError(error);
     }
   }
+
+  useEffect(() => {
+    if (location.state?.storyDeleted) {
+      setShowSuccessMessage(true);
+      const timer = setTimeout(() => {
+        setShowSuccessMessage(false);
+        navigate(location.pathname, { replace: true, state: {} });
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [location]);
 
   const updateTopicLikeState = (topicId, likeState) => {
     setTopicTags(currentTopicTags => currentTopicTags.map(topicTag => ({
@@ -129,12 +145,17 @@ export function TopicTags() {
 
   return (
     <div>
+      {showSuccessMessage && (
+        <Alert color="success" icon={HiInformationCircle} className='mb-4'>
+          <span className="font-medium">Story deleted successfully!</span>
+        </Alert>
+      )}
       <div className='text-4xl font-extrabold pb-4 '>Choisissez une carte</div>
       <div className='text-xl text-gray-500'>Afin de vous offrir la meilleure expérience possible, choisissez parmi l’une des trois catégories [1]; [2]; [3], celle qui correspond à votre besoin en ce moment précis !
-        </div>
-        <div className='text-xl text-gray-500'>
+      </div>
+      <div className='text-xl text-gray-500'>
         Puis, sélectionnez la carte qui reflète le mieux votre état d’esprit.
-        </div>
+      </div>
       {topicTags.map(topictag => (
         <div key={topictag.id} className='py-4'>
           <div className={`text-3xl font-semibold py-3 border-b-4`} style={{ borderBottomColor: topictag.color || "#FFC700" }}>{topictag.name}</div>

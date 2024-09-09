@@ -1,21 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useLocation, useParams } from 'react-router-dom';
-import { getCardsByStory, getStoryBySlug, userViewStory } from '../api/blog.api';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Alert, Progress } from 'flowbite-react';
+import { FaSync } from 'react-icons/fa';
+import { HiInformationCircle } from 'react-icons/hi2';
+
+import { useAppState } from '../context/ScrollContext';
 import { BlocksList } from '../components/topics/BlocksList';
-import { Progress } from 'flowbite-react';
 import { InteractBox } from '../components/topics/InteractBox';
 import { CommentsList } from '../components/topics/comments/CommentsList';
-import { getContentTypes } from '../api/base.api';
-import { useAppState } from '../context/ScrollContext';
 import { RateStory } from '../components/topics/RateStory';
 import { StoryNavBar } from '../components/topics/StoryNavBar';
-import { FaSync } from 'react-icons/fa';
 
+import { getContentTypes } from '../api/base.api';
+import { getCardsByStory, getStoryBySlug, userViewStory } from '../api/blog.api';
 
 export function StoryPage() {
   const { slug } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const commentsRef = useRef(null);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [story, setStory] = useState([]);
   const [cards, setCards] = useState([]);
   const [error, setError] = useState(null);
@@ -32,6 +36,18 @@ export function StoryPage() {
     const token = localStorage.getItem('token');
     setIsAuthenticated(!!token);
   }, []);
+
+  useEffect(() => {
+    if (location.state?.storyUpdated) {
+      setShowSuccessMessage(true);
+      const timer = setTimeout(() => {
+        setShowSuccessMessage(false);
+        navigate(location.pathname, { replace: true, state: {} });
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [location]);
 
   const goToNextCard = () => {
     if (currentCardIndex < cards.length - 1) {
@@ -68,7 +84,7 @@ export function StoryPage() {
       setCards(cardsResponse.data.results);
       setIsCardsLoaded(true);
       setCurrentCardIndex(0);
-      window.scrollTo(0, 0); 
+      window.scrollTo(0, 0);
     } catch (error) {
       setError(error);
     }
@@ -154,9 +170,24 @@ export function StoryPage() {
 
   return (
     <div className="pt-24 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
-      <div className='text-4xl font-extrabold pb-2'>
-        {story.title}
+      {showSuccessMessage && (
+        <Alert color="success" icon={HiInformationCircle} className='mb-4'>
+          <span className="font-medium">Story updated successfully!</span>
+        </Alert>
+      )}
+      <div className='pb-2 md:flex flex-col md:flex-row items-center'>
+        <div className='text-4xl font-extrabold'>
+          {story.title}
+        </div>
+        {story.is_owner &&
+          <div className='md:ps-2'>
+            <Link to={`/edit-story/${story.id}`}
+              className='text-gray-500 border-gray-100 border rounded-lg bg-white py-1 px-2'>
+              Edit Story
+            </Link>
+          </div>}
       </div>
+
       {cards.length > 0 && currentCardIndex < cards.length && (
         <>
           <div className='text-xl text-gray-500 pb-3'>
