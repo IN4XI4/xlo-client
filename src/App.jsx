@@ -8,8 +8,10 @@ import { TopicStoriesPage } from './pages/TopicStoriesPage'
 import { StoryPage } from './pages/StoryPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { MyNewStoriesPage } from './pages/MyNewStoriesPage'
+import { MyCreatedStoriesPage } from './pages/MyCreatedStoriesPage'
 import { AppStateProvider } from './context/ScrollContext'
 import { CreateStoryPage } from './pages/CreateStoryPage'
+import { EditStoryPage } from './pages/EditStoryPage'
 import { RecallsPage } from './pages/RecallsPage'
 import { LearnSoftSkillsPage } from './pages/LearnSoftSkillsPage'
 import { LearningProgramPage } from './pages/LearningProgramPage'
@@ -105,10 +107,12 @@ function App() {
           <Route path="/story/:slug" element={<StoryPage />} />
           <Route path="/profile/" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
           <Route path="/new-stories/" element={<ProtectedRoute><MyNewStoriesPage key="mystories-page" /></ProtectedRoute>} />
+          <Route path="/my-stories/" element={<ProtectedRoute><MyCreatedStoriesPage key="my-createdstories-page" /></ProtectedRoute>} />
           <Route path="/recall-cards/" element={<ProtectedRoute><RecallsPage key="recalls-page" /></ProtectedRoute>} />
           <Route path="/recall-blocks-focused/" element={<ProtectedRoute><FocusedRecallBlocksPage key="recalls-block-page" /></ProtectedRoute>} />
           <Route path="/recall-blocks-sparked/" element={<ProtectedRoute><SparkedRecallBlocksPage key="recalls-block-page-sparked" /></ProtectedRoute>} />
           <Route path="/create-story/:id/:slug" element={<ProtectedRoute><CreateStoryPage key="create-story-page" /></ProtectedRoute>} />
+          <Route path="/edit-story/:id" element={<ProtectedRoute><EditStoryPage key="edit-story-page" /></ProtectedRoute>} />
           <Route path="/learn-softskills/" element={<ProtectedRoute><LearnSoftSkillsPage key="learn-page" /></ProtectedRoute>} />
           <Route path="/practice-softskills/:softskill"
             element={<ProtectedRoute><LearningProgramPage key="practice-page" /></ProtectedRoute>} />

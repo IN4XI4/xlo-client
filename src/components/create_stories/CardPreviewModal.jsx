@@ -85,7 +85,7 @@ export function CardPreviewModal({ onClose, card }) {
 
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"  onClick={handleBackdropClick}>
+    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onClick={handleBackdropClick}>
       <div className="mt-24 mx-auto border w-11/12 md:w-5/6 shadow-lg rounded-md bg-white p-3" onClick={handleModalClick}>
         <div>
           <div className='text-gray-500 flex justify-end cursor-pointer hover:text-gray-600' onClick={onClose}>
@@ -159,9 +159,12 @@ export function CardPreviewModal({ onClose, card }) {
                           : (softSkill.color || "#3DB1FF")
                     }}>
                     <div className=''> <MarkdownRenderer content={block.content} /></div>
-                    {block.image.length > 0 ?
+                    {block.image && (typeof block.image === 'string' || block.image.length > 0) ?
                       <div className="my-4 pt-4 flex justify-center border-t-2">
-                        <div><img className='rounded-lg md:max-h-[500px]' src={getImageUrl(block.image)} alt="" /></div>
+                        <div>
+                          <img className='rounded-lg md:max-h-[500px]'
+                            src={typeof block.image === 'string' ? block.image : getImageUrl(block.image)} alt="" />
+                        </div>
                       </div>
                       : <div></div>}
                   </div>

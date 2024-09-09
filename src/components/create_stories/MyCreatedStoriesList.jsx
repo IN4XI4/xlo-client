@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { getLikedTopicStories } from '../../api/blog.api';
-import { StoriesListBox } from './StoriesListBox';
+import { getMyCreatedStories } from '../../api/blog.api';
+import { StoriesListBox } from '../topics/StoriesListBox';
 
 
-export function MyStoriesList({ searchText }) {
+export function MyCreatedStoriesList({ searchText }) {
   const [stories, setStories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedButton, setSelectedButton] = useState('Latest');
-  const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [selectedButton, setSelectedButton] = useState('Latest');
 
   useEffect(() => {
     loadStories(currentPage);
@@ -20,13 +20,15 @@ export function MyStoriesList({ searchText }) {
 
   async function loadStories(page) {
     try {
-      const ordering = selectedButton === 'Latest' ? 'desc' : 'asc';
-      const res = await getLikedTopicStories(page, ordering, searchText);
+      const ordering = selectedButton === 'Latest' ? '-created_time' : 'created_time';
+      const res = await getMyCreatedStories(page, ordering, searchText, true);
+
       if (page === 1) {
         setStories(res.data.results);
       } else {
         setStories(prevStories => [...prevStories, ...res.data.results]);
       }
+
       setHasMore(!!res.data.next);
       if (page === 1) {
         setCurrentPage(1);
@@ -46,6 +48,7 @@ export function MyStoriesList({ searchText }) {
       <StoriesListBox selectedButton={selectedButton}
         stories={stories}
         hasMore={hasMore}
+        isOwner={true}
         error={error}
         setCurrentPage={setCurrentPage}
         handleButtonClick={handleButtonClick} />

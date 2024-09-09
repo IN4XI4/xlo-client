@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { FaArrowRightLong } from "react-icons/fa6";
+import { FaArrowRightLong, FaXmark } from "react-icons/fa6";
 import MarkdownRenderer from '../MardownRenderer';
 
 
 export function MonsterMentorProfileModal({ image, name, job, profile, color, soft_skill_name, soft_skill_description,
-  soft_skill_logo, onClose, isMonster, isPreview=false }) {
+  soft_skill_logo, onClose, isMonster, isPreview = false }) {
   const [isOpen, setIsOpen] = useState(true);
   const handleModalClick = (event) => {
     event.stopPropagation();
@@ -13,10 +13,10 @@ export function MonsterMentorProfileModal({ image, name, job, profile, color, so
   return (
     <div className={`fixed inset-0 bg-gray-300 bg-opacity-50 overflow-y-auto h-full w-full z-50 
     ${isPreview ? "pt-10" : ""}`} onClick={onClose}>
-      <div id="principal" className="mt-24 mx-auto px-6 pt-4 border w-80 md:w-1/2 lg:w-1/3 2xl:w-1/4 shadow-lg
+      <div id="principal" className="mt-24 mx-auto px-6 pt-4 md:pt-6 border w-80 md:w-1/2 lg:w-1/3 2xl:w-1/4 shadow-lg
        rounded-md bg-white mb-6" onClick={handleModalClick}>
         <div id="relativo" className='relative -top-10 md:-top-16'>
-          <div className='flex items-end border-b pb-3 '>
+          <div className='flex items-end border-b pb-3'>
             <div className='ps-2'>
               {image ? (
                 <img src={image} alt="Mentor" className="h-20 w-20 md:h-24 md:w-24 rounded-full border-2"
@@ -27,7 +27,11 @@ export function MonsterMentorProfileModal({ image, name, job, profile, color, so
               </div>}
             </div>
 
-            <div className='ps-2 flex flex-col'>
+            <div className='ps-2 flex flex-col flex-grow justify-end'>
+              <div className='text-gray-500 cursor-pointer flex justify-end hover:text-gray-600'
+                onClick={onClose}>
+                <FaXmark className='text-2xl' />
+              </div>
               <span className='font-bold text-base'>
                 {name}
               </span>
