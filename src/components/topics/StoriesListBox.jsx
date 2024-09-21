@@ -52,8 +52,8 @@ export function StoriesListBox({ selectedButton, stories, hasMore, handleButtonC
         >
           {stories.map((story, index) => (
             <div key={index} className='grid grid-cols-10 py-3'>
-              <Link to={isOwner ? `/edit-story/${story.id}` : `/story/${story.slug}`} 
-              className={`col-span-7 ${story.user_has_viewed ? 'bg-gray-50' : 'bg-[#FFCE80]'} p-3 rounded-lg`}>
+              <Link to={isOwner ? `/edit-story/${story.id}` : `/story/${story.slug}`}
+                className={`col-span-7 ${story.user_has_viewed ? 'bg-gray-50' : 'bg-[#FFCE80]'} p-3 rounded-lg`}>
                 <div className='font-bold text-black text-xl truncate'>{story.title}</div>
                 <div className='flex justify-between'>
                   <div className='text-sm truncate pe-2'>{story.subtitle}</div>
@@ -95,7 +95,7 @@ export function StoriesListBox({ selectedButton, stories, hasMore, handleButtonC
                       <BiSolidCalendarEdit className='text-lg' />
                     </div>
                     <div className='truncate'>
-                      {new Date(story.updated_time).toLocaleString('es-ES')}
+                      {new Date(story.edited_time || story.created_time).toLocaleString('es-ES')}
                     </div>
                   </div>
                 </div>}

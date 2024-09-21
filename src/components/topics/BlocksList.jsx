@@ -152,7 +152,7 @@ function DefenseBlock({ content, image, color, mentor_image, mentor_name, mentor
                 className="h-10 w-10 md:h-14 md:w-14 rounded-full me-2 border-[3px] cursor-pointer"
                 onClick={() => openModal()}
                 style={{ borderColor: color }} />
-            ) : <FaUser />}
+            ) : <FaUser onClick={() => openModal()} className='cursor-pointer me-2' />}
           </div>
           <div className='text-sm md:text-base'>
             <div className='font-bold'>{mentor_name}</div>

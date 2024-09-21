@@ -5,6 +5,7 @@ import { getCommentsByStory } from '../../../api/blog.api';
 import { CommentCard } from './CommentCard';
 import { CommentBox } from './CommentBox';
 import { getUser } from '../../../api/users.api';
+import { COMMENTOR_LEVEL_1 } from '../../../globals';
 
 
 export function CommentsList({ storyId, commentContentTypeId }) {
@@ -90,15 +91,14 @@ export function CommentsList({ storyId, commentContentTypeId }) {
     }
   };
 
-
   async function checkIfUserIsCommentor() {
     try {
       const userRes = await getUser();
-      if (userRes.data.is_commentor) {
+      if (userRes.data.user_level >= COMMENTOR_LEVEL_1) {
         setIsCommentor(true);
       }
     } catch (error) {
-      console.error('Error al obtener información del usuario', error);
+      console.error("You don't have the permissions to comment.", error);
     }
   }
 
