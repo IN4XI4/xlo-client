@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { useForm, useFieldArray, Controller } from 'react-hook-form';
-import { FileInput, Select, TextInput } from 'flowbite-react';
+import { useNavigate } from 'react-router-dom';
+import { useForm, useFieldArray, Controller, useWatch } from 'react-hook-form';
+import { FileInput, Select, TextInput, ToggleSwitch, Tooltip } from 'flowbite-react';
 import MDEditor from '@uiw/react-md-editor';
 import { LuEye } from "react-icons/lu";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
+import { FaPlus } from 'react-icons/fa';
 import { BsFileEarmarkPlusFill, BsFillFileEarmarkMinusFill } from "react-icons/bs";
 import { IoDownload } from "react-icons/io5";
 import { HiMiniTrash } from "react-icons/hi2";
@@ -14,10 +16,11 @@ import { CardPreviewModal } from './CardPreviewModal';
 import { CardBlockNavigation } from './CardBlockNavigation';
 import { getMentors, getSoftSkills } from '../../api/base.api';
 import { deleteStory, getBlockTypes } from '../../api/blog.api';
-import { useNavigate } from 'react-router-dom';
+import { CreateMentorModal } from './CreateMentorModal';
+import { CREATOR_LEVEL_3 } from '../../globals';
 
 
-export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError, storyId = null }) {
+export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError, userLevel, storyId = null }) {
   const navigate = useNavigate();
   const [softSkills, setSoftSkills] = useState([]);
   const [mentors, setMentors] = useState([]);
@@ -28,12 +31,16 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
   const [previewCard, setPreviewCard] = useState(null);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showCreateMentorModal, setShowCreateMentorModal] = useState(false);
   const [formKey, setFormKey] = useState(0);
+  const [showCreateMentorButton, setSshowCreateMentorButton] = useState(false);
 
   const { control, register, handleSubmit, formState: { errors }, getValues, setValue, trigger } = useForm({
     defaultValues: initialData || {
       title: '',
       subtitle: '',
+      is_private: initialData?.is_private ?? false,
+      free_access: initialData?.free_access ?? false,
       cards: [{
         id: null,
         cardTitle: '',
@@ -49,20 +56,33 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
     name: "cards"
   });
 
-  useEffect(() => {
-    const loadSoftSkillsAndMentors = async () => {
-      try {
-        const softSkillsRes = await getSoftSkills();
-        const mentorsRes = await getMentors();
-        setSoftSkills(softSkillsRes.data.results);
-        setMentors(mentorsRes.data.results);
-      } catch (error) {
-        console.error("Error loading data:", error);
-      }
-    };
+  const isPrivate = useWatch({
+    control,
+    name: 'is_private',
+  });
 
+  useEffect(() => {
+    if (userLevel >= CREATOR_LEVEL_3) {
+      setSshowCreateMentorButton(true)
+    }
+  }, [])
+
+  useEffect(() => {
     loadSoftSkillsAndMentors();
   }, []);
+
+  const loadSoftSkillsAndMentors = async (updateMentorsOnly = false) => {
+    try {
+      if (!updateMentorsOnly) {
+        const softSkillsRes = await getSoftSkills();
+        setSoftSkills(softSkillsRes.data.results);
+      }
+      const mentorsRes = await getMentors();
+      setMentors(mentorsRes.data.results);
+    } catch (error) {
+      console.error("Error loading data:", error);
+    }
+  };
 
   useEffect(() => {
     const loadData = async () => {
@@ -245,6 +265,14 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
     setShowModal(false);
   };
 
+  const openCreateMentorModal = () => {
+    setShowCreateMentorModal(true);
+  };
+
+  const closeCreateMentorModal = () => {
+    setShowCreateMentorModal(false);
+  };
+
   return (
     <div className="pt-24 px-4 md:px-16 lg:px-32 xl:px-44">
       <div className='text-2xl md:text-4xl font-extrabold pb-6'>
@@ -259,13 +287,52 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
             {errors.title && <p className="text-red-500">{errors.title.message}</p>}
           </div>
         </div>
-        <div className='grid grid-cols-3 md:grid-cols-6 items-center pb-4'>
+        <div className='grid grid-cols-3 md:grid-cols-6 items-center pb-3'>
           <div className='font-semibold'>Story Subtitle</div>
           <div className='col-span-2 md:col-span-5'>
             <TextInput placeholder='Insert a Subtitle to your story'
               id="subtitle" {...register('subtitle', { required: 'Subtitle is required' })} />
             {errors.subtitle && <p className="text-red-500">{errors.subtitle.message}</p>}
           </div>
+        </div>
+        <div className='flex pb-3'>
+          <div className='flex pe-4'>
+            <div className='pe-2'>Is private</div>
+            <Controller
+              name="is_private"
+              control={control}
+              render={({ field }) => (
+                <ToggleSwitch
+                  color="cyan"
+                  checked={field.value}
+                  onChange={(checked) => {
+                    setValue('is_private', checked);
+                    if (checked) {
+                      setValue('free_access', false);
+                    }
+                  }}
+                />
+              )}
+            />
+          </div>
+          {!isPrivate && (
+            <div className='flex'>
+              <div className='pe-2'>
+                <Tooltip content="Public Url">Free Access</Tooltip></div>
+              <Controller
+                name="free_access"
+                control={control}
+                render={({ field }) => (
+                  <ToggleSwitch
+                    color="cyan"
+                    checked={field.value}
+                    onChange={(checked) => setValue('free_access', checked)}
+                  />
+                )}
+              />
+            </div>
+          )}
+
         </div>
         {fields.length > 0 && (
           <div className='border px-3 py-6 rounded-lg mb-2 bg-purple-100' key={currentCardIndex}>
@@ -274,11 +341,14 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
                 CARD {currentCardIndex + 1} / {fields.length}
               </div>
               <div className='md:col-span-5'>
-                <button type='button' className='bg-[#BD7DF4] py-2 px-3 rounded-lg flex items-center text-white'
-                  onClick={() => openPreviewModal(fields[currentCardIndex])}>
-                  <span className='pe-2'>CARD PREVIEW</span>
-                  <LuEye />
-                </button>
+                <Tooltip content="Take a look!">
+                  <button type='button' className='bg-[#BD7DF4] py-2 px-3 rounded-lg flex items-center text-white shadow-lg'
+                    onClick={() => openPreviewModal(fields[currentCardIndex])}>
+                    <span className='pe-2'>CARD PREVIEW</span>
+                    <LuEye />
+                  </button>
+                </Tooltip>
+
               </div>
             </div>
             <div className='grid grid-cols-3 md:grid-cols-6 items-center pb-4'>
@@ -311,7 +381,19 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
               </div>
             </div>
             <div className='grid grid-cols-3 md:grid-cols-6 items-center pb-4'>
-              <div className='font-semibold'>Mentor</div>
+              <div className='font-semibold flex items-center'>
+                <div className='pe-2'>Mentor</div>
+                {showCreateMentorButton &&
+                  <Tooltip content="Create a new mentor">
+                    <button type="button"
+                      className='bg-[#3DB1FF] p-1 rounded-full text-white flex items-center'
+                      onClick={() => openCreateMentorModal()}>
+                      <FaPlus />
+                    </button>
+                  </Tooltip>
+
+                }
+              </div>
               <div className='col-span-2 md:col-span-5'>
                 <Controller
                   control={control}
@@ -530,6 +612,8 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
         message={"¿Are you sure you want to delete this story?"}
         buttonColor={"#FD4E3F"}
       />}
+      {showCreateMentorModal &&
+        <CreateMentorModal onClose={closeCreateMentorModal} onMentorCreated={() => loadSoftSkillsAndMentors(true)} />}
     </div>
   )
 }

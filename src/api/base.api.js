@@ -25,4 +25,4 @@ export const listSoftSkillsDetailed = () => baseApi.get('base/softskills/detaile
 
 export const getMentor = (id) => baseApi.get(`base/mentors/${id}/`, { headers: getAuthHeaders() })
 export const getMentors = () => baseApi.get('base/mentors/', { headers: getAuthHeaders() })
-
+export const createMentor = (data) => baseApi.post(`base/mentors/`, data, { headers: getAuthHeaders() })

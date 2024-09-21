@@ -22,6 +22,9 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
 
   formData.append('title', data.title);
   formData.append('subtitle', data.subtitle);
+  formData.append('is_private', data.is_private);
+  formData.append('free_access', data.free_access);
+  formData.append('subtitle', data.subtitle);
   if (topicId) {
     formData.append('topic', topicId);
   }

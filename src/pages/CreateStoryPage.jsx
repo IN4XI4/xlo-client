@@ -5,11 +5,14 @@ import { StoryForm } from '../components/create_stories/StoryForm';
 import { getUser } from '../api/users.api';
 import { createStoryFull } from '../api/blog.api';
 import { BuildFormData } from '../components/create_stories/BuildFormData';
+import { CREATOR_LEVEL_1 } from '../globals';
+
 
 export function CreateStoryPage() {
   const { id: topicId, slug } = useParams();
   const navigate = useNavigate();
   const [isCreator, setIsCreator] = useState(false);
+  const [userLevel, setUserLevel] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [submitMessage, setSubmitMessage] = useState('');
   const [isSubmitError, setIsSubmitError] = useState(false);
@@ -19,7 +22,12 @@ export function CreateStoryPage() {
       try {
         setIsLoading(true);
         const response = await getUser();
-        setIsCreator(response.data.is_creator);
+        const user_level = response.data.user_level
+        setUserLevel(user_level)
+        
+        if (user_level >= CREATOR_LEVEL_1) {
+          setIsCreator(true);
+        }
       } catch (error) {
         console.error("Error loading data:", error);
       } finally {
@@ -55,5 +63,6 @@ export function CreateStoryPage() {
     initialData={null}
     onSubmit={onSubmit}
     submitMessage={submitMessage}
-    isSubmitError={isSubmitError} />
+    isSubmitError={isSubmitError}
+    userLevel={userLevel} />
 }
