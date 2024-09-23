@@ -94,7 +94,7 @@ export function CommentsList({ storyId, commentContentTypeId }) {
   async function checkIfUserIsCommentor() {
     try {
       const userRes = await getUser();
-      if (userRes.data.user_level >= COMMENTOR_LEVEL_1) {
+      if (userRes.data.user_level_display.level_value >= COMMENTOR_LEVEL_1) {
         setIsCommentor(true);
       }
     } catch (error) {

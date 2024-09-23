@@ -14,7 +14,6 @@ export const getTopic = (topic_id) => baseApi.get(`base/topics/${topic_id}`, { h
 export const getTopicBySlug = (slug) => baseApi.get(`base/topics/find-by-slug/${slug}/`, { headers: getAuthHeaders() })
 export const getTopics = () => baseApi.get('base/topics/', { headers: getAuthHeaders() })
 export const getTopicsByCategory = (categoryId) => baseApi.get(`base/topics/?tag=${categoryId}`, { headers: getAuthHeaders() })
-export const getTopicsByTopicTag = (tagId) => baseApi.get(`base/topics/?tag=${tagId}`, { headers: getAuthHeaders() })
 export const getTopicTags = () => baseApi.get('base/topictags/', { headers: getAuthHeaders() })
 
 export const getContentTypes = () => baseApi.get('base/contenttypes/', { headers: getAuthHeaders() })

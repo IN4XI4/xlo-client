@@ -22,7 +22,7 @@ export function CreateStoryPage() {
       try {
         setIsLoading(true);
         const response = await getUser();
-        const user_level = response.data.user_level
+        const user_level = response.data.user_level_display.level_value
         setUserLevel(user_level)
         
         if (user_level >= CREATOR_LEVEL_1) {
