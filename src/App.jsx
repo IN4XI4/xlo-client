@@ -18,6 +18,8 @@ import { LearningProgramPage } from './pages/LearningProgramPage'
 import { FocusedRecallBlocksPage } from './pages/FocusedRecallBlocksPage';
 import { SparkedRecallBlocksPage } from './pages/SparkedRecallBlocksPage';
 import useBeforeInstallPrompt from './hooks/UseBeforeInstallPrompt';
+import { SpacesPage } from './pages/SpacesPage';
+import { SpaceProvider } from './context/SpaceContext';
 
 
 const isProduction = import.meta.env.VITE_ENV === 'production';
@@ -96,8 +98,8 @@ function App() {
       {token && <Navigation />}
       <div className="flex-grow">
         {isInstallable && (
-          <button onClick={handleInstallClick} 
-          className="fixed bottom-4 right-4 z-40 p-2 border-2 rounded-lg border-[#3DB1FF] text-[#3DB1FF] shadow bg-white">
+          <button onClick={handleInstallClick}
+            className="fixed bottom-4 right-4 z-40 p-2 border-2 rounded-lg border-[#3DB1FF] text-[#3DB1FF] shadow bg-white">
             Install App
           </button>
         )}
@@ -108,6 +110,7 @@ function App() {
           <Route path="/profile/" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
           <Route path="/new-stories/" element={<ProtectedRoute><MyNewStoriesPage key="mystories-page" /></ProtectedRoute>} />
           <Route path="/my-stories/" element={<ProtectedRoute><MyCreatedStoriesPage key="my-createdstories-page" /></ProtectedRoute>} />
+          <Route path="/spaces/:slug?" element={<ProtectedRoute><SpacesPage key="spaces-page" /></ProtectedRoute>} />
           <Route path="/recall-cards/" element={<ProtectedRoute><RecallsPage key="recalls-page" /></ProtectedRoute>} />
           <Route path="/recall-blocks-focused/" element={<ProtectedRoute><FocusedRecallBlocksPage key="recalls-block-page" /></ProtectedRoute>} />
           <Route path="/recall-blocks-sparked/" element={<ProtectedRoute><SparkedRecallBlocksPage key="recalls-block-page-sparked" /></ProtectedRoute>} />
@@ -128,7 +131,9 @@ export default function Root() {
   return (
     <BrowserRouter>
       <AppStateProvider>
-        <App />
+        <SpaceProvider>
+          <App />
+        </SpaceProvider>
       </AppStateProvider>
     </BrowserRouter>
   );

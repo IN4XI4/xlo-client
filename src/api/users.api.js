@@ -22,7 +22,6 @@ export const updatePassword = (data) => usersApi.put(`users/update_password/`, d
 export const updateUser = (userId, data) => {
     const headers = getAuthHeaders();
     delete headers['Content-Type'];
-  
     return usersApi.patch(`users/${userId}/`, data, { headers });
   };
 export const lostPassword = (data) => usersApi.post('users/send_reset_code/', data)

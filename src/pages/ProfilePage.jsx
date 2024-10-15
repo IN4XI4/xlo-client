@@ -24,7 +24,7 @@ export function ProfilePage() {
   return (
     <div className="pt-20 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
       <div className='font-bold text-3xl pb-5'>PROFIL & PARAMÈTRES</div>
-      {profileInfo && <EditProfile profileInfo={profileInfo} />}
+      {profileInfo.user_level_display && <EditProfile profileInfo={profileInfo} />}
       <PasswordInfo />
       {profileInfo && (profileInfo.email_info !== undefined) && <Alerts profileInfo={profileInfo} />}
     </div>
