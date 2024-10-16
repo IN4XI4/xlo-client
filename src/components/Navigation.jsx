@@ -1,23 +1,30 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Avatar, Dropdown } from 'flowbite-react';
+
 import { FaBookmark, FaHeart, FaReply } from 'react-icons/fa';
 import { AiFillFire } from "react-icons/ai";
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { getUser } from '../api/users.api';
-import { Avatar, Dropdown } from 'flowbite-react';
-import { useAppState } from '../context/ScrollContext';
 import { BiSolidBellRing } from "react-icons/bi";
+import { PiTextAlignJustifyFill } from "react-icons/pi";
+import { IoPlanetSharp } from "react-icons/io5";
+
 import { ComingSoonModal } from './ComingSoonModal';
 import { NotificationsModal } from './NotificationsModal';
-import logo from '../assets/Logo.svg';
-import profile_pic from '../assets/Profile-pic.svg';
 import { SelectRecallsModal } from './SelectRecallsModal';
-import { PiTextAlignJustifyFill } from "react-icons/pi";
-
+import { CREATOR_LEVEL_1 } from '../globals';
+import { getUser } from '../api/users.api';
+import { useAppState } from '../context/ScrollContext';
+import logo from '../assets/Logo.svg';
+import rocket from '../assets/rocket.svg';
+import profile_pic from '../assets/Profile-pic.svg';
+import { useSpace } from '../context/SpaceContext';
+import { getActiveSpace } from '../api/spaces.api';
 
 
 export function Navigation() {
   const navigate = useNavigate();
   const location = useLocation();
+  const token = localStorage.getItem("token");
   const [user, setUser] = useState({ data: {} });
   const [error, setError] = useState(null);
   const { isScrolled, storyTitle, currentCardTitle, setIsScrolled, navigationKey } = useAppState();
@@ -27,6 +34,9 @@ export function Navigation() {
   const [modalTitle, setModalTitle] = useState('');
   const [modalContext, setModalContext] = useState('');
   const [modalNotificationType, setModalNotificationType] = useState('');
+  const { activeSpace, setActiveSpace } = useSpace();
+  const [userLevel, setUserLevel] = useState(0);
+  const [spaceInfo, setSpaceInfo] = useState(null);
 
   useEffect(() => {
     loadUser();
@@ -36,7 +46,24 @@ export function Navigation() {
     setIsScrolled(false);
   }, [location, setIsScrolled]);
 
-  const token = localStorage.getItem("token");
+  useEffect(() => {
+    fetchSpaceInfo();
+  }, [activeSpace]);
+
+  async function fetchSpaceInfo() {
+    if (activeSpace?.id) {
+      try {
+        const response = await getActiveSpace(activeSpace.id);
+        setSpaceInfo(response.data);
+        
+      } catch (error) {
+        console.error('Error fetching active space:', error);
+      }
+    } else {
+      setSpaceInfo(null);
+    }
+  }
+
   async function loadUser() {
     if (!token) {
       setError(new Error("No authentication token available."));
@@ -45,6 +72,7 @@ export function Navigation() {
     try {
       const res = await getUser();
       setUser(res.data);
+      setUserLevel(res.data.user_level_display.level_value)
     } catch (error) {
       setError(error);
       localStorage.removeItem("token");
@@ -106,23 +134,34 @@ export function Navigation() {
   };
 
   return (
-    <div className="bg-white z-30 shadow p-4 fixed top-0 w-full flex justify-between items-center px-4 md:px-16 lg:px-32 xl:px-44">
-      <div className="flex items-center space-x-4">
-        <Link to="/">
-          <img src={logo} alt="" />
-        </Link>
-        <div>
-          {isScrolled ? (
-            <>
-              {storyTitle && <div className="text-sm font-semibold py-0 truncate">{storyTitle}</div>}
-              {currentCardTitle && <div className="text-sm py-0 truncate">{currentCardTitle}</div>}
-            </>
-          ) : (
-            <span className="text-xl font-semibold">Mixelo</span>
-          )}
+    <div className="bg-white z-30 shadow p-4 fixed top-0 w-full flex items-center px-4 md:px-16 lg:px-32 xl:px-44">
+      <div className="flex flex-grow items-center space-x-4 pe-2 border-e-2">
+        <div className='flex flex-grow items-center'>
+          <Link to="/">
+            <img src={logo} alt="" />
+          </Link>
+          <div className='ps-3'>
+            {isScrolled ? (
+              <>
+                {storyTitle && <div className="text-sm font-semibold py-0 truncate">{storyTitle}</div>}
+                {currentCardTitle && <div className="text-sm py-0 truncate">{currentCardTitle}</div>}
+              </>
+            ) : (
+              <span className="text-xl font-semibold">Mixelo</span>
+            )}
+          </div>
         </div>
+        {activeSpace && (
+          <Link to={spaceInfo?.slug ? `/spaces/${spaceInfo.slug}` : '/spaces/'}>
+            <img
+              src={spaceInfo?.image ? spaceInfo.image : rocket}
+              alt="Profile"
+              className="h-10 w-10 rounded-full"
+            />
+          </Link>
+        )}
       </div>
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center ps-2">
         <div className="flex items-center space-x-4">
           <Dropdown label="" dismissOnClick={true} renderTrigger={() => (
             <span className='cursor-pointer'>
@@ -149,10 +188,17 @@ export function Navigation() {
                 Mes nouvelles histoires
               </span>
             </Dropdown.Item>
-            <Dropdown.Item onClick={() => navigate('/my-stories/')}>
+            {userLevel >= CREATOR_LEVEL_1 &&
+              <Dropdown.Item onClick={() => navigate('/my-stories/')}>
+                <span className='text-gray-500 flex items-center justify-items-center'>
+                  <PiTextAlignJustifyFill className='me-3' />
+                  Mes histoires
+                </span>
+              </Dropdown.Item>}
+            <Dropdown.Item onClick={() => navigate('/spaces/')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
-                <PiTextAlignJustifyFill className='me-3' />
-                Mes histoires
+                <IoPlanetSharp className='me-3' />
+                Spaces
               </span>
             </Dropdown.Item>
             <Dropdown.Item onClick={openRecallsModal}>
