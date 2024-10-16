@@ -141,24 +141,24 @@ export function Navigation() {
               <span className="block pb-1 font-semibold">{user.first_name}</span>
               <span className="block text-gray-500">{user.email}</span>
             </Dropdown.Header>
-            <Dropdown.Item onClick={goToSettings} className='text-gray-500'>Profil & Paramètres</Dropdown.Item>
+            <Dropdown.Item onClick={goToSettings} className='text-gray-500'>Profile & parameters</Dropdown.Item>
             <Dropdown.Divider />
             <Dropdown.Item onClick={() => navigate('/new-stories/')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
                 <BiSolidBellRing className='me-3' />
-                Mes nouvelles histoires
+                New stories
               </span>
             </Dropdown.Item>
             <Dropdown.Item onClick={() => navigate('/my-stories/')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
                 <PiTextAlignJustifyFill className='me-3' />
-                Mes histoires
+                My stories
               </span>
             </Dropdown.Item>
             <Dropdown.Item onClick={openRecallsModal}>
               <span className='text-gray-500 flex items-center justify-items-center'>
                 <FaBookmark className='me-3' />
-                Mes rappels</span>
+                My recalls</span>
             </Dropdown.Item>
             <Dropdown.Item onClick={() => openNotificationModal('like')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
@@ -181,20 +181,21 @@ export function Navigation() {
                 </svg>
                 Mes compétences exclusives</span>
             </Dropdown.Item>
-            <Dropdown.Item onClick={() => openModal('Soutenez-Nous', 'Plusieurs manières de supporter la plateforme seront bientôt disponibles. Vous pouvez toujours nous contacter sur contact@mixelo.io si vous souhaitez nous aider de quelconque façon.')}>
-              <span className='text-gray-500 flex items-center justify-items-center'>
-                <AiFillFire className='me-3 text-[#3DB1FF]' />
-                Ma contribution
+            <Dropdown.Item onClick={() => openModal('Support us', 'Many ways to support the platform will be available soon.You can always contact us at: contact@mixelo.io. If you\'d like to help out in any way.')}>
+              < span className = 'text-gray-500 flex items-center justify-items-center' >
+              <AiFillFire className='me-3 text-[#3DB1FF]' />
+                My contribution
               </span>
-            </Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item onClick={handleLogout} className='text-gray-500'>Me déconnecter</Dropdown.Item>
-          </Dropdown>
-        </div>
-      </div>
-      {isRecallsModalOpen && <SelectRecallsModal onClose={closeRecallsModal} />}
-      {isModalOpen && <ComingSoonModal title={modalTitle} context={modalContext} onClose={closeModal} />}
-      {isNotificationModalOpen && <NotificationsModal notificationType={modalNotificationType} onClose={closeNotificationModal} />}
+        </Dropdown.Item>
+        <Dropdown.Divider />
+        <Dropdown.Item onClick={handleLogout} className='text-gray-500'>Logout</Dropdown.Item>
+      </Dropdown>
+    </div>
+      </div >
+    { isRecallsModalOpen && <SelectRecallsModal onClose={closeRecallsModal} />
+}
+{ isModalOpen && <ComingSoonModal title={modalTitle} context={modalContext} onClose={closeModal} /> }
+{ isNotificationModalOpen && <NotificationsModal notificationType={modalNotificationType} onClose={closeNotificationModal} /> }
     </div >
   );
 }
