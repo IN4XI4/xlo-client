@@ -135,7 +135,7 @@ export function TopicStoriesPage() {
         <div className='flex-none items-stretch'>
           <button className="hidden md:flex items-center p-3 rounded-full bg-gray-200 text-[#6B7280]"
             onClick={createStoryHandler}>
-            <FaPlus className="mr-2" /> Créer une histoire
+            <FaPlus className="mr-2" /> Create a story
           </button>
           <button className="md:hidden p-2 rounded-full bg-gray-200 text-[#6B7280] border"
             onClick={createStoryHandler}>
