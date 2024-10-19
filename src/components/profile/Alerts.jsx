@@ -57,16 +57,16 @@ export function Alerts({ profileInfo }) {
 
   return (
     <div className='bg-white rounded border border-gray-100 p-3 mb-3'>
-      <div className='text-xl font-bold pb-1'>Alertes Email & Notifications</div>
+      <div className='text-xl font-bold pb-1'>Email alerts and notifications</div>
       <div className='font-bold pb-5 text-gray-500'>
-        Vous pouvez configurer “Mixelo” pour recevoir des notifications d’Email
+        You can configure “Mixelo” to receive email notifications
       </div>
       <div>
         <div className='flex border-gray-100 border-b-2 items-center justify-between mb-4 pb-2'>
           <div>
-            <div className='font-bold'>Alertes de rappels</div>
+            <div className='font-bold'>Recall alerts</div>
             <div className='text-gray-500'>
-              Recevez un Email chaque semaine, pour vous rappeler de consulter les “rappels” d’événements que vous auriez sélectionné !
+              Receive an email every week, to remind you to check the “Recall” the content you've selected!
             </div>
           </div>
           <ToggleSwitch
@@ -76,9 +76,9 @@ export function Alerts({ profileInfo }) {
         </div>
         <div className='flex border-gray-100 border-b-2 items-center justify-between mb-4 pb-2'>
           <div>
-            <div className='font-bold'>Notifications de nouvelles histoires</div>
+            <div className='font-bold'>New stories notification</div>
             <div className='text-gray-500'>
-              Recevez un Email, lorsqu'une nouvelle “histoire” appartenant à un “sujet” que vous avez aimé, est créé !
+              Receive an email when a new “Story” belonging to a “Topic” you've liked is created!
             </div>
           </div>
           <ToggleSwitch
@@ -88,9 +88,9 @@ export function Alerts({ profileInfo }) {
         </div>
         <div className='flex border-gray-100 border-b-2 items-center justify-between mb-4 pb-2'>
           <div>
-            <div className='font-bold'>Notifications de commentaires</div>
+            <div className='font-bold'>Comments notification</div>
             <div className='text-gray-500'>
-              Recevez un Email, lorsqu'un autre utilisateur répond a un comentaire que vous auriez publié ou liké !
+              Receive an email when another user replies to a comment you've posted or liked!
             </div>
           </div>
           <ToggleSwitch
@@ -100,9 +100,9 @@ export function Alerts({ profileInfo }) {
         </div>
         <div className='flex border-gray-100 border-b-2 items-center justify-between mb-4 pb-2'>
           <div>
-            <div className='font-bold'>Notifications de Mailing</div>
+            <div className='font-bold'>Mailing notification</div>
             <div className='text-gray-500'>
-              Recevez un Email, pour chaque nouvelle information que nous publirons concernant Mixelo ! (Mise a jours; informations diverses; evenements; promotions)
+              Receive an email for each new information we publish about Mixelo! (Updates; news; events; promotions; ...)
             </div>
           </div>
           <ToggleSwitch
@@ -112,9 +112,9 @@ export function Alerts({ profileInfo }) {
         </div>
         <div className='flex border-gray-100 border-b-2 items-center justify-between mb-4 pb-2'>
           <div>
-            <div className='font-bold'>Activez toutes les alertes de notifications</div>
+            <div className='font-bold'>Activate all notification alerts</div>
             <div className='text-gray-500'>
-              Recevez un Email, pour chaque événement concernant les “rappels”, les “nouvelles histoires” et les “commentaires”.
+              Receive an email for each event concerning “Recall”, “New stories” and “comments”.
             </div>
           </div>
           <ToggleSwitch

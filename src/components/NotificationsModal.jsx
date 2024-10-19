@@ -115,7 +115,7 @@ export function NotificationsModal({ notificationType: initialNotificationType, 
                   </div>
                   <div className='flex-1 truncate'>
                     <span className='font-bold'>{notification.user_action}</span>
-                    <span className='text-gray-500'> a aimé:</span>
+                    <span className='text-gray-500'> liked:</span>
                     <div className='text-gray-500 truncate'>{notification.comment_details.text}</div>
                   </div>
                 </div>

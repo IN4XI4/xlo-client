@@ -8,20 +8,20 @@ export function Welcome() {
   const view = queryParams.get('view');
   const messages = {
     default: {
-      header: "Bienvenue sur Mixelo",
-      description: "Imaginez un espace où chaque difficulté se transforme en une chance de grandir. Mixelo est plus qu'une simple plateforme, c'est un compagnon dans votre quête de développement personnel et professionnel. Ici, vous trouverez non seulement des outils pour surmonter les obstacles, mais aussi une source d'inspiration pour transformer vos défis actuels en tremplins pour l'avenir.",
+      header: "Welcome to Mixelo",
+      description: "Imagine a space where every difficulty is transformed into an opportunity to grow. Mixelo is more than just a platform, it's a companion in your quest for personal and professional development. Here, you'll find not only tools to overcome obstacles, but also a source of inspiration to transform your current challenges into springboards for the future.",
       linkTo: "/",
-      linkDesc: "Découvrez comment débloquez votre potentiel !"
+      linkDesc: "Discover how to unlock your true potential!"
     },
     forgotpassword: {
-      header: "Vous avez oublié votre mot de passe?",
-      description: "Ne vous inquiétez pas ! Renseigez simplement votre e-mail et nous vous enverrons un code pour réinitialiser votre mot de passe !",
+      header: "Forgot your password?",
+      description: "No need to worry! Simply enter your e-mail address and we'll send you a code to reset your password!",
       linkTo: "/",
       linkDesc: "Back to the homepage",
     },
     resetpassword: {
-      header: "Réinitialisez votre mot de passe !",
-      description: "Renseigez simplement votre e-mail et un nouveau mot de passe afin de vous connectez !",
+      header: "Reset your password!",
+      description: "Enter your e-mail address and a new password to log-in!",
       linkTo: "/",
       linkDesc: ""
     }

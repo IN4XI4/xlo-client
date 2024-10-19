@@ -9,7 +9,7 @@ export function Footer() {
     <footer className="bg-white shadow w-full py-4 px-4 md:px-16 lg:px-32 xl:px-44">
       <div className="grid grid-cols-6 justify-between items-center">
         <div className="col-span-6 md:col-span-2 pt-1 md:pt-0 text-center md:text-start text-gray-500 text-sm md:text-base order-3 md:order-1">
-          &copy; {currentYear}, un projet Inaxia | Tous droits réservés
+          &copy; {currentYear}, an inaxia project | All rights reserved
         </div>
         <div className="col-span-3 md:col-span-2 flex text-center justify-evenly items-center order-1 md:order-2">
           <div className="inline-flex items-center">
