@@ -20,7 +20,7 @@ export function RateStory() {
             </div>
             {isModalOpen && <ComingSoonModal
                 title="Story evaluation"
-                context="La fonctionnalité d’évaluation des histoires sera prochainement disponible."
+                context="The 'story evaluation' feature will be available shortly."
                 onClose={() => setIsModalOpen(false)} />}
         </div>
     )

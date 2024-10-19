@@ -20,8 +20,8 @@ export function Welcome() {
       linkDesc: "Back to the homepage",
     },
     resetpassword: {
-      header: "Réinitialisez votre mot de passe !",
-      description: "Renseigez simplement votre e-mail et un nouveau mot de passe afin de vous connectez !",
+      header: "Reset your password!",
+      description: "Enter your e-mail address and a new password to log-in!",
       linkTo: "/",
       linkDesc: ""
     }

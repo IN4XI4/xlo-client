@@ -23,9 +23,6 @@ export function MyNewStoriesPage() {
       <div className='text-2xl md:text-4xl font-extrabold'>
         Here you'll find new stories linked to the topic(s) you liked and you may haven't yet seen.
       </div>
-      <div className='text-xl py-3'>
-        Renforcement de la confiance en soi et de la capacité à atteindre les objectifs fixés avec une plus grande assurance et efficacité
-      </div>
       <div className='flex items-center py-4 border-b-4 border-[#D9D9D9]'>
         <div className='flex-none pe-2 md:pe-6'>
           <Link to="/">
