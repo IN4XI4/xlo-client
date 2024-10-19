@@ -150,7 +150,7 @@ export function TopicTags() {
           <span className="font-medium">Story deleted successfully!</span>
         </Alert>
       )}
-      <div className='text-4xl font-extrabold pb-4 '>Choisissez une carte</div>
+      <div className='text-4xl font-extrabold pb-4 '>Pick a card</div>
       <div className='text-xl text-gray-500'>
         In order to offer you the best possible experience, choose from one of the various categories the one that corresponds to your needs!
       </div>
