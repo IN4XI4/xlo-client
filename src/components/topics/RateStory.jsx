@@ -11,7 +11,7 @@ export function RateStory() {
     return (
         <div className='flex flex-col items-center text-gray-500 mb-4 border-b-4 border-[#D9D9D9] pb-4'>
             <div className='pb-1'>
-                Évaluation de l'histoire
+                Story evaluation
             </div>
             <div className='flex space-x-1 text-xl cursor-pointer'>
                 {[...Array(5)].map((_, i) => (
@@ -19,8 +19,8 @@ export function RateStory() {
                 ))}
             </div>
             {isModalOpen && <ComingSoonModal
-                title="Evaluation de l’histoire"
-                context="La fonctionnalité d’évaluation des histoires sera prochainement disponible."
+                title="Story evaluation"
+                context="The 'story evaluation' feature will be available shortly."
                 onClose={() => setIsModalOpen(false)} />}
         </div>
     )

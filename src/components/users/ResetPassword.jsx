@@ -110,7 +110,7 @@ export function ResetPassword() {
             <input id="accept_terms" type="checkbox" className="rounded" required />
             <label htmlFor="accept_terms" className="ml-2 text-sm">
               I accept the
-              <span className="text-[#3DB1FF] font-semibold"> Terms of service and privacy</span>
+              <span className="text-[#3DB1FF] font-semibold">Terms of service and privacy</span>
             </label>
           </div>
         </div>

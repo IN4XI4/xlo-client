@@ -24,7 +24,7 @@ export function RepliesList({ commentId, onReply, commentContentTypeId }) {
           setHasMore(false);
         }
       } catch (error) {
-        console.error('Error al cargar los comentarios', error);
+        console.error('Error loading comments', error);
         setHasMore(false);
       } finally {
         setIsLoading(false);

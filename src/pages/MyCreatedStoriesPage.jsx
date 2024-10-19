@@ -23,10 +23,10 @@ export function MyCreatedStoriesPage() {
   return (
     <div className="pt-24 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
       <div className='text-2xl md:text-4xl font-extrabold'>
-        Vous trouverez ici les histoires
+        Here you'll find the stories you've written
       </div>
       <div className='text-xl py-3'>
-        Here you can edit your stories
+        By selecting a story, you can directly edit or delete it
       </div>
       <div className='flex items-center py-4 border-b-4 border-[#D9D9D9]'>
         <div className='flex-none pe-2 md:pe-6'>
@@ -48,7 +48,7 @@ export function MyCreatedStoriesPage() {
         </div>
       </div>
       <div className='py-4'>
-        <MyCreatedStoriesList key="my-created-stories" searchText={searchText}/>
+        <MyCreatedStoriesList key="my-created-stories" searchText={searchText} />
       </div>
     </div>
   )

@@ -151,10 +151,11 @@ export function TopicTags() {
         </Alert>
       )}
       <div className='text-4xl font-extrabold pb-4 '>Choisissez une carte</div>
-      <div className='text-xl text-gray-500'>Afin de vous offrir la meilleure expérience possible, choisissez parmi l’une des trois catégories [1]; [2]; [3], celle qui correspond à votre besoin en ce moment précis !
+      <div className='text-xl text-gray-500'>
+        In order to offer you the best possible experience, choose from one of the various categories the one that corresponds to your needs!
       </div>
       <div className='text-xl text-gray-500'>
-        Puis, sélectionnez la carte qui reflète le mieux votre état d’esprit.
+        Then select the card that best reflects your state of mind.
       </div>
       {topicTags.map(topictag => (
         <div key={topictag.id} className='py-4'>

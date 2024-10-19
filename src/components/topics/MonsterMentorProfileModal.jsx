@@ -56,7 +56,7 @@ export function MonsterMentorProfileModal({ image, name, job, profile, color, so
             </div>
             <div className='flex py-2 items-center text-sm space-x-2 text-[#3DB1FF] underline cursor-pointer'>
               <div><FaArrowRightLong /></div>
-              <div>Découvrez-en davantage sur cette Soft Skill</div>
+              <div>Learn more about this skill</div>
             </div>
           </div>)}
         </div>
