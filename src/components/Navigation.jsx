@@ -17,8 +17,7 @@ import { useAppState } from '../context/ScrollContext';
 import logo from '../assets/Logo.svg';
 import rocket from '../assets/rocket.svg';
 import profile_pic from '../assets/Profile-pic.svg';
-import { SelectRecallsModal } from './SelectRecallsModal';
-import { PiTextAlignJustifyFill } from "react-icons/pi";
+import { useSpace } from '../context/SpaceContext';
 
 
 export function Navigation() {
