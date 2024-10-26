@@ -69,65 +69,68 @@ export function SpacesPage() {
   return (
     <div className="pt-24 px-4 md:px-16 lg:px-32 xl:px-44">
       <div className='text-gray-900 font-bold text-2xl md:text-4xl pt-2 pb-6'>
-        WELCOME TO MIXELO SPACES
+        {spaceInfo.id ? `Welcome to ${spaceInfo.name} Space` : "Welcome to Mixelo Spaces"}
       </div>
       {isSpaceLoaded ? (
-        isOwner ? (
-          <div className='grid grid-cols-1 md:grid-cols-3'>
-            <div className='md:pe-2'>
-              <div>
-                <CurrentSpaceBoxOwner currentSpaceColor={currentSpaceColor} spaceInfo={spaceInfo} />
-                <div className='bg-white rounded px-3 py-4 border border-gray-100 mb-3'>
-                  <div className='font-bold pb-2 text-xl'>Select your space color</div>
-                  <div className='flex justify-between'>
-                    {spaceColors && spaceColors.map((color, index) => {
-                      const isCurrentColor = color.id === selectedSpaceColor;
-                      const Icon = isCurrentColor ? FaDotCircle : FaRegCircle;
-                      return (
-                        <Icon
-                          key={index}
-                          className='cursor-pointer'
-                          style={{ color: color.color }}
-                          onClick={() => handleSpaceColorChange(color.id)} />
-                      );
-                    })}
+        <div>
+          {isOwner ? (
+            <div className='grid grid-cols-1 md:grid-cols-3'>
+              <div className='md:pe-2'>
+                <div>
+                  <CurrentSpaceBoxOwner currentSpaceColor={currentSpaceColor} spaceInfo={spaceInfo} />
+                  <div className='bg-white rounded px-3 py-4 border border-gray-100 mb-3'>
+                    <div className='font-bold pb-2 text-xl'>Select your space color</div>
+                    <div className='flex justify-between'>
+                      {spaceColors && spaceColors.map((color, index) => {
+                        const isCurrentColor = color.id === selectedSpaceColor;
+                        const Icon = isCurrentColor ? FaDotCircle : FaRegCircle;
+                        return (
+                          <Icon
+                            key={index}
+                            className='cursor-pointer'
+                            style={{ color: color.color }}
+                            onClick={() => handleSpaceColorChange(color.id)} />
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-                <div className='bg-white rounded px-3 py-4 border border-gray-100 mb-3'>
-                  <div className='font-bold pb-2 text-xl'>Space ID</div>
-                  <div className='flex space-x-2 items-center justify-between'>
-                    <TextInput
-                      id="space_id"
-                      type="text"
-                      value={spaceInfo.slug}
-                      disabled
-                    />
-                    <button className='bg-[#3DB1FF] px-3 py-2 rounded-lg text-white'>
-                      Invite People
-                    </button>
+                  <div className='bg-white rounded px-3 py-4 border border-gray-100 mb-3'>
+                    <div className='font-bold pb-2 text-xl'>Space ID</div>
+                    <div className='flex space-x-2 items-center justify-between'>
+                      <TextInput
+                        id="space_id"
+                        type="text"
+                        value={spaceInfo.slug}
+                        disabled
+                      />
+                      <button className='bg-[#3DB1FF] px-3 py-2 rounded-lg text-white'>
+                        Invite People
+                      </button>
+                    </div>
                   </div>
+                  <SpaceMembersBox spaceInfo={spaceInfo} />
                 </div>
               </div>
+              <div className='col-span-2 bg-white rounded border border-gray-100 mb-3 p-3'>
+              </div>
             </div>
-            <div className='col-span-2 bg-white rounded border border-gray-100 mb-3 p-3'>
+          ) : (
+            <div className='grid grid-cols-1 md:grid-cols-2'>
+              <div className='md:pe-2'>
+                <CurrentSpaceBox currentSpaceColor={currentSpaceColor} spaceInfo={spaceInfo} />
+              </div>
+              <div>
+                <SpaceMembersBox spaceInfo={spaceInfo} />
+              </div>
             </div>
+          )}
+          <div className=''>
+            <SpaceInfoBox spaceInfo={spaceInfo} />
           </div>
-        ) : (
-          <div className='grid grid-cols-1 md:grid-cols-2'>
-            <div className='md:pe-2'>
-              <CurrentSpaceBox currentSpaceColor={currentSpaceColor} spaceInfo={spaceInfo} />
-            </div>
-            <div>
-              <SpaceMembersBox />
-            </div>
-            <div className='md:col-span-2'>
-              <SpaceInfoBox spaceInfo={spaceInfo} />
-            </div>
-            <div className='md:col-span-2'>
-              <SpacesManagerBox />
-            </div>
+          <div className=''>
+            <SpacesManagerBox />
           </div>
-        )
+        </div>
       ) : (
         <div className='text-center text-gray-500 py-10'>
           No space found with the given identification.

@@ -20,6 +20,7 @@ import { SparkedRecallBlocksPage } from './pages/SparkedRecallBlocksPage';
 import useBeforeInstallPrompt from './hooks/UseBeforeInstallPrompt';
 import { SpacesPage } from './pages/SpacesPage';
 import { SpaceProvider } from './context/SpaceContext';
+import { SpaceMembersPage } from './pages/SpaceMembersPage';
 
 
 const isProduction = import.meta.env.VITE_ENV === 'production';
@@ -110,6 +111,7 @@ function App() {
           <Route path="/profile/" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
           <Route path="/new-stories/" element={<ProtectedRoute><MyNewStoriesPage key="mystories-page" /></ProtectedRoute>} />
           <Route path="/my-stories/" element={<ProtectedRoute><MyCreatedStoriesPage key="my-createdstories-page" /></ProtectedRoute>} />
+          <Route path="/spaces/:slug/members" element={<ProtectedRoute><SpaceMembersPage key="space-members-page" /></ProtectedRoute>} />
           <Route path="/spaces/:slug?" element={<ProtectedRoute><SpacesPage key="spaces-page" /></ProtectedRoute>} />
           <Route path="/recall-cards/" element={<ProtectedRoute><RecallsPage key="recalls-page" /></ProtectedRoute>} />
           <Route path="/recall-blocks-focused/" element={<ProtectedRoute><FocusedRecallBlocksPage key="recalls-block-page" /></ProtectedRoute>} />

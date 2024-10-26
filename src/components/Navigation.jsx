@@ -13,6 +13,7 @@ import { NotificationsModal } from './NotificationsModal';
 import { SelectRecallsModal } from './SelectRecallsModal';
 import { CREATOR_LEVEL_1 } from '../globals';
 import { getUser } from '../api/users.api';
+import { getActiveSpace } from '../api/spaces.api';
 import { useAppState } from '../context/ScrollContext';
 import logo from '../assets/Logo.svg';
 import rocket from '../assets/rocket.svg';
@@ -54,7 +55,7 @@ export function Navigation() {
       try {
         const response = await getActiveSpace(activeSpace.id);
         setSpaceInfo(response.data);
-        
+
       } catch (error) {
         console.error('Error fetching active space:', error);
       }
@@ -226,21 +227,21 @@ export function Navigation() {
                 </svg>
                 My skills</span>
             </Dropdown.Item>
-            <Dropdown.Item onClick={() => openModal('Support us', 'Many ways to support the platform will be available soon.You can always contact us at: contact@mixelo.io. If you\'d like to help out in any way.')}>
-              < span className = 'text-gray-500 flex items-center justify-items-center' >
-              <AiFillFire className='me-3 text-[#3DB1FF]' />
+            {/* <Dropdown.Item onClick={() => openModal('Support us', 'Many ways to support the platform will be available soon.You can always contact us at: contact@mixelo.io. If you\'d like to help out in any way.')}>
+              < span className='text-gray-500 flex items-center justify-items-center' >
+                <AiFillFire className='me-3 text-[#3DB1FF]' />
                 My contribution
               </span>
-        </Dropdown.Item>
-        <Dropdown.Divider />
-        <Dropdown.Item onClick={handleLogout} className='text-gray-500'>Logout</Dropdown.Item>
-      </Dropdown>
-    </div>
+            </Dropdown.Item> */}
+            <Dropdown.Divider />
+            <Dropdown.Item onClick={handleLogout} className='text-gray-500'>Logout</Dropdown.Item>
+          </Dropdown>
+        </div>
       </div >
-    { isRecallsModalOpen && <SelectRecallsModal onClose={closeRecallsModal} />
-}
-{ isModalOpen && <ComingSoonModal title={modalTitle} context={modalContext} onClose={closeModal} /> }
-{ isNotificationModalOpen && <NotificationsModal notificationType={modalNotificationType} onClose={closeNotificationModal} /> }
+      {isRecallsModalOpen && <SelectRecallsModal onClose={closeRecallsModal} />
+      }
+      {isModalOpen && <ComingSoonModal title={modalTitle} context={modalContext} onClose={closeModal} />}
+      {isNotificationModalOpen && <NotificationsModal notificationType={modalNotificationType} onClose={closeNotificationModal} />}
     </div >
   );
 }

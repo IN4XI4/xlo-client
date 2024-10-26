@@ -12,8 +12,9 @@ const getAuthHeaders = () => {
 export const getSpace = (spaceId) => usersApi.get(`spaces/${spaceId}`, { headers: getAuthHeaders() })
 export const getActiveSpace = (spaceId) => usersApi.get(`spaces/${spaceId}/active-space/`, { headers: getAuthHeaders() })
 export const getSpaceBySlug = (spaceSlug) => usersApi.get(`spaces/find-by-slug/${spaceSlug}/`, { headers: getAuthHeaders() })
+export const getMySpaces = () => usersApi.get(`spaces/my-spaces/`, { headers: getAuthHeaders() })
 export const updateSpace = (spaceId, data) => {
     const headers = getAuthHeaders();
     delete headers['Content-Type'];
     return usersApi.patch(`space/${spaceId}/`, data, { headers });
-  };
+};

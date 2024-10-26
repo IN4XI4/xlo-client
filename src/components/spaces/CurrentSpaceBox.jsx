@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import React from 'react'
+import { ToggleSwitch } from 'flowbite-react';
 
 import logo from '../../assets/Logo.svg';
 import rocket from '../../assets/rocket.svg';
@@ -19,11 +19,6 @@ export function CurrentSpaceBox({ currentSpaceColor, spaceInfo }) {
   };
   const isSpaceActive = activeSpace?.id === spaceInfo?.id;
   const isButtonDisabled = spaceInfo?.id && !spaceInfo?.is_member;
-  
-  const buttonText = isSpaceActive ? 'Active Space' : 'Inactive Space';
-  const buttonStyle = isSpaceActive ? 'bg-[#3DB1FF] text-white' : 'bg-[#E6EFF5] text-[#3DB1FF]';
-  const disabledStyle = 'bg-[#E6EFF5] text-gray-500 cursor-not-allowed';
-  const ButtonIcon = isSpaceActive ? FaEye : FaEyeSlash;
 
   return (
     <div className='bg-white rounded px-3 py-4 flex items-center border border-gray-100 mb-3'>
@@ -40,11 +35,16 @@ export function CurrentSpaceBox({ currentSpaceColor, spaceInfo }) {
         <div className='pb-3 text-gray-500 text-sm'>
           {spaceInfo.name || 'Mixelo Space'}
         </div>
-        <div className='flex justify-end'>
-          <button className={`${isButtonDisabled ? disabledStyle : buttonStyle} px-3 py-2 rounded-lg flex 
-          items-center w-44 justify-center`} onClick={isButtonDisabled ? null : handleActiveSpaceToggle}>
-            <span><ButtonIcon /></span> <span className='ps-2'>{buttonText}</span>
-          </button>
+        <div className='flex items-center'>
+          <ToggleSwitch
+            color='cyan'
+            checked={isSpaceActive}
+            disabled={isButtonDisabled}
+            onChange={handleActiveSpaceToggle}
+          />
+          <span className={`ps-3 text-sm  ${isSpaceActive ? 'text-[#3DB1FF]' : 'text-gray-500'}`}>
+            {isSpaceActive ? 'The space is active' : 'The space is inactive'}
+          </span>
         </div>
       </div>
     </div>
