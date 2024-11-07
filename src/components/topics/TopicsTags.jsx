@@ -180,7 +180,7 @@ export function TopicTags() {
                       {topic.image && <div className='flex justify-center'><img src={topic.image} alt={topic.title} className='w-full h-20 rounded-lg' /></div>}
                       <div className={topic.image ? "line-clamp-5 text-center overflow-hidden text-gray-500 py-1" : "line-clamp-8 text-center overflow-hidden text-gray-500 py-1"}>
                         {topic.title}
-                        <div className='text-center text-gray-500 text-sm pt-1'>
+                        <div className='text-center font-semibold text-gray-500 text-sm pt-2'>
                           Total stories: {topic.story_count}
                         </div>
                       </div>
