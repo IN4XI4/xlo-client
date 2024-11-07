@@ -43,10 +43,10 @@ export function LearnSoftSkillsPage() {
   return (
     <div className="pt-24 px-4 md:px-16 lg:px-32 xl:px-44">
       <div className='text-2xl md:text-3xl font-extrabold pb-4'>
-        Programme d'apprentissage des compétences générales
+        General skills learning program
       </div>
       <div className='text-gray-500 pb-3'>
-        Entrainer vos capacités a amélioré l’une des nombreuses compétences transversales présentes dans les histoires de Mixelo.
+        Training your skills has improved one of the many skills present in Mixelo stories.
       </div>
       <div className='border-b-4 pb-4 md:hidden'>
         <div className='bg-gray-200 text-gray-500 text-2xl rounded-full flex h-8 w-8 items-center justify-center cursor-pointer'

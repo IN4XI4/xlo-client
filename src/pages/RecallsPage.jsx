@@ -157,7 +157,7 @@ export function RecallsPage() {
       )}
       <div className="fixed inset-x-0 bottom-0 text-white text-center z-40">
         <div className='bg-[#0098FF] text-end px-4 text-sm'>
-          Vous êtes en mode “Rappel”
+          You are in “Recall” mode
         </div>
         <div className='bg-[#3DB1FF] px-4 flex py-1'>
           <div className='flex-none flex items-center w-1/4'>

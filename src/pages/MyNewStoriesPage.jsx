@@ -21,10 +21,7 @@ export function MyNewStoriesPage() {
   return (
     <div className="pt-20 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
       <div className='text-2xl md:text-4xl font-extrabold'>
-        Vous trouverez ici les nouvelles histoires que vous n’auriez pas consulter
-      </div>
-      <div className='text-xl py-3'>
-        Renforcement de la confiance en soi et de la capacité à atteindre les objectifs fixés avec une plus grande assurance et efficacité
+        Here you'll find new stories linked to the topic(s) you liked and you may haven't yet seen.
       </div>
       <div className='flex items-center py-4 border-b-4 border-[#D9D9D9]'>
         <div className='flex-none pe-2 md:pe-6'>
@@ -46,7 +43,7 @@ export function MyNewStoriesPage() {
         </div>
       </div>
       <div className='py-4'>
-        <MyStoriesList key="my-stories" searchText={searchText}/>
+        <MyStoriesList key="my-stories" searchText={searchText} />
       </div>
     </div>
   )
