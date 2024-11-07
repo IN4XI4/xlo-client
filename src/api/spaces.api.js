@@ -18,3 +18,8 @@ export const updateSpace = (spaceId, data) => {
     delete headers['Content-Type'];
     return usersApi.patch(`space/${spaceId}/`, data, { headers });
 };
+
+// Invitations
+export const getSpaceInvitations = () => usersApi.get(`space-invitations/my-invitations/`, { headers: getAuthHeaders() })
+export const acceptInvitation = (invitationId) => usersApi.post(`space-invitations/${invitationId}/accept/`, {}, { headers: getAuthHeaders() })
+export const rejectInvitation = (invitationId) => usersApi.post(`space-invitations/${invitationId}/reject/`, {}, { headers: getAuthHeaders() })

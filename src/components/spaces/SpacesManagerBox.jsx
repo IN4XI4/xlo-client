@@ -10,10 +10,9 @@ import logo from '../../assets/Logo.svg';
 import { getMySpaces } from '../../api/spaces.api';
 import { useSpace } from '../../context/SpaceContext';
 import { RocketIcon } from '../illustrations/icons/RocketIcon';
-import { act } from 'react';
 
 
-export function SpacesManagerBox() {
+export function SpacesManagerBox({ onActionComplete }) {
   const [mySpaces, setMySpaces] = useState([]);
   const [error, setError] = useState(null);
   const { activeSpace, setActiveSpace } = useSpace();
@@ -30,10 +29,15 @@ export function SpacesManagerBox() {
     loadMySpaces();
   }, []);
 
+  useEffect(() => {
+    if (onActionComplete) {
+      loadMySpaces();
+    }
+  }, [onActionComplete]);
+
   async function loadMySpaces() {
     try {
       const response = await getMySpaces();
-      console.log("response space", response.data);
       setMySpaces(response.data);
     } catch (error) {
       setError(error);
@@ -94,7 +98,7 @@ export function SpacesManagerBox() {
   return (
     <div className='bg-white rounded px-3 py-4 items-center border border-gray-100 mb-3'>
       <div className='font-bold pb-3'>Spaces manager</div>
-      <div className='flex'>
+      <div className='flex items-center'>
         <div className='flex flex-col-reverse md:flex-row flex-shrink-0 pe-2 md:pe-1 border-r-2'>
           <div className='flex md:flex-col justify-center'>
             <div className='flex items-center md:pb-3 pe-2 md:pe-0'>
@@ -136,13 +140,13 @@ export function SpacesManagerBox() {
                   <div key={space.id} className='flex justify-center items-center'>
                     <div className='flex justify-center py-2'>
                       <Link to={`/spaces/${space.slug}`}
-                        className={`bg-[#66E3E3] rounded-full w-12 md:w-20 h-12 md:h-20 flex items-center justify-center
+                        className={`bg-[#66E3E3] rounded-full w-16 md:w-20 h-16 md:h-20 flex items-center justify-center
                         cursor-pointer ${isActive ? "ring-4 ring-[#3DB1FF] ring-offset-2 shadow-2xl" : ""}`}>
                         {space.image ? (
-                          <img src={space.image} alt="Profile" className="w-10 h-10 md:w-[4.5rem] md:h-[4.5rem] rounded-full"
+                          <img src={space.image} alt="Profile" className="w-16 h-16 md:w-[4.5rem] md:h-[4.5rem] rounded-full"
                             style={{ borderColor: space.color_name }} />
                         ) : (
-                          <RocketIcon color={space.color_name} className="w-10 h-10 md:w-[4.5rem] md:h-[4.5rem]" />
+                          <RocketIcon color={space.color_name} className="w-16 h-16 md:w-[4.5rem] md:h-[4.5rem]" />
                         )}
 
                       </Link>

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
+import { Alert, TextInput } from 'flowbite-react';
 import { FaRegCircle, FaDotCircle } from 'react-icons/fa';
-import { TextInput } from 'flowbite-react';
+import { HiInformationCircle } from 'react-icons/hi';
 
 import { getSpaceBySlug, updateSpace } from '../api/spaces.api';
 import { CurrentSpaceBox } from '../components/spaces/CurrentSpaceBox';
@@ -9,6 +10,8 @@ import { CurrentSpaceBoxOwner } from '../components/spaces/CurrentSpaceBoxOwner'
 import { SpaceMembersBox } from '../components/spaces/SpaceMembersBox';
 import { SpaceInfoBox } from '../components/spaces/SpaceInfoBox';
 import { SpacesManagerBox } from '../components/spaces/SpacesManagerBox';
+import { SpacesInvitationsBox } from '../components/spaces/SpacesInvitationsBox';
+import { SpaceSettingsBox } from '../components/spaces/SpaceSettingsBox';
 
 
 export function SpacesPage() {
@@ -18,8 +21,24 @@ export function SpacesPage() {
   const [isOwner, setIsOwner] = useState(false);
   const [spaceColors, setSpaceColors] = useState([]);
   const [isSpaceLoaded, setIsSpaceLoaded] = useState(true);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertColor, setAlertColor] = useState('success');
 
   const currentSpaceColor = spaceColors.find(color => color.id === selectedSpaceColor)?.color || '#3DB1FF';
+
+  const handleShowAlert = (message, color = 'success') => {
+    setAlertMessage(message);
+    console.log("color", color);
+    
+    setAlertColor(color);
+    setTimeout(() => {
+      setAlertMessage('');
+    }, 7000);
+  };
+
+  const handleActionComplete = (message, color) => {
+    handleShowAlert(message, color);
+  };
 
   useEffect(() => {
     loadSpace();
@@ -30,7 +49,6 @@ export function SpacesPage() {
       try {
         setIsSpaceLoaded(false);
         const response = await getSpaceBySlug(slug);
-        console.log("response space", response.data);
         setIsSpaceLoaded(true);
         setSpaceInfo(response.data);
         setSelectedSpaceColor(response.data.color);
@@ -68,6 +86,11 @@ export function SpacesPage() {
 
   return (
     <div className="pt-24 px-4 md:px-16 lg:px-32 xl:px-44">
+      {alertMessage && (
+        <Alert color={alertColor} icon={HiInformationCircle} className='mb-4'>
+          <span className="font-medium">{alertMessage}</span>
+        </Alert>
+      )}
       <div className='text-gray-900 font-bold text-2xl md:text-4xl pt-2 pb-6'>
         {spaceInfo.id ? `Welcome to ${spaceInfo.name} Space` : "Welcome to Mixelo Spaces"}
       </div>
@@ -128,7 +151,13 @@ export function SpacesPage() {
             <SpaceInfoBox spaceInfo={spaceInfo} />
           </div>
           <div className=''>
-            <SpacesManagerBox />
+            <SpacesManagerBox onActionComplete={handleActionComplete} />
+          </div>
+          <div className=''>
+            <SpacesInvitationsBox onActionComplete={handleActionComplete} />
+          </div>
+          <div className=''>
+            <SpaceSettingsBox />
           </div>
         </div>
       ) : (

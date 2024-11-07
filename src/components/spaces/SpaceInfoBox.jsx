@@ -6,15 +6,15 @@ import { Link } from 'react-router-dom'
 export function SpaceInfoBox({ spaceInfo }) {
   const isDefaultSpace = !spaceInfo.id;
   const defaultName = 'Mixelo Space';
-  const defaultDescription = 'This is Mixelo’s main public space where all users can share and learn.';
+  const defaultDescription = 'This is Mixelo’s main public space that all users share.';
 
   return (
     <div className='bg-white rounded px-3 py-4 items-center border border-gray-100 mb-3'>
       <div className='font-bold pb-3'>{isDefaultSpace ? defaultName : spaceInfo.name}</div>
-      <div className='pb-4 text-gray-500 text-sm'>
+      <div className='text-gray-500 text-sm border-b-2 min-h-[70px]'>
         {isDefaultSpace ? defaultDescription : spaceInfo.description}
       </div>
-      <div className='flex flex-col md:flex-row justify-evenly text-gray-500 space-y-2 md:space-y-0'>
+      <div className='flex flex-col md:flex-row justify-evenly text-gray-500 space-y-2 md:space-y-0 pt-3'>
         {!isDefaultSpace && (
           <>
             <div className='flex items-center text-sm'>
@@ -31,15 +31,15 @@ export function SpaceInfoBox({ spaceInfo }) {
           <>
             <div className='flex items-center text-sm'>
               <FaBook />
-              <Link to="#" className='ps-2 text-[#3DB1FF] underline'>Most consumed stories</Link>
+              <Link to="#" className='ps-2 text-[#3DB1FF]'>Most consumed stories</Link>
             </div>
             <div className='flex items-center text-sm'>
               <FaBook />
-              <Link to="#" className='ps-2 text-[#3DB1FF] underline'>Most commented stories</Link>
+              <Link to="#" className='ps-2 text-[#3DB1FF]'>Most commented stories</Link>
             </div>
             <div className='flex items-center text-sm'>
               <FaUsers />
-              <Link to="#" className='ps-2 text-[#3DB1FF] underline'>Most active members</Link>
+              <Link to="#" className='ps-2 text-[#3DB1FF]'>Most active members</Link>
             </div>
           </>
         )}
