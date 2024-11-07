@@ -158,7 +158,7 @@ export function TopicTags() {
       </div>
       {topicTags.map(topictag => (
         <div key={topictag.id} className='py-4'>
-          <div className={`text-3xl font-semibold py-3 border-b-4`} style={{ borderBottomColor: topictag.color || "#FFC700" }}>{topictag.name}</div>
+          <div className={`text-3xl font-semibold py-3 border-b-4`} style={{ borderBottomColor: topictag.color || "#FFC700" }}>{topictag.name} <span className='text-gray-500 text-sm md:text-base'> (Topics: {topictag.topic_count})</span></div>
           <div className='grid grid-cols-6 md:grid-cols-12 py-4'>
             <div className='flex items-center'>
               <button className='bg-white p-4 rounded-full text-gray-700 hover:bg-gray-800 hover:text-white' onClick={() => goToPrevious(topictag.id)}>
@@ -179,7 +179,11 @@ export function TopicTags() {
                       {topic.image && <div className='flex justify-center'><img src={topic.image} alt={topic.title} className='w-full h-20 rounded-lg' /></div>}
                       <div className={topic.image ? "line-clamp-5 text-center overflow-hidden text-gray-500 py-1" : "line-clamp-8 text-center overflow-hidden text-gray-500 py-1"}>
                         {topic.title}
+                        <div className='text-center text-gray-500 text-sm pt-1'>
+                          Total stories: {topic.story_count}
+                        </div>
                       </div>
+
                       <div className='flex justify-center pt-2 pb-1' >
                         {topic.user_has_liked ? (
                           <FaHeart
