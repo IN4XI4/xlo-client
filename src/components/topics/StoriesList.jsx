@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { getStoriesByTopic } from '../../api/blog.api';
-import { getTopicsByCategory } from '../../api/base.api';
-import { FaAngleDown, FaCommentDots, FaEye, FaThumbsUp } from 'react-icons/fa';
-import { CgShapeCircle } from "react-icons/cg";
 import { Link, useNavigate } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { CgShapeCircle } from "react-icons/cg";
+import { FaAngleDown, FaCommentDots, FaEye, FaThumbsUp, FaUser } from 'react-icons/fa';
+import { IoIosSpeedometer } from "react-icons/io";
+import { Tooltip } from 'flowbite-react';
+
+import { getStoriesByTopic } from '../../api/blog.api';
+import { getTopicsByCategory } from '../../api/base.api';
 
 export function StoriesList({ topicId, categoryId, searchText }) {
   const [stories, setStories] = useState([]);
@@ -75,8 +78,8 @@ export function StoriesList({ topicId, categoryId, searchText }) {
 
   return (
     <div className='bg-white border rounded p-3 text-gray-500'>
-      <div className='grid grid-cols-10 pb-3'>
-        <div className='col-span-7 flex'>
+      <div className='grid grid-cols-10 md:grid-cols-11 pb-3'>
+        <div className='col-span-9 md:col-span-8 flex'>
           <button className={`mr-3 ${selectedButton === 'Stories' ? '' : 'text-[#3DB1FF] underline'}`}
             onClick={() => handleButtonClick('Stories')}
             disabled={selectedButton === 'Stories'}>
@@ -88,7 +91,7 @@ export function StoriesList({ topicId, categoryId, searchText }) {
             Latest
           </button>
         </div>
-        <div className='flex justify-center items-center text-[0.8rem] sm:text-[0.85rem] md:text-base'>
+        <div className='hidden md:flex justify-center items-center text-[0.8rem] sm:text-[0.85rem] md:text-base'>
           <span className='hidden md:block'>Replies</span>
           <span className='md:hidden'><FaCommentDots /></span>
           <span><FaAngleDown /></span>
@@ -98,7 +101,7 @@ export function StoriesList({ topicId, categoryId, searchText }) {
           <span className='md:hidden'><FaEye /></span>
           <span><FaAngleDown /></span>
         </div>
-        <div className='flex justify-center items-center text-[0.8rem]  sm:text-[0.85rem] md:text-base'>
+        <div className='hidden md:flex justify-center items-center text-[0.8rem]  sm:text-[0.85rem] md:text-base'>
           <span className='hidden md:block'>Likes</span>
           <span className='md:hidden'><FaThumbsUp /></span>
           <span><FaAngleDown /></span>
@@ -117,23 +120,48 @@ export function StoriesList({ topicId, categoryId, searchText }) {
           }
         >
           {stories.map((story, index) => (
-            <div key={index} className='grid grid-cols-10 py-3'>
-              <Link to={`/story/${story.slug}`} className={`col-span-7 ${story.user_has_viewed ? 'bg-gray-50' : 'bg-[#FFCE80]'} p-3 rounded-lg`}>
-                <div className='font-bold text-black text-xl truncate'>{story.title}</div>
-                <div className='flex justify-between'>
-                  <div className='text-sm truncate pe-2'>{story.subtitle}</div>
-                  <div className='flex'>
-                    {story.card_colors.map((color, colorIndex) => (
-                      <div key={colorIndex} className="pe-1" style={{ color: color || "#3DB1FF" }}>
-                        <CgShapeCircle />
+            <div key={index} className='grid grid-cols-10 md:grid-cols-11 py-3'>
+              <Link to={`/story/${story.slug}`}
+                className={`col-span-9 md:col-span-8 ${story.user_has_viewed ? 'bg-gray-50' : 'bg-[#FFCE80]'} 
+              p-3 rounded-lg me-1 md:me-0 flex`}>
+                {story.image && (
+                  <div className="hidden md:flex items-center justify-center md:w-24 md:h-20 md:mr-3">
+                    <img src={story.image} alt={story.title} className="object-cover w-full h-full rounded-lg" />
+                  </div>
+                )}
+                <div className='flex-grow overflow-hidden pb-1'>
+                  <div className='font-bold text-black truncate'>{story.title}</div>
+                  <div className='text-sm truncate'>{story.subtitle}</div>
+                  <div className="flex items-center pt-2">
+                    <Tooltip content="Difficulty level">
+                      <div
+                        className="flex w-auto items-center px-3 rounded-lg text-white text-sm me-4"
+                        style={{ backgroundColor: story.difficulty_color }}
+                      >
+                        <IoIosSpeedometer className="me-1" />
+                        {story.difficulty_name}
                       </div>
-                    ))}
+                    </Tooltip>
+
+                    <Tooltip content="Created by">
+                      <div className="flex items-center">
+                        <FaUser className="mr-1" />
+                        <div className="text-sm truncate">{story.owner_name}</div>
+                      </div>
+                    </Tooltip>
                   </div>
                 </div>
+                <div className="flex flex-col items-center space-y-1 md:justify-center mt-0">
+                  {story.card_colors.slice(0, 4).map((color, colorIndex) => (
+                    <div key={colorIndex} className="w-4 h-4" style={{ color: color || "#3DB1FF" }}>
+                      <CgShapeCircle />
+                    </div>
+                  ))}
+                </div>
               </Link>
-              <div className='text-center text-[#3DB1FF] self-center'>{story.comments_count}</div>
+              <div className='hidden md:block text-center text-[#3DB1FF] self-center'>{story.comments_count}</div>
               <div className='text-center text-[#3DB1FF] self-center'>{story.views_count}</div>
-              <div className='text-center text-[#3DB1FF] self-center'>{story.likes_count}</div>
+              <div className='hidden md:block text-center text-[#3DB1FF] self-center'>{story.likes_count}</div>
             </div>
           ))}
         </InfiniteScroll>

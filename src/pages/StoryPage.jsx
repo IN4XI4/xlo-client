@@ -175,17 +175,26 @@ export function StoryPage() {
           <span className="font-medium">Story updated successfully!</span>
         </Alert>
       )}
-      <div className='pb-2 md:flex flex-col md:flex-row items-center'>
-        <div className='text-4xl font-extrabold'>
-          {story.title}
-        </div>
+      <div className='text-sm text-gray-500 flex items-center'>
+        <span className='font-semibold'>Author: </span>
+        <span className='ps-2'>{story.owner_name}</span>
         {story.is_owner &&
-          <div className='md:ps-2'>
+          <div className='ps-2'>
             <Link to={`/edit-story/${story.id}`}
               className='text-gray-500 border-gray-100 border rounded-lg bg-white py-1 px-2'>
               Edit Story
             </Link>
           </div>}
+      </div>
+      <div className='py-2 flex items-center'>
+        {story.image && (
+          <div className="hidden md:flex items-center justify-center md:w-20 md:h-16 md:mr-3">
+            <img src={story.image} alt={story.title} className="object-cover w-full h-full rounded-lg" />
+          </div>
+        )}
+        <div className='text-4xl font-extrabold md:pb-2'>
+          {story.title}
+        </div>
       </div>
 
       {cards.length > 0 && currentCardIndex < cards.length && (
