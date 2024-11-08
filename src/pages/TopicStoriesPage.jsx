@@ -108,6 +108,11 @@ export function TopicStoriesPage() {
       <div className='text-2xl md:text-4xl font-extrabold'>
         {topic.title}
       </div>
+      {topic.description && topic.description !== "" && (
+        <div className='text-sm md:text-lg text-gray-500'>
+          {topic.description}
+        </div>
+      )}
       <div className='flex items-center py-4 border-b-4 border-[#D9D9D9]'>
         <div className='flex-none pe-2 md:pe-6'>
           <Link to="/">
