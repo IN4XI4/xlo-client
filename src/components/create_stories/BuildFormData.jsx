@@ -1,6 +1,6 @@
 export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoading, topicId = null) {
   let allValid = true;
-
+  
   for (let cardIndex = 0; cardIndex < data.cards.length; cardIndex++) {
     if (!data.cards[cardIndex].cardTitle || !data.cards[cardIndex].selectedSoftSkill || !data.cards[cardIndex].selectedMentor) {
       allValid = false;
@@ -24,9 +24,13 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
   formData.append('subtitle', data.subtitle);
   formData.append('is_private', data.is_private);
   formData.append('free_access', data.free_access);
-  formData.append('subtitle', data.subtitle);
+  formData.append('difficulty_level', data.difficulty_level);
+  formData.append('language', data.language);
   if (topicId) {
     formData.append('topic', topicId);
+  }  
+  if (data.image !== null) {
+    formData.append("image", data.image);
   }
 
   data.cards.forEach((card, cardIndex) => {
@@ -53,6 +57,6 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
       }
     });
   });
-
+  
   return formData;
 }
