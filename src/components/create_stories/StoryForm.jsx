@@ -6,6 +6,7 @@ import MDEditor from '@uiw/react-md-editor';
 import { LuEye } from "react-icons/lu";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
+import { MdImage } from "react-icons/md";
 import { FaPlus } from 'react-icons/fa';
 import { BsFileEarmarkPlusFill, BsFillFileEarmarkMinusFill } from "react-icons/bs";
 import { IoDownload } from "react-icons/io5";
@@ -39,6 +40,9 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
     defaultValues: initialData || {
       title: '',
       subtitle: '',
+      image: null,
+      difficulty_level: '',
+      language: '',
       is_private: initialData?.is_private ?? false,
       free_access: initialData?.free_access ?? false,
       cards: [{
@@ -332,7 +336,93 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
               />
             </div>
           )}
-
+        </div>
+        <div className='flex flex-col md:flex-row pb-3'>
+          <div className='grid md:flex md:pe-4 grid-cols-3 items-center '>
+            <Tooltip content="Small image (1 mb max)"><div className='font-semibold pe-4'>Thumbnail</div></Tooltip>
+            <div className='relative'>
+              {!imagePreviews['story_image'] ? (
+                <div
+                  className='w-[90px] h-[60px] bg-gray-200 flex justify-center items-center rounded-lg cursor-pointer'
+                  onClick={() => document.querySelector('input[name="image"]').click()}
+                >
+                  <span className='text-white text-xl'><MdImage /></span>
+                </div>
+              ) : (
+                <img
+                  src={imagePreviews['story_image']}
+                  alt="Story Preview"
+                  className='w-[90px] h-[60px] rounded-lg object-cover cursor-pointer'
+                  onClick={() => document.querySelector('input[name="image"]').click()}
+                />
+              )}
+              <FileInput
+                type="file"
+                accept="image/png, image/jpeg, image/gif"
+                className='hidden'
+                {...register('image')}
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    if (file.size > 1048576) {
+                      alert('Image size must not exceed 1 MB');
+                      return;
+                    }
+                    setValue('image', file, { shouldDirty: true, shouldTouch: true });
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      setImagePreviews(prev => ({ ...prev, 'story_image': reader.result }));
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                }}
+              />
+            </div>
+          </div>
+          <div className='grid md:flex md:pe-4 grid-cols-3 items-center md:justify-center pt-3 md:py-0'>
+            <div className='font-semibold pe-4'>Content Level</div>
+            <div className='col-span-2'>
+              <Controller
+                control={control}
+                name="difficulty_level"
+                rules={{ required: 'Difficulty level is required' }}
+                render={({ field }) => (
+                  <Select {...field}>
+                    <option value="" disabled>Select Difficulty Level</option>
+                    <option value="1">Beginner</option>
+                    <option value="2">Amateur</option>
+                    <option value="3">Intermediate</option>
+                    <option value="4">Professional</option>
+                    <option value="5">Expert</option>
+                  </Select>
+                )}
+              />
+              {errors.difficulty_level && <p className="text-red-500">{errors.difficulty_level.message}</p>}
+            </div>
+          </div>
+          <div className='grid md:flex grid-cols-3 items-center md:justify-center py-3 md:py-0'>
+            <div className='font-semibold pe-4'>Language</div>
+            <div className='col-span-2'>
+              <Controller
+                control={control}
+                name="language"
+                rules={{ required: 'Language is required' }}
+                render={({ field }) => (
+                  <Select {...field}>
+                    <option value="" disabled>Select Language</option>
+                    <option value="EN">English</option>
+                    <option value="FR">French</option>
+                    <option value="ES">Spanish</option>
+                    <option value="DE">German</option>
+                    <option value="IT">Italian</option>
+                    <option value="PT">Portuguese</option>
+                    <option value="OT">Other</option>
+                  </Select>
+                )}
+              />
+              {errors.difficulty_level && <p className="text-red-500">{errors.difficulty_level.message}</p>}
+            </div>
+          </div>
         </div>
         {fields.length > 0 && (
           <div className='border px-3 py-6 rounded-lg mb-2 bg-purple-100' key={currentCardIndex}>

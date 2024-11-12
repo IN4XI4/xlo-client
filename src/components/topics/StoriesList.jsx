@@ -2,12 +2,28 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { CgShapeCircle } from "react-icons/cg";
+import { RiEarthFill } from "react-icons/ri";
 import { FaAngleDown, FaCommentDots, FaEye, FaThumbsUp, FaUser } from 'react-icons/fa';
 import { IoIosSpeedometer } from "react-icons/io";
 import { Tooltip } from 'flowbite-react';
 
 import { getStoriesByTopic } from '../../api/blog.api';
 import { getTopicsByCategory } from '../../api/base.api';
+import enFlag from '../../assets/flags/gb.svg';
+import esFlag from '../../assets/flags/es.svg';
+import frFlag from '../../assets/flags/fr.svg';
+import deFlag from '../../assets/flags/de.svg';
+import itFlag from '../../assets/flags/it.svg';
+import ptFlag from '../../assets/flags/pt.svg';
+
+const flagMap = {
+  EN: enFlag,
+  ES: esFlag,
+  FR: frFlag,
+  DE: deFlag,
+  IT: itFlag,
+  PT: ptFlag,
+};
 
 export function StoriesList({ topicId, categoryId, searchText }) {
   const [stories, setStories] = useState([]);
@@ -133,22 +149,41 @@ export function StoriesList({ topicId, categoryId, searchText }) {
                   <div className='font-bold text-black truncate'>{story.title}</div>
                   <div className='text-sm truncate'>{story.subtitle}</div>
                   <div className="flex items-center pt-2">
-                    <Tooltip content="Difficulty level">
-                      <div
-                        className="flex w-auto items-center px-3 rounded-lg text-white text-sm me-4"
-                        style={{ backgroundColor: story.difficulty_color }}
-                      >
-                        <IoIosSpeedometer className="me-1" />
-                        {story.difficulty_name}
-                      </div>
-                    </Tooltip>
-
-                    <Tooltip content="Created by">
+                    <div className='me-4 flex-none'>
+                      <Tooltip content="Difficulty level">
+                        <div
+                          className="flex w-auto items-center px-3 rounded-lg text-white text-sm"
+                          style={{ backgroundColor: story.difficulty_color }}
+                        >
+                          <IoIosSpeedometer className="me-1" />
+                          {story.difficulty_name}
+                        </div>
+                      </Tooltip>
+                    </div>
+                    <div className='me-4 flex-grow md:flex-none overflow-hidden'>
                       <div className="flex items-center">
-                        <FaUser className="mr-1" />
+                        <Tooltip content="Created by">
+                          <FaUser className="mr-1" />
+                        </Tooltip>
                         <div className="text-sm truncate">{story.owner_name}</div>
                       </div>
-                    </Tooltip>
+                    </div>
+                    <div className='flex-none'>
+                      <Tooltip content="Language">
+                        <div className="flex items-center">
+                          {flagMap[story.language] ? (
+                            <img
+                              src={flagMap[story.language]}
+                              alt={story.language}
+                              className="w-5 h-5 md:mr-1 rounded-lg"
+                            />
+                          ) : (
+                            <RiEarthFill className="w-5 h-5 md:mr-1 text-gray-500" />
+                          )}
+                          <div className="hidden md:block text-sm truncate">{story.language_name}</div>
+                        </div>
+                      </Tooltip>
+                    </div>
                   </div>
                 </div>
                 <div className="flex flex-col items-center space-y-1 md:justify-center mt-0">
