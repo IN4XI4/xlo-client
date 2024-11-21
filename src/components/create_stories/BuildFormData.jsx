@@ -44,7 +44,7 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
     formData.append(`${cardPrefix}.cardTitle`, card.cardTitle);
     formData.append(`${cardPrefix}.selectedSoftSkill`, card.selectedSoftSkill);
     formData.append(`${cardPrefix}.selectedMentor`, card.selectedMentor);
-    if (!topicId) {
+    if (!topicId && card.id) {
       formData.append(`${cardPrefix}.id`, card.id);
     }
 
