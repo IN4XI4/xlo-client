@@ -40,7 +40,7 @@ const BlockContainer = ({ children, color, additionalClass, hasLiked, userHasRec
   };
 
   return (
-    <div className='pb-4'>
+    <div className='pb-4' translate="no">
       <div className="flex">
         <div className={`flex-grow p-4 bg-gray-50 shadow rounded-2xl border-[4px] ${additionalClass}`} style={{ borderColor: color || "#3DB1FF" }}>
           <MarkdownRenderer content={children} />
