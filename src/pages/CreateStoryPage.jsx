@@ -24,7 +24,7 @@ export function CreateStoryPage() {
         const response = await getUser();
         const user_level = response.data.user_level
         setUserLevel(user_level)
-        
+
         if (user_level >= CREATOR_LEVEL_1) {
           setIsCreator(true);
         }
@@ -39,6 +39,9 @@ export function CreateStoryPage() {
 
   const onSubmit = async (data) => {
     const formData = BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoading, topicId)
+    if (!formData) {
+      return;
+    }
     try {
       const response = await createStoryFull(formData);
       setIsSubmitError(false);

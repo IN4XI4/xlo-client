@@ -1,4 +1,8 @@
 export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoading, topicId = null) {
+  if (!data || !data.cards) {
+    console.error("Data or data.cards is undefined or null.");
+    return;
+  }
   let allValid = true;
   
   for (let cardIndex = 0; cardIndex < data.cards.length; cardIndex++) {
@@ -11,6 +15,7 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
       }
     }
   }
+
   if (!allValid) {
     setSubmitMessage('Please check all cards and blocks. Some of them have incomplete information.');
     setIsSubmitError(true);
@@ -32,7 +37,7 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
   if (data.image !== null) {
     formData.append("image", data.image);
   }
-
+  
   data.cards.forEach((card, cardIndex) => {
     const cardPrefix = `cards[${cardIndex}]`;
 
