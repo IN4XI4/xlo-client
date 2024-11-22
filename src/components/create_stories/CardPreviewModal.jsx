@@ -4,15 +4,14 @@ import { BsDot, BsThreeDotsVertical } from "react-icons/bs";
 import { FaXmark } from "react-icons/fa6";
 import { FaRegBookmark, FaRegCopy, FaRegHeart, FaReply } from 'react-icons/fa';
 import { getMentor, getSoftSkill } from '../../api/base.api';
-import { getBlockTypes } from '../../api/blog.api';
 import { MonsterMentorProfileModal } from '../topics/MonsterMentorProfileModal';
+import { BLOCK_TYPES } from '../../globals';
 
 
 export function CardPreviewModal({ onClose, card }) {
   const [isOpen, setIsOpen] = useState(true);
   const [blocks, setBlocks] = useState(null);
   const [activeActionIconsIndex, setActiveActionIconsIndex] = useState(null);
-  const [blockTypes, setBlockTypes] = useState([]);
   const [softSkill, setSoftSkill] = useState(null);
   const [mentor, setMentor] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,8 +24,6 @@ export function CardPreviewModal({ onClose, card }) {
 
     const fetchData = async () => {
       try {
-        const blockTypesResponse = await getBlockTypes();
-        setBlockTypes(blockTypesResponse.data.results);
 
         if (card.selectedSoftSkill) {
           const softSkillResponse = await getSoftSkill(card.selectedSoftSkill);
@@ -68,9 +65,7 @@ export function CardPreviewModal({ onClose, card }) {
   };
 
   const getBlockTypeName = (blockTypeId) => {
-    const blockType = blockTypes.find(type => type.id === parseInt(blockTypeId));
-
-    return blockType ? blockType.name : '';
+    return BLOCK_TYPES[blockTypeId] || "STANDARD";
   };
 
   const openModal = (data) => {
@@ -95,7 +90,7 @@ export function CardPreviewModal({ onClose, card }) {
           <div className='bg-white rounded-md border py-4 px-2 my-4'>
             {blocks && card.blocks && card.blocks.length > 0 && softSkill && mentor && blocks.map((block, index) => (
               <div key={index} className='py-4'>
-                {getBlockTypeName(block.blockType) === "ATTACK" ? (
+                {getBlockTypeName(block.blockType) === "MONSTER" ? (
                   <div className='pb-1 flex justify-end items-center'>
                     <div className='text-end text-sm md:text-base'>
                       <div className='font-bold'>{softSkill.monster_name}</div>
@@ -121,7 +116,7 @@ export function CardPreviewModal({ onClose, card }) {
                       ) : (<div></div>)}
                     </div>
                   </div>
-                ) : getBlockTypeName(block.blockType) === "DEFENSE" ? (
+                ) : getBlockTypeName(block.blockType) === "MENTOR" ? (
                   <div className='pb-1 flex items-center'>
                     <div className=''>
                       {mentor.picture ? (
@@ -147,14 +142,14 @@ export function CardPreviewModal({ onClose, card }) {
                   </div>
 
                 ) : (<></>)}
-                <div className={`flex items-center ${getBlockTypeName(block.blockType) === "DEFENSE" ? "ps-10" : ""}
-                ${getBlockTypeName(block.blockType) === "ATTACK" ? "pe-4 md:pe-10" : ""}`}>
+                <div className={`flex items-center ${getBlockTypeName(block.blockType) === "MENTOR" ? "ps-10" : ""}
+                ${getBlockTypeName(block.blockType) === "MONSTER" ? "pe-4 md:pe-10" : ""}`}>
                   <div className={`flex-grow bg-gray-50 rounded-2xl border-[4px] px-4 py-4
-                  ${getBlockTypeName(block.blockType) === "DEFENSE" ? "rounded-tl-none" : ""}
-                  ${getBlockTypeName(block.blockType) === "ATTACK" ? "rounded-tr-none" : ""}`}
+                  ${getBlockTypeName(block.blockType) === "MENTOR" ? "rounded-tl-none" : ""}
+                  ${getBlockTypeName(block.blockType) === "MONSTER" ? "rounded-tr-none" : ""}`}
                     style={{
                       borderColor:
-                        getBlockTypeName(block.blockType) === "DEFENSE"
+                        getBlockTypeName(block.blockType) === "MENTOR"
                           ? (mentor.color || "#3DB1FF")
                           : (softSkill.color || "#3DB1FF")
                     }}>
@@ -177,7 +172,7 @@ export function CardPreviewModal({ onClose, card }) {
                   </div>
                 </div>
                 {activeActionIconsIndex === index &&
-                  <div className={`${getBlockTypeName(block.blockType) === "ATTACK" ? "pe-4 md:pe-10" : ""}`}>
+                  <div className={`${getBlockTypeName(block.blockType) === "MONSTER" ? "pe-4 md:pe-10" : ""}`}>
                     <div className='flex text-gray-500 space-x-1 py-1 text-lg justify-end pe-6'>
                       <FaRegCopy className='cursor-pointer' />
                       <FaRegBookmark className='cursor-pointer' />

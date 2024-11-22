@@ -192,7 +192,7 @@ function getBlockComponent(block, card, handleLikeClick, isAuthenticated, onReca
     onRecallUpdate
   };
   switch (block.block_type_name.toLowerCase()) {
-    case 'attack':
+    case 'monster':
       return <AttackBlock {...commonProps}
         color={card.soft_skill_color}
         monster_image={card.soft_skill_monster_picture}
@@ -201,7 +201,7 @@ function getBlockComponent(block, card, handleLikeClick, isAuthenticated, onReca
         soft_skill_name={card.soft_skill_name}
         soft_skill_description={card.soft_skill_description}
         soft_skill_logo={card.soft_skill_logo} />;
-    case 'defense':
+    case 'mentor':
       return <DefenseBlock {...commonProps}
         color={card.mentor_color}
         mentor_image={card.mentor_picture}

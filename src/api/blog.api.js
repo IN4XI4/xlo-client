@@ -61,7 +61,6 @@ export const getCardsBySoftSkill = (data, page) => blogApi.post(`cards/random-by
 // Blocks
 export const getBlock = (blockId) => blogApi.get(`blocks/${blockId}/`, { headers: getAuthHeaders() })
 export const getBlocksByCard = (cardId) => blogApi.get(`blocks/?card=${cardId}`, { headers: getAuthHeaders() })
-export const getBlockTypes = () => blogApi.get(`blocktypes/`, { headers: getAuthHeaders() })
 
 // Comments
 export const getCommentsByStory = (storyId, page, newest = false) => {
