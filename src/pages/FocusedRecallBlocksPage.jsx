@@ -167,7 +167,7 @@ export function FocusedRecallBlocksPage() {
           <div className='font-semibold text-2xl'>{currentBlock.story_title}</div>
           <div className='text-2xl text-gray-500'>{currentBlock.card_title}</div>
           <div className='bg-white rounded-md border py-4 px-2 my-4'>
-            {currentBlock.block_type_name === "ATTACK" ? (
+            {currentBlock.block_type_name === "monster" ? (
               <div className='pb-1 flex justify-end items-center'>
                 <div className='text-end text-sm md:text-base'>
                   <div className='font-bold'>{currentBlock.soft_skill_monster_name}</div>
@@ -193,7 +193,7 @@ export function FocusedRecallBlocksPage() {
                   ) : (<div></div>)}
                 </div>
               </div>
-            ) : currentBlock.block_type_name === "DEFENSE" ? (
+            ) : currentBlock.block_type_name === "MENTOR" ? (
               <div className='pb-1 flex items-center'>
                 <div className=''>
                   {currentBlock.mentor_picture ? (
@@ -218,11 +218,11 @@ export function FocusedRecallBlocksPage() {
                 </div>
               </div>
             ) : (<></>)}
-            <div className={`flex items-center ${currentBlock.block_type_name === "DEFENSE" ? "ps-10" : ""}`}>
+            <div className={`flex items-center ${currentBlock.block_type_name === "MENTOR" ? "ps-10" : ""}`}>
               <div className='flex-grow bg-gray-50 rounded-2xl border-[4px] px-4 py-6'
                 style={{
                   borderColor:
-                    currentBlock.block_type_name === "DEFENSE"
+                    currentBlock.block_type_name === "MENTOR"
                       ? (currentBlock.mentor_color || "#3DB1FF")
                       : (currentBlock.soft_skill_color || "#3DB1FF")
                 }}>

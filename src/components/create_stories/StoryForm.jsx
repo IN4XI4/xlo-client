@@ -16,16 +16,15 @@ import { ConfirmationModal } from '../ConfirmationModal';
 import { CardPreviewModal } from './CardPreviewModal';
 import { CardBlockNavigation } from './CardBlockNavigation';
 import { getMentors, getSoftSkills } from '../../api/base.api';
-import { deleteStory, getBlockTypes } from '../../api/blog.api';
+import { deleteStory } from '../../api/blog.api';
 import { CreateMentorModal } from './CreateMentorModal';
-import { CREATOR_LEVEL_3 } from '../../globals';
+import { CREATOR_LEVEL_3, BLOCK_TYPES } from '../../globals';
 
 
 export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError, userLevel, storyId = null }) {
   const navigate = useNavigate();
   const [softSkills, setSoftSkills] = useState([]);
   const [mentors, setMentors] = useState([]);
-  const [blockTypes, setBlockTypes] = useState([]);
   const [imagePreviews, setImagePreviews] = useState({});
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [currentBlockIndex, setCurrentBlockIndex] = useState(0);
@@ -87,19 +86,6 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
       console.error("Error loading data:", error);
     }
   };
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const blockTypesRes = await getBlockTypes();
-        setBlockTypes(blockTypesRes.data.results);
-
-      } catch (error) {
-        console.error("Error loading block types:", error);
-      }
-    };
-    loadData();
-  }, []);
 
   useEffect(() => {
     if (initialData) {
@@ -564,8 +550,8 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
                         render={({ field }) => (
                           <Select {...field}>
                             <option value="">Select Block Type</option>
-                            {blockTypes.map((type) => (
-                              <option key={type.id} value={type.id}>{type.name}</option>
+                            {Object.entries(BLOCK_TYPES).map(([key, value]) => (
+                              <option key={key} value={key}>{value}</option>
                             ))}
                           </Select>
                         )}

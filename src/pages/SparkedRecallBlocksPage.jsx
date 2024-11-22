@@ -134,7 +134,7 @@ export function SparkedRecallBlocksPage() {
       >
         {blocks.map((block, index) => (
           <div key={index} className='pb-10'>
-            {block.block.block_type_name === "ATTACK" ? (
+            {block.block.block_type_name === "monster" ? (
               <div className='pb-1 flex justify-end items-center'>
                 <div className='text-end text-sm md:text-base'>
                   <div className='font-bold'>{block.block.soft_skill_monster_name}</div>
@@ -160,7 +160,7 @@ export function SparkedRecallBlocksPage() {
                   ) : (<div></div>)}
                 </div>
               </div>
-            ) : block.block.block_type_name === "DEFENSE" ? (
+            ) : block.block.block_type_name === "MENTOR" ? (
               <div className='pb-1 flex items-center'>
                 <div className=''>
                   {block.block.mentor_picture ? (
@@ -185,11 +185,11 @@ export function SparkedRecallBlocksPage() {
                 </div>
               </div>
             ) : (<></>)}
-            <div className={`flex items-center ${block.block.block_type_name === "DEFENSE" ? "ps-10" : ""}`}>
+            <div className={`flex items-center ${block.block.block_type_name === "MENTOR" ? "ps-10" : ""}`}>
               <div className='flex-grow bg-gray-50 rounded-2xl border-[4px] p-4'
                 style={{
                   borderColor:
-                    block.block.block_type_name === "DEFENSE"
+                    block.block.block_type_name === "MENTOR"
                       ? (block.block.mentor_color || "#3DB1FF")
                       : (block.block.soft_skill_color || "#3DB1FF")
                 }}>
