@@ -170,7 +170,7 @@ export function StoriesList({ topicId, categoryId, searchText }) {
                     </div>
                     <div className='flex-none'>
                       <Tooltip content="Language">
-                        <div className="flex items-center">
+                        <div className="flex items-center pe-1 md:pe-0">
                           {flagMap[story.language] ? (
                             <img
                               src={flagMap[story.language]}

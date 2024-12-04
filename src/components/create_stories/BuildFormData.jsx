@@ -1,4 +1,5 @@
 export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoading, topicId = null) {
+  
   if (!data || !data.cards) {
     console.error("Data or data.cards is undefined or null.");
     return;
@@ -24,11 +25,13 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
 
   setIsLoading(true);
   const formData = new FormData();
-
+  
   formData.append('title', data.title);
   formData.append('subtitle', data.subtitle);
   formData.append('is_private', data.is_private);
   formData.append('free_access', data.free_access);
+  formData.append('life_moments', data.life_moments);
+  formData.append('story_identities', data.story_identities);
   formData.append('difficulty_level', data.difficulty_level);
   formData.append('language', data.language);
   if (topicId) {
@@ -59,6 +62,9 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
 
       if (block.image && block.image.length > 0) {
         formData.append(`${blockPrefix}.image`, block.image[0]);
+      }
+      if (block.image_2 && block.image_2.length > 0) {
+        formData.append(`${blockPrefix}.image_2`, block.image[0]);
       }
     });
   });

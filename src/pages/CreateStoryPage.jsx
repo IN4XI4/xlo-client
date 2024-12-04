@@ -13,6 +13,8 @@ export function CreateStoryPage() {
   const navigate = useNavigate();
   const [isCreator, setIsCreator] = useState(false);
   const [userLevel, setUserLevel] = useState(0);
+  const [userPicture, setUserPicture] = useState(0);
+  const [userColor, setUserColor] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [submitMessage, setSubmitMessage] = useState('');
   const [isSubmitError, setIsSubmitError] = useState(false);
@@ -22,8 +24,13 @@ export function CreateStoryPage() {
       try {
         setIsLoading(true);
         const response = await getUser();
+
         const user_level = response.data.user_level
+        const user_image = response.data.picture
+        const user_color = response.data.profile_color
         setUserLevel(user_level)
+        setUserPicture(user_image)
+        setUserColor(user_color)
 
         if (user_level >= CREATOR_LEVEL_1) {
           setIsCreator(true);
@@ -67,5 +74,7 @@ export function CreateStoryPage() {
     onSubmit={onSubmit}
     submitMessage={submitMessage}
     isSubmitError={isSubmitError}
+    userPicture={userPicture}
+    userColor={userColor}
     userLevel={userLevel} />
 }

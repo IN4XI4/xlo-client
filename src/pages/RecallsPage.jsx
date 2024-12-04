@@ -151,7 +151,10 @@ export function RecallsPage() {
           <div className='md:px-16 lg:px-24 mb-3'>
             <BlocksList key={recallCards[currentCardIndex].card.id}
               card={recallCards[currentCardIndex].card}
-              blockContentTypeId={blockContentTypeId} />
+              blockContentTypeId={blockContentTypeId}
+              ownerAvatar={recallCards[currentCardIndex].card.owner_picture}
+              ownerColor={recallCards[currentCardIndex].card.owner_color}
+               />
           </div>
         </div>
       )}
