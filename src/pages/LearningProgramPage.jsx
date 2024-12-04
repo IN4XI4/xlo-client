@@ -92,7 +92,11 @@ export function LearningProgramPage() {
             {softskillCards[currentCardIndex].title}
           </div>
           <div className='md:px-16 lg:px-24 mb-3'>
-            <BlocksList card={softskillCards[currentCardIndex]} blockContentTypeId={blockContentTypeId} />
+            <BlocksList card={softskillCards[currentCardIndex]}
+              blockContentTypeId={blockContentTypeId}
+              ownerAvatar={softskillCards[currentCardIndex].owner_picture}
+              ownerColor={softskillCards[currentCardIndex].owner_color}
+               />
           </div>
         </>
       )}
