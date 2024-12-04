@@ -64,7 +64,7 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
       }]
     }
   });
-
+  
   const { fields, append, remove } = useFieldArray({
     control,
     name: "cards"
@@ -307,7 +307,9 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
               name="life_moments"
               rules={{ required: false }}
               render={({ field }) => (
-                <Select {...field}>
+                <Select {...field}
+                  value={field.value || ""}
+                  onChange={(e) => field.onChange(e.target.value)}>
                   <option value="">Unspecified Age</option>
                   <option value="1">Aged 5 to 10</option>
                   <option value="2">Aged 10 to 15</option>
@@ -329,7 +331,9 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
               name="story_identities"
               rules={{ required: false }}
               render={({ field }) => (
-                <Select {...field}>
+                <Select {...field}
+                  value={field.value || ""}
+                  onChange={(e) => field.onChange(e.target.value)}>
                   <option value="">Unspecified Identity</option>
                   <option value="1">Instinctive Identity</option>
                   <option value="2">Emotional Identity</option>
@@ -346,7 +350,9 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
               name="difficulty_level"
               rules={{ required: false }}
               render={({ field }) => (
-                <Select {...field}>
+                <Select {...field}
+                  value={field.value || ""}
+                  onChange={(e) => field.onChange(e.target.value)}>
                   <option value="">Unspecified Difficulty</option>
                   <option value="1">Beginner</option>
                   <option value="2">Amateur</option>
@@ -365,7 +371,9 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
               name="language"
               rules={{ required: false }}
               render={({ field }) => (
-                <Select {...field}>
+                <Select {...field}
+                  value={field.value || ""}
+                  onChange={(e) => field.onChange(e.target.value)}>
                   <option value="">Unspecified Language</option>
                   <option value="EN">English</option>
                   <option value="FR">French</option>

@@ -1,11 +1,18 @@
 export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoading, topicId = null) {
-  
+
+
+  function appendIfNotNull(formData, key, value) {
+    if (value !== null) {
+      formData.append(key, value);
+    }
+  }
+
   if (!data || !data.cards) {
     console.error("Data or data.cards is undefined or null.");
     return;
   }
   let allValid = true;
-  
+
   for (let cardIndex = 0; cardIndex < data.cards.length; cardIndex++) {
     if (!data.cards[cardIndex].cardTitle || !data.cards[cardIndex].selectedSoftSkill || !data.cards[cardIndex].selectedMentor) {
       allValid = false;
@@ -25,22 +32,22 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
 
   setIsLoading(true);
   const formData = new FormData();
-  
+
   formData.append('title', data.title);
   formData.append('subtitle', data.subtitle);
   formData.append('is_private', data.is_private);
   formData.append('free_access', data.free_access);
-  formData.append('life_moments', data.life_moments);
-  formData.append('story_identities', data.story_identities);
-  formData.append('difficulty_level', data.difficulty_level);
-  formData.append('language', data.language);
+  appendIfNotNull(formData, 'life_moments', data.life_moments);
+  appendIfNotNull(formData, 'story_identities', data.story_identities);
+  appendIfNotNull(formData, 'difficulty_level', data.difficulty_level);
+  appendIfNotNull(formData, 'language', data.language);
   if (topicId) {
     formData.append('topic', topicId);
-  }  
+  }
   if (data.image !== null) {
     formData.append("image", data.image);
   }
-  
+
   data.cards.forEach((card, cardIndex) => {
     const cardPrefix = `cards[${cardIndex}]`;
 
@@ -68,6 +75,6 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
       }
     });
   });
-  
+
   return formData;
 }
