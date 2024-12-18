@@ -64,7 +64,7 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
       }]
     }
   });
-  
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: "cards"
@@ -112,6 +112,12 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
             setImagePreviews(prev => ({
               ...prev,
               [`cards.${cardIndex}.blocks.${blockIndex}.image`]: block.image
+            }));
+          }
+          if (block.image_2) {
+            setImagePreviews(prev => ({
+              ...prev,
+              [`cards.${cardIndex}.blocks.${blockIndex}.image_2`]: block.image_2
             }));
           }
         });
@@ -243,7 +249,7 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
       cardTitle: '',
       selectedSoftSkill: '',
       selectedMentor: '',
-      blocks: [{ content: '', blockType: '' }]
+      blocks: [{ content: '', blockType: '', quoted_by: '', block_color: '' }]
     }]);
     setImagePreviews({});
     setCurrentCardIndex(0);
@@ -653,6 +659,10 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
                     setImagePreviews={setImagePreviews}
                     setValue={setValue}
                     register={register}
+                    blockColor={useWatch({
+                      control,
+                      name: `cards.${currentCardIndex}.blocks.${currentBlockIndex}.block_color`,
+                    })}
                     errors={errors} />
                 </div>
               )}

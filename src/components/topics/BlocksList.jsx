@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 
 import { MonsterBlock } from '../blocks/MonsterBlock';
 import { MentorBlock } from '../blocks/MentorBlock';
+import { QuoteBlock } from '../blocks/QuoteBlock';
 import { StandardBlock } from '../blocks/StandardBlock';
 import { HeroBlock } from '../blocks/HeroBlock';
 import { HighlightBlock } from '../blocks/HighlightBlock';
+import { TestimonialBlock } from '../blocks/TestimonialBlock';
 import { deleteLike, getBlocksByCard, likeSomething } from '../../api/blog.api';
 
 function getBlockComponent(block, card, handleLikeClick, isAuthenticated, onRecallUpdate, ownerAvatar, ownerColor) {
@@ -18,6 +20,7 @@ function getBlockComponent(block, card, handleLikeClick, isAuthenticated, onReca
     isAuthenticated,
     onRecallUpdate
   };
+
   switch (block.block_type_name.toLowerCase()) {
     case 'monster':
       return <MonsterBlock {...commonProps}
@@ -36,12 +39,16 @@ function getBlockComponent(block, card, handleLikeClick, isAuthenticated, onReca
         mentor_job={card.mentor_job}
         mentor_profile={card.mentor_profile} />;
     case 'hero':
-      return <HeroBlock {...commonProps}
-        color={card.mentor_color}
-        ownerAvatar={ownerAvatar} />;
+      return <HeroBlock {...commonProps} color={card.mentor_color} ownerAvatar={ownerAvatar} />;
+    case 'quote':
+      return (<QuoteBlock
+        {...commonProps} color={card.soft_skill_color} authorName={block.quoted_by} authorPicture={block.image_2}
+      />)
+        ;
     case 'highlight':
-      return <HighlightBlock {...commonProps}
-        ownerColor={ownerColor} />;
+      return <HighlightBlock {...commonProps} ownerColor={ownerColor} />;
+    case 'testimonial':
+      return <TestimonialBlock {...commonProps} blockColor={block.block_color_string} />;
     default:
       return <StandardBlock {...commonProps} color={card.soft_skill_color} />;
   }

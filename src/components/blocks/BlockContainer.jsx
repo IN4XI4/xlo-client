@@ -8,9 +8,10 @@ import { ImageContainer } from "./ImageContainer";
 
 
 export const BlockContainer = ({ children, color, additionalClass, hasLiked, userHasRecalled, onLikeClick,
-  isAuthenticated, content, block_id, onRecallUpdate, image, ownerAvatar = null, ownerColor = null, CustomContent = DefaultContent,
+  isAuthenticated, content, block_id, onRecallUpdate, image, ownerAvatar = null, ownerColor = null, 
+  CustomContent = DefaultContent, authorName = null, authorPicture = null, blockColor = null,
   isPreview = false, isRecall = false }) => {
-
+    
   const [showActionIcons, setShowActionIcons] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
 
@@ -43,6 +44,9 @@ export const BlockContainer = ({ children, color, additionalClass, hasLiked, use
           image={image}
           ownerAvatar={ownerAvatar}
           ownerColor={ownerColor}
+          authorName={authorName}
+          authorPicture={authorPicture}
+          blockColor={blockColor}
         />
         <div className='flex items-center'>
           {showActionIcons ?

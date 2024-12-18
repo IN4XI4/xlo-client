@@ -63,15 +63,29 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
 
       formData.append(`${blockPrefix}.content`, block.content);
       formData.append(`${blockPrefix}.blockType`, block.blockType);
+      formData.append(`${blockPrefix}.quoted_by`, block.quoted_by);
+      formData.append(`${blockPrefix}.block_color`, block.block_color);
       if (!topicId && block.id) {
         formData.append(`${blockPrefix}.id`, block.id);
       }
 
-      if (block.image && block.image.length > 0) {
-        formData.append(`${blockPrefix}.image`, block.image[0]);
+      if (block.image) {
+        if (Array.isArray(block.image) && block.image.length > 0) {
+          formData.append(`${blockPrefix}.image`, block.image[0]);
+        } else if (block.image instanceof File) {
+          formData.append(`${blockPrefix}.image`, block.image);
+        } else {
+          console.warn(`Unexpected format for block.image:`, block.image);
+        }
       }
-      if (block.image_2 && block.image_2.length > 0) {
-        formData.append(`${blockPrefix}.image_2`, block.image[0]);
+      if (block.image_2) {
+        if (Array.isArray(block.image_2) && block.image_2.length > 0) {
+          formData.append(`${blockPrefix}.image_2`, block.image_2[0]);
+        } else if (block.image_2 instanceof File) {
+          formData.append(`${blockPrefix}.image_2`, block.image_2);
+        } else {
+          console.warn(`Unexpected format for block.image_2:`, block.image_2);
+        }
       }
     });
   });
