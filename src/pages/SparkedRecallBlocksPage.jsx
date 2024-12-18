@@ -5,7 +5,10 @@ import { HeroBlock } from '../components/blocks/HeroBlock';
 import { StandardBlock } from '../components/blocks/StandardBlock';
 import { MonsterBlock } from '../components/blocks/MonsterBlock';
 import { MentorBlock } from '../components/blocks/MentorBlock';
+import { HighlightBlock } from '../components/blocks/HighlightBlock';
 import { deleteLike, getMyRecallBlocksSparked, likeSomething } from '../api/blog.api';
+import { QuoteBlock } from '../components/blocks/QuoteBlock';
+import { TestimonialBlock } from '../components/blocks/TestimonialBlock';
 
 
 export function SparkedRecallBlocksPage() {
@@ -139,6 +142,39 @@ export function SparkedRecallBlocksPage() {
                 image={block.block.image}
                 color={block.block.mentor_color}
                 ownerAvatar={block.block.owner_picture}
+                user_has_liked={block.block.user_has_liked}
+                user_has_recalled={block.block.user_has_recalled}
+                onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
+                isRecall={true}
+              />
+            ) : block.block.block_type_name === "HIGHLIGHT" ? (
+              <HighlightBlock
+                content={block.block.content}
+                image={block.block.image}
+                color={block.block.mentor_color}
+                user_has_liked={block.block.user_has_liked}
+                user_has_recalled={block.block.user_has_recalled}
+                onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
+                isRecall={true}
+              />
+            ) : block.block.block_type_name === "QUOTE" ? (
+              <QuoteBlock
+                content={block.block.content}
+                image={block.block.image}
+                color={block.block.mentor_color}
+                authorName={block.block.quoted_by}
+                authorPicture={block.block.image_2}
+                user_has_liked={block.block.user_has_liked}
+                user_has_recalled={block.block.user_has_recalled}
+                onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
+                isRecall={true}
+              />
+            ) : block.block.block_type_name === "TESTIMONIAL" ? (
+              <TestimonialBlock
+                content={block.block.content}
+                image={block.block.image}
+                color={block.block.mentor_color}
+                blockColor={block.block.block_color_string}
                 user_has_liked={block.block.user_has_liked}
                 user_has_recalled={block.block.user_has_recalled}
                 onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}

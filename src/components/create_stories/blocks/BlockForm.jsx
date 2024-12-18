@@ -4,10 +4,12 @@ import MDEditor from '@uiw/react-md-editor';
 import { BsFileEarmarkPlusFill, BsFillFileEarmarkMinusFill } from 'react-icons/bs';
 import { FileInput } from 'flowbite-react';
 
+import { QuoteBlockForm } from './QuoteBlockForm';
+import { TestimonialBlockForm } from './TestimonialBlockForm';
 import { BLOCK_TYPES } from '../../../globals';
 
 
-export function BlockForm({ blockType, control, currentCardIndex, currentBlockIndex, imagePreviews, setImagePreviews,
+export function BlockForm({ blockType, control, currentCardIndex, currentBlockIndex, blockColor, imagePreviews, setImagePreviews,
   setValue, register, errors }) {
   const [helpText, setHelpText] = useState("")
 
@@ -16,7 +18,14 @@ export function BlockForm({ blockType, control, currentCardIndex, currentBlockIn
     MONSTER: "Used to enhance the intensity of suspenseful and confrontational scenes.",
     MENTOR: "Used to provide valuable help or advice at critical moments in the story.",
     HERO: "Used to introduce and highlight the main character of the story.",
-    HIGHLIGHT: "Used to highlight important aspects of the generated content."
+    HIGHLIGHT: "Used to highlight important aspects of the generated content.",
+    QUOTE: "Showcases a significant statement or quote to add context or depth to the story.",
+    TESTIMONIAL: "Used near the conclusion, encourages in-depth contemplation.",
+  };
+
+  const BLOCK_TYPE_COMPONENTS = {
+    QUOTE: QuoteBlockForm,
+    TESTIMONIAL: TestimonialBlockForm,
   };
 
   useEffect(() => {
@@ -33,27 +42,54 @@ export function BlockForm({ blockType, control, currentCardIndex, currentBlockIn
     setValue(`cards.${cardIndex}.blocks.${blockIndex}.image`, null, { shouldDirty: true, shouldTouch: true });
   };
 
-  const handleDeleteImage2 = (cardIndex, blockIndex) => {
-    const updatedImagePreviews = { ...imagePreviews };
-    delete updatedImagePreviews[`cards.${cardIndex}.blocks.${blockIndex}.image_2`];
-    setImagePreviews(updatedImagePreviews);
-    setValue(`cards.${cardIndex}.blocks.${blockIndex}.image_2`, null, { shouldDirty: true, shouldTouch: true });
+  const handleAddImage = (e) => {
+    const fileInput = document.querySelector(`input[name='cards.${currentCardIndex}.blocks.${currentBlockIndex}.image']`);
+    if (fileInput) {
+      fileInput.click();
+      fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          console.log("File selected:", file);
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const fileData = reader.result;
+            console.log("File data (base64):", fileData);
+            setImagePreviews(prev => ({
+              ...prev,
+              [`cards.${currentCardIndex}.blocks.${currentBlockIndex}.image`]: fileData
+            }));
+            setValue(`cards.${currentCardIndex}.blocks.${currentBlockIndex}.image`, file, {
+              shouldDirty: true,
+              shouldTouch: true
+            });
+            console.log("Image previews updated:", imagePreviews);
+          };
+          reader.readAsDataURL(file);
+        } else {
+          console.warn("No file selected.");
+        }
+      }, { once: true });
+    } else {
+      console.error("File input not found.");
+    }
   };
+
+  const BlockComponent = BLOCK_TYPE_COMPONENTS[BLOCK_TYPES[blockType]];
 
   return (
     <div>
       <div className='grid grid-cols-3 md:grid-cols-6'>
         <div className='hidden md:block'></div>
-        <div className='text-gray-500 text-sm col-span-3 md:col-span-5'>
+        <div className='text-gray-500 text-sm col-span-3 md:col-span-5 ps-1'>
           {helpText}
         </div>
       </div>
-      <div className='grid grid-cols-1 md:grid-cols-3'>
+      <div className='grid grid-cols-1 md:grid-cols-3 pb-3'>
         <div className='md:col-span-2 flex flex-col md:pe-4'>
           <div className="font-semibold md:pb-2">
             Text <span className='text-red-500'>*</span>
           </div>
-          <div className='md:col-span-5 py-3'>
+          <div className='py-3'>
             <Controller
               control={control}
               name={`cards.${currentCardIndex}.blocks.${currentBlockIndex}.content`}
@@ -96,23 +132,13 @@ export function BlockForm({ blockType, control, currentCardIndex, currentBlockIn
                 <FileInput
                   type="file"
                   accept="image/png, image/jpeg, image/gif"
-                  className='hidden'
+                  className="hidden"
                   {...register(`cards.${currentCardIndex}.blocks.${currentBlockIndex}.image`)}
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onloadend = () => {
-                        setImagePreviews(prev => ({ ...prev, [`cards.${currentCardIndex}.blocks.${currentBlockIndex}.image`]: reader.result }));
-                      };
-                      reader.readAsDataURL(file);
-                    }
-                  }}
                 />
                 <button
                   type="button"
                   className="bg-[#5B0FFE] p-2 rounded-full text-white flex items-center"
-                  onClick={() => document.querySelector(`input[name='cards.${currentCardIndex}.blocks.${currentBlockIndex}.image']`).click()}
+                  onClick={handleAddImage}
                 >
                   <BsFileEarmarkPlusFill />
                 </button>
@@ -133,76 +159,11 @@ export function BlockForm({ blockType, control, currentCardIndex, currentBlockIn
               Image Preview
             </div>
           )}
-          {/* {blockTypeString === 'HERO' && (
-          <div className="pt-4">
-            <div className='flex justify-between items-center pb-3'>
-              <div className="font-semibold pb-1">Hero Image</div>
-              <div className="flex items-center">
-                {imagePreviews[`cards.${currentCardIndex}.blocks.${currentBlockIndex}.image_2`] && (
-                  <div className='md:ps-0 pe-4'>
-                    <button
-                      type="button"
-                      className="bg-[#FD4E3F] p-2 rounded-full text-white flex items-center"
-                      onClick={() =>
-                        handleDeleteHeroImage(currentCardIndex, currentBlockIndex)
-                      }
-                    >
-                      <BsFillFileEarmarkMinusFill />
-                    </button>
-                  </div>
-                )}
-                <div className="">
-                  <FileInput
-                    type="file"
-                    accept="image/png, image/jpeg, image/gif"
-                    className='hidden'
-                    {...register(`cards.${currentCardIndex}.blocks.${currentBlockIndex}.image_2`)}
-                    onChange={(e) => {
-                      const file = e.target.files[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          setImagePreviews((prev) => ({
-                            ...prev,
-                            [`cards.${currentCardIndex}.blocks.${currentBlockIndex}.image_2`]: reader.result,
-                          }));
-                        };
-                        reader.readAsDataURL(file);
-                      }
-                    }}
-                  />
-                  <button
-                    type="button"
-                    className="bg-[#5B0FFE] p-2 rounded-full text-white flex items-center"
-                    onClick={() =>
-                      document.querySelector(
-                        `input[name='cards.${currentCardIndex}.blocks.${currentBlockIndex}.image_2']`
-                      ).click()
-                    }
-                  >
-                    <BsFileEarmarkPlusFill />
-                  </button>
-                </div>
-              </div>
-            </div>
-            {imagePreviews[`cards.${currentCardIndex}.blocks.${currentBlockIndex}.image_2`] ? (
-              <div className='col-span-2 md:col-span-4 flex items-center justify-center '>
-                <img
-                  src={imagePreviews[`cards.${currentCardIndex}.blocks.${currentBlockIndex}.image_2`]}
-                  alt="Hero Image Preview"
-                  className='max-h-[400px] rounded-lg'
-                />
-              </div>
-            ) : (
-              <div className='col-span-2 md:col-span-4 h-[150px] md:h-[200px] bg-white border rounded-md flex justify-center 
-                  items-center text-gray-500'>
-                Image Preview
-              </div>
-            )}
-          </div>
-        )} */}
         </div>
       </div>
+      {BlockComponent &&
+        <BlockComponent
+          {...{ currentCardIndex, currentBlockIndex, blockColor, register, setImagePreviews, setValue, imagePreviews, errors }} />}
     </div>
 
   )

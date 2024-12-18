@@ -19,7 +19,7 @@ const MarkdownRenderer = ({ content, additionalClass }) => (
   <MDEditor.Markdown
     source={content}
     style={{ whiteSpace: 'pre-wrap' }}
-    className={`bg-transparent ${additionalClass || ''}`}
+    className={`text-black bg-transparent ${additionalClass || ''}`}
     remarkPlugins={[remarkGfm]}
     rehypePlugins={[
       rehypeRaw,

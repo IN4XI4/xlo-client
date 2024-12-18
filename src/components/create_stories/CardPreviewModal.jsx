@@ -8,6 +8,8 @@ import { MentorBlock } from '../blocks/MentorBlock';
 import { MonsterBlock } from '../blocks/MonsterBlock';
 import { StandardBlock } from '../blocks/StandardBlock';
 import { HighlightBlock } from '../blocks/HighlightBlock';
+import { QuoteBlock } from '../blocks/QuoteBlock';
+import { TestimonialBlock } from '../blocks/TestimonialBlock';
 
 
 export function CardPreviewModal({ onClose, card, userPicture, userColor }) {
@@ -98,12 +100,30 @@ export function CardPreviewModal({ onClose, card, userPicture, userColor }) {
                     ownerAvatar={userPicture}
                     isPreview={true}
                   />
+                ) : getBlockTypeName(block.blockType) === "QUOTE" ? (
+                  <QuoteBlock
+                    content={block.content}
+                    image={block.image}
+                    authorName={block.quoted_by}
+                    authorPicture={block.image_2}
+                    color={mentor.color}
+                    ownerAvatar={userPicture}
+                    isPreview={true}
+                  />
                 ) : getBlockTypeName(block.blockType) === "HIGHLIGHT" ? (
                   <HighlightBlock
                     content={block.content}
                     image={block.image}
                     color={mentor.color}
                     ownerColor={userColor}
+                    isPreview={true}
+                  />
+                ) : getBlockTypeName(block.blockType) === "TESTIMONIAL" ? (
+                  <TestimonialBlock
+                    content={block.content}
+                    image={block.image}
+                    color={mentor.color}
+                    blockColor={block.block_color_string}
                     isPreview={true}
                   />
                 ) : (<StandardBlock
