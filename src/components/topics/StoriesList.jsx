@@ -149,17 +149,19 @@ export function StoriesList({ topicId, categoryId, searchText }) {
                   <div className='font-bold text-black truncate'>{story.title}</div>
                   <div className='text-sm truncate'>{story.subtitle}</div>
                   <div className="flex items-center pt-2">
-                    <div className='me-4 flex-none'>
-                      <Tooltip content="Difficulty level">
-                        <div
-                          className="flex w-auto items-center px-3 rounded-lg text-white text-sm"
-                          style={{ backgroundColor: story.difficulty_color }}
-                        >
-                          <IoIosSpeedometer className="me-1" />
-                          {story.difficulty_name}
-                        </div>
-                      </Tooltip>
-                    </div>
+                    {story.difficulty_color && story.difficulty_name &&
+                      <div className='me-4 flex-none'>
+                        <Tooltip content="Difficulty level">
+                          <div
+                            className="flex w-auto items-center px-3 rounded-lg text-white text-sm"
+                            style={{ backgroundColor: story.difficulty_color }}
+                          >
+                            <IoIosSpeedometer className="me-1" />
+                            {story.difficulty_name}
+                          </div>
+                        </Tooltip>
+                      </div>}
+
                     <div className='me-4 flex-grow md:flex-none overflow-hidden'>
                       <div className="flex items-center">
                         <Tooltip content="Created by">
