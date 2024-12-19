@@ -2,7 +2,7 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
 
 
   function appendIfNotNull(formData, key, value) {
-    if (value !== null && value !== undefined && value !== "undefined") {
+    if (value !== null && value !== undefined && value !== "undefined" && value !== "null") {
       formData.append(key, value);
     }
   }
