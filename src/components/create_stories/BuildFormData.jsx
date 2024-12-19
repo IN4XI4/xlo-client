@@ -2,7 +2,7 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
 
 
   function appendIfNotNull(formData, key, value) {
-    if (value !== null && value !== undefined && value !== "undefined") {
+    if (value !== null && value !== undefined && value !== "undefined" && value !== "null") {
       formData.append(key, value);
     }
   }
@@ -34,7 +34,7 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
   const formData = new FormData();
 
   formData.append('title', data.title);
-  formData.append('subtitle', data.subtitle);
+  appendIfNotNull(formData, 'subtitle', data.subtitle);
   formData.append('is_private', data.is_private);
   formData.append('free_access', data.free_access);
   appendIfNotNull(formData, 'life_moments', data.life_moments);
