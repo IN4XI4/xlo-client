@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Controller } from 'react-hook-form';
+import { Controller, useWatch } from 'react-hook-form';
 import MDEditor from '@uiw/react-md-editor';
 import { BsFileEarmarkPlusFill, BsFillFileEarmarkMinusFill } from 'react-icons/bs';
 import { FileInput } from 'flowbite-react';
@@ -9,9 +9,19 @@ import { TestimonialBlockForm } from './TestimonialBlockForm';
 import { BLOCK_TYPES } from '../../../globals';
 
 
-export function BlockForm({ blockType, control, currentCardIndex, currentBlockIndex, blockColor, imagePreviews, setImagePreviews,
+export function BlockForm({ control, currentCardIndex, currentBlockIndex, imagePreviews, setImagePreviews,
   setValue, register, errors }) {
   const [helpText, setHelpText] = useState("")
+  const [currentBlockType, setCurrentBlockType] = useState('');
+
+  const observedBlockType = useWatch({
+    control,
+    name: `cards.${currentCardIndex}.blocks.${currentBlockIndex}.blockType`,
+  });
+
+  useEffect(() => {
+    setCurrentBlockType(observedBlockType || '');
+  }, [observedBlockType])
 
   const HELP_TEXTS = {
     STANDARD: "Used for general storytelling and contains no special features.",
@@ -29,11 +39,12 @@ export function BlockForm({ blockType, control, currentCardIndex, currentBlockIn
   };
 
   useEffect(() => {
-    const blockTypeString = BLOCK_TYPES[blockType];
+    const blockTypeString = BLOCK_TYPES[currentBlockType];
+
     if (blockTypeString) {
       setHelpText(HELP_TEXTS[blockTypeString] || "");
     }
-  }, [blockType]);
+  }, [currentBlockType]);
 
   const handleDeleteImage = (cardIndex, blockIndex) => {
     const updatedImagePreviews = { ...imagePreviews };
@@ -49,11 +60,9 @@ export function BlockForm({ blockType, control, currentCardIndex, currentBlockIn
       fileInput.addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (file) {
-          console.log("File selected:", file);
           const reader = new FileReader();
           reader.onloadend = () => {
             const fileData = reader.result;
-            console.log("File data (base64):", fileData);
             setImagePreviews(prev => ({
               ...prev,
               [`cards.${currentCardIndex}.blocks.${currentBlockIndex}.image`]: fileData
@@ -62,7 +71,6 @@ export function BlockForm({ blockType, control, currentCardIndex, currentBlockIn
               shouldDirty: true,
               shouldTouch: true
             });
-            console.log("Image previews updated:", imagePreviews);
           };
           reader.readAsDataURL(file);
         } else {
@@ -74,7 +82,7 @@ export function BlockForm({ blockType, control, currentCardIndex, currentBlockIn
     }
   };
 
-  const BlockComponent = BLOCK_TYPE_COMPONENTS[BLOCK_TYPES[blockType]];
+  const BlockComponent = BLOCK_TYPE_COMPONENTS[BLOCK_TYPES[currentBlockType]];
 
   return (
     <div>
@@ -163,7 +171,7 @@ export function BlockForm({ blockType, control, currentCardIndex, currentBlockIn
       </div>
       {BlockComponent &&
         <BlockComponent
-          {...{ currentCardIndex, currentBlockIndex, blockColor, register, setImagePreviews, setValue, imagePreviews, errors }} />}
+          {...{ control, currentCardIndex, currentBlockIndex, register, setImagePreviews, setValue, imagePreviews, errors }} />}
     </div>
 
   )
