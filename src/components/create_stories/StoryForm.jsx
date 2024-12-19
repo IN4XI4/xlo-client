@@ -647,22 +647,12 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
                   </div>
                   <BlockForm
                     control={control}
-                    blockType={
-                      useWatch({
-                        control,
-                        name: `cards.${currentCardIndex}.blocks.${currentBlockIndex}.blockType`,
-                      })
-                    }
                     currentCardIndex={currentCardIndex}
                     currentBlockIndex={currentBlockIndex}
                     imagePreviews={imagePreviews}
                     setImagePreviews={setImagePreviews}
                     setValue={setValue}
                     register={register}
-                    blockColor={useWatch({
-                      control,
-                      name: `cards.${currentCardIndex}.blocks.${currentBlockIndex}.block_color`,
-                    })}
                     errors={errors} />
                 </div>
               )}

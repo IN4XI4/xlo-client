@@ -1,36 +1,44 @@
 import React, { useEffect, useState } from 'react'
-import { getUserProfileColors } from '../../../api/users.api';
+import { useWatch } from 'react-hook-form';
 import { FaRegCircle } from 'react-icons/fa6';
 import { FaDotCircle } from 'react-icons/fa';
 
+import { getUserProfileColors } from '../../../api/users.api';
+
 
 export function TestimonialBlockForm({
-  blockColor,
+  control,
   register,
   currentCardIndex,
   currentBlockIndex,
   setValue,
   errors, }) {
   const [profileColors, setProfileColors] = useState([]);
-  const [selectedProfileColor, setSelectedProfileColor] = useState(blockColor);
-  console.log("color", blockColor);
+  const [selectedProfileColor, setSelectedProfileColor] = useState("");
 
-  async function loadProfileColors() {
-    try {
-      const res = await getUserProfileColors();
-      setProfileColors(res.data);
-    } catch (error) {
-      setError(error);
-    }
-  }
+  const observedBlockColor = useWatch({
+    control,
+    name: `cards.${currentCardIndex}.blocks.${currentBlockIndex}.block_color`,
+  });
 
   useEffect(() => {
+    async function loadProfileColors() {
+      try {
+        const res = await getUserProfileColors();
+        setProfileColors(res.data);
+      } catch (error) {
+        console.error("Error loading profile colors:", error);
+      }
+    }
     loadProfileColors();
-    setSelectedProfileColor(blockColor);
-  }, [blockColor]);
+  }, []);
+
+  useEffect(() => {
+    setSelectedProfileColor(observedBlockColor);
+  }, [observedBlockColor]);
 
   const handleProfileColorChange = (colorId) => {
-    if (colorId === blockColor) return;
+    if (colorId === observedBlockColor) return;
     setValue(`cards.${currentCardIndex}.blocks.${currentBlockIndex}.block_color`, colorId, {
       shouldDirty: true,
       shouldTouch: true,
