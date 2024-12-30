@@ -249,7 +249,7 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
       cardTitle: '',
       selectedSoftSkill: '',
       selectedMentor: '',
-      blocks: [{ content: '', blockType: '', quoted_by: '', block_color: '' }]
+      blocks: [{ content: '', blockType: '', quoted_by: '', block_color: '', content_class: '' }]
     }]);
     setImagePreviews({});
     setCurrentCardIndex(0);

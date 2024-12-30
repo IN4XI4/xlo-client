@@ -11,6 +11,8 @@ import { TestimonialBlock } from '../components/blocks/TestimonialBlock';
 import { HeroBlock } from '../components/blocks/HeroBlock';
 import { QuoteBlock } from '../components/blocks/QuoteBlock';
 import { deleteLike, deleteRecallBlock, getBlock, getMyRecallBlocksFocused, likeSomething } from '../api/blog.api';
+import { WonderBlock } from '../components/blocks/WonderBlock';
+import { FactBlock } from '../components/blocks/FactBlock';
 
 
 export function FocusedRecallBlocksPage() {
@@ -212,6 +214,28 @@ export function FocusedRecallBlocksPage() {
                 image={currentBlock.image}
                 color={currentBlock.mentor_color}
                 blockColor={currentBlock.block_color_string}
+                user_has_liked={currentBlock.user_has_liked}
+                user_has_recalled={currentBlock.user_has_recalled}
+                onLikeClick={() => handleLikeClick(currentBlock.id, currentBlock.user_has_liked)}
+                isRecall={true}
+              />
+            ) : currentBlock.block_type_name === "WONDER" ? (
+              <WonderBlock
+                content={currentBlock.content}
+                image={currentBlock.image}
+                color={currentBlock.mentor_color}
+                title={currentBlock.title}
+                user_has_liked={currentBlock.user_has_liked}
+                user_has_recalled={currentBlock.user_has_recalled}
+                onLikeClick={() => handleLikeClick(currentBlock.id, currentBlock.user_has_liked)}
+                isRecall={true}
+              />
+            ) : currentBlock.block_type_name === "FACT" ? (
+              <FactBlock
+                content={currentBlock.content}
+                image={currentBlock.image}
+                color={currentBlock.mentor_color}
+                contentClass={currentBlock.content_class}
                 user_has_liked={currentBlock.user_has_liked}
                 user_has_recalled={currentBlock.user_has_recalled}
                 onLikeClick={() => handleLikeClick(currentBlock.id, currentBlock.user_has_liked)}

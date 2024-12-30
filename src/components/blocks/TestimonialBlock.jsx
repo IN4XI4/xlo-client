@@ -4,10 +4,10 @@ import MarkdownRenderer from "../MardownRenderer";
 import { ImageContainer } from "./ImageContainer";
 import TestimonialIcon from "../../assets/TestimonialIcon.svg"
 
-const TestimonialContent = ({ children, color, additionalClass, image, blockColor }) => (
+const TestimonialContent = ({ children, additionalClass, image, blockColor }) => (
   <div
-    className={`flex-grow p-4 bg-gray-50 shadow rounded-2xl border-[4px] ${additionalClass}`}
-    style={{ borderColor: color || "#3DB1FF", backgroundColor: blockColor }}
+    className={`flex-grow p-4 bg-gray-50 shadow rounded-2xl ${additionalClass}`}
+    style={{ backgroundColor: blockColor, boxShadow: `0 0 0 4px ${blockColor}66` }}
   >
     <div className='flex items-center'>
       <img src={TestimonialIcon} alt="" className='h-14 w-14 md:h-20 md:w-20 pe-2 md:pe-4' />

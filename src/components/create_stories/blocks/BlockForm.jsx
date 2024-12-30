@@ -6,6 +6,8 @@ import { FileInput } from 'flowbite-react';
 
 import { QuoteBlockForm } from './QuoteBlockForm';
 import { TestimonialBlockForm } from './TestimonialBlockForm';
+import { WonderBlockForm } from './WonderBlockForm';
+import { FactBlockForm } from './FactBlockForm';
 import { BLOCK_TYPES } from '../../../globals';
 
 
@@ -13,6 +15,7 @@ export function BlockForm({ control, currentCardIndex, currentBlockIndex, imageP
   setValue, register, errors }) {
   const [helpText, setHelpText] = useState("")
   const [currentBlockType, setCurrentBlockType] = useState('');
+  const [blockTypeName, setBlockTypeName] = useState('');
 
   const observedBlockType = useWatch({
     control,
@@ -31,11 +34,15 @@ export function BlockForm({ control, currentCardIndex, currentBlockIndex, imageP
     HIGHLIGHT: "Used to highlight important aspects of the generated content.",
     QUOTE: "Showcases a significant statement or quote to add context or depth to the story.",
     TESTIMONIAL: "Used near the conclusion, encourages in-depth contemplation.",
+    FACT: "Used to support the story providing informations like fact, myth or opinion?",
+    WONDER: " Used in pivotal situations that call for profound contemplation.",
   };
 
   const BLOCK_TYPE_COMPONENTS = {
     QUOTE: QuoteBlockForm,
     TESTIMONIAL: TestimonialBlockForm,
+    FACT: FactBlockForm,
+    WONDER: WonderBlockForm,
   };
 
   useEffect(() => {
@@ -43,6 +50,7 @@ export function BlockForm({ control, currentCardIndex, currentBlockIndex, imageP
 
     if (blockTypeString) {
       setHelpText(HELP_TEXTS[blockTypeString] || "");
+      setBlockTypeName(blockTypeString);
     }
   }, [currentBlockType]);
 
@@ -94,6 +102,11 @@ export function BlockForm({ control, currentCardIndex, currentBlockIndex, imageP
       </div>
       <div className='grid grid-cols-1 md:grid-cols-3 pb-3'>
         <div className='md:col-span-2 flex flex-col md:pe-4'>
+          {blockTypeName === "WONDER" && BlockComponent && (
+            <BlockComponent
+              {...{ control, currentCardIndex, currentBlockIndex, register, setImagePreviews, setValue, imagePreviews, errors }}
+            />
+          )}
           <div className="font-semibold md:pb-2">
             Text <span className='text-red-500'>*</span>
           </div>
@@ -169,7 +182,7 @@ export function BlockForm({ control, currentCardIndex, currentBlockIndex, imageP
           )}
         </div>
       </div>
-      {BlockComponent &&
+      {blockTypeName !== "WONDER" && BlockComponent &&
         <BlockComponent
           {...{ control, currentCardIndex, currentBlockIndex, register, setImagePreviews, setValue, imagePreviews, errors }} />}
     </div>
