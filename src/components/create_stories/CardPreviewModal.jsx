@@ -10,6 +10,8 @@ import { StandardBlock } from '../blocks/StandardBlock';
 import { HighlightBlock } from '../blocks/HighlightBlock';
 import { QuoteBlock } from '../blocks/QuoteBlock';
 import { TestimonialBlock } from '../blocks/TestimonialBlock';
+import { WonderBlock } from '../blocks/WonderBlock';
+import { FactBlock } from '../blocks/FactBlock';
 
 
 export function CardPreviewModal({ onClose, card, userPicture, userColor }) {
@@ -17,7 +19,8 @@ export function CardPreviewModal({ onClose, card, userPicture, userColor }) {
   const [blocks, setBlocks] = useState(null);
   const [softSkill, setSoftSkill] = useState(null);
   const [mentor, setMentor] = useState(null);
-
+  console.log(card.blocks);
+  
   useEffect(() => {
     if (card.blocks && card.blocks.length > 0) {
       setBlocks(card.blocks);
@@ -124,6 +127,21 @@ export function CardPreviewModal({ onClose, card, userPicture, userColor }) {
                     image={block.image}
                     color={mentor.color}
                     blockColor={block.block_color_string}
+                    isPreview={true}
+                  />
+                ) : getBlockTypeName(block.blockType) === "WONDER" ? (
+                  <WonderBlock
+                    content={block.content}
+                    image={block.image}
+                    blockTitle={block.title}
+                    isPreview={true}
+                  />
+                ) : getBlockTypeName(block.blockType) === "FACT" ? (
+                  <FactBlock
+                    content={block.content}
+                    image={block.image}
+                    color={mentor.color}
+                    contentClass={block.content_class || "FACT"}
                     isPreview={true}
                   />
                 ) : (<StandardBlock

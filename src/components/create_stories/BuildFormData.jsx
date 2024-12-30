@@ -1,12 +1,11 @@
 export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoading, topicId = null) {
 
-
   function appendIfNotNull(formData, key, value) {
     if (value !== null && value !== undefined && value !== "undefined" && value !== "null") {
       formData.append(key, value);
     }
   }
-
+  
   if (!data || !data.cards) {
     console.error("Data or data.cards is undefined or null.");
     return;
@@ -60,11 +59,13 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
 
     card.blocks.forEach((block, blockIndex) => {
       const blockPrefix = `${cardPrefix}.blocks[${blockIndex}]`;
-
+      
       formData.append(`${blockPrefix}.content`, block.content);
       formData.append(`${blockPrefix}.blockType`, block.blockType);
       appendIfNotNull(formData, `${blockPrefix}.quoted_by`, block.quoted_by);
       appendIfNotNull(formData, `${blockPrefix}.block_color`, block.block_color);
+      appendIfNotNull(formData, `${blockPrefix}.title`, block.title);
+      appendIfNotNull(formData, `${blockPrefix}.content_class`, block.content_class);
       if (!topicId && block.id) {
         formData.append(`${blockPrefix}.id`, block.id);
       }

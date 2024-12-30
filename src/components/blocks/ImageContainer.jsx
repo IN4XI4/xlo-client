@@ -1,15 +1,23 @@
-const getImageUrl = (imageFileList) => {
-  if (imageFileList && imageFileList.length > 0) {
-    return URL.createObjectURL(imageFileList[0]);
+const getImageUrl = (image) => {
+  if (image instanceof File) {
+    return URL.createObjectURL(image);
   }
-  return null;
+  if (Array.isArray(image) && image.length > 0) {
+    return URL.createObjectURL(image[0]);
+  }
+  return typeof image === "string" ? image : null;
 };
 
-export const ImageContainer = ({ image }) => (
-  image && (typeof image === 'string' || image.length > 0) ? (
-    <div className='py-4 border-t-2 mt-4'>
-      <img src={typeof image === 'string' ? image : getImageUrl(image)} alt="Block"
-        className=" max-w-full rounded-xl" />
+export const ImageContainer = ({ image, additionalClass, additionalClassImg }) => {
+  const imageUrl = getImageUrl(image);
+
+  return imageUrl ? (
+    <div className={`py-3 border-t-2 ${additionalClass || ''}`}>
+      <img
+        src={imageUrl}
+        alt="Block"
+        className={`max-w-full ${additionalClassImg || 'rounded-b-xl'}`}
+      />
     </div>
-  ) : null
-);
+  ) : null;
+};

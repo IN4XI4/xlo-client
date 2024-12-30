@@ -9,6 +9,8 @@ import { HighlightBlock } from '../components/blocks/HighlightBlock';
 import { deleteLike, getMyRecallBlocksSparked, likeSomething } from '../api/blog.api';
 import { QuoteBlock } from '../components/blocks/QuoteBlock';
 import { TestimonialBlock } from '../components/blocks/TestimonialBlock';
+import { WonderBlock } from '../components/blocks/WonderBlock';
+import { FactBlock } from '../components/blocks/FactBlock';
 
 
 export function SparkedRecallBlocksPage() {
@@ -175,6 +177,27 @@ export function SparkedRecallBlocksPage() {
                 image={block.block.image}
                 color={block.block.mentor_color}
                 blockColor={block.block.block_color_string}
+                user_has_liked={block.block.user_has_liked}
+                user_has_recalled={block.block.user_has_recalled}
+                onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
+                isRecall={true}
+              />
+            ) : block.block.block_type_name === "WONDER" ? (
+              <WonderBlock
+                content={block.block.content}
+                image={block.block.image}
+                title={block.block.title}
+                user_has_liked={block.block.user_has_liked}
+                user_has_recalled={block.block.user_has_recalled}
+                onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
+                isRecall={true}
+              />
+            ) : block.block.block_type_name === "FACT" ? (
+              <FactBlock
+                content={block.block.content}
+                image={block.block.image}
+                color={block.block.mentor_color}
+                contentClass={block.block.content_class}
                 user_has_liked={block.block.user_has_liked}
                 user_has_recalled={block.block.user_has_recalled}
                 onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
