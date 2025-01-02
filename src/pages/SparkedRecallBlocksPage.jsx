@@ -11,6 +11,8 @@ import { QuoteBlock } from '../components/blocks/QuoteBlock';
 import { TestimonialBlock } from '../components/blocks/TestimonialBlock';
 import { WonderBlock } from '../components/blocks/WonderBlock';
 import { FactBlock } from '../components/blocks/FactBlock';
+import { FlashcardBlock } from '../components/blocks/FlashcardBlock';
+import { ReflectionBlock } from '../components/blocks/ReflectionBlock';
 
 
 export function SparkedRecallBlocksPage() {
@@ -198,6 +200,30 @@ export function SparkedRecallBlocksPage() {
                 image={block.block.image}
                 color={block.block.mentor_color}
                 contentClass={block.block.content_class}
+                user_has_liked={block.block.user_has_liked}
+                user_has_recalled={block.block.user_has_recalled}
+                onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
+                isRecall={true}
+              />
+            ) : block.block.block_type_name === "FLASHCARD" ? (
+              <FlashcardBlock
+                content={block.block.content}
+                image={block.block.image}
+                color={block.block.soft_skill_color}
+                content2={block.block.content2}
+                image2={block.block.image2}
+                user_has_liked={block.block.user_has_liked}
+                user_has_recalled={block.block.user_has_recalled}
+                onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
+                isRecall={true}
+              />
+            ) : block.block.block_type_name === "REFLECTION" ? (
+              <ReflectionBlock
+                content={block.block.content}
+                image={block.block.image}
+                color={block.block.soft_skill_color}
+                content2={block.block.content_2}
+                image2={block.block.image2}
                 user_has_liked={block.block.user_has_liked}
                 user_has_recalled={block.block.user_has_recalled}
                 onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}

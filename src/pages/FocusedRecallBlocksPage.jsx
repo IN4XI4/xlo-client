@@ -13,6 +13,8 @@ import { QuoteBlock } from '../components/blocks/QuoteBlock';
 import { deleteLike, deleteRecallBlock, getBlock, getMyRecallBlocksFocused, likeSomething } from '../api/blog.api';
 import { WonderBlock } from '../components/blocks/WonderBlock';
 import { FactBlock } from '../components/blocks/FactBlock';
+import { FlashcardBlock } from '../components/blocks/FlashcardBlock';
+import { ReflectionBlock } from '../components/blocks/ReflectionBlock';
 
 
 export function FocusedRecallBlocksPage() {
@@ -236,6 +238,30 @@ export function FocusedRecallBlocksPage() {
                 image={currentBlock.image}
                 color={currentBlock.mentor_color}
                 contentClass={currentBlock.content_class}
+                user_has_liked={currentBlock.user_has_liked}
+                user_has_recalled={currentBlock.user_has_recalled}
+                onLikeClick={() => handleLikeClick(currentBlock.id, currentBlock.user_has_liked)}
+                isRecall={true}
+              />
+            ) : currentBlock.block_type_name === "FLASHCARD" ? (
+              <FlashcardBlock
+                content={currentBlock.content}
+                image={currentBlock.image}
+                color={currentBlock.soft_skill_color}
+                content2={currentBlock.content_2}
+                image2={currentBlock.image_2}
+                user_has_liked={currentBlock.user_has_liked}
+                user_has_recalled={currentBlock.user_has_recalled}
+                onLikeClick={() => handleLikeClick(currentBlock.id, currentBlock.user_has_liked)}
+                isRecall={true}
+              />
+            ) : currentBlock.block_type_name === "REFLECTION" ? (
+              <ReflectionBlock
+                content={currentBlock.content}
+                image={currentBlock.image}
+                color={currentBlock.soft_skill_color}
+                content2={currentBlock.content_2}
+                image2={currentBlock.image_2}
                 user_has_liked={currentBlock.user_has_liked}
                 user_has_recalled={currentBlock.user_has_recalled}
                 onLikeClick={() => handleLikeClick(currentBlock.id, currentBlock.user_has_liked)}

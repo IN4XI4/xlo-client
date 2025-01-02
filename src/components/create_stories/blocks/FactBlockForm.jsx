@@ -6,7 +6,6 @@ import { Select } from 'flowbite-react'
 export function FactBlockForm({ control, currentCardIndex, currentBlockIndex, register, setImagePreviews, setValue,
   imagePreviews, errors }) {
 
-  console.log("Initial Errors:", errors);
   return (
     <div>
       <div className='font-semibold pb-1'>This is a: <span className='text-red-500'>*</span></div>

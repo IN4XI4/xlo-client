@@ -11,10 +11,10 @@ export const BLOCK_TYPES = {
     4: "HERO",
     5: "HIGHLIGHT",
     6: "QUOTE",
-    // 7: "FLASHCARD",
+    7: "FLASHCARD",
     8: "FACT",
     9: "WONDER",
     // 10: "QUESTION",
     11: "TESTIMONIAL",
-    // 12: "REFLECTION",
+    12: "REFLECTION",
 };
