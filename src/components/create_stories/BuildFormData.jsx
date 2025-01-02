@@ -1,5 +1,5 @@
 export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoading, topicId = null) {
-
+  
   function appendIfNotNull(formData, key, value) {
     if (value !== null && value !== undefined && value !== "undefined" && value !== "null") {
       formData.append(key, value);
@@ -66,6 +66,7 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
       appendIfNotNull(formData, `${blockPrefix}.block_color`, block.block_color);
       appendIfNotNull(formData, `${blockPrefix}.title`, block.title);
       appendIfNotNull(formData, `${blockPrefix}.content_class`, block.content_class);
+      appendIfNotNull(formData, `${blockPrefix}.content_2`, block.content_2);
       if (!topicId && block.id) {
         formData.append(`${blockPrefix}.id`, block.id);
       }

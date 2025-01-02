@@ -8,6 +8,8 @@ import { QuoteBlockForm } from './QuoteBlockForm';
 import { TestimonialBlockForm } from './TestimonialBlockForm';
 import { WonderBlockForm } from './WonderBlockForm';
 import { FactBlockForm } from './FactBlockForm';
+import { FlashcardBlockForm } from './FlashcardBlockForm';
+import { ReflectionBlockForm } from './ReflectionBlockForm';
 import { BLOCK_TYPES } from '../../../globals';
 
 
@@ -35,7 +37,9 @@ export function BlockForm({ control, currentCardIndex, currentBlockIndex, imageP
     QUOTE: "Showcases a significant statement or quote to add context or depth to the story.",
     TESTIMONIAL: "Used near the conclusion, encourages in-depth contemplation.",
     FACT: "Used to support the story providing informations like fact, myth or opinion?",
-    WONDER: " Used in pivotal situations that call for profound contemplation.",
+    WONDER: "Used in pivotal situations that call for profound contemplation.",
+    FLASHCARD: "Used as a helpful study resource, providing a fresh perspective on knowledge.",
+    REFLECTION: "Used at the end of a chapter or at key moments to encourage personal reflection.",
   };
 
   const BLOCK_TYPE_COMPONENTS = {
@@ -43,6 +47,8 @@ export function BlockForm({ control, currentCardIndex, currentBlockIndex, imageP
     TESTIMONIAL: TestimonialBlockForm,
     FACT: FactBlockForm,
     WONDER: WonderBlockForm,
+    FLASHCARD: FlashcardBlockForm,
+    REFLECTION: ReflectionBlockForm,
   };
 
   useEffect(() => {

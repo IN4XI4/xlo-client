@@ -10,6 +10,8 @@ import { TestimonialBlock } from '../blocks/TestimonialBlock';
 import { WonderBlock } from '../blocks/WonderBlock';
 import { FactBlock } from '../blocks/FactBlock';
 import { deleteLike, getBlocksByCard, likeSomething } from '../../api/blog.api';
+import { FlashcardBlock } from '../blocks/FlashcardBlock';
+import { ReflectionBlock } from '../blocks/ReflectionBlock';
 
 function getBlockComponent(block, card, handleLikeClick, isAuthenticated, onRecallUpdate, ownerAvatar, ownerColor) {
   const commonProps = {
@@ -55,6 +57,10 @@ function getBlockComponent(block, card, handleLikeClick, isAuthenticated, onReca
       return <WonderBlock {...commonProps} blockTitle={block.title}/>;
     case 'fact':
       return <FactBlock {...commonProps} contentClass={block.content_class} color={card.soft_skill_color}/>;
+    case 'flashcard':
+      return <FlashcardBlock {...commonProps} color={card.soft_skill_color} content2={block.content_2} image2={block.image_2}/>;
+    case 'reflection':
+      return <ReflectionBlock {...commonProps} color={card.soft_skill_color} content2={block.content_2} image2={block.image_2}/>;
     default:
       return <StandardBlock {...commonProps} color={card.soft_skill_color} />;
   }

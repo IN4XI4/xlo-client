@@ -12,6 +12,8 @@ import { QuoteBlock } from '../blocks/QuoteBlock';
 import { TestimonialBlock } from '../blocks/TestimonialBlock';
 import { WonderBlock } from '../blocks/WonderBlock';
 import { FactBlock } from '../blocks/FactBlock';
+import { FlashcardBlock } from '../blocks/FlashcardBlock';
+import { ReflectionBlock } from '../blocks/ReflectionBlock';
 
 
 export function CardPreviewModal({ onClose, card, userPicture, userColor }) {
@@ -62,7 +64,7 @@ export function CardPreviewModal({ onClose, card, userPicture, userColor }) {
   };
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onClick={handleBackdropClick}>
-      <div className="mt-24 mx-auto border w-11/12 md:w-5/6 shadow-lg rounded-md bg-white p-3" onClick={handleModalClick}>
+      <div className="mt-24 mx-auto border w-11/12 md:w-3/4 shadow-lg rounded-md bg-white p-3" onClick={handleModalClick}>
         <div>
           <div className='text-gray-500 flex justify-end cursor-pointer hover:text-gray-600' onClick={onClose}>
             <FaXmark className='text-2xl' />
@@ -142,6 +144,24 @@ export function CardPreviewModal({ onClose, card, userPicture, userColor }) {
                     image={block.image}
                     color={mentor.color}
                     contentClass={block.content_class || "FACT"}
+                    isPreview={true}
+                  />
+                ) : getBlockTypeName(block.blockType) === "FLASHCARD" ? (
+                  <FlashcardBlock
+                    content={block.content}
+                    image={block.image}
+                    color={softSkill.color}
+                    content2={block.content_2}
+                    image2={block.image_2}
+                    isPreview={true}
+                  />
+                ) : getBlockTypeName(block.blockType) === "REFLECTION" ? (
+                  <ReflectionBlock
+                    content={block.content}
+                    image={block.image}
+                    color={softSkill.color}
+                    content2={block.content_2}
+                    image2={block.image_2}
                     isPreview={true}
                   />
                 ) : (<StandardBlock
