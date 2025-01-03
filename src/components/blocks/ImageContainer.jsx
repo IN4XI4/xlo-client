@@ -12,7 +12,7 @@ export const ImageContainer = ({ image, additionalClass, additionalClassImg }) =
   const imageUrl = getImageUrl(image);
 
   return imageUrl ? (
-    <div className={`py-3 border-t-2 ${additionalClass || ''}`}>
+    <div className={`py-3 border-t-2 ${additionalClass || ''} flex justify-center`}>
       <img
         src={imageUrl}
         alt="Block"
