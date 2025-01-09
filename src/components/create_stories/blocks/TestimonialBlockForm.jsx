@@ -37,9 +37,13 @@ export function TestimonialBlockForm({
     setSelectedProfileColor(observedBlockColor);
   }, [observedBlockColor]);
 
-  const handleProfileColorChange = (colorId) => {
+  const handleProfileColorChange = (colorId, colorCode) => {
     if (colorId === observedBlockColor) return;
     setValue(`cards.${currentCardIndex}.blocks.${currentBlockIndex}.block_color`, colorId, {
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+    setValue(`cards.${currentCardIndex}.blocks.${currentBlockIndex}.block_color_string`, colorCode, {
       shouldDirty: true,
       shouldTouch: true,
     });
@@ -61,7 +65,7 @@ export function TestimonialBlockForm({
                 key={index}
                 className='cursor-pointer'
                 style={{ color: color.color }}
-                onClick={() => handleProfileColorChange(color.id)} />
+                onClick={() => handleProfileColorChange(color.id, color.color)} />
             );
           })}
         </div>

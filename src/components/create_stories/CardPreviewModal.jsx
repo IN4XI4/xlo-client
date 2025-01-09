@@ -21,7 +21,6 @@ export function CardPreviewModal({ onClose, card, userPicture, userColor }) {
   const [blocks, setBlocks] = useState(null);
   const [softSkill, setSoftSkill] = useState(null);
   const [mentor, setMentor] = useState(null);
-  console.log(card.blocks);
   
   useEffect(() => {
     if (card.blocks && card.blocks.length > 0) {
