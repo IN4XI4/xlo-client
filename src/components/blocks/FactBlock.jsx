@@ -8,7 +8,6 @@ import { RiQuestionnaireFill } from "react-icons/ri";
 const FactContent = ({ color, children, additionalClass, image, contentClass }) => {
   const [response, setResponse] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
-  console.log("image", image);
   
   const handleButtonClick = (selectedClass) => {
     if (isAnswered) return;
@@ -49,7 +48,6 @@ const FactContent = ({ color, children, additionalClass, image, contentClass }) 
 export function FactBlock({ content, image, color, user_has_liked, user_has_recalled, onLikeClick, isAuthenticated, block_id,
   onRecallUpdate, contentClass, isPreview = false, isRecall = false }) {
   const hasLiked = user_has_liked !== false;
-  console.log("co", contentClass);
   
   return (
     <div>
