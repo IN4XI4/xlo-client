@@ -14,7 +14,7 @@ export const BLOCK_TYPES = {
     7: "FLASHCARD",
     8: "FACT",
     9: "WONDER",
-    // 10: "QUESTION",
+    10: "QUESTION",
     11: "TESTIMONIAL",
     12: "REFLECTION",
 };

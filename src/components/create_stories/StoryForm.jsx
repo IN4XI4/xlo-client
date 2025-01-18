@@ -59,7 +59,8 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
           image: null,
           image_2: null,
           quoted_by: '',
-          block_color: ''
+          block_color: '',
+          options: null,
         }]
       }]
     }
@@ -249,7 +250,7 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
       cardTitle: '',
       selectedSoftSkill: '',
       selectedMentor: '',
-      blocks: [{ content: '', blockType: '', quoted_by: '', block_color: '', content_class: '' }]
+      blocks: [{ content: '', blockType: '', quoted_by: '', block_color: '', content_class: '', options: null }]
     }]);
     setImagePreviews({});
     setCurrentCardIndex(0);
@@ -652,6 +653,7 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
                     imagePreviews={imagePreviews}
                     setImagePreviews={setImagePreviews}
                     setValue={setValue}
+                    getValues={getValues}
                     register={register}
                     errors={errors} />
                 </div>

@@ -8,10 +8,10 @@ import { ImageContainer } from "./ImageContainer";
 
 
 export const BlockContainer = ({ children, color, additionalClass, hasLiked, userHasRecalled, onLikeClick,
-  isAuthenticated, content, block_id, onRecallUpdate, image, ownerAvatar = null, ownerColor = null, 
+  isAuthenticated, content, block_id, onRecallUpdate, image, ownerAvatar = null, ownerColor = null,
   CustomContent = DefaultContent, authorName = null, authorPicture = null, blockColor = null, blockTitle = null,
-  contentClass = null, content2 = null, image2 = null, isPreview = false, isRecall = false }) => {
-    
+  contentClass = null, content2 = null, image2 = null, blockOptions = null, isPreview = false, isRecall = false }) => {
+
   const [showActionIcons, setShowActionIcons] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
 
@@ -47,6 +47,7 @@ export const BlockContainer = ({ children, color, additionalClass, hasLiked, use
           authorName={authorName}
           authorPicture={authorPicture}
           blockColor={blockColor}
+          blockOptions={blockOptions}
           contentClass={contentClass}
           blockTitle={blockTitle}
           content2={content2}
