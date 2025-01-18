@@ -67,6 +67,7 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
       appendIfNotNull(formData, `${blockPrefix}.title`, block.title);
       appendIfNotNull(formData, `${blockPrefix}.content_class`, block.content_class);
       appendIfNotNull(formData, `${blockPrefix}.content_2`, block.content_2);
+      appendIfNotNull(formData, `${blockPrefix}.options`, JSON.stringify(block.options));
       if (!topicId && block.id) {
         formData.append(`${blockPrefix}.id`, block.id);
       }

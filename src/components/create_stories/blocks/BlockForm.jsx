@@ -10,11 +10,12 @@ import { WonderBlockForm } from './WonderBlockForm';
 import { FactBlockForm } from './FactBlockForm';
 import { FlashcardBlockForm } from './FlashcardBlockForm';
 import { ReflectionBlockForm } from './ReflectionBlockForm';
+import { QuestionBlockForm } from './QuestionBlockForm';
 import { BLOCK_TYPES } from '../../../globals';
 
 
 export function BlockForm({ control, currentCardIndex, currentBlockIndex, imagePreviews, setImagePreviews,
-  setValue, register, errors }) {
+  setValue, getValues, register, errors }) {
   const [helpText, setHelpText] = useState("")
   const [currentBlockType, setCurrentBlockType] = useState('');
   const [blockTypeName, setBlockTypeName] = useState('');
@@ -40,6 +41,7 @@ export function BlockForm({ control, currentCardIndex, currentBlockIndex, imageP
     WONDER: "Used in pivotal situations that call for profound contemplation.",
     FLASHCARD: "Used as a helpful study resource, providing a fresh perspective on knowledge.",
     REFLECTION: "Used at the end of a chapter or at key moments to encourage personal reflection.",
+    QUESTION: "For interactive learning, enabling to prompt with question.",
   };
 
   const BLOCK_TYPE_COMPONENTS = {
@@ -49,6 +51,7 @@ export function BlockForm({ control, currentCardIndex, currentBlockIndex, imageP
     WONDER: WonderBlockForm,
     FLASHCARD: FlashcardBlockForm,
     REFLECTION: ReflectionBlockForm,
+    QUESTION: QuestionBlockForm,
   };
 
   useEffect(() => {
@@ -190,7 +193,10 @@ export function BlockForm({ control, currentCardIndex, currentBlockIndex, imageP
       </div>
       {blockTypeName !== "WONDER" && BlockComponent &&
         <BlockComponent
-          {...{ control, currentCardIndex, currentBlockIndex, register, setImagePreviews, setValue, imagePreviews, errors }} />}
+          {...{
+            control, currentCardIndex, currentBlockIndex, register, setImagePreviews,
+            setValue, getValues, imagePreviews, errors
+          }} />}
     </div>
 
   )

@@ -14,6 +14,7 @@ import { WonderBlock } from '../blocks/WonderBlock';
 import { FactBlock } from '../blocks/FactBlock';
 import { FlashcardBlock } from '../blocks/FlashcardBlock';
 import { ReflectionBlock } from '../blocks/ReflectionBlock';
+import { QuestionBlock } from '../blocks/QuestionBlock';
 
 
 export function CardPreviewModal({ onClose, card, userPicture, userColor }) {
@@ -161,6 +162,14 @@ export function CardPreviewModal({ onClose, card, userPicture, userColor }) {
                     color={softSkill.color}
                     content2={block.content_2}
                     image2={block.image_2}
+                    isPreview={true}
+                  />
+                ) : getBlockTypeName(block.blockType) === "QUESTION" ? (
+                  <QuestionBlock
+                    content={block.content}
+                    image={block.image}
+                    color={softSkill.color}
+                    blockOptions={block.options}
                     isPreview={true}
                   />
                 ) : (<StandardBlock
