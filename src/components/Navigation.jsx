@@ -6,11 +6,11 @@ import { getUser } from '../api/users.api';
 import { Avatar, Dropdown } from 'flowbite-react';
 import { useAppState } from '../context/ScrollContext';
 import { BiSolidBellRing } from "react-icons/bi";
-import { ComingSoonModal } from './ComingSoonModal';
-import { NotificationsModal } from './NotificationsModal';
+import { ComingSoonModal } from './modals/ComingSoonModal';
+import { NotificationsModal } from './modals/NotificationsModal';
 import logo from '../assets/Logo.svg';
 import profile_pic from '../assets/Profile-pic.svg';
-import { SelectRecallsModal } from './SelectRecallsModal';
+import { SelectRecallsModal } from './modals/SelectRecallsModal';
 import { PiTextAlignJustifyFill } from "react-icons/pi";
 
 
@@ -68,6 +68,7 @@ export function Navigation() {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('lastConnectionDate');
     navigate('/');
     window.location.reload();
   };

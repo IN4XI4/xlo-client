@@ -28,7 +28,7 @@ export function EditProfile({ profileInfo }) {
   useEffect(() => {
     setBiography(profileInfo.biography || '');
   }, [profileInfo.biography]);
-
+  
   useEffect(() => {
     if (profileInfo) {
       setFirstName(profileInfo.first_name || '');
@@ -159,7 +159,6 @@ export function EditProfile({ profileInfo }) {
       await updateUser(userId, updatedInfo);
     } catch (error) {
       console.error("Error al actualizar el color de perfil:", error);
-      // Opcionalmente, puedes revertir el estado si la actualización falla
       setSelectedProfileColor(profileInfo.profile_color);
     }
   };
@@ -175,7 +174,7 @@ export function EditProfile({ profileInfo }) {
     };
 
     try {
-      const response = await updateUser(profileInfo.id, updatedInfo);
+      await updateUser(profileInfo.id, updatedInfo);
       setUpdateBioSuccess(true);
       setTimeout(() => setUpdateBioSuccess(false), 5000);
     } catch (error) {

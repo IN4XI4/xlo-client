@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { FaRegBookmark, FaRegHeart, FaHeart, FaReply, FaUser, FaRegCopy, FaCheck, FaBookmark } from 'react-icons/fa';
 import { RepliesList } from './RepliesList';
 import { deleteLike, deleteRecallComment, likeSomething, recallComment } from '../../../api/blog.api';
-import { ProfileModal } from '../../ProfileModal';
+import { ProfileModal } from '../../modals/ProfileModal';
 import { Dropdown } from 'flowbite-react';
 
 

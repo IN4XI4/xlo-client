@@ -1,14 +1,38 @@
 import React, { useEffect, useState } from 'react'
-import { getUserModal } from '../api/users.api';
 import { FaUser } from 'react-icons/fa';
 import { IoMale, IoFemale, IoLogoLinkedin } from "react-icons/io5";
 import { BiWorld } from "react-icons/bi";
 import { GrMail } from "react-icons/gr";
 
+import ExplorerBadge from '../badges/ExplorerBadge'
+import CollaboratorBadge from '../badges/CollaboratorBadge'
+import PopularBadge from '../badges/PopularBadge'
+import VeteranBadge from '../badges/VeteranBadge'
+import StorytellerBadge from '../badges/StorytellerBadge'
+import { getUserBadges, getUserModal } from '../../api/users.api';
+import { Tooltip } from 'flowbite-react';
+
+
+const badgeTypeToComponentMap = {
+  VETERAN: VeteranBadge,
+  STORYTELLER: StorytellerBadge,
+  POPULAR: PopularBadge,
+  COLLABORATOR: CollaboratorBadge,
+  EXPLORER: ExplorerBadge,
+};
+
+function capitalize(text) {
+  if (!text) return "";
+  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+}
+
+
+
 export function ProfileModal({ userId, onClose }) {
   const [user, setUser] = useState([]);
   const [error, setError] = useState([]);
   const [isOpen, setIsOpen] = useState(true);
+  const [userBadges, setUserBadges] = useState([]);
 
   const handleModalClick = (event) => {
     event.stopPropagation();
@@ -22,6 +46,8 @@ export function ProfileModal({ userId, onClose }) {
     try {
       const res = await getUserModal(userId);
       setUser(res.data);
+      const badgesRes = await getUserBadges(userId);
+      setUserBadges(badgesRes.data);
     } catch (error) {
       setError(error);
     }
@@ -82,6 +108,24 @@ export function ProfileModal({ userId, onClose }) {
               <BiWorld />
             </span>
             <span>{user.website}</span>
+          </div>
+          <div className="flex flex-wrap items-center pt-2">
+            {userBadges.map((badge) => {
+              const BadgeComponent = badgeTypeToComponentMap[badge.badge_type];
+              if (!BadgeComponent) return null;
+              const [firstColor, secondColor] = badge.level_colors || ['#FFFFFF', '#000000'];
+              return (
+                <div key={badge.id}>
+                  <Tooltip className="text-sm" content={`${badge.level} ${capitalize(badge.badge_type)}`} placement="bottom">
+                    <BadgeComponent
+                      firstColor={firstColor}
+                      secondColor={secondColor}
+                      className="h-10 w-10"
+                    />
+                  </Tooltip>
+                </div>
+              );
+            })}
           </div>
           <div className='pt-4'>
             <button className='bg-[#3DB1FF] flex w-full justify-center md:w-auto md:justify-start rounded-lg px-4 py-2 items-center text-white'>

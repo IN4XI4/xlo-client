@@ -1,24 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import ReactGA from "react-ga4";
+
 import { HomePage } from './pages/HomePage'
-import { Navigation } from './components/Navigation'
-import { Footer } from './components/Footer'
 import { TopicStoriesPage } from './pages/TopicStoriesPage'
 import { StoryPage } from './pages/StoryPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { MyNewStoriesPage } from './pages/MyNewStoriesPage'
 import { MyCreatedStoriesPage } from './pages/MyCreatedStoriesPage'
-import { AppStateProvider } from './context/ScrollContext'
 import { CreateStoryPage } from './pages/CreateStoryPage'
-import { EditStoryPage } from './pages/EditStoryPage'
 import { RecallsPage } from './pages/RecallsPage'
+import { EditStoryPage } from './pages/EditStoryPage'
 import { LearnSoftSkillsPage } from './pages/LearnSoftSkillsPage'
 import { LearningProgramPage } from './pages/LearningProgramPage'
 import { FocusedRecallBlocksPage } from './pages/FocusedRecallBlocksPage';
 import { SparkedRecallBlocksPage } from './pages/SparkedRecallBlocksPage';
+import { BadgeUpdateModal } from './components/modals/BadgesUpdateModal';
+import { Navigation } from './components/Navigation'
+import { Footer } from './components/Footer'
+import { AppStateProvider } from './context/ScrollContext'
 import useBeforeInstallPrompt from './hooks/UseBeforeInstallPrompt';
-
+import { checkNewDay } from './utils/checkNewDay';
 
 const isProduction = import.meta.env.VITE_ENV === 'production';
 if (isProduction) {
@@ -62,6 +64,7 @@ function App() {
   const title = formatTitle(location.pathname);
   const deferredPrompt = useBeforeInstallPrompt();
   const [isInstallable, setIsInstallable] = useState(false);
+  const [newBadges, setNewBadges] = useState([]);
 
   useEffect(() => {
     if (isProduction) {
@@ -74,6 +77,14 @@ function App() {
       setIsInstallable(true);
     }
   }, [deferredPrompt]);
+
+  useEffect(() => {
+    checkNewDay(setNewBadges);
+  }, []);
+
+  const handleCloseModal = () => {
+    setNewBadges([]);
+  };
 
   const handleInstallClick = async () => {
     if (deferredPrompt) {
@@ -93,11 +104,12 @@ function App() {
   const token = localStorage.getItem("token");
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
+      {newBadges.length > 0 && <BadgeUpdateModal badges={newBadges} onClose={handleCloseModal} />}
       {token && <Navigation />}
       <div className="flex-grow">
         {isInstallable && (
-          <button onClick={handleInstallClick} 
-          className="fixed bottom-4 right-4 z-40 p-2 border-2 rounded-lg border-[#3DB1FF] text-[#3DB1FF] shadow bg-white">
+          <button onClick={handleInstallClick}
+            className="fixed bottom-4 right-4 z-40 p-2 border-2 rounded-lg border-[#3DB1FF] text-[#3DB1FF] shadow bg-white">
             Install App
           </button>
         )}
