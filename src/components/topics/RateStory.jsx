@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { FaRegStar } from 'react-icons/fa'
-import { ComingSoonModal } from '../ComingSoonModal'
+import { ComingSoonModal } from '../modals/ComingSoonModal'
 
 
 export function RateStory() {

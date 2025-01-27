@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { listLikeNotifications, listReplyNotifications, updateNotification } from '../api/blog.api';
+import { listLikeNotifications, listReplyNotifications, updateNotification } from '../../api/blog.api';
 import { FaHeart, FaReply, FaChevronDown } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
-import { useAppState } from '../context/ScrollContext';
+import { useAppState } from '../../context/ScrollContext';
 
-import '../App.css'
-import user_image from '../assets/user_image.svg';
+import '../../App.css'
+import user_image from '../../assets/user_image.svg';
 
 export function NotificationsModal({ notificationType: initialNotificationType, onClose }) {
   const navigate = useNavigate();

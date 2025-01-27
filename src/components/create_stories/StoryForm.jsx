@@ -9,7 +9,7 @@ import { FaPlus } from 'react-icons/fa';
 import { BsFileEarmarkPlusFill, BsFillFileEarmarkMinusFill } from "react-icons/bs";
 import { HiMiniTrash } from "react-icons/hi2";
 
-import { ConfirmationModal } from '../ConfirmationModal';
+import { ConfirmationModal } from '../modals/ConfirmationModal';
 import { CardPreviewModal } from './CardPreviewModal';
 import { CardBlockNavigation } from './CardBlockNavigation';
 import { getMentors, getSoftSkills } from '../../api/base.api';

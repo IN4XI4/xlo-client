@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, Label, TextInput } from 'flowbite-react';
-import { login } from '../../api/base.api';
 import { useNavigate, Link } from 'react-router-dom';
+import { Button, Label, TextInput } from 'flowbite-react';
+
+import { login } from '../../api/base.api';
+import { checkNewDay } from '../../utils/checkNewDay';
 
 export function Login() {
   const {
@@ -21,6 +23,7 @@ export function Login() {
       const response = await login(apiData);
       if (response.data && response.data.token) {
         localStorage.setItem('token', response.data.token);
+        checkNewDay()
         navigate('/');
       } else {
         setServerError('Login was successful, but no token was received.');

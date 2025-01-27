@@ -4,7 +4,7 @@ import { getTopicBySlug } from '../api/base.api';
 import { FaArrowLeft, FaHeart, FaPlus, FaRegHeart, FaSearch } from 'react-icons/fa';
 import { Alert, TextInput } from 'flowbite-react';
 import { StoriesList } from '../components/topics/StoriesList';
-import { ComingSoonModal } from '../components/ComingSoonModal';
+import { ComingSoonModal } from '../components/modals/ComingSoonModal';
 import { deleteLike, likeSomething } from '../api/blog.api';
 import { HiInformationCircle } from 'react-icons/hi';
 
