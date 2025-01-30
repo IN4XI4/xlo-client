@@ -55,7 +55,7 @@ export function ProfileModal({ userId, onClose }) {
 
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 bg-gray-300 bg-opacity-50 overflow-y-auto h-full w-full" onClick={onClose}>
+    <div className="fixed inset-0 bg-gray-300 bg-opacity-50 overflow-y-auto h-full w-full z-40" onClick={onClose}>
       <div id="principal" className="relative top-32 mx-auto px-6 pt-4 border w-80 md:w-1/2 lg:w-1/3 2xl:w-1/4 shadow-lg rounded-md bg-white" onClick={handleModalClick}>
         <div id="relativo" className='relative -top-10 md:-top-16'>
           <div className='flex items-end border-b pb-3 '>
@@ -69,7 +69,7 @@ export function ProfileModal({ userId, onClose }) {
               </div>}
             </div>
             <div className="hidden md:flex text-gray-500 flex-col items-center ps-1">
-              {user.gender === 2 ? <IoMale size="20" /> : user.gender === 1 ? <IoFemale size="20" /> : null}
+              {user.gender === 2 ? <IoFemale size="20" /> : user.gender === 1 ? <IoMale size="20" /> : null}
               <span className='text-sm'>{user.birth_year}</span>
             </div>
             <div className='ps-2 flex flex-col'>
