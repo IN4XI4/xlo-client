@@ -111,7 +111,9 @@ export function CommentCard({ comment, isReply, onReply, commentContentTypeId })
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
-  const BadgeComponent = badgeTypeToComponentMap[comment.commentor_last_badge.badge_type];
+  const BadgeComponent = comment.commentor_last_badge?.badge_type
+    ? badgeTypeToComponentMap[comment.commentor_last_badge.badge_type]
+    : null;
   const [firstColor, secondColor] = comment.commentor_last_badge.level_colors || ['#FFFFFF', '#000000'];
 
   useEffect(() => {
