@@ -46,9 +46,9 @@ export function Welcome() {
           </svg>
         </Link>
       </div>
-      <div>
+      <Link to={currentMessages.linkTo} className='flex items-center'>
         <img src={logo} alt="" className='h-12 md:h-24' />
-      </div>
+        </Link>
     </div>
   )
 }

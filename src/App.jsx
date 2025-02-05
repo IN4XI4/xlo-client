@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import ReactGA from "react-ga4";
 
 import { HomePage } from './pages/HomePage'
+import { LoginPage } from './pages/LoginPage';
 import { TopicStoriesPage } from './pages/TopicStoriesPage'
 import { StoryPage } from './pages/StoryPage'
 import { ProfilePage } from './pages/ProfilePage'
@@ -40,16 +41,28 @@ function formatTitle(pathname) {
 
 function ConditionalFooter() {
   const location = useLocation();
-  const token = localStorage.getItem("token");
+  const normalizedPath = location.pathname.replace(/\/$/, "");
 
   if (
-    token &&
-    location.pathname !== "/recall-cards/" &&
-    !location.pathname.startsWith("/practice-softskills/")
+    normalizedPath === "/login" ||
+    normalizedPath === "/recall-cards" ||
+    normalizedPath.startsWith("/practice-softskills")
   ) {
-    return <Footer />;
+    return null;
   }
-  return null;
+
+  return <Footer />;
+}
+
+function ConditionalNavigationBar() {
+  const location = useLocation();
+  const normalizedPath = location.pathname.replace(/\/$/, "");
+
+  if (normalizedPath === "/login") {
+    return null;
+  }
+
+  return <Navigation />;
 }
 
 function ProtectedRoute({ children }) {
@@ -101,11 +114,10 @@ function App() {
     }
   };
 
-  const token = localStorage.getItem("token");
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       {newBadges.length > 0 && <BadgeUpdateModal badges={newBadges} onClose={handleCloseModal} />}
-      {token && <Navigation />}
+      <ConditionalNavigationBar />
       <div className="flex-grow">
         {isInstallable && (
           <button onClick={handleInstallClick}
@@ -115,7 +127,8 @@ function App() {
         )}
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/topic/:slug" element={<ProtectedRoute><TopicStoriesPage /></ProtectedRoute>} />
+          <Route path="/login/" element={<LoginPage />} />
+          <Route path="/topic/:slug" element={<TopicStoriesPage />} />
           <Route path="/story/:slug" element={<StoryPage />} />
           <Route path="/profile/" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
           <Route path="/new-stories/" element={<ProtectedRoute><MyNewStoriesPage key="mystories-page" /></ProtectedRoute>} />
