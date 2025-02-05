@@ -87,14 +87,14 @@ export function Login() {
             <input id="remember" type="checkbox" className="rounded" />
             <label htmlFor="remember" className="ml-2 text-sm text-gray-00">Remember this device</label>
           </div>
-          <Link to="/?view=forgotpassword" className="text-sm text-blue-500 hover:underline">Lost Password?</Link>
+          <Link to="/login?view=forgotpassword" className="text-sm text-blue-500 hover:underline">Lost Password?</Link>
         </div>
         <div >
           <Button type="submit" className='w-full bg-[#3DB1FF]'>Login to your account</Button>
         </div>
         <div className="mt-4">
           <span className="text-sm text-gray-900 font-bold">Not registered yet? </span>
-          <Link to="/?view=register" className="text-sm text-blue-500 hover:underline">Create an account</Link>
+          <Link to="/login?view=register" className="text-sm text-blue-500 hover:underline">Create an account</Link>
         </div>
       </div>
     </form>

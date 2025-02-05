@@ -17,7 +17,7 @@ import { PiTextAlignJustifyFill } from "react-icons/pi";
 export function Navigation() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [user, setUser] = useState({ data: {} });
+  const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
   const { isScrolled, storyTitle, currentCardTitle, setIsScrolled, navigationKey } = useAppState();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -49,7 +49,7 @@ export function Navigation() {
       localStorage.removeItem("token");
     }
   }
-
+  
   useEffect(() => {
     const handleProfilePictureUpdate = (event) => {
       setUser(currentUserInfo => ({ ...currentUserInfo, picture: event.detail }));
@@ -124,7 +124,7 @@ export function Navigation() {
       </div>
       <div className="flex items-center space-x-4">
         <div className="flex items-center space-x-4">
-          <Dropdown label="" dismissOnClick={true} renderTrigger={() => (
+          {user ? (<Dropdown label="" dismissOnClick={true} renderTrigger={() => (
             <span className='cursor-pointer'>
               {user && user.picture ? (
                 <Avatar img={user.picture} alt="Profile" rounded
@@ -182,20 +182,27 @@ export function Navigation() {
                 My skills</span>
             </Dropdown.Item>
             <Dropdown.Item onClick={() => openModal('Support us', 'Many ways to support the platform will be available soon.You can always contact us at: contact@mixelo.io. If you\'d like to help out in any way.')}>
-              < span className = 'text-gray-500 flex items-center justify-items-center' >
-              <AiFillFire className='me-3 text-[#3DB1FF]' />
+              < span className='text-gray-500 flex items-center justify-items-center' >
+                <AiFillFire className='me-3 text-[#3DB1FF]' />
                 My contribution
               </span>
-        </Dropdown.Item>
-        <Dropdown.Divider />
-        <Dropdown.Item onClick={handleLogout} className='text-gray-500'>Logout</Dropdown.Item>
-      </Dropdown>
-    </div>
+            </Dropdown.Item>
+            <Dropdown.Divider />
+            <Dropdown.Item onClick={handleLogout} className='text-gray-500'>Logout</Dropdown.Item>
+          </Dropdown>
+          ) : (
+            <div className="flex space-x-4">
+              <Link to="/login" className="text-[#3DB1FF]">Login</Link>
+              <Link to="/login?view=register" className="text-[#3DB1FF]">Register</Link>
+            </div>
+          )}
+
+        </div>
       </div >
-    { isRecallsModalOpen && <SelectRecallsModal onClose={closeRecallsModal} />
-}
-{ isModalOpen && <ComingSoonModal title={modalTitle} context={modalContext} onClose={closeModal} /> }
-{ isNotificationModalOpen && <NotificationsModal notificationType={modalNotificationType} onClose={closeNotificationModal} /> }
+      {isRecallsModalOpen && <SelectRecallsModal onClose={closeRecallsModal} />
+      }
+      {isModalOpen && <ComingSoonModal title={modalTitle} context={modalContext} onClose={closeModal} />}
+      {isNotificationModalOpen && <NotificationsModal notificationType={modalNotificationType} onClose={closeNotificationModal} />}
     </div >
   );
 }
