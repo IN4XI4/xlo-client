@@ -22,6 +22,14 @@ export function TopicStoriesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalContext, setModalContext] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsAuthenticated(!!token);
+    setShowAlert(!token);
+  }, []);
 
   useEffect(() => {
     if (location.state?.storyCreated) {
@@ -100,6 +108,16 @@ export function TopicStoriesPage() {
   };
   return (
     <div className="pt-24 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
+      {showAlert && (
+        <Alert
+          color="info"
+          icon={HiInformationCircle}
+          className="mb-4"
+          onDismiss={() => setShowAlert(false)}
+        >
+          <span className="font-medium">Sign in to unlock all features and enhance your experience!</span>
+        </Alert>
+      )}
       {showSuccessMessage && (
         <Alert color="success" icon={HiInformationCircle} className='mb-4'>
           <span className="font-medium">Story created successfully!</span>
@@ -131,12 +149,14 @@ export function TopicStoriesPage() {
             onChange={handleTextInputChange}
             onKeyDown={handleKeyPress} />
         </div>
-        <div className='flex-none pe-2 md:pe-6'>
-          <button className="p-2 md:p-4 bg-gray-200 rounded-full border"
-            onClick={topic.user_has_liked ? handleUnlikeTopic : handleLikeTopic}>
-            {topic.user_has_liked ? <FaHeart className='text-[#3DB1FF]' /> : <FaRegHeart className='text-[#3DB1FF]' />}
-          </button>
-        </div>
+        {isAuthenticated && (
+          <div className='flex-none pe-2 md:pe-6'>
+            <button className="p-2 md:p-4 bg-gray-200 rounded-full border"
+              onClick={topic.user_has_liked ? handleUnlikeTopic : handleLikeTopic}>
+              {topic.user_has_liked ? <FaHeart className='text-[#3DB1FF]' /> : <FaRegHeart className='text-[#3DB1FF]' />}
+            </button>
+          </div>)}
+
         <div className='flex-none items-stretch'>
           <button className="hidden md:flex items-center p-3 rounded-full bg-gray-200 text-[#6B7280]"
             onClick={createStoryHandler}>

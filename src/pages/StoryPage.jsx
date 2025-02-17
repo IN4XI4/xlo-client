@@ -231,7 +231,7 @@ export function StoryPage() {
           )}
         </>
       )}
-      {isCardsLoaded && (
+      {isCardsLoaded && isAuthenticated && (
         <div ref={commentsRef} className='py-4'>
           <CommentsList storyId={story.id} commentContentTypeId={commentContentTypeId} />
         </div>

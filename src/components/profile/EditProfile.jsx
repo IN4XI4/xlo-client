@@ -1,8 +1,10 @@
 import { Checkbox, Label, Select, TextInput, Textarea } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
+import { ImArrowUpLeft2 } from "react-icons/im";
 import { FaCog, FaRegCircle, FaDotCircle, FaUser } from 'react-icons/fa'
-import { getCountries, getUserExperience, getUserGenders, getUserProfileColors, updateUser } from '../../api/users.api';
 
+import { getCountries, getUserExperience, getUserGenders, getUserProfileColors, updateUser } from '../../api/users.api';
 
 export function EditProfile({ profileInfo }) {
   const [profileColors, setProfileColors] = useState([]);
@@ -28,7 +30,7 @@ export function EditProfile({ profileInfo }) {
   useEffect(() => {
     setBiography(profileInfo.biography || '');
   }, [profileInfo.biography]);
-  
+
   useEffect(() => {
     if (profileInfo) {
       setFirstName(profileInfo.first_name || '');
@@ -267,6 +269,19 @@ export function EditProfile({ profileInfo }) {
   return (
     <div className='grid grid-cols-1 md:grid-cols-3'>
       <div className='md:pe-2'>
+        <div className='bg-white rounded px-3 py-4 border border-gray-100 mb-3'>
+          <div className='flex'>
+            <Link to="/profile" className='pe-1 md:pe-2 border-e-2'>
+              <button className="p-2 md:p-2 bg-gray-200 rounded-full border">
+                <ImArrowUpLeft2 className='text-[#6B7280]' />
+              </button>
+            </Link>
+            <Link to="/avatar" className='flex items-center justify-center text-white bg-[#3DB1FF] flex-grow 
+            ms-1 md:ms-2 rounded text-sm cursor-pointer'>
+              ACCESS TO MY JOURNEY
+            </Link>
+          </div>
+        </div>
         <div className='bg-white rounded px-3 py-4 flex items-center border border-gray-100 mb-3'>
           <div className='bg-gray-100 rounded-full flex items-center justify-center h-24 w-24'>
             {selectedImage ? (

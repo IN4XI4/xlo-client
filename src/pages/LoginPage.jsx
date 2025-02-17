@@ -10,7 +10,6 @@ export function LoginPage() {
   const location = useLocation();
   const getViewFromQuery = () => {
     const queryParams = new URLSearchParams(location.search);
-    console.log("params", queryParams);
     return queryParams.get('view') || 'login';
   };
   const [currentView, setCurrentView] = useState(getViewFromQuery());

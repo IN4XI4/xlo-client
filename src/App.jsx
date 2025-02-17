@@ -16,12 +16,14 @@ import { LearnSoftSkillsPage } from './pages/LearnSoftSkillsPage'
 import { LearningProgramPage } from './pages/LearningProgramPage'
 import { FocusedRecallBlocksPage } from './pages/FocusedRecallBlocksPage';
 import { SparkedRecallBlocksPage } from './pages/SparkedRecallBlocksPage';
+import { AvatarPage } from './pages/AvatarPage';
 import { BadgeUpdateModal } from './components/modals/BadgesUpdateModal';
 import { Navigation } from './components/Navigation'
 import { Footer } from './components/Footer'
 import { AppStateProvider } from './context/ScrollContext'
 import useBeforeInstallPrompt from './hooks/UseBeforeInstallPrompt';
 import { checkNewDay } from './utils/checkNewDay';
+
 
 const isProduction = import.meta.env.VITE_ENV === 'production';
 if (isProduction) {
@@ -131,6 +133,7 @@ function App() {
           <Route path="/topic/:slug" element={<TopicStoriesPage />} />
           <Route path="/story/:slug" element={<StoryPage />} />
           <Route path="/profile/" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+          <Route path="/avatar/" element={<ProtectedRoute><AvatarPage /></ProtectedRoute>} />
           <Route path="/new-stories/" element={<ProtectedRoute><MyNewStoriesPage key="mystories-page" /></ProtectedRoute>} />
           <Route path="/my-stories/" element={<ProtectedRoute><MyCreatedStoriesPage key="my-createdstories-page" /></ProtectedRoute>} />
           <Route path="/recall-cards/" element={<ProtectedRoute><RecallsPage key="recalls-page" /></ProtectedRoute>} />
