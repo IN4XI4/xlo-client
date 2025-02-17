@@ -271,7 +271,7 @@ export function EditProfile({ profileInfo }) {
       <div className='md:pe-2'>
         <div className='bg-white rounded px-3 py-4 border border-gray-100 mb-3'>
           <div className='flex'>
-            <Link to="/profile" className='pe-1 md:pe-2 border-e-2'>
+            <Link to="/" className='pe-1 md:pe-2 border-e-2'>
               <button className="p-2 md:p-2 bg-gray-200 rounded-full border">
                 <ImArrowUpLeft2 className='text-[#6B7280]' />
               </button>
