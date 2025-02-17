@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TextInput } from 'flowbite-react'
 import { FaMinus, FaPlus } from 'react-icons/fa6';
 
@@ -6,6 +6,15 @@ import { FaMinus, FaPlus } from 'react-icons/fa6';
 export function QuestionBlockForm({ control, currentCardIndex, currentBlockIndex, register, setImagePreviews, setValue,
   getValues, imagePreviews, errors }) {
   const [extraOptions, setExtraOptions] = useState([]);
+
+  useEffect(() => {
+    const incorrectAnswers = getValues(
+      `cards.${currentCardIndex}.blocks.${currentBlockIndex}.options.incorrect_answers`
+    );
+    if (incorrectAnswers && incorrectAnswers.length > 1) {
+      setExtraOptions(Array.from({ length: incorrectAnswers.length - 1 }, (_, i) => i));
+    }
+  }, [getValues, currentCardIndex, currentBlockIndex]);
 
   const handleAddIncorrectAnswer = () => {
     setExtraOptions([...extraOptions, extraOptions.length]);
@@ -102,9 +111,9 @@ export function QuestionBlockForm({ control, currentCardIndex, currentBlockIndex
         </div>
       ))}
       <div className="md:pt-2">
-        <button type="button" onClick={handleAddIncorrectAnswer} 
-        className='flex bg-[#5B0FFE] items-center p-2 rounded-full md:rounded-lg text-white'>
-          <FaPlus/> <span className='hidden md:block md:ps-2'>Add Incorrect Answer</span>
+        <button type="button" onClick={handleAddIncorrectAnswer}
+          className='flex bg-[#5B0FFE] items-center p-2 rounded-full md:rounded-lg text-white'>
+          <FaPlus /> <span className='hidden md:block md:ps-2'>Add Incorrect Answer</span>
         </button>
       </div>
     </div>

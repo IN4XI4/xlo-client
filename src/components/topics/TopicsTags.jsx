@@ -17,6 +17,14 @@ export function TopicTags() {
   const navigate = useNavigate();
   const location = useLocation();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsAuthenticated(!!token);
+    setShowAlert(!token);
+  }, []);
 
   useEffect(() => {
     loadTopicTags();
@@ -145,6 +153,16 @@ export function TopicTags() {
 
   return (
     <div>
+      {showAlert && (
+        <Alert
+          color="info"
+          icon={HiInformationCircle}
+          className="mb-4"
+          onDismiss={() => setShowAlert(false)}
+        >
+          <span className="font-medium">Sign in to unlock all features and enhance your experience!</span>
+        </Alert>
+      )}
       {showSuccessMessage && (
         <Alert color="success" icon={HiInformationCircle} className='mb-4'>
           <span className="font-medium">Story deleted successfully!</span>
@@ -184,8 +202,7 @@ export function TopicTags() {
                           Total stories: {topic.story_count}
                         </div>
                       </div>
-
-                      <div className='flex justify-center pt-2 pb-1' >
+                      {isAuthenticated && (<div className='flex justify-center pt-2 pb-1' >
                         {topic.user_has_liked ? (
                           <FaHeart
                             className='text-gray-500 text-xl'
@@ -203,7 +220,8 @@ export function TopicTags() {
                             }}
                           />
                         )}
-                      </div>
+                      </div>)}
+
                     </div>
                   </div>
                 ))}
