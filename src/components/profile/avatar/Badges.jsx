@@ -72,7 +72,9 @@ export function Badges() {
         const nextLevelInfo = nextBadgeLevels[badgeType] || { next_level: null, percentage: 100 };
         const nextLevel = nextLevelInfo.next_level;
         const progress = nextLevelInfo.percentage;
-        const nextBadgeColors = LEVEL_COLORS[nextLevel.toUpperCase()] || ["#AAAAAA", "#DDDDDD"];
+        const nextBadgeColors = nextLevel
+          ? (LEVEL_COLORS[nextLevel.toUpperCase()] || ["#AAAAAA", "#DDDDDD"])
+          : ["#3DB1FF", "#DDDDDD"];
         const BadgeComponent = badgeTypeToComponentMap[badgeType];
 
         return (
@@ -80,9 +82,13 @@ export function Badges() {
             <div className='flex pb-2 items-center justify-between'>
               <div>
                 <div className='font-semibold text-lg border-gray-100'>{capitalize(badgeType.toLowerCase())} badges</div>
-                {nextLevel && (
+                {nextLevel ? (
                   <div className='text-sm text-gray-500'>You're about to earn a new badge
                     <span className='font-bold ps-1'>{capitalize(nextLevel)}</span>
+                  </div>
+                ) : (
+                  <div className='text-sm text-gray-500'>
+                    Congratulations! You have reached the highest level.
                   </div>
                 )}
               </div>
