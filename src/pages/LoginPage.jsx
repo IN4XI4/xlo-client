@@ -35,7 +35,7 @@ export function LoginPage() {
   }
 
   return (
-    <div className="grid lg:grid-cols-5 pt-24 md:pt-32 px-4 md:px-16 lg:px-32 xl:px-44">
+    <div className="grid lg:grid-cols-5 pt-24 md:pt-32 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32">
       <div className='lg:col-span-3 pb-6 px-4'>
         <Welcome />
       </div>

@@ -94,7 +94,7 @@ export function SparkedRecallBlocksPage() {
   };
 
   return (
-    <div className='pb-20 pt-24 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44'>
+    <div className='pb-20 pt-24 md:pt-28 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32'>
       <div className='text-xl font-semibold'>Welcome to the block recall</div>
       <div className='text-gray-500 truncate'>All your block content are located here...</div>
       <InfiniteScroll

@@ -85,7 +85,7 @@ export function LearningProgramPage() {
   };
 
   return (
-    <div className="pt-24 px-4 md:px-16 lg:px-32 xl:px-44">
+    <div className="pt-24 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32">
       {softskillCards.length > 0 && currentCardIndex < softskillCards.length && (
         <>
           <div className='text-xl text-gray-500 pb-3'>

@@ -26,7 +26,7 @@ export function ProfilePage() {
   }
 
   return (
-    <div className="pt-20 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
+    <div className="pt-20 md:pt-28 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32">
       <div className="flex items-center pb-5 justify-between">
         <div className='font-bold text-2xl md:text-3xl'>PROFILE AND PARAMETERS</div>
       </div>
