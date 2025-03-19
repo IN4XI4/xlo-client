@@ -1,31 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Progress, Tooltip } from 'flowbite-react';
+import { Tooltip } from 'flowbite-react';
 
 import { getUserBadges, getUserBadgeInfo } from '../../../api/users.api';
-import ExplorerBadge from '../../badges/ExplorerBadge';
-import CollaboratorBadge from '../../badges/CollaboratorBadge';
-import PopularBadge from '../../badges/PopularBadge';
-import VeteranBadge from '../../badges/VeteranBadge';
-import StorytellerBadge from '../../badges/StorytellerBadge';
+import { levelOrder, LEVEL_COLORS, badgeTypeToComponentMap } from '../../../globals';
 
-
-const badgeTypeToComponentMap = {
-  VETERAN: VeteranBadge,
-  STORYTELLER: StorytellerBadge,
-  POPULAR: PopularBadge,
-  COLLABORATOR: CollaboratorBadge,
-  EXPLORER: ExplorerBadge,
-};
-
-const levelOrder = { BRONZE: 1, SILVER: 2, GOLD: 3, OBSIDIAN: 4, MIXELO: 5 };
-
-const LEVEL_COLORS = {
-  BRONZE: ["#A97142", "#F0DEA4"],
-  SILVER: ["#A7A7A7", "#DCDCDC"],
-  GOLD: ["#BC9313", "#E4D4A1"],
-  OBSIDIAN: ["#3E2856", "#B2A9BB"],
-  MIXELO: ["#3DB1FF", "#B8E3FF"],
-};
 
 function capitalize(text) {
   if (!text) return "";
@@ -46,7 +24,6 @@ export function Badges() {
     try {
       const profileRes = await getUserBadgeInfo();
       const profileData = profileRes.data;
-      console.log("data", profileData);
       setNextBadgeLevels(profileData.next_badge_levels);
 
       const badgesRes = await getUserBadges(profileData.id);
@@ -62,6 +39,7 @@ export function Badges() {
       setError(error);
     }
   }
+
   if (!userBadges || !nextBadgeLevels) {
     return <div>Loading badges...</div>;
   }

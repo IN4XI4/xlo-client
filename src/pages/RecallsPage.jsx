@@ -138,7 +138,7 @@ export function RecallsPage() {
   };
 
   return (
-    <div className="pb-20 pt-24 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
+    <div className="pb-20 pt-24 md:pt-28 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32">
       {!isCardsLoaded ? (
         <div>Loading...</div>
       ) : recallCards.length === 0 ? (

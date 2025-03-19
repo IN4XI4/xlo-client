@@ -1,25 +1,13 @@
 import React, { useEffect, useState } from 'react'
+import { Tooltip } from 'flowbite-react';
 import { FaUser } from 'react-icons/fa';
 import { IoMale, IoFemale, IoLogoLinkedin } from "react-icons/io5";
 import { BiWorld } from "react-icons/bi";
 import { GrMail } from "react-icons/gr";
 
-import ExplorerBadge from '../badges/ExplorerBadge'
-import CollaboratorBadge from '../badges/CollaboratorBadge'
-import PopularBadge from '../badges/PopularBadge'
-import VeteranBadge from '../badges/VeteranBadge'
-import StorytellerBadge from '../badges/StorytellerBadge'
 import { getUserBadges, getUserModal } from '../../api/users.api';
-import { Tooltip } from 'flowbite-react';
+import { badgeTypeToComponentMap } from '../../globals';
 
-
-const badgeTypeToComponentMap = {
-  VETERAN: VeteranBadge,
-  STORYTELLER: StorytellerBadge,
-  POPULAR: PopularBadge,
-  COLLABORATOR: CollaboratorBadge,
-  EXPLORER: ExplorerBadge,
-};
 
 function capitalize(text) {
   if (!text) return "";

@@ -63,7 +63,7 @@ export function CreateStoryPage() {
   };
 
   if (isLoading) {
-    return <div className="pt-24 px-4 md:px-16 lg:px-32 xl:px-44">Loading...</div>;
+    return <div className="pt-24 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32">Loading...</div>;
   }
 
   if (!isCreator) {
