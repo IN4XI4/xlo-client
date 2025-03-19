@@ -9,21 +9,8 @@ import { Tooltip } from 'flowbite-react';
 
 import { getStoriesByTopic } from '../../api/blog.api';
 import { getTopicsByCategory } from '../../api/base.api';
-import enFlag from '../../assets/flags/gb.svg';
-import esFlag from '../../assets/flags/es.svg';
-import frFlag from '../../assets/flags/fr.svg';
-import deFlag from '../../assets/flags/de.svg';
-import itFlag from '../../assets/flags/it.svg';
-import ptFlag from '../../assets/flags/pt.svg';
+import { flagMap } from '../../globals';
 
-const flagMap = {
-  EN: enFlag,
-  ES: esFlag,
-  FR: frFlag,
-  DE: deFlag,
-  IT: itFlag,
-  PT: ptFlag,
-};
 
 export function StoriesList({ topicId, categoryId, searchText }) {
   const [stories, setStories] = useState([]);

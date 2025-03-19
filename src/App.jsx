@@ -21,6 +21,7 @@ import { BadgeUpdateModal } from './components/modals/BadgesUpdateModal';
 import { Navigation } from './components/Navigation'
 import { Footer } from './components/Footer'
 import { AppStateProvider } from './context/ScrollContext'
+import { UserProvider } from './context/UserContext';
 import useBeforeInstallPrompt from './hooks/UseBeforeInstallPrompt';
 import { checkNewDay } from './utils/checkNewDay';
 
@@ -76,6 +77,7 @@ function ProtectedRoute({ children }) {
 }
 function App() {
   const location = useLocation();
+  const isHomePage = location.pathname === "/";
   const title = formatTitle(location.pathname);
   const deferredPrompt = useBeforeInstallPrompt();
   const [isInstallable, setIsInstallable] = useState(false);
@@ -121,7 +123,7 @@ function App() {
       {newBadges.length > 0 && <BadgeUpdateModal badges={newBadges} onClose={handleCloseModal} />}
       <ConditionalNavigationBar />
       <div className="flex-grow">
-        {isInstallable && (
+        {isInstallable && isHomePage && (
           <button onClick={handleInstallClick}
             className="fixed bottom-4 right-4 z-40 p-2 border-2 rounded-lg border-[#3DB1FF] text-[#3DB1FF] shadow bg-white">
             Install App
@@ -156,7 +158,9 @@ export default function Root() {
   return (
     <BrowserRouter>
       <AppStateProvider>
-        <App />
+        <UserProvider>
+          <App />
+        </UserProvider>
       </AppStateProvider>
     </BrowserRouter>
   );

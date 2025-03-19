@@ -1,23 +1,10 @@
 // components/BadgeUpdateModal.jsx
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Tooltip } from 'flowbite-react';
 import { FaXmark } from 'react-icons/fa6';
+import { badgeTypeToComponentMap } from '../../globals';
 
-import ExplorerBadge from '../badges/ExplorerBadge'
-import CollaboratorBadge from '../badges/CollaboratorBadge'
-import PopularBadge from '../badges/PopularBadge'
-import VeteranBadge from '../badges/VeteranBadge'
-import StorytellerBadge from '../badges/StorytellerBadge'
-import { useNavigate } from 'react-router-dom';
-
-
-const badgeTypeToComponentMap = {
-  VETERAN: VeteranBadge,
-  STORYTELLER: StorytellerBadge,
-  POPULAR: PopularBadge,
-  COLLABORATOR: CollaboratorBadge,
-  EXPLORER: ExplorerBadge,
-};
 
 function capitalize(text) {
   if (!text) return "";

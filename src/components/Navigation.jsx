@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { FaBookmark, FaHeart, FaReply } from 'react-icons/fa';
-import { AiFillFire } from "react-icons/ai";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { getUser } from '../api/users.api';
 import { Avatar, Dropdown } from 'flowbite-react';
-import { useAppState } from '../context/ScrollContext';
+import { AiFillFire } from "react-icons/ai";
+import { FaBookmark, FaHeart, FaReply } from 'react-icons/fa';
 import { BiSolidBellRing } from "react-icons/bi";
+
+import { getUser } from '../api/users.api';
+import { useAppState } from '../context/ScrollContext';
 import { ComingSoonModal } from './modals/ComingSoonModal';
 import { NotificationsModal } from './modals/NotificationsModal';
 import logo from '../assets/Logo.svg';
 import profile_pic from '../assets/Profile-pic.svg';
 import { SelectRecallsModal } from './modals/SelectRecallsModal';
 import { PiTextAlignJustifyFill } from "react-icons/pi";
+import { useUser } from '../context/UserContext';
 
 
 export function Navigation() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [user, setUser] = useState(null);
+  const { user, setUser } = useUser();
   const [error, setError] = useState(null);
   const { isScrolled, storyTitle, currentCardTitle, setIsScrolled, navigationKey } = useAppState();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,15 +29,18 @@ export function Navigation() {
   const [modalContext, setModalContext] = useState('');
   const [modalNotificationType, setModalNotificationType] = useState('');
 
+  const token = localStorage.getItem("token");
+
   useEffect(() => {
-    loadUser();
-  }, [navigationKey]);
+    if (!user && token) {
+      loadUser();
+    }
+  }, [navigationKey, token]);
 
   useEffect(() => {
     setIsScrolled(false);
   }, [location, setIsScrolled]);
 
-  const token = localStorage.getItem("token");
   async function loadUser() {
     if (!token) {
       setError(new Error("No authentication token available."));
@@ -49,7 +54,7 @@ export function Navigation() {
       localStorage.removeItem("token");
     }
   }
-  
+
   useEffect(() => {
     const handleProfilePictureUpdate = (event) => {
       setUser(currentUserInfo => ({ ...currentUserInfo, picture: event.detail }));

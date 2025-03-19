@@ -1,28 +1,16 @@
 import React, { useEffect, useState } from 'react'
+import { Dropdown, Tooltip } from 'flowbite-react';
 import { FaRegBookmark, FaRegHeart, FaHeart, FaReply, FaUser, FaRegCopy, FaCheck, FaBookmark } from 'react-icons/fa';
+
 import { RepliesList } from './RepliesList';
 import { deleteLike, deleteRecallComment, likeSomething, recallComment } from '../../../api/blog.api';
 import { ProfileModal } from '../../modals/ProfileModal';
-import { Dropdown, Tooltip } from 'flowbite-react';
-import CollaboratorBadge from '../../badges/CollaboratorBadge'
-import PopularBadge from '../../badges/PopularBadge'
-import VeteranBadge from '../../badges/VeteranBadge'
-import StorytellerBadge from '../../badges/StorytellerBadge'
-import ExplorerBadge from '../../badges/ExplorerBadge';
-
-const badgeTypeToComponentMap = {
-  VETERAN: VeteranBadge,
-  STORYTELLER: StorytellerBadge,
-  POPULAR: PopularBadge,
-  COLLABORATOR: CollaboratorBadge,
-  EXPLORER: ExplorerBadge,
-};
+import { badgeTypeToComponentMap } from '../../../globals';
 
 function capitalize(text) {
   if (!text) return "";
   return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
 }
-
 
 const ActionIcons = ({ onReplyClick, userHasLiked, onLikeClick, isCopied, copyToClipboard, userHasRecalled, comment_id }) => {
   const [selectedRecallLevel, setSelectedRecallLevel] = useState(userHasRecalled.level);
