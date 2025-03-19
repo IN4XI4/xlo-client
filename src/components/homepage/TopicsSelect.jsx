@@ -22,9 +22,10 @@ export function TopicsSelect({ isAuthenticated }) {
   async function loadTopicTags() {
     try {
       const res = await getTopicTags();
-      setTopicTags(res.data.results);
-      if (res.data.results.length > 0) {
-        setSelectedTopicTag(res.data.results[0]);
+      const shuffledResults = res.data.results.sort(() => Math.random() - 0.5);
+      setTopicTags(shuffledResults);
+      if (shuffledResults.length > 0) {
+        setSelectedTopicTag(shuffledResults[0]);
       }
     } catch (error) {
       setError(error);
