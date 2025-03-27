@@ -36,7 +36,7 @@ export function AtGlanceTile({ isAuthenticated }) {
           </div>
         </div>
         <div>
-          <div className="text-[#75929F] text-2xl cursor-pointer">
+          <div className="text-[#75929F] text-xl cursor-pointer">
             {isOpen ? <FiChevronUp /> : <FiChevronDown />}
           </div>
         </div>

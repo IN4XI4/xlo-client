@@ -61,7 +61,7 @@ export function HomePage() {
           <div className='w-full md:w-[55%] md:pe-1'>
             <TopicsSelect isAuthenticated={isAuthenticated} />
             {user && <div className="py-3"><AtGlanceTile isAuthenticated={isAuthenticated} /></div>}
-            {!user && <div className="py-3"><MyActivitiesTile isAuthenticated={isAuthenticated} /></div>}
+            {!user && <div className="pt-3 md:py-3"><MyActivitiesTile isAuthenticated={isAuthenticated} /></div>}
           </div>
           {user ? <div className='w-full md:w-[45%] grid grid-cols-1 sm:grid-cols-2 md:ps-2'>
             <MyActivitiesTile activeDays={user.active_days} isAuthenticated={isAuthenticated} />
@@ -71,7 +71,7 @@ export function HomePage() {
             <MySpacesTile />
           </div> :
             <div className='w-full md:w-[45%] grid grid-cols-1 sm:grid-cols-2 md:ps-2'>
-              <div className="sm:col-span-2 pt-3 md:pt-0 pb-3"><AtGlanceTile isAuthenticated={isAuthenticated} /></div>
+              <div className="sm:col-span-2 pb-3"><AtGlanceTile isAuthenticated={isAuthenticated} /></div>
             </div>}
         </div>
 

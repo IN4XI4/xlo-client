@@ -30,14 +30,14 @@ export function MyRewardsTile() {
   }
 
   if (!nextBadgeLevels) {
-    return <div>Loading badges...</div>;
+    return <div></div>;
   }
   return (
     <div className='flex flex-col max-h-full'>
       <div className={`bg-[#97F2E9] rounded-xl p-3 sm:ms-2 ${isOpen ? "flex-grow flex flex-col" : ""}`}>
         <div className='flex items-center' onClick={() => setIsOpen(!isOpen)}>
           <div className='flex-grow pe-1 cursor-pointer'>
-            <div className='text-[#009B93] font-bold text-xl xl:text-2xl border-b-2 border-[#009B93]'>
+            <div className='text-[#009B93] font-bold md:text-xl xl:text-2xl border-b-2 border-[#009B93]'>
               My rewards
             </div>
             <div className='text-end text-[#009B93] text-sm pb-1'>

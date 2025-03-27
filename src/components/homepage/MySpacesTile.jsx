@@ -6,7 +6,7 @@ export function MySpacesTile() {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <div className='bg-white flex flex-col'>
+    <div className='flex flex-col'>
       <div className={`bg-[#F0DEA4] rounded-xl p-3 mb-3 sm:mb-0  sm:ms-2 ${isOpen ? "flex-grow flex flex-col" : ""}`}>
         <div className='flex items-center' onClick={() => setIsOpen(!isOpen)}>
           <div className='flex-grow pe-3 cursor-pointer'>
