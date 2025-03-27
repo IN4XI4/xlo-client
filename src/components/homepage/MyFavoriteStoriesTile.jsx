@@ -38,7 +38,7 @@ export function MyFavoriteStoriesTile() {
           </div>
         </div>
         <div>
-          <div className="text-[#98706A] text-2xl cursor-pointer">
+          <div className="text-[#98706A] text-xl cursor-pointer">
             {isOpen ? <FiChevronUp /> : <FiChevronDown />}
           </div>
         </div>
