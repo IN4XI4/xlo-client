@@ -10,6 +10,16 @@ const getAuthHeaders = () => {
 };
 
 // Stories
+export const getStories = (page, page_size = 10, ordering = null, searchText = '') => {
+    let url = `stories/?page=${page}&page_size=${page_size}`;
+    if (ordering) {
+        url += `&ordering=${ordering}`;
+    }
+    if (searchText) {
+        url += `&title__icontains=${encodeURIComponent(searchText)}`;
+    }
+    return blogApi.get(url, { headers: getAuthHeaders() });
+};
 export const getStoriesByTopic = (topic_id, page, ordering = null, searchText = '') => {
     let url = `stories/?topic=${topic_id}&page=${page}`;
     if (ordering) {
@@ -20,6 +30,16 @@ export const getStoriesByTopic = (topic_id, page, ordering = null, searchText = 
     }
     return blogApi.get(url, { headers: getAuthHeaders() });
 };
+
+
+export const getLikedStories = (page, page_size = 10, ordering = null) => {
+    let url = `stories/liked_stories/?page=${page}&page_size=${page_size}`;
+    if (ordering) {
+        url += `&order=${ordering}`;
+    }
+    return blogApi.get(url, { headers: getAuthHeaders() });
+};
+
 export const getLikedTopicStories = (page, ordering = null, searchText = '') => {
     let url = `stories/liked_topics_stories/?page=${page}`;
     if (ordering) {
@@ -61,7 +81,6 @@ export const getCardsBySoftSkill = (data, page) => blogApi.post(`cards/random-by
 // Blocks
 export const getBlock = (blockId) => blogApi.get(`blocks/${blockId}/`, { headers: getAuthHeaders() })
 export const getBlocksByCard = (cardId) => blogApi.get(`blocks/?card=${cardId}`, { headers: getAuthHeaders() })
-export const getBlockTypes = () => blogApi.get(`blocktypes/`, { headers: getAuthHeaders() })
 
 // Comments
 export const getCommentsByStory = (storyId, page, newest = false) => {

@@ -13,6 +13,8 @@ export function EditStoryPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [initialData, setInitialData] = useState({});
   const [userLevel, setUserLevel] = useState(0);
+  const [userPicture, setUserPicture] = useState(0);
+  const [userColor, setUserColor] = useState(0);
   const [submitMessage, setSubmitMessage] = useState('');
   const [isSubmitError, setIsSubmitError] = useState(false);
 
@@ -21,7 +23,11 @@ export function EditStoryPage() {
       try {
         const response = await getUser();
         const user_level = response.data.user_level_display.level_value
+        const user_image = response.data.picture
+        const user_color = response.data.profile_color
         setUserLevel(user_level)
+        setUserPicture(user_image)
+        setUserColor(user_color)
 
       } catch (error) {
         console.error("Error loading data:", error);
@@ -62,7 +68,7 @@ export function EditStoryPage() {
   }
 
   if (isLoading || !initialData) {
-    return <div className="pt-24 px-4 md:px-16 lg:px-32 xl:px-44">Loading...</div>;
+    return <div className="pt-24 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32">Loading...</div>;
   }
 
   return (
@@ -72,6 +78,8 @@ export function EditStoryPage() {
       submitMessage={submitMessage}
       isSubmitError={isSubmitError}
       userLevel={userLevel}
+      userColor={userColor}
+      userPicture={userPicture}
       storyId={storyId} />
   )
 }

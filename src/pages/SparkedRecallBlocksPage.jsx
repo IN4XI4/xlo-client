@@ -1,21 +1,26 @@
 import React, { useEffect, useState } from 'react'
-import { deleteLike, getMyRecallBlocksSparked, likeSomething } from '../api/blog.api';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import MarkdownRenderer from '../components/MardownRenderer';
-import { BsDot, BsThreeDotsVertical } from "react-icons/bs";
-import { ActionIcons } from '../components/topics/ActionIcons';
-import { MonsterMentorProfileModal } from '../components/topics/MonsterMentorProfileModal';
+
+import { HeroBlock } from '../components/blocks/HeroBlock';
+import { StandardBlock } from '../components/blocks/StandardBlock';
+import { MonsterBlock } from '../components/blocks/MonsterBlock';
+import { MentorBlock } from '../components/blocks/MentorBlock';
+import { HighlightBlock } from '../components/blocks/HighlightBlock';
+import { deleteLike, getMyRecallBlocksSparked, likeSomething } from '../api/blog.api';
+import { QuoteBlock } from '../components/blocks/QuoteBlock';
+import { TestimonialBlock } from '../components/blocks/TestimonialBlock';
+import { WonderBlock } from '../components/blocks/WonderBlock';
+import { FactBlock } from '../components/blocks/FactBlock';
+import { FlashcardBlock } from '../components/blocks/FlashcardBlock';
+import { ReflectionBlock } from '../components/blocks/ReflectionBlock';
+import { QuestionBlock } from '../components/blocks/QuestionBlock';
 
 
 export function SparkedRecallBlocksPage() {
   const [blocks, setBlocks] = useState([]);
   const [error, setError] = useState(null);
-  const [isCopied, setIsCopied] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [showActionIcons, setShowActionIcons] = useState({});
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalData, setModalData] = useState({});
   const [importanceOrder, setImportanceOrder] = useState('');
   const [createdTimeOrder, setCreatedTimeOrder] = useState('');
   const blockContentTypeId = 12;
@@ -39,7 +44,7 @@ export function SparkedRecallBlocksPage() {
     const orderValues = ['created_time', '-created_time'];
     return orderValues[Math.floor(Math.random() * orderValues.length)];
   }
-  
+
 
   async function loadBlocks(page) {
     try {
@@ -59,34 +64,6 @@ export function SparkedRecallBlocksPage() {
       setHasMore(false);
     }
   }
-
-  const openModal = (data) => {
-    setModalData(data);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  // Action
-  const handleToggleActionIcons = (blockId) => {
-    setShowActionIcons(prevState => ({
-      ...prevState,
-      [blockId]: !prevState[blockId]
-    }));
-  };
-
-  const copyToClipboard = (content) => {
-    navigator.clipboard.writeText(content)
-      .then(() => {
-        setIsCopied(true);
-        setTimeout(() => setIsCopied(false), 5000);
-      })
-      .catch((error) => {
-        console.error('Error copying content to clipboard', error);
-      });
-  };
 
   const handleLikeClick = async (blockId, userHasLiked) => {
     try {
@@ -117,7 +94,7 @@ export function SparkedRecallBlocksPage() {
   };
 
   return (
-    <div className='pb-20 pt-24 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44'>
+    <div className='pb-20 pt-24 md:pt-28 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32'>
       <div className='text-xl font-semibold'>Welcome to the block recall</div>
       <div className='text-gray-500 truncate'>All your block content are located here...</div>
       <InfiniteScroll
@@ -134,100 +111,148 @@ export function SparkedRecallBlocksPage() {
       >
         {blocks.map((block, index) => (
           <div key={index} className='pb-10'>
-            {block.block.block_type_name === "ATTACK" ? (
-              <div className='pb-1 flex justify-end items-center'>
-                <div className='text-end text-sm md:text-base'>
-                  <div className='font-bold'>{block.block.soft_skill_monster_name}</div>
-                  <div className='text-gray-500'>{block.block.soft_skill_name}</div>
-                </div>
-                <div className=''>
-                  {block.block.soft_skill_monster_picture ? (
-                    <img src={block.block.soft_skill_monster_picture} alt="Monster"
-                      className="h-10 w-10 md:h-14 md:w-14 rounded-full ms-2 border-[3px] cursor-pointer"
-                      style={{ borderColor: block.block.soft_skill_color }}
-                      onClick={() => openModal(
-                        {
-                          image: block.block.soft_skill_monster_picture,
-                          name: block.block.soft_skill_monster_name,
-                          profile: block.block.soft_skill_monster_profile,
-                          color: block.block.soft_skill_color,
-                          soft_skill_name: block.block.soft_skill_name,
-                          soft_skill_description: block.block.soft_skill_description,
-                          soft_skill_logo: block.block.soft_skill_logo,
-                          isMonster: true
-                        }
-                      )} />
-                  ) : (<div></div>)}
-                </div>
-              </div>
-            ) : block.block.block_type_name === "DEFENSE" ? (
-              <div className='pb-1 flex items-center'>
-                <div className=''>
-                  {block.block.mentor_picture ? (
-                    <img src={block.block.mentor_picture} alt="Mentor"
-                      className="h-10 w-10 md:h-14 md:w-14 rounded-full me-2 border-[3px] cursor-pointer"
-                      onClick={() => openModal(
-                        {
-                          image: block.block.mentor_picture,
-                          name: block.block.mentor_name,
-                          job: block.block.mentor_job,
-                          profile: block.block.mentor_profile,
-                          color: block.block.mentor_color,
-                          isMonster: false
-                        }
-                      )}
-                      style={{ borderColor: block.block.mentor_color }} />
-                  ) : <></>}
-                </div>
-                <div className='text-sm md:text-base'>
-                  <div className='font-bold'>{block.block.mentor_name}</div>
-                  <div className='text-gray-500'>{block.block.mentor_job}</div>
-                </div>
-              </div>
-            ) : (<></>)}
-            <div className={`flex items-center ${block.block.block_type_name === "DEFENSE" ? "ps-10" : ""}`}>
-              <div className='flex-grow bg-gray-50 rounded-2xl border-[4px] p-4'
-                style={{
-                  borderColor:
-                    block.block.block_type_name === "DEFENSE"
-                      ? (block.block.mentor_color || "#3DB1FF")
-                      : (block.block.soft_skill_color || "#3DB1FF")
-                }}>
-                <div className=''> <MarkdownRenderer content={block.block.content} /></div>
-                <div className={`py-3 flex justify-center ${block.block.image ? "border-t-2" : ""}`}>
-                  {block.block.image ?
-                    (<div><img className='rounded-lg md:max-h-[500px]' src={block.block.image} alt="" /></div>)
-                    : (<div></div>)}</div>
-              </div>
-              <div>
-                <div className='flex items-center'>
-                  {showActionIcons[block.block.id] ?
-                    <BsDot className="text-2xl cursor-pointer text-gray-500" onClick={() => handleToggleActionIcons(block.block.id)} /> :
-                    <BsThreeDotsVertical className="text-2xl cursor-pointer text-gray-500 px-0" onClick={() => handleToggleActionIcons(block.block.id)} />}
-                </div>
-              </div>
-            </div>
-            {showActionIcons[block.block.id] &&
-              <ActionIcons hasLiked={block.block.user_has_liked}
-                onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)} isCopied={isCopied}
-                copyToClipboard={() => copyToClipboard(block.block.content)} userHasRecalled={block.block.user_has_recalled} block_id={block.block.id}
-                onRecallUpdate={() => { }} hideBookmarkAndReply={true} />
-            }
+            {block.block.block_type_name === "MONSTER" ? (
+              <MonsterBlock
+                content={block.block.content}
+                image={block.block.image}
+                color={block.block.soft_skill_color}
+                monster_image={block.block.soft_skill_monster_picture}
+                monster_name={block.block.soft_skill_monster_name}
+                monster_profile={block.block.soft_skill_monster_profile}
+                soft_skill_name={block.block.soft_skill_name}
+                soft_skill_description={block.block.soft_skill_description}
+                soft_skill_logo={block.block.soft_skill_logo}
+                user_has_liked={block.block.user_has_liked}
+                user_has_recalled={block.block.user_has_recalled}
+                onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
+                isRecall={true}
+              />
+            ) : block.block.block_type_name === "MENTOR" ? (
+              <MentorBlock
+                content={block.block.content}
+                image={block.block.image}
+                color={block.block.mentor_color}
+                mentor_image={block.block.mentor_picture}
+                mentor_name={block.block.mentor_name}
+                mentor_job={block.block.mentor_job}
+                mentor_profile={block.block.mentor_profile}
+                user_has_liked={block.block.user_has_liked}
+                user_has_recalled={block.block.user_has_recalled}
+                onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
+                isRecall={true}
+              />
+            ) : block.block.block_type_name === "HERO" ? (
+              <HeroBlock
+                content={block.block.content}
+                image={block.block.image}
+                color={block.block.mentor_color}
+                ownerAvatar={block.block.owner_picture}
+                user_has_liked={block.block.user_has_liked}
+                user_has_recalled={block.block.user_has_recalled}
+                onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
+                isRecall={true}
+              />
+            ) : block.block.block_type_name === "HIGHLIGHT" ? (
+              <HighlightBlock
+                content={block.block.content}
+                image={block.block.image}
+                color={block.block.mentor_color}
+                user_has_liked={block.block.user_has_liked}
+                user_has_recalled={block.block.user_has_recalled}
+                onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
+                isRecall={true}
+              />
+            ) : block.block.block_type_name === "QUOTE" ? (
+              <QuoteBlock
+                content={block.block.content}
+                image={block.block.image}
+                color={block.block.mentor_color}
+                authorName={block.block.quoted_by}
+                authorPicture={block.block.image_2}
+                user_has_liked={block.block.user_has_liked}
+                user_has_recalled={block.block.user_has_recalled}
+                onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
+                isRecall={true}
+              />
+            ) : block.block.block_type_name === "TESTIMONIAL" ? (
+              <TestimonialBlock
+                content={block.block.content}
+                image={block.block.image}
+                color={block.block.mentor_color}
+                blockColor={block.block.block_color_string}
+                user_has_liked={block.block.user_has_liked}
+                user_has_recalled={block.block.user_has_recalled}
+                onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
+                isRecall={true}
+              />
+            ) : block.block.block_type_name === "WONDER" ? (
+              <WonderBlock
+                content={block.block.content}
+                image={block.block.image}
+                title={block.block.title}
+                user_has_liked={block.block.user_has_liked}
+                user_has_recalled={block.block.user_has_recalled}
+                onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
+                isRecall={true}
+              />
+            ) : block.block.block_type_name === "FACT" ? (
+              <FactBlock
+                content={block.block.content}
+                image={block.block.image}
+                color={block.block.mentor_color}
+                contentClass={block.block.content_class}
+                user_has_liked={block.block.user_has_liked}
+                user_has_recalled={block.block.user_has_recalled}
+                onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
+                isRecall={true}
+              />
+            ) : block.block.block_type_name === "FLASHCARD" ? (
+              <FlashcardBlock
+                content={block.block.content}
+                image={block.block.image}
+                color={block.block.soft_skill_color}
+                content2={block.block.content2}
+                image2={block.block.image2}
+                user_has_liked={block.block.user_has_liked}
+                user_has_recalled={block.block.user_has_recalled}
+                onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
+                isRecall={true}
+              />
+            ) : block.block.block_type_name === "REFLECTION" ? (
+              <ReflectionBlock
+                content={block.block.content}
+                image={block.block.image}
+                color={block.block.soft_skill_color}
+                content2={block.block.content_2}
+                image2={block.block.image2}
+                user_has_liked={block.block.user_has_liked}
+                user_has_recalled={block.block.user_has_recalled}
+                onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
+                isRecall={true}
+              />
+            ) : block.block.block_type_name === "QUESTION" ? (
+              <QuestionBlock
+                content={block.block.content}
+                image={block.block.image}
+                color={block.block.soft_skill_color}
+                blockOptions={block.block.options}
+                user_has_liked={block.block.user_has_liked}
+                user_has_recalled={block.block.user_has_recalled}
+                onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
+                isRecall={true}
+              />
+            ) : (<StandardBlock
+              content={block.block.content}
+              image={block.block.image}
+              color={block.block.soft_skill_color}
+              user_has_liked={block.block.user_has_liked}
+              user_has_recalled={block.block.user_has_recalled}
+              onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
+              isRecall={true}
+            />)}
           </div>
         ))}
       </InfiniteScroll>
-      {isModalOpen && <MonsterMentorProfileModal
-        image={modalData.image}
-        name={modalData.name}
-        job={modalData.job}
-        profile={modalData.profile}
-        color={modalData.color}
-        onClose={closeModal}
-        soft_skill_name={modalData.soft_skill_name}
-        soft_skill_description={modalData.soft_skill_description}
-        soft_skill_logo={modalData.soft_skill_logo}
-        isMonster={modalData.isMonster}
-      />}
     </div>
   )
 }

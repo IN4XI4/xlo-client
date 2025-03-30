@@ -8,24 +8,24 @@ import { BiSolidBellRing } from "react-icons/bi";
 import { PiTextAlignJustifyFill } from "react-icons/pi";
 import { IoPlanetSharp } from "react-icons/io5";
 
-import { ComingSoonModal } from './ComingSoonModal';
-import { NotificationsModal } from './NotificationsModal';
-import { SelectRecallsModal } from './SelectRecallsModal';
 import { CREATOR_LEVEL_1 } from '../globals';
 import { getUser } from '../api/users.api';
 import { getActiveSpace } from '../api/spaces.api';
 import { useAppState } from '../context/ScrollContext';
-import logo from '../assets/Logo.svg';
 import rocket from '../assets/rocket.svg';
-import profile_pic from '../assets/Profile-pic.svg';
 import { useSpace } from '../context/SpaceContext';
+import { ComingSoonModal } from './modals/ComingSoonModal';
+import { NotificationsModal } from './modals/NotificationsModal';
+import logo from '../assets/Logo.svg';
+import profile_pic from '../assets/Profile-pic.svg';
+import { SelectRecallsModal } from './modals/SelectRecallsModal';
+import { useUser } from '../context/UserContext';
 
 
 export function Navigation() {
   const navigate = useNavigate();
   const location = useLocation();
-  const token = localStorage.getItem("token");
-  const [user, setUser] = useState({ data: {} });
+  const { user, setUser } = useUser();
   const [error, setError] = useState(null);
   const { isScrolled, storyTitle, currentCardTitle, setIsScrolled, navigationKey } = useAppState();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,9 +38,13 @@ export function Navigation() {
   const [userLevel, setUserLevel] = useState(0);
   const [spaceInfo, setSpaceInfo] = useState(null);
 
+  const token = localStorage.getItem("token");
+
   useEffect(() => {
-    loadUser();
-  }, [navigationKey]);
+    if (!user && token) {
+      loadUser();
+    }
+  }, [navigationKey, token]);
 
   useEffect(() => {
     setIsScrolled(false);
@@ -97,6 +101,7 @@ export function Navigation() {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('lastConnectionDate');
     navigate('/');
     window.location.reload();
   };
@@ -134,7 +139,7 @@ export function Navigation() {
   };
 
   return (
-    <div className="bg-white z-30 shadow p-4 fixed top-0 w-full flex items-center px-4 md:px-16 lg:px-32 xl:px-44">
+    <div className="bg-white z-30 shadow p-4 fixed top-0 w-full flex items-center px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32">
       <div className="flex flex-grow items-center space-x-4 pe-2 border-e-2">
         <div className='flex flex-grow items-center'>
           <Link to="/">
@@ -163,7 +168,7 @@ export function Navigation() {
       </div>
       <div className="flex items-center ps-2">
         <div className="flex items-center space-x-4">
-          <Dropdown label="" dismissOnClick={true} renderTrigger={() => (
+          {user ? (<Dropdown label="" dismissOnClick={true} renderTrigger={() => (
             <span className='cursor-pointer'>
               {user && user.picture ? (
                 <Avatar img={user.picture} alt="Profile" rounded
@@ -232,10 +237,18 @@ export function Navigation() {
                 <AiFillFire className='me-3 text-[#3DB1FF]' />
                 My contribution
               </span>
+            </Dropdown.Item>
             </Dropdown.Item> */}
             <Dropdown.Divider />
             <Dropdown.Item onClick={handleLogout} className='text-gray-500'>Logout</Dropdown.Item>
           </Dropdown>
+          ) : (
+            <div className="flex space-x-4">
+              <Link to="/login" className="text-[#3DB1FF]">Login</Link>
+              <Link to="/login?view=register" className="text-[#3DB1FF]">Register</Link>
+            </div>
+          )}
+
         </div>
       </div >
       {isRecallsModalOpen && <SelectRecallsModal onClose={closeRecallsModal} />

@@ -1,66 +1,81 @@
-import React, { useState, useEffect } from 'react';
-import { Login } from '../components/users/Login'
-import { ForgotPassword } from '../components/users/ForgotPassword';
-import { Register } from '../components/users/Register';
-import { ResetPassword } from '../components/users/ResetPassword';
-import { Welcome } from '../components/Welcome';
-import { useLocation } from 'react-router-dom';
-import { TopicTags } from '../components/topics/TopicsTags';
+import React, { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Alert } from 'flowbite-react';
+import { HiInformationCircle } from 'react-icons/hi2';
+
+import { TopicsSelect } from '../components/homepage/TopicsSelect';
+import { AtGlanceTile } from '../components/homepage/AtGlanceTile';
+import { MyActivitiesTile } from '../components/homepage/MyActivitiesTile';
+import { MyFavoriteStoriesTile } from '../components/homepage/MyFavoriteStoriesTile';
+import { MyRewardsTile } from '../components/homepage/MyRewardsTile';
+import { useUser } from '../context/UserContext';
+import { MyAvatarTile } from '../components/homepage/MyAvatarTile';
+import { MySpacesTile } from '../components/homepage/MySpacesTile';
 
 
 export function HomePage() {
+  const navigate = useNavigate();
   const location = useLocation();
-  const token = localStorage.getItem("token");
-  const getViewFromQuery = () => {
-    const queryParams = new URLSearchParams(location.search);
-    return queryParams.get('view') || 'login';
-  };
-  const [currentView, setCurrentView] = useState(getViewFromQuery());
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const { user } = useUser();
+
   useEffect(() => {
-    setCurrentView(getViewFromQuery());
-  }, [location.search]);
+    const token = localStorage.getItem('token');
+    setIsAuthenticated(!!token);
+    setShowAlert(!token);
+  }, []);
 
-  const renderToken = () => (
-    <>
-      <div className="pt-24 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
-        <TopicTags />
-      </div>
-    </>
-  );
+  useEffect(() => {
+    if (location.state?.storyDeleted) {
+      setShowSuccessMessage(true);
+      const timer = setTimeout(() => {
+        setShowSuccessMessage(false);
+        navigate(location.pathname, { replace: true, state: {} });
+      }, 5000);
 
-  const renderNoToken = () => {
-    let viewComponent;
-    switch (currentView) {
-      case 'register':
-        viewComponent = <Register />;
-        break;
-      case 'forgotpassword':
-        viewComponent = <ForgotPassword />;
-        break;
-      case 'resetpassword':
-        viewComponent = <ResetPassword />;
-        break;
-      case 'login':
-      default:
-        viewComponent = <Login />;
-        break;
+      return () => clearTimeout(timer);
     }
+  }, [location]);
 
-    return (
-      <div className="grid lg:grid-cols-5 pt-24 md:pt-32 px-4 md:px-16 lg:px-32 xl:px-44">
-        <div className='lg:col-span-3 pb-6 px-4'>
-          <Welcome />
-        </div>
-        <div className='lg:col-span-2 pb-8 sm:px-24 md:px-0 xl:px-4'>
-          {viewComponent}
-        </div>
-      </div>
-    );
-  };
   return (
-    <div>
-      {token ? renderToken() : renderNoToken()}
-    </div>
+    <div className="pt-24 md:pt-24 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32">
+      <div>
+        {showAlert && (
+          <Alert
+            color="info"
+            icon={HiInformationCircle}
+            className="mb-4"
+            onDismiss={() => setShowAlert(false)}
+          >
+            <span className="font-medium">Sign in to unlock all features and enhance your experience!</span>
+          </Alert>
+        )}
+        {showSuccessMessage && (
+          <Alert color="success" icon={HiInformationCircle} className='mb-4'>
+            <span className="font-medium">Story deleted successfully!</span>
+          </Alert>
+        )}
+        <div className='flex flex-col md:flex-row items-start'>
+          <div className='w-full md:w-[55%] md:pe-1'>
+            <TopicsSelect isAuthenticated={isAuthenticated} />
+            {user && <div className="py-3"><AtGlanceTile isAuthenticated={isAuthenticated} /></div>}
+            {!user && <div className="pt-3 md:py-3"><MyActivitiesTile isAuthenticated={isAuthenticated} /></div>}
+          </div>
+          {user ? <div className='w-full md:w-[45%] grid grid-cols-1 sm:grid-cols-2 md:ps-2'>
+            <MyActivitiesTile activeDays={user.active_days} isAuthenticated={isAuthenticated} />
+            <MyRewardsTile user={user} />
+            <div className="sm:col-span-2 py-3"><MyFavoriteStoriesTile /></div>
+            <MyAvatarTile />
+            <MySpacesTile />
+          </div> :
+            <div className='w-full md:w-[45%] grid grid-cols-1 sm:grid-cols-2 md:ps-2'>
+              <div className="sm:col-span-2 pb-3"><AtGlanceTile isAuthenticated={isAuthenticated} /></div>
+            </div>}
+        </div>
 
+      </div>
+    </div>
   )
 }

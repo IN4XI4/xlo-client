@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react'
+import { Dropdown, Tooltip } from 'flowbite-react';
 import { FaRegBookmark, FaRegHeart, FaHeart, FaReply, FaUser, FaRegCopy, FaCheck, FaBookmark } from 'react-icons/fa';
+
 import { RepliesList } from './RepliesList';
 import { deleteLike, deleteRecallComment, likeSomething, recallComment } from '../../../api/blog.api';
-import { ProfileModal } from '../../ProfileModal';
-import { Dropdown } from 'flowbite-react';
+import { ProfileModal } from '../../modals/ProfileModal';
+import { badgeTypeToComponentMap } from '../../../globals';
 
+function capitalize(text) {
+  if (!text) return "";
+  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+}
 
 const ActionIcons = ({ onReplyClick, userHasLiked, onLikeClick, isCopied, copyToClipboard, userHasRecalled, comment_id }) => {
   const [selectedRecallLevel, setSelectedRecallLevel] = useState(userHasRecalled.level);
@@ -93,6 +99,10 @@ export function CommentCard({ comment, isReply, onReply, commentContentTypeId })
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+  const BadgeComponent = comment.commentor_last_badge?.badge_type
+    ? badgeTypeToComponentMap[comment.commentor_last_badge.badge_type]
+    : null;
+  const [firstColor, secondColor] = comment.commentor_last_badge?.level_colors || ['#FFFFFF', '#000000'];
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -154,12 +164,30 @@ export function CommentCard({ comment, isReply, onReply, commentContentTypeId })
         {comment.user_picture ? (
           <img src={comment.user_picture} alt="Mentor" className="h-8 w-8 md:h-12 md:w-12 rounded-full cursor-pointer"
             onClick={() => isAuthenticated && openModal()} />
-        ) : <div className='p-2 md:p-4 rounded-full bg-gray-200 text-gray-500 cursor-pointer' onClick={() => isAuthenticated && openModal()}><FaUser /></div>}
+        ) : <div className='p-2 md:p-4 rounded-full bg-gray-200 text-gray-500 cursor-pointer'
+          onClick={() => isAuthenticated && openModal()}><FaUser /></div>}
       </div>
       <div className={`flex-grow ${cardBackgroundClass} rounded-lg p-4 rounded-tl-none`}>
         <div className=''>
-          <div className="">
-            <span className='font-bold cursor-pointer' onClick={() => isAuthenticated && openModal()}>{comment.user_name}</span> <span className='text-gray-500'>{comment.formatted_created_time}</span>
+          <div className="flex items-center">
+            <span className='font-bold cursor-pointer pe-1' onClick={() => isAuthenticated && openModal()}>
+              {comment.user_name}
+            </span>
+            {comment.commentor_last_badge ? (
+              <div className='pe-1 md:pe-2'>
+                <Tooltip className="text-sm"
+                  content={`${comment.commentor_last_badge.level} ${capitalize(comment.commentor_last_badge.badge_type)}`}
+                  placement="bottom">
+                  <BadgeComponent
+                    firstColor={firstColor}
+                    secondColor={secondColor}
+                    className="h-5 w-5 md:h-6 md:w-6"
+                  />
+                </Tooltip>
+              </div>
+            ) : (
+              <div></div>)}
+            <span className='text-gray-500'>{comment.formatted_created_time}</span>
           </div>
           <div className='pb-3'>
             {comment.comment_text}

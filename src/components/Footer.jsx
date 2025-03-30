@@ -6,7 +6,7 @@ import { MdInfoOutline, MdMailOutline } from 'react-icons/md';
 export function Footer() {
   const currentYear = new Date().getFullYear();
   return (
-    <footer className="bg-white shadow w-full py-4 px-4 md:px-16 lg:px-32 xl:px-44">
+    <footer className="bg-white shadow w-full py-4 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32">
       <div className="grid grid-cols-6 justify-between items-center">
         <div className="col-span-6 md:col-span-2 pt-1 md:pt-0 text-center md:text-start text-gray-500 text-sm md:text-base order-3 md:order-1">
           &copy; {currentYear}, an inaxia project | All rights reserved

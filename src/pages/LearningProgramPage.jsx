@@ -85,14 +85,18 @@ export function LearningProgramPage() {
   };
 
   return (
-    <div className="pt-24 px-4 md:px-16 lg:px-32 xl:px-44">
+    <div className="pt-24 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32">
       {softskillCards.length > 0 && currentCardIndex < softskillCards.length && (
         <>
           <div className='text-xl text-gray-500 pb-3'>
             {softskillCards[currentCardIndex].title}
           </div>
           <div className='md:px-16 lg:px-24 mb-3'>
-            <BlocksList card={softskillCards[currentCardIndex]} blockContentTypeId={blockContentTypeId} />
+            <BlocksList card={softskillCards[currentCardIndex]}
+              blockContentTypeId={blockContentTypeId}
+              ownerAvatar={softskillCards[currentCardIndex].owner_picture}
+              ownerColor={softskillCards[currentCardIndex].owner_color}
+               />
           </div>
         </>
       )}

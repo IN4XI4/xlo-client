@@ -169,23 +169,32 @@ export function StoryPage() {
   }
 
   return (
-    <div className="pt-24 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
+    <div className="pt-24 md:pt-28 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32">
       {showSuccessMessage && (
         <Alert color="success" icon={HiInformationCircle} className='mb-4'>
           <span className="font-medium">Story updated successfully!</span>
         </Alert>
       )}
-      <div className='pb-2 md:flex flex-col md:flex-row items-center'>
-        <div className='text-4xl font-extrabold'>
-          {story.title}
-        </div>
+      <div className='text-sm text-gray-500 flex items-center'>
+        <span className='font-semibold'>Author: </span>
+        <span className='ps-2'>{story.owner_name}</span>
         {story.is_owner &&
-          <div className='md:ps-2'>
+          <div className='ps-2'>
             <Link to={`/edit-story/${story.id}`}
               className='text-gray-500 border-gray-100 border rounded-lg bg-white py-1 px-2'>
               Edit Story
             </Link>
           </div>}
+      </div>
+      <div className='py-2 flex items-center'>
+        {story.image && (
+          <div className="hidden md:flex items-center justify-center md:w-20 md:h-16 md:mr-3">
+            <img src={story.image} alt={story.title} className="object-cover w-full h-full rounded-lg" />
+          </div>
+        )}
+        <div className='text-4xl font-extrabold md:pb-2'>
+          {story.title}
+        </div>
       </div>
 
       {cards.length > 0 && currentCardIndex < cards.length && (
@@ -194,7 +203,12 @@ export function StoryPage() {
             {cards[currentCardIndex].title}
           </div>
           <div className='md:px-16 lg:px-24 mb-3'>
-            <BlocksList card={cards[currentCardIndex]} blockContentTypeId={blockContentTypeId} />
+            <BlocksList 
+            card={cards[currentCardIndex]} 
+            blockContentTypeId={blockContentTypeId} 
+            ownerAvatar={story.user_picture}
+            ownerColor={story.user_color}
+             />
           </div>
           <div className='md:px-16 lg:px-24 mb-4'>
             <div className='text-end text-sm text-gray-500'>
@@ -217,7 +231,7 @@ export function StoryPage() {
           )}
         </>
       )}
-      {isCardsLoaded && (
+      {isCardsLoaded && isAuthenticated && (
         <div ref={commentsRef} className='py-4'>
           <CommentsList storyId={story.id} commentContentTypeId={commentContentTypeId} />
         </div>

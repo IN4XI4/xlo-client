@@ -19,7 +19,7 @@ export function MyNewStoriesPage() {
     }
   };
   return (
-    <div className="pt-20 md:pt-28 px-4 md:px-16 lg:px-32 xl:px-44">
+    <div className="pt-20 md:pt-28 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32">
       <div className='text-2xl md:text-4xl font-extrabold'>
         Here you'll find new stories linked to the topic(s) you liked and you may haven't yet seen.
       </div>

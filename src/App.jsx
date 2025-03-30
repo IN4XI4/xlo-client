@@ -1,26 +1,32 @@
 import React, { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import ReactGA from "react-ga4";
+
 import { HomePage } from './pages/HomePage'
-import { Navigation } from './components/Navigation'
-import { Footer } from './components/Footer'
+import { LoginPage } from './pages/LoginPage';
 import { TopicStoriesPage } from './pages/TopicStoriesPage'
 import { StoryPage } from './pages/StoryPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { MyNewStoriesPage } from './pages/MyNewStoriesPage'
 import { MyCreatedStoriesPage } from './pages/MyCreatedStoriesPage'
-import { AppStateProvider } from './context/ScrollContext'
 import { CreateStoryPage } from './pages/CreateStoryPage'
-import { EditStoryPage } from './pages/EditStoryPage'
 import { RecallsPage } from './pages/RecallsPage'
+import { EditStoryPage } from './pages/EditStoryPage'
 import { LearnSoftSkillsPage } from './pages/LearnSoftSkillsPage'
 import { LearningProgramPage } from './pages/LearningProgramPage'
 import { FocusedRecallBlocksPage } from './pages/FocusedRecallBlocksPage';
 import { SparkedRecallBlocksPage } from './pages/SparkedRecallBlocksPage';
+import { AvatarPage } from './pages/AvatarPage';
+import { BadgeUpdateModal } from './components/modals/BadgesUpdateModal';
+import { Navigation } from './components/Navigation'
+import { Footer } from './components/Footer'
+import { AppStateProvider } from './context/ScrollContext'
+import { UserProvider } from './context/UserContext';
 import useBeforeInstallPrompt from './hooks/UseBeforeInstallPrompt';
 import { SpacesPage } from './pages/SpacesPage';
 import { SpaceProvider } from './context/SpaceContext';
 import { SpaceMembersPage } from './pages/SpaceMembersPage';
+import { checkNewDay } from './utils/checkNewDay';
 
 
 const isProduction = import.meta.env.VITE_ENV === 'production';
@@ -41,16 +47,28 @@ function formatTitle(pathname) {
 
 function ConditionalFooter() {
   const location = useLocation();
-  const token = localStorage.getItem("token");
+  const normalizedPath = location.pathname.replace(/\/$/, "");
 
   if (
-    token &&
-    location.pathname !== "/recall-cards/" &&
-    !location.pathname.startsWith("/practice-softskills/")
+    normalizedPath === "/login" ||
+    normalizedPath === "/recall-cards" ||
+    normalizedPath.startsWith("/practice-softskills")
   ) {
-    return <Footer />;
+    return null;
   }
-  return null;
+
+  return <Footer />;
+}
+
+function ConditionalNavigationBar() {
+  const location = useLocation();
+  const normalizedPath = location.pathname.replace(/\/$/, "");
+
+  if (normalizedPath === "/login") {
+    return null;
+  }
+
+  return <Navigation />;
 }
 
 function ProtectedRoute({ children }) {
@@ -62,9 +80,11 @@ function ProtectedRoute({ children }) {
 }
 function App() {
   const location = useLocation();
+  const isHomePage = location.pathname === "/";
   const title = formatTitle(location.pathname);
   const deferredPrompt = useBeforeInstallPrompt();
   const [isInstallable, setIsInstallable] = useState(false);
+  const [newBadges, setNewBadges] = useState([]);
 
   useEffect(() => {
     if (isProduction) {
@@ -77,6 +97,14 @@ function App() {
       setIsInstallable(true);
     }
   }, [deferredPrompt]);
+
+  useEffect(() => {
+    checkNewDay(setNewBadges);
+  }, []);
+
+  const handleCloseModal = () => {
+    setNewBadges([]);
+  };
 
   const handleInstallClick = async () => {
     if (deferredPrompt) {
@@ -93,12 +121,12 @@ function App() {
     }
   };
 
-  const token = localStorage.getItem("token");
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      {token && <Navigation />}
+      {newBadges.length > 0 && <BadgeUpdateModal badges={newBadges} onClose={handleCloseModal} />}
+      <ConditionalNavigationBar />
       <div className="flex-grow">
-        {isInstallable && (
+        {isInstallable && isHomePage && (
           <button onClick={handleInstallClick}
             className="fixed bottom-4 right-4 z-40 p-2 border-2 rounded-lg border-[#3DB1FF] text-[#3DB1FF] shadow bg-white">
             Install App
@@ -106,9 +134,11 @@ function App() {
         )}
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/topic/:slug" element={<ProtectedRoute><TopicStoriesPage /></ProtectedRoute>} />
+          <Route path="/login/" element={<LoginPage />} />
+          <Route path="/topic/:slug" element={<TopicStoriesPage />} />
           <Route path="/story/:slug" element={<StoryPage />} />
           <Route path="/profile/" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+          <Route path="/avatar/" element={<ProtectedRoute><AvatarPage /></ProtectedRoute>} />
           <Route path="/new-stories/" element={<ProtectedRoute><MyNewStoriesPage key="mystories-page" /></ProtectedRoute>} />
           <Route path="/my-stories/" element={<ProtectedRoute><MyCreatedStoriesPage key="my-createdstories-page" /></ProtectedRoute>} />
           <Route path="/spaces/:slug/members" element={<ProtectedRoute><SpaceMembersPage key="space-members-page" /></ProtectedRoute>} />
@@ -134,7 +164,9 @@ export default function Root() {
     <BrowserRouter>
       <AppStateProvider>
         <SpaceProvider>
-          <App />
+          <UserProvider>
+            <App />
+          </UserProvider>
         </SpaceProvider>
       </AppStateProvider>
     </BrowserRouter>

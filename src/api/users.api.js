@@ -15,8 +15,11 @@ export const getUserModal = (userId) => usersApi.get(`users/${userId}/`, { heade
 export const getUserProfileColors = () => usersApi.get(`profile_colors/`, { headers: getAuthHeaders() })
 export const getUserExperience = () => usersApi.get(`experience/`, { headers: getAuthHeaders() })
 export const getUserGenders = () => usersApi.get(`genders/`, { headers: getAuthHeaders() })
+export const getUserBadges = (userId) => usersApi.get(`user-badges/?user=${userId}`, { headers: getAuthHeaders() })
 export const getCountries = () => usersApi.get(`countries/`, { headers: getAuthHeaders() })
+export const getUserBadgeInfo = () => usersApi.get(`users/user-badge-information/`, { headers: getAuthHeaders() })
 export const registerUser = (data) => usersApi.post('users/', data)
+export const updateUserBadges = () => usersApi.post(`user-badges/update-badges/`, null, { headers: getAuthHeaders() })
 
 export const updatePassword = (data) => usersApi.put(`users/update_password/`, data, { headers: getAuthHeaders() })
 export const updateUser = (userId, data) => {

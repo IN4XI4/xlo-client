@@ -35,13 +35,13 @@ export function LearnSoftSkillsPage() {
 
   if (loading) {
     return (
-      <div className="pt-24 px-4 md:px-16 lg:px-32 xl:px-44">
+      <div className="pt-24 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32">
         Loading...
       </div>
     )
   }
   return (
-    <div className="pt-24 px-4 md:px-16 lg:px-32 xl:px-44">
+    <div className="pt-24 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32">
       <div className='text-2xl md:text-3xl font-extrabold pb-4'>
         General skills learning program
       </div>
