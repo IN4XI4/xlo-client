@@ -7,12 +7,12 @@ import { AiFillFire } from "react-icons/ai";
 import { BiSolidBellRing } from "react-icons/bi";
 import { PiTextAlignJustifyFill } from "react-icons/pi";
 import { IoPlanetSharp } from "react-icons/io5";
+import { ImExit } from "react-icons/im";
 
 import { CREATOR_LEVEL_1 } from '../globals';
 import { getUser } from '../api/users.api';
 import { getActiveSpace } from '../api/spaces.api';
 import { useAppState } from '../context/ScrollContext';
-import rocket from '../assets/rocket.svg';
 import { useSpace } from '../context/SpaceContext';
 import { ComingSoonModal } from './modals/ComingSoonModal';
 import { NotificationsModal } from './modals/NotificationsModal';
@@ -20,7 +20,7 @@ import logo from '../assets/Logo.svg';
 import profile_pic from '../assets/Profile-pic.svg';
 import { SelectRecallsModal } from './modals/SelectRecallsModal';
 import { useUser } from '../context/UserContext';
-
+import { RocketIcon } from './illustrations/icons/RocketIcon';
 
 export function Navigation() {
   const navigate = useNavigate();
@@ -41,14 +41,31 @@ export function Navigation() {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
+    setIsScrolled(false);
+  }, [location, setIsScrolled]);
+
+  useEffect(() => {
     if (!user && token) {
       loadUser();
     }
   }, [navigationKey, token]);
 
-  useEffect(() => {
-    setIsScrolled(false);
-  }, [location, setIsScrolled]);
+
+  async function loadUser() {
+    if (!token) {
+      setError(new Error("No authentication token available."));
+      return;
+    }
+    try {
+      const res = await getUser();
+      setUser(res.data);
+      setUserLevel(res.data.user_level_display.level_value)
+    } catch (error) {
+      setError(error);
+      localStorage.removeItem("token");
+    }
+  }
+
 
   useEffect(() => {
     fetchSpaceInfo();
@@ -65,21 +82,6 @@ export function Navigation() {
       }
     } else {
       setSpaceInfo(null);
-    }
-  }
-
-  async function loadUser() {
-    if (!token) {
-      setError(new Error("No authentication token available."));
-      return;
-    }
-    try {
-      const res = await getUser();
-      setUser(res.data);
-      setUserLevel(res.data.user_level_display.level_value)
-    } catch (error) {
-      setError(error);
-      localStorage.removeItem("token");
     }
   }
 
@@ -156,14 +158,18 @@ export function Navigation() {
             )}
           </div>
         </div>
-        {activeSpace && (
-          <Link to={spaceInfo?.slug ? `/spaces/${spaceInfo.slug}` : '/spaces/'}>
-            <img
-              src={spaceInfo?.image ? spaceInfo.image : rocket}
-              alt="Profile"
-              className="h-10 w-10 rounded-full"
-            />
-          </Link>
+        {activeSpace && user && spaceInfo && (
+          <div className='flex items-center'>
+            <Link to={spaceInfo?.slug ? `/spaces/${spaceInfo.slug}` : '/spaces/'}>
+              {spaceInfo?.image ? (<img
+                src={spaceInfo.image}
+                alt="Profile"
+                className="h-10 w-10 rounded-full"
+              />) : (<RocketIcon color={spaceInfo.color_name} className="h-10 w-10" />)}
+
+            </Link>
+            <ImExit className='text-gray-400 ms-1 cursor-pointer' onClick={() => setActiveSpace(null)} />
+          </div>
         )}
       </div>
       <div className="flex items-center ps-2">
@@ -232,13 +238,12 @@ export function Navigation() {
                 </svg>
                 My skills</span>
             </Dropdown.Item>
-            {/* <Dropdown.Item onClick={() => openModal('Support us', 'Many ways to support the platform will be available soon.You can always contact us at: contact@mixelo.io. If you\'d like to help out in any way.')}>
+            <Dropdown.Item onClick={() => openModal('Support us', 'Many ways to support the platform will be available soon.You can always contact us at: contact@mixelo.io. If you\'d like to help out in any way.')}>
               < span className='text-gray-500 flex items-center justify-items-center' >
                 <AiFillFire className='me-3 text-[#3DB1FF]' />
                 My contribution
               </span>
             </Dropdown.Item>
-            </Dropdown.Item> */}
             <Dropdown.Divider />
             <Dropdown.Item onClick={handleLogout} className='text-gray-500'>Logout</Dropdown.Item>
           </Dropdown>

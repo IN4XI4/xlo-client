@@ -19,11 +19,11 @@ export function SpaceInfoBox({ spaceInfo }) {
           <>
             <div className='flex items-center text-sm'>
               <FaUsers />
-              <span className='ps-2'>{spaceInfo.members_count} | active users are present on this space</span>
+              <span className='ps-2'>{spaceInfo.members_count} | active users on this space</span>
             </div>
             <div className='flex items-center text-sm'>
               <FaBook />
-              <span className='ps-2'>{spaceInfo.stories_count} | stories are present on this space</span>
+              <span className='ps-2'>{spaceInfo.stories_count} | stories on this space</span>
             </div>
           </>
         )}

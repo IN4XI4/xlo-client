@@ -116,7 +116,7 @@ export function SpacesManagerBox({ onActionComplete }) {
           </div>
           <div className='px-3 pb-1 md:pb-0 flex flex-col justify-center items-center text-gray-500'>
             <Link to="/spaces/" className={`rounded-full border-[0.2rem] border-gray-200 w-12 md:w-20 h-12 md:h-20 mb-2
-             flex items-center justify-center ${isDefaultSpaceActive ? "ring-4 ring-[#3DB1FF] ring-offset-2 shadow-2xl" : ""}`}>
+             flex items-center justify-center ${isDefaultSpaceActive ? "ring-4 ring-[#3DBdFF] ring-offset-2 shadow-2xl" : ""}`}>
               <img src={logo} alt="" className='h-6 w-6 md:h-12 md:w-12' />
             </Link>
             <div className='justify-center font-bold text-sm hidden md:block'>

@@ -1,20 +1,27 @@
 import axios from "axios";
 
 const baseApi = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL
+  baseURL: import.meta.env.VITE_API_BASE_URL
 })
 const getAuthHeaders = () => {
-    const token = localStorage.getItem("token");
-    return token ? { Authorization: `Token ${token}` } : {};
+  const token = localStorage.getItem("token");
+  return token ? { Authorization: `Token ${token}` } : {};
 };
 
 export const login = (data) => baseApi.post('api-token-auth/', data)
+
+export const getTopicTags = (spaceId = null) => {
+  let url = `base/topictags/`;
+  if (spaceId) {
+    url += `?space_id=${spaceId}`;
+  }
+  return baseApi.get(url, { headers: getAuthHeaders() });
+};
 
 export const getTopic = (topic_id) => baseApi.get(`base/topics/${topic_id}`, { headers: getAuthHeaders() })
 export const getTopicBySlug = (slug) => baseApi.get(`base/topics/find-by-slug/${slug}/`, { headers: getAuthHeaders() })
 export const getTopics = () => baseApi.get('base/topics/', { headers: getAuthHeaders() })
 export const getTopicsByCategory = (categoryId) => baseApi.get(`base/topics/?tag=${categoryId}`, { headers: getAuthHeaders() })
-export const getTopicTags = () => baseApi.get('base/topictags/', { headers: getAuthHeaders() })
 
 export const getContentTypes = () => baseApi.get('base/contenttypes/', { headers: getAuthHeaders() })
 

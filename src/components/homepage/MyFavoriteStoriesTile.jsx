@@ -5,7 +5,7 @@ import { getLikedStories } from '../../api/blog.api';
 import { StoryRow } from '../topics/StoryRow';
 
 
-export function MyFavoriteStoriesTile() {
+export function MyFavoriteStoriesTile({ activeSpace }) {
   const [stories, setStories] = useState([]);
   const [error, setError] = useState(null);
   const [isOpen, setIsOpen] = useState(true);
@@ -17,7 +17,8 @@ export function MyFavoriteStoriesTile() {
 
   async function loadStories() {
     try {
-      const res = await getLikedStories(1, 10, "-created_time");
+      const spaceId = activeSpace?.id ?? null;
+      const res = await getLikedStories(1, 10, "-created_time", spaceId);
       setStories(res.data.results)
       console.log("res", res.data.results);
 

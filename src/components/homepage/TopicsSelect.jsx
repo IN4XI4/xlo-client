@@ -8,7 +8,8 @@ import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { getTopicTags } from '../../api/base.api';
 import { deleteLike, likeSomething } from '../../api/blog.api';
 
-export function TopicsSelect({ isAuthenticated }) {
+
+export function TopicsSelect({ isAuthenticated, activeSpace }) {
   const [topicTags, setTopicTags] = useState([]);
   const [selectedTopicTag, setSelectedTopicTag] = useState(null);
   const [error, setError] = useState(null);
@@ -21,7 +22,8 @@ export function TopicsSelect({ isAuthenticated }) {
 
   async function loadTopicTags() {
     try {
-      const res = await getTopicTags();
+      const spaceId = activeSpace?.id ?? null;
+      const res = await getTopicTags(spaceId);
       const shuffledResults = res.data.results.sort(() => Math.random() - 0.5);
       setTopicTags(shuffledResults);
       if (shuffledResults.length > 0) {
