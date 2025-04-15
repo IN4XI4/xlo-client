@@ -13,8 +13,10 @@ export function Footer() {
         </div>
         <div className="col-span-3 md:col-span-2 flex text-center justify-evenly items-center order-1 md:order-2">
           <div className="inline-flex items-center">
-            <span className="text-gray-500 pr-1">Contact</span>
-            <MdMailOutline className='text-xl text-gray-500 mr-4' />
+            <a href="mailto:contact@mixelo.io" className="flex items-center">
+              <span className="text-gray-500 pr-1 cursor-pointer">Contact</span>
+              <MdMailOutline className='text-xl text-gray-500 mr-4 cursor-pointer' />
+            </a>
             <span className="text-gray-500 pr-1">Privacy</span>
             <MdInfoOutline className='text-xl text-gray-500' />
           </div>

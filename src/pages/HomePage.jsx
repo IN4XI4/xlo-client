@@ -68,7 +68,7 @@ export function HomePage() {
             {!user && <div className="pt-3 md:py-3"><MyActivitiesTile isAuthenticated={isAuthenticated} /></div>}
           </div>
           {user ? <div className='w-full md:w-[45%] grid grid-cols-1 sm:grid-cols-2 md:ps-2'>
-            <MyActivitiesTile activeDays={user.active_days} isAuthenticated={isAuthenticated} />
+            <MyActivitiesTile activeDays={user.active_days} userData={user} isAuthenticated={isAuthenticated} />
             <MyRewardsTile user={user} />
             <div className="sm:col-span-2 py-3">
               <MyFavoriteStoriesTile activeSpace={activeSpace} key={`topics-${activeSpace?.id || "none"}`} />
