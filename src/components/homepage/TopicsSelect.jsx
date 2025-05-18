@@ -23,6 +23,7 @@ export function TopicsSelect({ isAuthenticated, activeSpace }) {
   async function loadTopicTags() {
     try {
       const spaceId = activeSpace?.id ?? null;
+
       const res = await getTopicTags(spaceId);
       const shuffledResults = res.data.results.sort(() => Math.random() - 0.5);
       setTopicTags(shuffledResults);
@@ -214,7 +215,7 @@ export function TopicsSelect({ isAuthenticated, activeSpace }) {
             style={{ color: selectedTopicTag.color || "#3DB1FF", borderBottomColor: selectedTopicTag.color || "#3DB1FF" }}>
             {selectedTopicTag.name}
           </div>
-          <div className='pt-3 grid grid-cols-5 justify-center items-center text-center'
+          <div className='pt-3 grid grid-flow-col justify-center items-center text-center'
             style={{
               "--hover-color": `${selectedTopicTag?.color || "#3DB1FF"}66`,
               "--bg-color": `${selectedTopicTag?.color || "#3DB1FF"}`,
@@ -228,7 +229,10 @@ export function TopicsSelect({ isAuthenticated, activeSpace }) {
                   className={`p-2 truncate cursor-pointer
                     ${isSelected ? "bg-[var(--hover-color)]" : "bg-[var(--bg-color)] text-white"} 
                     hover:bg-[var(--hover-color)]
-                    ${index === 0 ? "rounded-l-lg" : index === topicTags.length - 1 ? "rounded-r-lg" : ""}`
+                    ${topicTags.length === 1
+                      ? "rounded-lg" : index === 0
+                        ? "rounded-l-lg" : index === topicTags.length - 1
+                          ? "rounded-r-lg" : ""}`
                   }
                   style={isSelected ? { color: selectedTopicTag?.color } : {}}
                   onClick={() => setSelectedTopicTag(tag)}

@@ -22,7 +22,6 @@ export function SpacesInvitationsBox({ onActionComplete }) {
   async function loadSpaceInvitations() {
     try {
       const response = await getSpaceInvitations();
-      console.log(response.data);
       setIsSpaceInvitationsLoaded(true);
       setSpaceInvitations(response.data);
     } catch (error) {

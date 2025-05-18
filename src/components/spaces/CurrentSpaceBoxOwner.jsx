@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { ToggleSwitch } from 'flowbite-react';
 
 import logo from '../../assets/Logo.svg';
 import { updateSpace } from '../../api/spaces.api';
 import { useSpace } from '../../context/SpaceContext';
+import { RocketIcon } from '../illustrations/icons/RocketIcon';
 
 
 export function CurrentSpaceBoxOwner({ currentSpaceColor, spaceInfo }) {
@@ -12,13 +13,7 @@ export function CurrentSpaceBoxOwner({ currentSpaceColor, spaceInfo }) {
   const { activeSpace, setActiveSpace } = useSpace();
 
   const handleActiveSpaceToggle = () => {
-    console.log("space info id", spaceInfo.id);
-    console.log("space active id", activeSpace);
-
-    if (!spaceInfo?.id) {
-      return;
-    }
-    if (activeSpace?.id === spaceInfo.id) {
+    if (!spaceInfo?.id || activeSpace?.id === spaceInfo.id) {
       setActiveSpace(null);
     } else {
       setActiveSpace({ id: spaceInfo.id, name: spaceInfo.name });
@@ -26,9 +21,7 @@ export function CurrentSpaceBoxOwner({ currentSpaceColor, spaceInfo }) {
   };
 
   const handleClickChangePicture = () => {
-    if (isOwner) {
-      document.getElementById('space-picture-input').click();
-    }
+    document.getElementById('space-picture-input').click();
   };
 
   const MAX_FILE_SIZE = 4 * 1024 * 1024;
@@ -44,7 +37,6 @@ export function CurrentSpaceBoxOwner({ currentSpaceColor, spaceInfo }) {
       reader.onload = (e) => {
         setSelectedImage(e.target.result);
       };
-      console.log("por aca va boludo");
       reader.readAsDataURL(file);
       const formData = new FormData();
       formData.append("image", file);
@@ -56,6 +48,9 @@ export function CurrentSpaceBoxOwner({ currentSpaceColor, spaceInfo }) {
         }
         const spaceId = spaceInfo.id;
         const response = await updateSpace(spaceId, formData);
+        if (activeSpace?.id === spaceId) {
+          setActiveSpace({ ...activeSpace });
+        }
         const newSpacePictureUrl = response.data.image;
         const event = new CustomEvent('spacePictureUpdated', { detail: newSpacePictureUrl });
         window.dispatchEvent(event);
@@ -66,20 +61,11 @@ export function CurrentSpaceBoxOwner({ currentSpaceColor, spaceInfo }) {
   };
 
   const isSpaceActive = activeSpace?.id === spaceInfo.id;
-  const buttonText = spaceInfo.id
-    ? isSpaceActive ? 'Active Space' : 'Inactive Space'
-    : 'Active Space';
-  const buttonStyle = spaceInfo.id
-    ? isSpaceActive
-      ? 'bg-[#3DB1FF] text-white'
-      : 'bg-[#E6EFF5] text-[#3DB1FF]'
-    : 'bg-[#3DB1FF] text-white';
-  const ButtonIcon = isSpaceActive ? FaEye : FaEyeSlash;
 
   return (
     <div className='bg-white rounded px-3 py-4 flex items-center border border-gray-100 mb-3'>
-      {/* <div className='bg-gray-100 rounded-full flex items-center justify-center h-24 w-24 flex-shrink-0 cursor-pointer'
-        onClick={isOwner ? handleClickChangePicture : null}>
+      <div className='bg-gray-100 rounded-full flex items-center justify-center h-24 w-24 flex-shrink-0 cursor-pointer'
+        onClick={handleClickChangePicture}>
         {selectedImage ? (
           <img src={selectedImage} alt="Selected" className="h-24 w-24 border-4 rounded-full"
             style={{ borderColor: currentSpaceColor }} />
@@ -87,21 +73,23 @@ export function CurrentSpaceBoxOwner({ currentSpaceColor, spaceInfo }) {
           <img src={spaceInfo.image} alt="Profile" className="h-24 w-24 border-4 rounded-full"
             style={{ borderColor: currentSpaceColor }} />
         ) : spaceInfo.id ? (
-          <div>
-
-          </div>
+          <RocketIcon color={spaceInfo.color_name} />
         ) : (<img src={logo} alt="" />)}
-      </div> */}
+      </div>
       <div className='ps-3 flex-grow'>
         <div className='font-bold'>Space Activation</div>
         <div className='pb-3 text-gray-500 text-sm'>
           {spaceInfo.name || 'Mixelo Space'}
         </div>
-        <div className='flex justify-end'>
-          <button className={`${buttonStyle} px-3 py-2 rounded-lg flex items-center w-44 justify-center`}
-            onClick={handleActiveSpaceToggle}>
-            <span><ButtonIcon /></span> <span className='ps-2'>{buttonText}</span>
-          </button>
+        <div className='flex items-center'>
+          <ToggleSwitch
+            color='cyan'
+            checked={isSpaceActive}
+            onChange={handleActiveSpaceToggle}
+          />
+          <span className={`ps-3 text-sm  ${isSpaceActive ? 'text-[#3DB1FF]' : 'text-gray-500'}`}>
+            {isSpaceActive ? 'The space is active' : 'The space is inactive'}
+          </span>
         </div>
         <input
           type="file"

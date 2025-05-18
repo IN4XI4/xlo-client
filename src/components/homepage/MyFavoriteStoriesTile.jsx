@@ -20,7 +20,6 @@ export function MyFavoriteStoriesTile({ activeSpace }) {
       const spaceId = activeSpace?.id ?? null;
       const res = await getLikedStories(1, 10, "-created_time", spaceId);
       setStories(res.data.results)
-      console.log("res", res.data.results);
 
     } catch (error) {
       setError(error);

@@ -2,8 +2,8 @@ import React from 'react'
 import { ToggleSwitch } from 'flowbite-react';
 
 import logo from '../../assets/Logo.svg';
-import rocket from '../../assets/rocket.svg';
 import { useSpace } from '../../context/SpaceContext';
+import { RocketIcon } from '../illustrations/icons/RocketIcon';
 
 
 export function CurrentSpaceBox({ currentSpaceColor, spaceInfo }) {
@@ -27,7 +27,7 @@ export function CurrentSpaceBox({ currentSpaceColor, spaceInfo }) {
           <img src={spaceInfo.image} alt="Profile" className="h-24 w-24 border-4 rounded-full"
             style={{ borderColor: currentSpaceColor }} />
         ) : spaceInfo.id ? (
-          <img src={rocket} alt="" />
+          <RocketIcon color={spaceInfo.color_name} />
         ) : (<img src={logo} alt="" />)}
       </div>
       <div className='ps-3 flex-grow'>

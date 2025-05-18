@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const usersApi = axios.create({
+const spacesApi = axios.create({
     baseURL: `${import.meta.env.VITE_API_BASE_URL}spaces/`
 })
 
@@ -9,17 +9,21 @@ const getAuthHeaders = () => {
     return token ? { Authorization: `Token ${token}` } : {};
 };
 
-export const getSpace = (spaceId) => usersApi.get(`spaces/${spaceId}`, { headers: getAuthHeaders() })
-export const getActiveSpace = (spaceId) => usersApi.get(`spaces/${spaceId}/active-space/`, { headers: getAuthHeaders() })
-export const getSpaceBySlug = (spaceSlug) => usersApi.get(`spaces/find-by-slug/${spaceSlug}/`, { headers: getAuthHeaders() })
-export const getMySpaces = () => usersApi.get(`spaces/my-spaces/`, { headers: getAuthHeaders() })
+export const getSpace = (spaceId) => spacesApi.get(`spaces/${spaceId}`, { headers: getAuthHeaders() })
+export const getActiveSpace = (spaceId) => spacesApi.get(`spaces/${spaceId}/active-space/`, { headers: getAuthHeaders() })
+export const getSpaceBySlug = (spaceSlug) => spacesApi.get(`spaces/find-by-slug/${spaceSlug}/`, { headers: getAuthHeaders() })
+export const getMySpaces = () => spacesApi.get(`spaces/my-spaces/`, { headers: getAuthHeaders() })
 export const updateSpace = (spaceId, data) => {
     const headers = getAuthHeaders();
     delete headers['Content-Type'];
-    return usersApi.patch(`space/${spaceId}/`, data, { headers });
+    return spacesApi.patch(`spaces/${spaceId}/`, data, { headers });
 };
 
 // Invitations
-export const getSpaceInvitations = () => usersApi.get(`space-invitations/my-invitations/`, { headers: getAuthHeaders() })
-export const acceptInvitation = (invitationId) => usersApi.post(`space-invitations/${invitationId}/accept/`, {}, { headers: getAuthHeaders() })
-export const rejectInvitation = (invitationId) => usersApi.post(`space-invitations/${invitationId}/reject/`, {}, { headers: getAuthHeaders() })
+export const getSpaceInvitations = () => spacesApi.get(`space-invitations/my-invitations/`, { headers: getAuthHeaders() })
+export const acceptInvitation = (invitationId) => spacesApi.post(`space-invitations/${invitationId}/accept/`, {}, { headers: getAuthHeaders() })
+export const rejectInvitation = (invitationId) => spacesApi.post(`space-invitations/${invitationId}/reject/`, {}, { headers: getAuthHeaders() })
+
+
+// Create
+export const createSpace = (data) => spacesApi.post(`spaces/`, data, { headers: getAuthHeaders() })

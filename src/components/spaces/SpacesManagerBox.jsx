@@ -10,12 +10,15 @@ import logo from '../../assets/Logo.svg';
 import { getMySpaces } from '../../api/spaces.api';
 import { useSpace } from '../../context/SpaceContext';
 import { RocketIcon } from '../illustrations/icons/RocketIcon';
+import { CreateSpaceModal } from './create/CreateSpaceModal';
 
 
-export function SpacesManagerBox({ onActionComplete }) {
+
+export function SpacesManagerBox({ onActionComplete, user }) {
   const [mySpaces, setMySpaces] = useState([]);
   const [error, setError] = useState(null);
   const { activeSpace, setActiveSpace } = useSpace();
+  const [showCreateSpaceModal, setShowCreateSpaceModal] = useState(false);
   const sliderRef = useRef(null);
   const isDefaultSpaceActive = !activeSpace?.id;
   const roleInfo = {
@@ -95,6 +98,16 @@ export function SpacesManagerBox({ onActionComplete }) {
     ]
   };
 
+  const openCreateSpaceModal = () => {
+    if (user?.is_creator) {
+    setShowCreateSpaceModal(true);
+  }
+  };
+
+  const closeCreateSpaceModal = () => {
+    setShowCreateSpaceModal(false);
+  };
+
   return (
     <div className='bg-white rounded px-3 py-4 items-center border border-gray-100 mb-3'>
       <div className='font-bold pb-3'>Spaces manager</div>
@@ -102,10 +115,14 @@ export function SpacesManagerBox({ onActionComplete }) {
         <div className='flex flex-col-reverse md:flex-row flex-shrink-0 pe-2 md:pe-1 border-r-2'>
           <div className='flex md:flex-col justify-center'>
             <div className='flex items-center md:pb-3 pe-2 md:pe-0'>
-              <div className='flex rounded-full items-center p-2 bg-[#3DB1FF] text-white cursor-pointer'>
+              <div className='flex rounded-full items-center p-2 bg-[#3DB1FF] text-white cursor-pointer'
+                onClick={() => openCreateSpaceModal()}>
                 <FaPlus />
               </div>
-              <div className='hidden md:block text-[#3DB1FF] text-sm md:ps-2'>New Space</div>
+              <div className='hidden md:block text-[#3DB1FF] text-sm md:ps-2 cursor-pointer'
+                onClick={() => openCreateSpaceModal()}>
+                New Space
+              </div>
             </div>
             <div className='flex items-center'>
               <div className='flex rounded-full items-center p-2 bg-[#43B29D] text-white cursor-pointer'>
@@ -173,6 +190,9 @@ export function SpacesManagerBox({ onActionComplete }) {
           </div>
         </div>
       </div>
+      {showCreateSpaceModal && (
+        <CreateSpaceModal onCancel={closeCreateSpaceModal} />
+      )}
     </div>
   )
 }

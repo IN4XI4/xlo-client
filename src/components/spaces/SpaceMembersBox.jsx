@@ -31,8 +31,10 @@ export function SpaceMembersBox({ spaceInfo }) {
           {isButtonDisabled ? (<></>) : (
             <>
               <span className='pe-2'><FaUser /></span>
-              <span>You are: </span>
-              <span className='font-semibold ps-2'>[{userRole}]</span>
+              <div>
+                <span>You are: </span>
+                <span className='font-semibold ps-2'>[{userRole}]</span>
+              </div>
             </>)}
         </div>
         <Link to={isButtonDisabled ? '#' : `/spaces/${spaceInfo.slug}/members`}>

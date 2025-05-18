@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { Tooltip } from 'flowbite-react';
 
 import { EditProfile } from '../components/profile/EditProfile'
 import { PasswordInfo } from '../components/profile/PasswordInfo'

@@ -66,10 +66,11 @@ export function Navigation() {
     }
   }
 
-
   useEffect(() => {
-    fetchSpaceInfo();
-  }, [activeSpace]);
+    if (user && activeSpace?.id) {
+      fetchSpaceInfo();
+    }
+  }, [user, activeSpace]);
 
   async function fetchSpaceInfo() {
     if (activeSpace?.id) {
@@ -187,11 +188,20 @@ export function Navigation() {
               )}
             </span>
           )}>
-            <Dropdown.Header>
-              <span className="block pb-1 font-semibold">{user.first_name}</span>
-              <span className="block text-gray-500">{user.email}</span>
-            </Dropdown.Header>
-            <Dropdown.Item onClick={goToSettings} className='text-gray-500'>Profile & parameters</Dropdown.Item>
+            <Dropdown.Item>
+              <div className='flex flex-col text-start mb-0 pb-0' onClick={goToSettings} >
+                <div className="font-semibold">{user.first_name}</div>
+                <div className="text-gray-500 pb-1">{user.email}</div>
+                <div className='text-gray-500'>Profile & parameters</div>
+              </div>
+            </Dropdown.Item>
+            <Dropdown.Divider />
+            <Dropdown.Item onClick={() => navigate('/spaces/')}>
+              <span className='text-gray-500 flex items-center justify-items-center'>
+                <IoPlanetSharp className='me-3' />
+                Spaces
+              </span>
+            </Dropdown.Item>
             <Dropdown.Divider />
             <Dropdown.Item onClick={() => navigate('/new-stories/')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
@@ -206,12 +216,6 @@ export function Navigation() {
                   My stories
                 </span>
               </Dropdown.Item>}
-            <Dropdown.Item onClick={() => navigate('/spaces/')}>
-              <span className='text-gray-500 flex items-center justify-items-center'>
-                <IoPlanetSharp className='me-3' />
-                Spaces
-              </span>
-            </Dropdown.Item>
             <Dropdown.Item onClick={openRecallsModal}>
               <span className='text-gray-500 flex items-center justify-items-center'>
                 <FaBookmark className='me-3' />
