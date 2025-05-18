@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { Tooltip } from 'flowbite-react';
 
 import { EditProfile } from '../components/profile/EditProfile'
 import { PasswordInfo } from '../components/profile/PasswordInfo'
@@ -30,7 +29,7 @@ export function ProfilePage() {
       <div className="flex items-center pb-5 justify-between">
         <div className='font-bold text-2xl md:text-3xl'>PROFILE AND PARAMETERS</div>
       </div>
-      {profileInfo && <EditProfile profileInfo={profileInfo} />}
+      {profileInfo.user_level_display && <EditProfile profileInfo={profileInfo} />}
       <PasswordInfo />
       {profileInfo && (profileInfo.email_info !== undefined) && <Alerts profileInfo={profileInfo} />}
     </div>

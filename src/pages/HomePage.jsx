@@ -11,6 +11,7 @@ import { MyRewardsTile } from '../components/homepage/MyRewardsTile';
 import { useUser } from '../context/UserContext';
 import { MyAvatarTile } from '../components/homepage/MyAvatarTile';
 import { MySpacesTile } from '../components/homepage/MySpacesTile';
+import { useSpace } from '../context/SpaceContext';
 
 
 export function HomePage() {
@@ -20,6 +21,7 @@ export function HomePage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const { user } = useUser();
+  const { activeSpace } = useSpace();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -59,14 +61,18 @@ export function HomePage() {
         )}
         <div className='flex flex-col md:flex-row items-start'>
           <div className='w-full md:w-[55%] md:pe-1'>
-            <TopicsSelect isAuthenticated={isAuthenticated} />
-            {user && <div className="py-3"><AtGlanceTile isAuthenticated={isAuthenticated} /></div>}
+            <TopicsSelect isAuthenticated={isAuthenticated} activeSpace={activeSpace} key={`topics-${activeSpace?.id || "none"}`} />
+            {user && <div className="py-3">
+              <AtGlanceTile isAuthenticated={isAuthenticated} activeSpace={activeSpace} key={`topics-${activeSpace?.id || "none"}`} />
+            </div>}
             {!user && <div className="pt-3 md:py-3"><MyActivitiesTile isAuthenticated={isAuthenticated} /></div>}
           </div>
           {user ? <div className='w-full md:w-[45%] grid grid-cols-1 sm:grid-cols-2 md:ps-2'>
             <MyActivitiesTile activeDays={user.active_days} userData={user} isAuthenticated={isAuthenticated} />
             <MyRewardsTile user={user} />
-            <div className="sm:col-span-2 py-3"><MyFavoriteStoriesTile /></div>
+            <div className="sm:col-span-2 py-3">
+              <MyFavoriteStoriesTile activeSpace={activeSpace} key={`topics-${activeSpace?.id || "none"}`} />
+            </div>
             <MyAvatarTile />
             <MySpacesTile />
           </div> :

@@ -22,7 +22,7 @@ export function EditStoryPage() {
     const loadUserMe = async () => {
       try {
         const response = await getUser();
-        const user_level = response.data.user_level
+        const user_level = response.data.user_level_display.level_value
         const user_image = response.data.picture
         const user_color = response.data.profile_color
         setUserLevel(user_level)

@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Avatar, Dropdown } from 'flowbite-react';
-import { AiFillFire } from "react-icons/ai";
-import { FaBookmark, FaHeart, FaReply } from 'react-icons/fa';
-import { BiSolidBellRing } from "react-icons/bi";
 
+import { FaBookmark, FaHeart, FaReply } from 'react-icons/fa';
+import { AiFillFire } from "react-icons/ai";
+import { BiSolidBellRing } from "react-icons/bi";
+import { PiTextAlignJustifyFill } from "react-icons/pi";
+import { IoPlanetSharp } from "react-icons/io5";
+import { ImExit } from "react-icons/im";
+
+import { CREATOR_LEVEL_1 } from '../globals';
 import { getUser } from '../api/users.api';
+import { getActiveSpace } from '../api/spaces.api';
 import { useAppState } from '../context/ScrollContext';
+import { useSpace } from '../context/SpaceContext';
 import { ComingSoonModal } from './modals/ComingSoonModal';
 import { NotificationsModal } from './modals/NotificationsModal';
 import logo from '../assets/Logo.svg';
 import profile_pic from '../assets/Profile-pic.svg';
 import { SelectRecallsModal } from './modals/SelectRecallsModal';
-import { PiTextAlignJustifyFill } from "react-icons/pi";
 import { useUser } from '../context/UserContext';
-
+import { RocketIcon } from './illustrations/icons/RocketIcon';
 
 export function Navigation() {
   const navigate = useNavigate();
@@ -28,8 +34,15 @@ export function Navigation() {
   const [modalTitle, setModalTitle] = useState('');
   const [modalContext, setModalContext] = useState('');
   const [modalNotificationType, setModalNotificationType] = useState('');
+  const { activeSpace, setActiveSpace } = useSpace();
+  const [userLevel, setUserLevel] = useState(0);
+  const [spaceInfo, setSpaceInfo] = useState(null);
 
   const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    setIsScrolled(false);
+  }, [location, setIsScrolled]);
 
   useEffect(() => {
     if (!user && token) {
@@ -37,9 +50,6 @@ export function Navigation() {
     }
   }, [navigationKey, token]);
 
-  useEffect(() => {
-    setIsScrolled(false);
-  }, [location, setIsScrolled]);
 
   async function loadUser() {
     if (!token) {
@@ -49,9 +59,30 @@ export function Navigation() {
     try {
       const res = await getUser();
       setUser(res.data);
+      setUserLevel(res.data.user_level_display.level_value)
     } catch (error) {
       setError(error);
       localStorage.removeItem("token");
+    }
+  }
+
+  useEffect(() => {
+    if (user && activeSpace?.id) {
+      fetchSpaceInfo();
+    }
+  }, [user, activeSpace]);
+
+  async function fetchSpaceInfo() {
+    if (activeSpace?.id) {
+      try {
+        const response = await getActiveSpace(activeSpace.id);
+        setSpaceInfo(response.data);
+
+      } catch (error) {
+        console.error('Error fetching active space:', error);
+      }
+    } else {
+      setSpaceInfo(null);
     }
   }
 
@@ -111,23 +142,38 @@ export function Navigation() {
   };
 
   return (
-    <div className="bg-white z-30 shadow p-4 fixed top-0 w-full flex justify-between items-center px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32">
-      <div className="flex items-center space-x-4">
-        <Link to="/">
-          <img src={logo} alt="" />
-        </Link>
-        <div>
-          {isScrolled ? (
-            <>
-              {storyTitle && <div className="text-sm font-semibold py-0 truncate">{storyTitle}</div>}
-              {currentCardTitle && <div className="text-sm py-0 truncate">{currentCardTitle}</div>}
-            </>
-          ) : (
-            <span className="text-xl font-semibold">Mixelo</span>
-          )}
+    <div className="bg-white z-30 shadow p-4 fixed top-0 w-full flex items-center px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32">
+      <div className="flex flex-grow items-center space-x-4 pe-2 border-e-2">
+        <div className='flex flex-grow items-center'>
+          <Link to="/">
+            <img src={logo} alt="" />
+          </Link>
+          <div className='ps-3'>
+            {isScrolled ? (
+              <>
+                {storyTitle && <div className="text-sm font-semibold py-0 truncate">{storyTitle}</div>}
+                {currentCardTitle && <div className="text-sm py-0 truncate">{currentCardTitle}</div>}
+              </>
+            ) : (
+              <span className="text-xl font-semibold">Mixelo</span>
+            )}
+          </div>
         </div>
+        {activeSpace && user && spaceInfo && (
+          <div className='flex items-center'>
+            <Link to={spaceInfo?.slug ? `/spaces/${spaceInfo.slug}` : '/spaces/'}>
+              {spaceInfo?.image ? (<img
+                src={spaceInfo.image}
+                alt="Profile"
+                className="h-10 w-10 rounded-full"
+              />) : (<RocketIcon color={spaceInfo.color_name} className="h-10 w-10" />)}
+
+            </Link>
+            <ImExit className='text-gray-400 ms-1 cursor-pointer' onClick={() => setActiveSpace(null)} />
+          </div>
+        )}
       </div>
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center ps-2">
         <div className="flex items-center space-x-4">
           {user ? (<Dropdown label="" dismissOnClick={true} renderTrigger={() => (
             <span className='cursor-pointer'>
@@ -142,11 +188,20 @@ export function Navigation() {
               )}
             </span>
           )}>
-            <Dropdown.Header>
-              <span className="block pb-1 font-semibold">{user.first_name}</span>
-              <span className="block text-gray-500">{user.email}</span>
-            </Dropdown.Header>
-            <Dropdown.Item onClick={goToSettings} className='text-gray-500'>Profile & parameters</Dropdown.Item>
+            <Dropdown.Item>
+              <div className='flex flex-col text-start mb-0 pb-0' onClick={goToSettings} >
+                <div className="font-semibold">{user.first_name}</div>
+                <div className="text-gray-500 pb-1">{user.email}</div>
+                <div className='text-gray-500'>Profile & parameters</div>
+              </div>
+            </Dropdown.Item>
+            <Dropdown.Divider />
+            <Dropdown.Item onClick={() => navigate('/spaces/')}>
+              <span className='text-gray-500 flex items-center justify-items-center'>
+                <IoPlanetSharp className='me-3' />
+                Spaces
+              </span>
+            </Dropdown.Item>
             <Dropdown.Divider />
             <Dropdown.Item onClick={() => navigate('/new-stories/')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
@@ -154,12 +209,13 @@ export function Navigation() {
                 New stories
               </span>
             </Dropdown.Item>
-            <Dropdown.Item onClick={() => navigate('/my-stories/')}>
-              <span className='text-gray-500 flex items-center justify-items-center'>
-                <PiTextAlignJustifyFill className='me-3' />
-                My stories
-              </span>
-            </Dropdown.Item>
+            {userLevel >= CREATOR_LEVEL_1 &&
+              <Dropdown.Item onClick={() => navigate('/my-stories/')}>
+                <span className='text-gray-500 flex items-center justify-items-center'>
+                  <PiTextAlignJustifyFill className='me-3' />
+                  My stories
+                </span>
+              </Dropdown.Item>}
             <Dropdown.Item onClick={openRecallsModal}>
               <span className='text-gray-500 flex items-center justify-items-center'>
                 <FaBookmark className='me-3' />

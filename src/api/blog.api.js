@@ -1,69 +1,78 @@
 import axios from "axios";
 
 const blogApi = axios.create({
-    baseURL: `${import.meta.env.VITE_API_BASE_URL}blog/`
+  baseURL: `${import.meta.env.VITE_API_BASE_URL}blog/`
 })
 
 const getAuthHeaders = () => {
-    const token = localStorage.getItem("token");
-    return token ? { Authorization: `Token ${token}` } : {};
+  const token = localStorage.getItem("token");
+  return token ? { Authorization: `Token ${token}` } : {};
 };
 
 // Stories
-export const getStories = (page, page_size = 10, ordering = null, searchText = '') => {
-    let url = `stories/?page=${page}&page_size=${page_size}`;
-    if (ordering) {
-        url += `&ordering=${ordering}`;
-    }
-    if (searchText) {
-        url += `&title__icontains=${encodeURIComponent(searchText)}`;
-    }
-    return blogApi.get(url, { headers: getAuthHeaders() });
+export const getStories = (page, page_size = 10, ordering = null, searchText = '', spaceId = null) => {
+  let url = `stories/?page=${page}&page_size=${page_size}`;
+  if (ordering) {
+    url += `&ordering=${ordering}`;
+  }
+  if (searchText) {
+    url += `&title__icontains=${encodeURIComponent(searchText)}`;
+  }
+  if (spaceId) {
+    url += `&spaces=${spaceId}`;
+  }
+  return blogApi.get(url, { headers: getAuthHeaders() });
 };
-export const getStoriesByTopic = (topic_id, page, ordering = null, searchText = '') => {
-    let url = `stories/?topic=${topic_id}&page=${page}`;
-    if (ordering) {
-        url += `&ordering=${ordering}`;
-    }
-    if (searchText) {
-        url += `&title__icontains=${encodeURIComponent(searchText)}`;
-    }
-    return blogApi.get(url, { headers: getAuthHeaders() });
+export const getStoriesByTopic = (topic_id, page, ordering = null, searchText = '', spaceId = null) => {
+  let url = `stories/?topic=${topic_id}&page=${page}`;
+  if (ordering) {
+    url += `&ordering=${ordering}`;
+  }
+  if (searchText) {
+    url += `&title__icontains=${encodeURIComponent(searchText)}`;
+  }
+  if (spaceId) {
+    url += `&spaces=${spaceId}`;
+  }
+  return blogApi.get(url, { headers: getAuthHeaders() });
 };
 
 
-export const getLikedStories = (page, page_size = 10, ordering = null) => {
-    let url = `stories/liked_stories/?page=${page}&page_size=${page_size}`;
-    if (ordering) {
-        url += `&order=${ordering}`;
-    }
-    return blogApi.get(url, { headers: getAuthHeaders() });
+export const getLikedStories = (page, page_size = 10, ordering = null, spaceId = null) => {
+  let url = `stories/liked_stories/?page=${page}&page_size=${page_size}`;
+  if (ordering) {
+    url += `&order=${ordering}`;
+  }
+  if (spaceId) {
+    url += `&spaces=${spaceId}`;
+  }
+  return blogApi.get(url, { headers: getAuthHeaders() });
 };
 
 export const getLikedTopicStories = (page, ordering = null, searchText = '') => {
-    let url = `stories/liked_topics_stories/?page=${page}`;
-    if (ordering) {
-        url += `&order=${ordering}`;
-    }
-    if (searchText) {
-        url += `&search=${encodeURIComponent(searchText)}`;
-    }
-    return blogApi.get(url, { headers: getAuthHeaders() });
+  let url = `stories/liked_topics_stories/?page=${page}`;
+  if (ordering) {
+    url += `&order=${ordering}`;
+  }
+  if (searchText) {
+    url += `&search=${encodeURIComponent(searchText)}`;
+  }
+  return blogApi.get(url, { headers: getAuthHeaders() });
 };
 export const getMyCreatedStories = (page, ordering = null, searchText = '', user_owned = null) => {
 
-    let url = `stories/?page=${page}`;
+  let url = `stories/?page=${page}`;
 
-    if (ordering) {
-        url += `&ordering=${ordering}`;
-    }
-    if (searchText) {
-        url += `&title__icontains=${encodeURIComponent(searchText)}`;
-    }
-    if (user_owned) {
-        url += '&user_owned=true';
-    }
-    return blogApi.get(url, { headers: getAuthHeaders() });
+  if (ordering) {
+    url += `&ordering=${ordering}`;
+  }
+  if (searchText) {
+    url += `&title__icontains=${encodeURIComponent(searchText)}`;
+  }
+  if (user_owned) {
+    url += '&user_owned=true';
+  }
+  return blogApi.get(url, { headers: getAuthHeaders() });
 };
 export const getStory = (storyId) => blogApi.get(`stories/${storyId}/`, { headers: getAuthHeaders() })
 export const getStoryBySlug = (slug) => blogApi.get(`stories/find-by-slug/${slug}/`, { headers: getAuthHeaders() })
@@ -84,11 +93,11 @@ export const getBlocksByCard = (cardId) => blogApi.get(`blocks/?card=${cardId}`,
 
 // Comments
 export const getCommentsByStory = (storyId, page, newest = false) => {
-    let url = `comments/?story=${storyId}&parent__isnull=true&page=${page}`;
-    if (newest) {
-        url += '&ordering=-created_time';
-    }
-    return blogApi.get(url, { headers: getAuthHeaders() });
+  let url = `comments/?story=${storyId}&parent__isnull=true&page=${page}`;
+  if (newest) {
+    url += '&ordering=-created_time';
+  }
+  return blogApi.get(url, { headers: getAuthHeaders() });
 };
 export const getReplies = (commentId, page) => blogApi.get(`comments/?parent=${commentId}&page=${page}`, { headers: getAuthHeaders() })
 export const createComment = (data) => blogApi.post(`comments/`, data, { headers: getAuthHeaders() })
@@ -109,8 +118,8 @@ export const getMyRecallCards = () => blogApi.get(`recalls/user-recall-cards`, {
 // TODO: dynamic ordering and filtering for recallBlocks
 export const getMyRecallBlocksFocused = () => blogApi.get(`recall-blocks/random-recalled-block-ids`, { headers: getAuthHeaders() })
 export const getMyRecallBlocksSparked = (page, importanceOrder = '-importance_level', createdTimeOrder = '-created_time') => {
-    const ordering = `${importanceOrder},${createdTimeOrder}`;
-    return blogApi.get(`recall-blocks/?ordering=${ordering}&page=${page}`, { headers: getAuthHeaders() });
+  const ordering = `${importanceOrder},${createdTimeOrder}`;
+  return blogApi.get(`recall-blocks/?ordering=${ordering}&page=${page}`, { headers: getAuthHeaders() });
 };
 
 // Notifications

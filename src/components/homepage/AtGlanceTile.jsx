@@ -5,7 +5,7 @@ import { getStories } from '../../api/blog.api';
 import { StoryRow } from '../topics/StoryRow';
 
 
-export function AtGlanceTile({ isAuthenticated }) {
+export function AtGlanceTile({ isAuthenticated, activeSpace }) {
   const [stories, setStories] = useState([]);
   const [error, setError] = useState(null);
   const [isOpen, setIsOpen] = useState(true);
@@ -17,7 +17,8 @@ export function AtGlanceTile({ isAuthenticated }) {
 
   async function loadStories() {
     try {
-      const res = await getStories(1, 10, "-views_count");
+      const spaceId = activeSpace?.id ?? null;
+      const res = await getStories(1, 10, "-views_count", null, spaceId);
       setStories(res.data.results)
 
     } catch (error) {

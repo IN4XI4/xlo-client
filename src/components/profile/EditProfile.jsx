@@ -208,7 +208,7 @@ export function EditProfile({ profileInfo }) {
     }
 
     try {
-      const response = await updateUser(profileInfo.id, updatedInfo);
+      await updateUser(profileInfo.id, updatedInfo);
       setUpdateInfoSuccess(true);
       setTimeout(() => setUpdateInfoSuccess(false), 5000);
     } catch (error) {
@@ -289,12 +289,13 @@ export function EditProfile({ profileInfo }) {
             ) : profileInfo.profile_picture ? (
               <img src={profileInfo.profile_picture} alt="Profile" className="h-24 w-24 border-4 rounded-full" style={{ borderColor: currentProfileColor }} />
             ) : (
-              <FaUser className='text-6xl' style={{ color: currentProfileColor }} />
+              <FaUser className='text-4xl' style={{ color: currentProfileColor }} />
             )}
           </div>
           <div className='ps-3'>
             <div className='font-bold'>{profileInfo.first_name} {profileInfo.last_name}</div>
-            <div className='pb-3'>{profileInfo.email}</div>
+            <div>{profileInfo.email}</div>
+            <div className='pb-3 text-gray-500'>{profileInfo.user_level_display.level_name}</div>
             <button className='bg-[#3DB1FF] px-3 py-2 rounded-lg text-white flex items-center'
               onClick={handleClickChangePicture}>
               <span><FaCog /></span> <span className='ps-2'>Change picture</span>

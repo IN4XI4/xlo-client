@@ -1,11 +1,11 @@
 export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoading, topicId = null) {
-  
+
   function appendIfNotNull(formData, key, value) {
     if (value !== null && value !== undefined && value !== "undefined" && value !== "null") {
       formData.append(key, value);
     }
   }
-  
+
   if (!data || !data.cards) {
     console.error("Data or data.cards is undefined or null.");
     return;
@@ -58,8 +58,9 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
     }
 
     card.blocks.forEach((block, blockIndex) => {
+
       const blockPrefix = `${cardPrefix}.blocks[${blockIndex}]`;
-      
+
       formData.append(`${blockPrefix}.content`, block.content);
       formData.append(`${blockPrefix}.blockType`, block.blockType);
       appendIfNotNull(formData, `${blockPrefix}.quoted_by`, block.quoted_by);
@@ -73,7 +74,9 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
       }
 
       if (block.image) {
-        if (Array.isArray(block.image) && block.image.length > 0) {
+        if (typeof block.image === 'string') {
+          formData.append(`${blockPrefix}.image`, block.image);
+        } else if (Array.isArray(block.image) && block.image.length > 0) {
           formData.append(`${blockPrefix}.image`, block.image[0]);
         } else if (block.image instanceof File) {
           formData.append(`${blockPrefix}.image`, block.image);
@@ -82,7 +85,9 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
         }
       }
       if (block.image_2) {
-        if (Array.isArray(block.image_2) && block.image_2.length > 0) {
+        if (typeof block.image_2 === 'string') {
+          formData.append(`${blockPrefix}.image_2`, block.image_2);
+        } else if (Array.isArray(block.image_2) && block.image_2.length > 0) {
           formData.append(`${blockPrefix}.image_2`, block.image_2[0]);
         } else if (block.image_2 instanceof File) {
           formData.append(`${blockPrefix}.image_2`, block.image_2);

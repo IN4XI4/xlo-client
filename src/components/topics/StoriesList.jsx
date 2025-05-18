@@ -10,6 +10,7 @@ import { Tooltip } from 'flowbite-react';
 import { getStoriesByTopic } from '../../api/blog.api';
 import { getTopicsByCategory } from '../../api/base.api';
 import { flagMap } from '../../globals';
+import { useSpace } from '../../context/SpaceContext';
 
 
 export function StoriesList({ topicId, categoryId, searchText }) {
@@ -19,6 +20,7 @@ export function StoriesList({ topicId, categoryId, searchText }) {
   const [selectedButton, setSelectedButton] = useState('Stories');
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const { activeSpace } = useSpace();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,7 +38,8 @@ export function StoriesList({ topicId, categoryId, searchText }) {
   async function loadStories(page) {
     try {
       const ordering = selectedButton === 'Latest' ? '-created_time' : null;
-      const res = await getStoriesByTopic(topicId, page, ordering, searchText);
+      const spaceId = activeSpace?.id ?? null;
+      const res = await getStoriesByTopic(topicId, page, ordering, searchText, spaceId);
 
       if (page === 1) {
         setStories(res.data.results);
