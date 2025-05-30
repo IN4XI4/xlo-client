@@ -149,6 +149,7 @@ export function TopicStoriesPage() {
             onChange={handleTextInputChange}
             onKeyDown={handleKeyPress} />
         </div>
+
         {isAuthenticated && (
           <div className='flex-none pe-2 md:pe-6'>
             <button className="p-2 md:p-4 bg-gray-200 rounded-full border"

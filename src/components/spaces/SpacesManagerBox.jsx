@@ -11,7 +11,7 @@ import { getMySpaces } from '../../api/spaces.api';
 import { useSpace } from '../../context/SpaceContext';
 import { RocketIcon } from '../illustrations/icons/RocketIcon';
 import { CreateSpaceModal } from './create/CreateSpaceModal';
-
+import { JoinSpaceModal } from './join/JoinSpaceModal';
 
 
 export function SpacesManagerBox({ onActionComplete, user }) {
@@ -19,6 +19,7 @@ export function SpacesManagerBox({ onActionComplete, user }) {
   const [error, setError] = useState(null);
   const { activeSpace, setActiveSpace } = useSpace();
   const [showCreateSpaceModal, setShowCreateSpaceModal] = useState(false);
+  const [showJoinSpaceModal, setShowJoinSpaceModal] = useState(false);
   const sliderRef = useRef(null);
   const isDefaultSpaceActive = !activeSpace?.id;
   const roleInfo = {
@@ -100,12 +101,20 @@ export function SpacesManagerBox({ onActionComplete, user }) {
 
   const openCreateSpaceModal = () => {
     if (user?.is_creator) {
-    setShowCreateSpaceModal(true);
-  }
+      setShowCreateSpaceModal(true);
+    }
+  };
+
+  const openJoinSpaceModal = () => {
+    setShowJoinSpaceModal(true);
   };
 
   const closeCreateSpaceModal = () => {
     setShowCreateSpaceModal(false);
+  };
+
+  const closeJoinSpaceModal = () => {
+    setShowJoinSpaceModal(false);
   };
 
   return (
@@ -125,10 +134,13 @@ export function SpacesManagerBox({ onActionComplete, user }) {
               </div>
             </div>
             <div className='flex items-center'>
-              <div className='flex rounded-full items-center p-2 bg-[#43B29D] text-white cursor-pointer'>
+              <div className='flex rounded-full items-center p-2 bg-[#43B29D] text-white cursor-pointer'
+                onClick={() => openJoinSpaceModal()}>
                 <FaArrowRight />
               </div>
-              <div className='hidden md:block text-[#3DB1FF] text-sm md:ps-2'>Join Space</div>
+              <div className='hidden md:block text-[#3DB1FF] text-sm md:ps-2 cursor-pointer' onClick={() => openJoinSpaceModal()}>
+                Join Space
+              </div>
             </div>
           </div>
           <div className='px-3 pb-1 md:pb-0 flex flex-col justify-center items-center text-gray-500'>
@@ -192,6 +204,16 @@ export function SpacesManagerBox({ onActionComplete, user }) {
       </div>
       {showCreateSpaceModal && (
         <CreateSpaceModal onCancel={closeCreateSpaceModal} />
+      )}
+      {showJoinSpaceModal && (
+        <JoinSpaceModal
+          onCancel={closeJoinSpaceModal}
+          user={user}
+          onOpenCreate={() => {
+            closeJoinSpaceModal();
+            openCreateSpaceModal();
+          }}
+        />
       )}
     </div>
   )
