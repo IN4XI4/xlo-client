@@ -27,6 +27,15 @@ export const updateSpace = (spaceId, data) => {
   return spacesApi.patch(`spaces/${spaceId}/`, data, { headers });
 };
 
+// Members
+export const getSpaceMembers = (spaceSlug, search = '') => spacesApi.get(`spaces/${spaceSlug}/members/?search=${search}`, { headers: getAuthHeaders() })
+export const getSpaceAdmins = (spaceSlug, search = '') => spacesApi.get(`spaces/${spaceSlug}/admins/?search=${search}`, { headers: getAuthHeaders() })
+export const getSpacePendingRequests = (spaceSlug, search = '') => {
+  return spacesApi.get(`spaces/${spaceSlug}/pending_requests/?search=${search}`, { headers: getAuthHeaders() })
+}
+export const makeAdmin = (spaceId, data) => spacesApi.post(`spaces/${spaceId}/make-admin/`, data, { headers: getAuthHeaders() })
+export const makeMember = (spaceId, data) => spacesApi.post(`spaces/${spaceId}/make-member/`, data, { headers: getAuthHeaders() })
+
 // Invitations
 export const getSpaceInvitations = () => spacesApi.get(`space-invitations/my-invitations/`, { headers: getAuthHeaders() })
 export const acceptInvitation = (invitationId) => spacesApi.post(`space-invitations/${invitationId}/accept/`, {}, { headers: getAuthHeaders() })
@@ -34,6 +43,8 @@ export const rejectInvitation = (invitationId) => spacesApi.post(`space-invitati
 
 // Requests
 export const requestJoinSpace = (data) => spacesApi.post(`space-requests/`, data, { headers: getAuthHeaders() })
+export const acceptRequestJoinSpace = (requestId) => spacesApi.post(`space-requests/${requestId}/accept/`, {}, { headers: getAuthHeaders() })
+export const rejectRequestJoinSpace = (requestId) => spacesApi.post(`space-requests/${requestId}/reject/`, {}, { headers: getAuthHeaders() })
 
 
 
