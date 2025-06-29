@@ -26,7 +26,7 @@ export function SpaceMembersPage() {
   const allowedTabs = [];
   if (isAdmin) allowedTabs.push("pending");
   if (isMember) allowedTabs.push("standard");
-  if (isOwner) allowedTabs.push("admin");
+  if (isMember) allowedTabs.push("admin");
 
   const handleSearchKeyDown = (e) => {
     if (e.key === 'Enter') {
@@ -55,7 +55,7 @@ export function SpaceMembersPage() {
     const allowed = [];
     if (isAdmin) allowed.push("pending");
     if (isMember) allowed.push("standard");
-    if (isOwner) allowed.push("admin");
+    if (isMember) allowed.push("admin");
 
     if (!allowed.includes(memberType)) {
       setMemberType(allowed[0] || null);
@@ -124,7 +124,7 @@ export function SpaceMembersPage() {
         <div className='text-[#3DB1FF] text-2xl md:text-3xl font-semibold'>Space members</div>
       </div>
       <div className='flex items-center border-b-4'>
-        <Link to="/spaces/" className='pe-2'>
+        <Link to={`/spaces/${slug}/`} className='pe-2'>
           <button className="p-3 bg-gray-200 rounded-full border">
             <ImArrowUpLeft2 className='text-[#6B7280]' />
           </button>

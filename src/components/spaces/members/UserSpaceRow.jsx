@@ -85,14 +85,14 @@ export function UserSpaceRow({ spaceId, member, memberType, isOwner }) {
             {actionDone ? (<FaCheck />) : (<>Make admin</>)}
           </div>
         )}
-        {memberType === 'admin' && (
+        {memberType === 'admin' && isOwner && (
           <div onClick={handleMakeStandard} className="bg-[#3DB1FF] whitespace-nowrap text-white w-32 h-6 font-semibold 
           flex items-center justify-center text-sm px-3 rounded-full transition-transform cursor-pointer" >
             {actionDone ? (<FaCheck />) : (<>Make standard</>)}
           </div>
         )}
         {memberType === 'pending' && (
-          <div className="space-y-2">
+          <div className="space-y-2 pb-3">
             <div onClick={handleAcceptRequest}
               className="bg-[#43B29D] text-white font-semibold text-sm px-3 w-28 h-6 rounded-full flex items-center 
               justify-center cursor-pointer transition-transform">
