@@ -10,17 +10,24 @@ const getAuthHeaders = () => {
 };
 
 export const getSpaces = (page, page_size = 20, searchText = '') => {
-  let url = `spaces/?page=${page}&page_size=${page_size}`;
+  const params = { page, page_size };
   if (searchText) {
-    url += `&name__icontains=${encodeURIComponent(searchText)}`;
+    params.name__icontains = searchText;
   }
-  return spacesApi.get(url, { headers: getAuthHeaders() });
+  return spacesApi.get('spaces/', {
+    headers: getAuthHeaders(),
+    params,
+  });
 };
 
 export const getSpace = (spaceId) => spacesApi.get(`spaces/${spaceId}`, { headers: getAuthHeaders() })
 export const getActiveSpace = (spaceId) => spacesApi.get(`spaces/${spaceId}/active-space/`, { headers: getAuthHeaders() })
 export const getSpaceBySlug = (spaceSlug) => spacesApi.get(`spaces/find-by-slug/${spaceSlug}/`, { headers: getAuthHeaders() })
-export const getMySpaces = () => spacesApi.get(`spaces/my-spaces/`, { headers: getAuthHeaders() })
+export const getMySpaces = (search) =>
+  spacesApi.get(`spaces/my-spaces/`, {
+    headers: getAuthHeaders(),
+    params: search ? { search } : {},
+  });
 export const updateSpace = (spaceId, data) => {
   const headers = getAuthHeaders();
   delete headers['Content-Type'];
