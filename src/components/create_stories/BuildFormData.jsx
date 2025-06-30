@@ -47,6 +47,10 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
     formData.append("image", data.image);
   }
 
+  const spaces = Array.isArray(data.spaces) ? data.spaces : [];
+  if (spaces.length > 0) {
+    formData.append('spaces', spaces.join(','));
+  }
   data.cards.forEach((card, cardIndex) => {
     const cardPrefix = `cards[${cardIndex}]`;
 

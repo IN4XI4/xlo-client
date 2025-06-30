@@ -17,6 +17,7 @@ import { deleteStory } from '../../api/blog.api';
 import { CreateMentorModal } from './CreateMentorModal';
 import { CREATOR_LEVEL_3, BLOCK_TYPES } from '../../globals';
 import { BlockForm } from './blocks/BlockForm';
+import { AddToSpaceModal } from './add_to_space/AddToSpaceModal';
 
 
 export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError, userLevel, userPicture, userColor, storyId = null }) {
@@ -32,6 +33,8 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
   const [showCreateMentorModal, setShowCreateMentorModal] = useState(false);
   const [formKey, setFormKey] = useState(0);
   const [showCreateMentorButton, setSshowCreateMentorButton] = useState(false);
+  const [showAddToSpaceModal, setShowAddToSpaceModal] = useState(false);
+  const [addedSpaceIds, setAddedSpaceIds] = useState([]);
 
   const { control, register, handleSubmit, formState: { errors }, getValues, setValue, trigger } = useForm({
     defaultValues: initialData || {
@@ -42,6 +45,7 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
       story_identities: '',
       difficulty_level: '',
       language: '',
+      spaces: [],
       is_private: initialData?.is_private ?? false,
       free_access: initialData?.free_access ?? false,
       cards: [{
@@ -81,6 +85,12 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
       setSshowCreateMentorButton(true)
     }
   }, [])
+
+  useEffect(() => {
+    if (initialData?.spaces) {
+      setAddedSpaceIds(initialData.spaces);
+    }
+  }, [initialData]);
 
   useEffect(() => {
     loadSoftSkillsAndMentors();
@@ -237,6 +247,21 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
   const closePreviewModal = () => {
     setIsPreviewModalOpen(false);
     setPreviewCard(null);
+  };
+
+  const openAddToSpaceModal = () => {
+    setShowAddToSpaceModal(true);
+  };
+
+  const closeAddToSpaceModal = () => {
+    setShowAddToSpaceModal(false);
+  };
+
+  const handleConfirmAddToSpace = (addedSpaces) => {
+    const spaceIds = addedSpaces.map((s) => s.id);
+    setValue("spaces", spaceIds);
+    setAddedSpaceIds(spaceIds);
+    
   };
 
   const confirmDeleteStory = () => {
@@ -434,67 +459,76 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
               )}
             </div>
           </div>
-          <div className='col-span-2 md:col-span-1 pb-3 md:pb-0'>
-            <Tooltip content="Small image (1 mb max)"><div className='font-semibold pb-1'>Thumbnail</div></Tooltip>
-            <div className='flex md:pe-4 items-center '>
-              <div>
-                <div className='relative'>
-                  {!imagePreviews['image'] ? (
-                    <div
-                      className='w-[90px] h-[60px] bg-white flex justify-center items-center rounded-lg cursor-pointer'
-                      onClick={() => document.querySelector('input[name="image"]').click()}
-                    >
-                      <span className='text-gray-300 text-xl'><MdImage /></span>
-                    </div>
-                  ) : (
-                    <img
-                      src={imagePreviews['image']}
-                      alt="Story Preview"
-                      className='w-[90px] h-[60px] rounded-lg object-cover cursor-pointer'
-                      onClick={() => document.querySelector('input[name="image"]').click()}
-                    />
-                  )}
-                  <FileInput
-                    type="file"
-                    accept="image/png, image/jpeg, image/gif"
-                    className='hidden'
-                    {...register('image')}
-                    onChange={(e) => {
-                      const file = e.target.files[0];
-                      if (file) {
-                        if (file.size > 1048576) {
-                          alert('Image size must not exceed 1 MB');
-                          return;
+          <div className='col-span-2 md:col-span-1 pb-3 md:pb-0 flex'>
+            <div>
+              <Tooltip content="Small image (1 mb max)"><div className='font-semibold pb-1'>Thumbnail</div></Tooltip>
+              <div className='flex md:pe-4 items-center '>
+                <div>
+                  <div className='relative'>
+                    {!imagePreviews['image'] ? (
+                      <div
+                        className='w-[90px] h-[60px] bg-white flex justify-center items-center rounded-lg cursor-pointer'
+                        onClick={() => document.querySelector('input[name="image"]').click()}
+                      >
+                        <span className='text-gray-300 text-xl'><MdImage /></span>
+                      </div>
+                    ) : (
+                      <img
+                        src={imagePreviews['image']}
+                        alt="Story Preview"
+                        className='w-[90px] h-[60px] rounded-lg object-cover cursor-pointer'
+                        onClick={() => document.querySelector('input[name="image"]').click()}
+                      />
+                    )}
+                    <FileInput
+                      type="file"
+                      accept="image/png, image/jpeg, image/gif"
+                      className='hidden'
+                      {...register('image')}
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          if (file.size > 1048576) {
+                            alert('Image size must not exceed 1 MB');
+                            return;
+                          }
+                          setValue('image', file, { shouldDirty: true, shouldTouch: true });
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+                            setImagePreviews(prev => ({ ...prev, 'image': reader.result }));
+                          };
+                          reader.readAsDataURL(file);
                         }
-                        setValue('image', file, { shouldDirty: true, shouldTouch: true });
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          setImagePreviews(prev => ({ ...prev, 'image': reader.result }));
-                        };
-                        reader.readAsDataURL(file);
-                      }
-                    }}
-                  />
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className='ps-1 md:ps-3 flex items-center justify-center'>
+                  <div className='bg-[#FD4E3F] p-2 rounded-full text-white cursor-pointer'>
+                    <BsFillFileEarmarkMinusFill
+                      onClick={() => {
+                        setImagePreviews(prev => {
+                          const updatedPreviews = { ...prev };
+                          delete updatedPreviews['image'];
+                          return updatedPreviews;
+                        });
+                        setValue('image', null, { shouldDirty: true, shouldTouch: true });
+                      }} />
+                  </div>
+                </div>
+                <div className='ps-1 md:ps-3 flex items-center justify-center'>
+                  <div className='bg-[#5B0FFE] p-2 rounded-full text-white cursor-pointer'
+                    onClick={() => document.querySelector('input[name="image"]').click()}>
+                    <BsFileEarmarkPlusFill />
+                  </div>
                 </div>
               </div>
-              <div className='ps-3 flex items-center justify-center'>
-                <div className='bg-[#FD4E3F] p-2 rounded-full text-white cursor-pointer'>
-                  <BsFillFileEarmarkMinusFill
-                    onClick={() => {
-                      setImagePreviews(prev => {
-                        const updatedPreviews = { ...prev };
-                        delete updatedPreviews['image'];
-                        return updatedPreviews;
-                      });
-                      setValue('image', null, { shouldDirty: true, shouldTouch: true });
-                    }} />
-                </div>
-              </div>
-              <div className='ps-3 flex items-center justify-center'>
-                <div className='bg-[#5B0FFE] p-2 rounded-full text-white cursor-pointer'
-                  onClick={() => document.querySelector('input[name="image"]').click()}>
-                  <BsFileEarmarkPlusFill />
-                </div>
+            </div>
+            <div className='ps-1 md:ps-0'>
+              <div className='font-semibold pb-2'>Spaces</div>
+              <div className='rounded-full bg-[#1C64F2] px-4 py-1 text-sm text-white cursor-pointer'
+                onClick={() => openAddToSpaceModal()}>
+                ADD TO SPACE
               </div>
             </div>
           </div>
@@ -699,6 +733,11 @@ export function StoryForm({ initialData, onSubmit, submitMessage, isSubmitError,
       />}
       {showCreateMentorModal &&
         <CreateMentorModal onClose={closeCreateMentorModal} onMentorCreated={() => loadSoftSkillsAndMentors(true)} />}
+      {showAddToSpaceModal && <AddToSpaceModal
+        onCancel={closeAddToSpaceModal}
+        onConfirm={handleConfirmAddToSpace}
+        initialAddedSpaceIds={addedSpaceIds}
+      />}
     </div>
   )
 }
