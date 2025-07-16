@@ -243,9 +243,11 @@ export function SpacesPage() {
           <div className=''>
             <SpacesInvitationsBox onActionComplete={handleActionComplete} />
           </div>
-          <div className=''>
-            <SpaceSettingsBox />
-          </div>
+          {spaceInfo.is_member && (
+            <div className=''>
+              <SpaceSettingsBox spaceInfo={spaceInfo} onActionComplete={handleActionComplete} />
+            </div>
+          )}
         </div>
       ) : (
         <div className='text-center text-gray-500 py-10'>

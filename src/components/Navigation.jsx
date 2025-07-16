@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Avatar, Dropdown } from 'flowbite-react';
 
-import { FaBookmark, FaHeart, FaReply } from 'react-icons/fa';
+import { FaBookmark } from 'react-icons/fa';
+import { HiBellAlert } from "react-icons/hi2";
 import { AiFillFire } from "react-icons/ai";
 import { BiSolidBellRing } from "react-icons/bi";
 import { PiTextAlignJustifyFill } from "react-icons/pi";
@@ -203,6 +204,12 @@ export function Navigation() {
               </span>
             </Dropdown.Item>
             <Dropdown.Divider />
+            <Dropdown.Item onClick={() => openNotificationModal('like')}>
+              <span className='text-gray-500 flex items-center justify-items-center'>
+                <HiBellAlert className={`me-3 ${user.notifications && user.notifications.like_count > 0 ? "text-[#3DB1FF]" : ""}`} />
+                My notifications {user.notifications && user.notifications.like_count > 0 && <span>&nbsp;({user.notifications.like_count})</span>}
+              </span>
+            </Dropdown.Item>
             <Dropdown.Item onClick={() => navigate('/new-stories/')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
                 <BiSolidBellRing className='me-3' />
@@ -220,18 +227,6 @@ export function Navigation() {
               <span className='text-gray-500 flex items-center justify-items-center'>
                 <FaBookmark className='me-3' />
                 My recalls</span>
-            </Dropdown.Item>
-            <Dropdown.Item onClick={() => openNotificationModal('like')}>
-              <span className='text-gray-500 flex items-center justify-items-center'>
-                <FaHeart className={`me-3 ${user.notifications && user.notifications.like_count > 0 ? "text-[#3DB1FF]" : ""}`} />
-                Mes engagements {user.notifications && user.notifications.like_count > 0 && <span>&nbsp;({user.notifications.like_count})</span>}
-              </span>
-            </Dropdown.Item>
-            <Dropdown.Item onClick={() => openNotificationModal('reply')}>
-              <span className='text-gray-500 flex items-center justify-items-center'>
-                <FaReply className={`me-3 ${user.notifications && user.notifications.reply_count > 0 ? "text-[#3DB1FF]" : ""}`} />
-                Mes conversations {user.notifications && user.notifications.reply_count > 0 && <span>&nbsp;({user.notifications.like_count})</span>}
-              </span>
             </Dropdown.Item>
             <Dropdown.Item onClick={handleLearningProgramClick}>
               <span className='text-gray-500 flex items-center justify-items-center'>
