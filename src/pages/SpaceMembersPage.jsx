@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom';
 
+import { Alert } from 'flowbite-react';
 import { FaPlus, FaSearch, FaUsers } from 'react-icons/fa'
+import { HiInformationCircle } from 'react-icons/hi';
 import { ImArrowUpLeft2 } from "react-icons/im";
 
 import { ListSpaceMembers } from '../components/spaces/members/ListSpaceMembers';
 import { getSpaceAdmins, getSpaceBySlug, getSpaceMembers, getSpacePendingRequests } from '../api/spaces.api';
+import { InviteUsersModal } from '../components/spaces/members/InviteUsersModal';
 
 
 export function SpaceMembersPage() {
@@ -14,6 +17,9 @@ export function SpaceMembersPage() {
   const [isMember, setIsMember] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
+  const [showInviteUsersModal, setShowInviteUsersModal] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertColor, setAlertColor] = useState('success');
 
   const [inputText, setInputText] = useState('');
   const [searchText, setSearchText] = useState('');
@@ -109,6 +115,27 @@ export function SpaceMembersPage() {
     }
   }
 
+  const openInviteUsersModal = () => {
+    setShowInviteUsersModal(true);
+  };
+
+  const closeInviteUsersModal = () => {
+    setShowInviteUsersModal(false);
+  };
+
+  const handleShowAlert = (message, color = 'success') => {
+    setAlertMessage(message);
+
+    setAlertColor(color);
+    setTimeout(() => {
+      setAlertMessage('');
+    }, 7000);
+  };
+
+  const handleActionComplete = (message, color) => {
+    handleShowAlert(message, color);
+  };
+
   if (!isMember) {
     return (
       <div className="pt-24 px-4 md:px-16 lg:px-32 xl:px-44 text-center text-gray-500">
@@ -119,6 +146,11 @@ export function SpaceMembersPage() {
 
   return (
     <div className="pt-24 px-4 md:px-16 lg:px-32 xl:px-44">
+      {alertMessage && (
+        <Alert color={alertColor} icon={HiInformationCircle} className='mb-4'>
+          <span className="font-medium">{alertMessage}</span>
+        </Alert>
+      )}
       <div className='flex items-center'>
         <div className='bg-[#3DB1FF] rounded-full p-2 md:p-3 me-3'><FaUsers className='text-3xl md:text-4xl text-white' /></div>
         <div className='text-[#3DB1FF] text-2xl md:text-3xl font-semibold'>Space members</div>
@@ -159,11 +191,12 @@ export function SpaceMembersPage() {
         {isAdmin &&
           (<>
             <div className='flex items-center'>
-              <div className='flex rounded-full items-center p-2 bg-[#3DB1FF] text-white cursor-pointer'>
+              <div className='flex rounded-full items-center p-2 bg-[#3DB1FF] text-white cursor-pointer'
+                onClick={() => openInviteUsersModal()}>
                 <FaPlus />
               </div>
-              <div className='ps-1 text-[#3DB1FF] font-semibold cursor-pointer'>
-                Invite new standard users
+              <div className='ps-1 text-[#3DB1FF] font-semibold cursor-pointer' onClick={() => openInviteUsersModal()}>
+                Invite new users
               </div>
             </div>
           </>)}
@@ -173,9 +206,17 @@ export function SpaceMembersPage() {
         hasMore={hasMore}
         setCurrentPage={setCurrentPage}
         memberType={memberType}
+        isAdmin={isAdmin}
         isOwner={isOwner}
         spaceId={spaceId}
       />
+      {showInviteUsersModal && (
+        <InviteUsersModal
+          spaceId={spaceId}
+          onActionComplete={handleActionComplete} 
+          onCancel={closeInviteUsersModal}
+        />
+      )}
     </div>
   )
 }

@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import { FaUser } from 'react-icons/fa'
 import { FaXmark, FaCheck } from "react-icons/fa6";
-import { acceptRequestJoinSpace, makeAdmin, makeMember, rejectRequestJoinSpace } from '../../../api/spaces.api';
+import { acceptRequestJoinSpace, makeAdmin, makeMember, rejectRequestJoinSpace, removeUser } from '../../../api/spaces.api';
 
 
-export function UserSpaceRow({ spaceId, member, memberType, isOwner }) {
+export function UserSpaceRow({ spaceId, member, memberType, isOwner, isAdmin }) {
 
   const hasProfileInfo = member.first_name || member.last_name || member.profession;
   const [actionDone, setActionDone] = useState(false);
+  const [actionDoneRemove, setActionDoneRemove] = useState(false);
   const [accepted, setAccepted] = useState(false);
   const [declined, setDeclined] = useState(false);
   const [hideRow, setHideRow] = useState(false);
@@ -26,6 +27,16 @@ export function UserSpaceRow({ spaceId, member, memberType, isOwner }) {
     try {
       await makeMember(spaceId, { user_id: member.id });
       setActionDone(true);
+      setTimeout(() => setHideRow(true), 1000);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleRemoveUser = async () => {
+    try {
+      await removeUser(spaceId, { user_id: member.id });
+      setActionDoneRemove(true);
       setTimeout(() => setHideRow(true), 1000);
     } catch (err) {
       console.error(err);
@@ -85,11 +96,24 @@ export function UserSpaceRow({ spaceId, member, memberType, isOwner }) {
             {actionDone ? (<FaCheck />) : (<>Make admin</>)}
           </div>
         )}
-        {memberType === 'admin' && isOwner && (
-          <div onClick={handleMakeStandard} className="bg-[#3DB1FF] whitespace-nowrap text-white w-32 h-6 font-semibold 
-          flex items-center justify-center text-sm px-3 rounded-full transition-transform cursor-pointer" >
-            {actionDone ? (<FaCheck />) : (<>Make standard</>)}
+        {memberType === 'standard' && (isOwner || isAdmin) && (
+          <div onClick={handleRemoveUser} className="bg-[#FD4E3F] text-white font-semibold w-32 h-6 items-center 
+          flex justify-center text-sm px-3 mt-2 mb-4 rounded-full transition-transform cursor-pointer">
+            {actionDoneRemove ? (<FaCheck />) : (<>Remove user</>)}
           </div>
+        )}
+        {memberType === 'admin' && isOwner && (
+          <div>
+            <div onClick={handleMakeStandard} className="bg-[#3DB1FF] whitespace-nowrap text-white w-32 h-6 font-semibold 
+          flex items-center justify-center text-sm px-3 rounded-full transition-transform cursor-pointer" >
+              {actionDone ? (<FaCheck />) : (<>Make standard</>)}
+            </div>
+            <div onClick={handleRemoveUser} className="bg-[#FD4E3F] text-white font-semibold w-32 h-6 items-center 
+          flex justify-center text-sm px-3 mt-2 mb-4 rounded-full transition-transform cursor-pointer">
+              {actionDoneRemove ? (<FaCheck />) : (<>Remove user</>)}
+            </div>
+          </div>
+
         )}
         {memberType === 'pending' && (
           <div className="space-y-2 pb-3">

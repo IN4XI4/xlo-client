@@ -43,11 +43,20 @@ export const getSpacePendingRequests = (spaceSlug, search = '') => {
 export const makeAdmin = (spaceId, data) => spacesApi.post(`spaces/${spaceId}/make-admin/`, data, { headers: getAuthHeaders() })
 export const makeMember = (spaceId, data) => spacesApi.post(`spaces/${spaceId}/make-member/`, data, { headers: getAuthHeaders() })
 export const leaveSpace = (spaceId) => spacesApi.post(`spaces/${spaceId}/leave/`, {}, { headers: getAuthHeaders() })
+export const removeUser = (spaceId, data) => spacesApi.post(`spaces/${spaceId}/remove-user/`, data, { headers: getAuthHeaders() })
 
 // Invitations
 export const getSpaceInvitations = () => spacesApi.get(`space-invitations/my-invitations/`, { headers: getAuthHeaders() })
 export const acceptInvitation = (invitationId) => spacesApi.post(`space-invitations/${invitationId}/accept/`, {}, { headers: getAuthHeaders() })
 export const rejectInvitation = (invitationId) => spacesApi.post(`space-invitations/${invitationId}/reject/`, {}, { headers: getAuthHeaders() })
+export const sendMultipleInvitations = (spaceId, data) => {
+  return spacesApi.post(`spaces/${spaceId}/invite-multiple/`, data, { headers: getAuthHeaders() })
+}
+export const sendEmailInvitations = (spaceId, data) => {
+  return spacesApi.post(`spaces/${spaceId}/invite-emails/`, data, { headers: getAuthHeaders() })
+}
+
+
 
 // Requests
 export const requestJoinSpace = (data) => spacesApi.post(`space-requests/`, data, { headers: getAuthHeaders() })
@@ -59,3 +68,11 @@ export const deleteSpace = (spaceId) => spacesApi.delete(`spaces/${spaceId}/`, {
 
 // Create
 export const createSpace = (data) => spacesApi.post(`spaces/`, data, { headers: getAuthHeaders() })
+
+export const listInviteUsers = (spaceId, page, page_size = 20, searchText = '') => {
+  const params = { page, page_size };
+  if (searchText) {
+    params.search = searchText;
+  }
+  return spacesApi.get(`spaces/${spaceId}/users-to-invite/`, { headers: getAuthHeaders(), params });
+};

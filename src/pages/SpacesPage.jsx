@@ -15,6 +15,7 @@ import { SpacesManagerBox } from '../components/spaces/SpacesManagerBox';
 import { SpacesInvitationsBox } from '../components/spaces/SpacesInvitationsBox';
 import { SpaceSettingsBox } from '../components/spaces/SpaceSettingsBox';
 import { useUser } from '../context/UserContext';
+import { InvitePeopleModal } from '../components/spaces/InvitePeopleModal';
 
 
 export function SpacesPage() {
@@ -30,6 +31,7 @@ export function SpacesPage() {
   const [alertColor, setAlertColor] = useState('success');
   const { user } = useUser();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showInvitePeopleModal, setShowInvitePeopleModal] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -139,6 +141,14 @@ export function SpacesPage() {
     }
   };
 
+  const openInvitePeopleModal = () => {
+    setShowInvitePeopleModal(true);
+  };
+
+  const closeInvitePeopleModal = () => {
+    setShowInvitePeopleModal(false);
+  };
+
   return (
     <div className="pt-24 px-4 md:px-16 lg:px-32 xl:px-44">
       {alertMessage && (
@@ -168,11 +178,12 @@ export function SpacesPage() {
                       <TextInput
                         id="space_id"
                         type="text"
-                        value={spaceInfo.slug}
+                        value={`${spaceInfo.slug}:mixelo.io`}
                         disabled
                       />
-                      <button className='bg-[#3DB1FF] px-3 py-2 rounded-lg text-white whitespace-nowrap' >
-                        Invite People
+                      <button className='bg-[#3DB1FF] px-3 py-2 rounded-lg text-white whitespace-nowrap'
+                        onClick={() => openInvitePeopleModal()}>
+                        Invite people
                       </button>
                     </div>
                   </div>
@@ -254,7 +265,13 @@ export function SpacesPage() {
           No space found with the given identification.
         </div>
       )}
-
+      {showInvitePeopleModal && (
+        <InvitePeopleModal
+          spaceId={spaceInfo.id}
+          onActionComplete={handleActionComplete}
+          onCancel={closeInvitePeopleModal}
+        />
+      )}
     </div>
   )
 }
