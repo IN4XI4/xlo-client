@@ -3,7 +3,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { UserSpaceRow } from './UserSpaceRow'
 
 
-export function ListSpaceMembers({ spaceId, members, hasMore, setCurrentPage, memberType, isOwner }) {
+export function ListSpaceMembers({ spaceId, members, hasMore, setCurrentPage, memberType, isOwner, isAdmin }) {
   return (
     <div className='pb-3'>
       <InfiniteScroll
@@ -23,6 +23,7 @@ export function ListSpaceMembers({ spaceId, members, hasMore, setCurrentPage, me
             member={member}
             memberType={memberType}
             isOwner={isOwner}
+            isAdmin={isAdmin}
             spaceId={spaceId} />
         ))}
       </InfiniteScroll>

@@ -192,7 +192,7 @@ export function SpacesManagerBox({ onActionComplete, user }) {
               })}
             </Slider>
           ) : (
-            <div>No spaces available</div>
+            <div className='col-span-12 md:col-span-10 mb-2 items-center flex justify-center'>No spaces available</div>
           )}
           <div className='hidden md:col-span-1 md:flex items-center justify-center'>
             <div className='p-2 bg-[#3DB1FF] text-white rounded-full text-lg cursor-pointer'
