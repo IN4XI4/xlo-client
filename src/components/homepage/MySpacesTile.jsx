@@ -78,7 +78,7 @@ export function MySpacesTile() {
           <div className='flex-grow flex flex-col justify-between'>
             <div className="pb-6">
               {isLoading ? (
-                <div className='flex justify-center items-centero pt-3'>
+                <div className='flex justify-center items-center pt-3'>
                   <FaSpinner className="text-[#D6A400] text-4xl animate-spin" />
                 </div>
               ) : (mySpaces.length > 0 ? (
@@ -112,7 +112,7 @@ export function MySpacesTile() {
                   })}
                 </Slider>
               ) : (
-                <div>No spaces available</div>
+                <div></div>
               ))}
             </div>
             <div className='flex justify-end items-end pt-1'>
