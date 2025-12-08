@@ -6,6 +6,7 @@ import { getUser } from '../api/users.api';
 import { createStoryFull } from '../api/blog.api';
 import { BuildFormData } from '../components/create_stories/BuildFormData';
 import { CREATOR_LEVEL_1 } from '../globals';
+import { NewStoryForm } from '../components/new_create_stories/NewStoryForm';
 
 
 export function CreateStoryPage() {
@@ -68,12 +69,18 @@ export function CreateStoryPage() {
   if (!isCreator) {
     return <Navigate to="/" />;
   }
-  return <StoryForm
+  return <NewStoryForm
     initialData={null}
-    onSubmit={onSubmit}
+    userLevel={userLevel}
     submitMessage={submitMessage}
     isSubmitError={isSubmitError}
-    userPicture={userPicture}
-    userColor={userColor}
-    userLevel={userLevel} />
+    onSubmit={onSubmit} />
+  // return <StoryForm
+  //   initialData={null}
+  //   onSubmit={onSubmit}
+  //   submitMessage={submitMessage}
+  //   isSubmitError={isSubmitError}
+  //   userPicture={userPicture}
+  //   userColor={userColor}
+  //   userLevel={userLevel} />
 }
