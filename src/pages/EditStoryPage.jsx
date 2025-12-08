@@ -5,6 +5,7 @@ import { getUser } from '../api/users.api';
 import { getStoryFull, updateStoryFull } from '../api/blog.api';
 import { StoryForm } from '../components/create_stories/StoryForm';
 import { BuildFormData } from '../components/create_stories/BuildFormData';
+import { NewStoryForm } from '../components/new_create_stories/NewStoryForm';
 
 
 export function EditStoryPage() {
@@ -72,14 +73,21 @@ export function EditStoryPage() {
   }
 
   return (
-    <StoryForm
-      initialData={initialData}
-      onSubmit={onSubmit}
-      submitMessage={submitMessage}
-      isSubmitError={isSubmitError}
-      userLevel={userLevel}
-      userColor={userColor}
-      userPicture={userPicture}
-      storyId={storyId} />
+    <NewStoryForm
+        initialData={initialData}
+        userLevel={userLevel}
+        submitMessage={submitMessage}
+        isSubmitError={isSubmitError}
+        onSubmit={onSubmit}
+        storyId={storyId} />
+    // <StoryForm
+    //   initialData={initialData}
+    //   onSubmit={onSubmit}
+    //   submitMessage={submitMessage}
+    //   isSubmitError={isSubmitError}
+    //   userLevel={userLevel}
+    //   userColor={userColor}
+    //   userPicture={userPicture}
+    //   storyId={storyId} />
   )
 }

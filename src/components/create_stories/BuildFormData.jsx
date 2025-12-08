@@ -13,16 +13,13 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
   let allValid = true;
 
   for (let cardIndex = 0; cardIndex < data.cards.length; cardIndex++) {
-    if (!data.cards[cardIndex].cardTitle || !data.cards[cardIndex].selectedSoftSkill || !data.cards[cardIndex].selectedMentor) {
-      allValid = false;
-    }
-    for (let blockIndex = 0; blockIndex < data.cards[cardIndex].blocks.length; blockIndex++) {
-      if (!data.cards[cardIndex].blocks[blockIndex].blockType || !data.cards[cardIndex].blocks[blockIndex].content) {
+    const card = data.cards[cardIndex];
+    for (let blockIndex = 0; blockIndex < card.blocks.length; blockIndex++) {
+      if (!card.blocks[blockIndex].blockType || !card.blocks[blockIndex].content) {
         allValid = false;
       }
     }
   }
-
   if (!allValid) {
     setSubmitMessage('Please check all cards and blocks. Some of them have incomplete information.');
     setIsSubmitError(true);
@@ -51,12 +48,23 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
   if (spaces.length > 0) {
     formData.append('spaces', spaces.join(','));
   }
+
+  let globalMentorValue = data.globalMentor;
+  if (data.globalMentor && typeof data.globalMentor === 'object' && 'id' in data.globalMentor) {
+    globalMentorValue = data.globalMentor.id;
+  }
+
+  let globalSoftSkillValue = data.globalSoftSkill;
+  if (data.globalSoftSkill && typeof data.globalSoftSkill === 'object' && 'id' in data.globalSoftSkill) {
+    globalSoftSkillValue = data.globalSoftSkill.id;
+  }
+
   data.cards.forEach((card, cardIndex) => {
     const cardPrefix = `cards[${cardIndex}]`;
 
     formData.append(`${cardPrefix}.cardTitle`, card.cardTitle);
-    formData.append(`${cardPrefix}.selectedSoftSkill`, card.selectedSoftSkill);
-    formData.append(`${cardPrefix}.selectedMentor`, card.selectedMentor);
+    formData.append(`${cardPrefix}.selectedSoftSkill`, globalSoftSkillValue);
+    formData.append(`${cardPrefix}.selectedMentor`, globalMentorValue);
     if (!topicId && card.id) {
       formData.append(`${cardPrefix}.id`, card.id);
     }
@@ -64,9 +72,8 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
     card.blocks.forEach((block, blockIndex) => {
 
       const blockPrefix = `${cardPrefix}.blocks[${blockIndex}]`;
-
       formData.append(`${blockPrefix}.content`, block.content);
-      formData.append(`${blockPrefix}.blockType`, block.blockType);
+      formData.append(`${blockPrefix}.blockType`, Number(block.blockType));
       appendIfNotNull(formData, `${blockPrefix}.quoted_by`, block.quoted_by);
       appendIfNotNull(formData, `${blockPrefix}.block_color`, block.block_color);
       appendIfNotNull(formData, `${blockPrefix}.title`, block.title);
