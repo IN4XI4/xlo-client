@@ -91,6 +91,12 @@ export function QuoteForm({ cardIndex, blockIndex, register, errors, globalMento
         </div>
       ) : (
         <div className="flex items-center justify-center py-3">
+          <FileInput
+            type="file"
+            accept="image/png, image/jpeg, image/gif"
+            className="hidden"
+            {...register(`cards.${cardIndex}.blocks.${blockIndex}.image_2`)}
+          />
           <div className='h-10 w-10 rounded-full border-[#FFBA0A] border-2 cursor-pointer'
             onClick={handleAddImage}>
           </div>
