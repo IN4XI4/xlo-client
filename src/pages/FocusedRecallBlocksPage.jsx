@@ -16,6 +16,7 @@ import { FactBlock } from '../components/blocks/FactBlock';
 import { FlashcardBlock } from '../components/blocks/FlashcardBlock';
 import { ReflectionBlock } from '../components/blocks/ReflectionBlock';
 import { QuestionBlock } from '../components/blocks/QuestionBlock';
+import { IllustrationBlock } from '../components/blocks/IllustrationBlock';
 
 
 export function FocusedRecallBlocksPage() {
@@ -275,6 +276,16 @@ export function FocusedRecallBlocksPage() {
                 color={currentBlock.soft_skill_color}
                 user_has_liked={currentBlock.user_has_liked}
                 blockOptions={currentBlock.options}
+                user_has_recalled={currentBlock.user_has_recalled}
+                onLikeClick={() => handleLikeClick(currentBlock.id, currentBlock.user_has_liked)}
+                isRecall={true}
+              />
+            ) : currentBlock.block_type_name === "ILLUSTRATION" ? (
+              <IllustrationBlock
+                content={currentBlock.content}
+                image={currentBlock.image}
+                color={currentBlock.soft_skill_color}
+                user_has_liked={currentBlock.user_has_liked}
                 user_has_recalled={currentBlock.user_has_recalled}
                 onLikeClick={() => handleLikeClick(currentBlock.id, currentBlock.user_has_liked)}
                 isRecall={true}

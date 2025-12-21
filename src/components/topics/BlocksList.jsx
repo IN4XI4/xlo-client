@@ -13,6 +13,7 @@ import { deleteLike, getBlocksByCard, likeSomething } from '../../api/blog.api';
 import { FlashcardBlock } from '../blocks/FlashcardBlock';
 import { ReflectionBlock } from '../blocks/ReflectionBlock';
 import { QuestionBlock } from '../blocks/QuestionBlock';
+import { IllustrationBlock } from '../blocks/IllustrationBlock';
 
 function getBlockComponent(block, card, handleLikeClick, isAuthenticated, onRecallUpdate, ownerAvatar, ownerColor) {
   const commonProps = {
@@ -52,6 +53,8 @@ function getBlockComponent(block, card, handleLikeClick, isAuthenticated, onReca
         ;
     case 'highlight':
       return <HighlightBlock {...commonProps} ownerColor={ownerColor} />;
+    case 'illustration':
+      return <IllustrationBlock {...commonProps} color={card.soft_skill_color}/>;
     case 'testimonial':
       return <TestimonialBlock {...commonProps} blockColor={block.block_color_string} />;
     case 'wonder':

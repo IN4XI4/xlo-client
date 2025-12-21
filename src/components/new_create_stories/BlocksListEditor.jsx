@@ -14,6 +14,7 @@ import { MonsterForm } from './block_forms/MonsterForm';
 import { MentorForm } from './block_forms/MentorForm';
 import { HeroForm } from './block_forms/HeroForm';
 import { HighlightForm } from './block_forms/HighlightForm';
+import { IllustrationForm } from './block_forms/IllustrationForm';
 import { FaMinusCircle, FaPlusCircle } from 'react-icons/fa';
 import { BlockNavigationBar } from './BlockNavigationBar';
 import { ConfirmationModal } from '../modals/ConfirmationModal';
@@ -47,6 +48,7 @@ const BLOCK_TYPE_COMPONENTS = {
   10: QuestionForm,     // QUESTION
   11: TestimonialForm,  // TESTIMONIAL
   12: ReflectionForm,   // REFLECTION
+  13: IllustrationForm,   // REFLECTION
 };
 
 function BlockRow({ cardIndex, blockIndex, getValues, setValue, register, errors, globalMentor, globalSoftSkill,

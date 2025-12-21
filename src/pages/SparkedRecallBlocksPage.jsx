@@ -14,6 +14,7 @@ import { FactBlock } from '../components/blocks/FactBlock';
 import { FlashcardBlock } from '../components/blocks/FlashcardBlock';
 import { ReflectionBlock } from '../components/blocks/ReflectionBlock';
 import { QuestionBlock } from '../components/blocks/QuestionBlock';
+import { IllustrationBlock } from '../components/blocks/IllustrationBlock';
 
 
 export function SparkedRecallBlocksPage() {
@@ -232,6 +233,17 @@ export function SparkedRecallBlocksPage() {
               />
             ) : block.block.block_type_name === "QUESTION" ? (
               <QuestionBlock
+                content={block.block.content}
+                image={block.block.image}
+                color={block.block.soft_skill_color}
+                blockOptions={block.block.options}
+                user_has_liked={block.block.user_has_liked}
+                user_has_recalled={block.block.user_has_recalled}
+                onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
+                isRecall={true}
+              />
+            ) : block.block.block_type_name === "ILLUSTRATION" ? (
+              <IllustrationBlock
                 content={block.block.content}
                 image={block.block.image}
                 color={block.block.soft_skill_color}

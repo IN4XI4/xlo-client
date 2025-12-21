@@ -10,13 +10,13 @@ const getImageUrl = (image) => {
 
 export const ImageContainer = ({ image, additionalClass, additionalClassImg }) => {
   const imageUrl = getImageUrl(image);
-
+  
   return imageUrl ? (
-    <div className={`py-3 border-t-2 ${additionalClass || ''} flex justify-center`}>
+    <div className={`py-3 border-t-2 ${additionalClass || ''} flex items-center justify-center`}>
       <img
         src={imageUrl}
         alt="Block"
-        className={`max-w-full ${additionalClassImg || 'rounded-b-xl'}`}
+        className={`max-h-[800px] ${additionalClassImg || 'rounded-b-xl'}`}
       />
     </div>
   ) : null;
