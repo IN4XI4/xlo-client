@@ -18,6 +18,7 @@ import { IllustrationForm } from './block_forms/IllustrationForm';
 import { FaMinusCircle, FaPlusCircle } from 'react-icons/fa';
 import { BlockNavigationBar } from './BlockNavigationBar';
 import { ConfirmationModal } from '../modals/ConfirmationModal';
+import { MultipleChoiceForm } from './block_forms/MultipleChoiceForm';
 
 
 const HELP_TEXTS = {
@@ -49,10 +50,11 @@ const BLOCK_TYPE_COMPONENTS = {
   11: TestimonialForm,  // TESTIMONIAL
   12: ReflectionForm,   // REFLECTION
   13: IllustrationForm,   // REFLECTION
+  14: MultipleChoiceForm,   // MULTICHOICE QUESTION
 };
 
 function BlockRow({ cardIndex, blockIndex, getValues, setValue, register, errors, globalMentor, globalSoftSkill,
-  showTypeSelector, blockType, imagePreviews, setImagePreviews }) {
+  showTypeSelector, blockType, imagePreviews, setImagePreviews, control }) {
 
   const BlockComponent = useMemo(
     () => (blockType ? BLOCK_TYPE_COMPONENTS[blockType] : null),
@@ -83,7 +85,8 @@ function BlockRow({ cardIndex, blockIndex, getValues, setValue, register, errors
       {BlockComponent ? (
         <BlockComponent cardIndex={cardIndex} blockIndex={blockIndex} globalMentor={globalMentor} globalSoftskill={globalSoftSkill}
           register={register} errors={errors} showTypeSelector={showTypeSelector} value={blockType} onSelect={onSelectType}
-          imagePreviews={imagePreviews} getValues={getValues} setValue={setValue} setImagePreviews={setImagePreviews} />
+          imagePreviews={imagePreviews} getValues={getValues} setValue={setValue} setImagePreviews={setImagePreviews}
+          control={control} />
       ) : (
         <div className="text-gray-400 italic">No form for this block type yet.</div>
       )}
@@ -232,6 +235,7 @@ export function BlocksListEditor({ fields, currentCardIndex, control, setValue, 
               <div key={f.id}>
                 <BlockRow
                   key={f.id}
+                  control={control}
                   cardIndex={currentCardIndex}
                   blockIndex={i}
                   getValues={getValues}

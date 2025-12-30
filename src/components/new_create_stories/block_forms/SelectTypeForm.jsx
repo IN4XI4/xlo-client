@@ -12,6 +12,7 @@ import { ReflectionIcon } from '../../illustrations/icons/block_types/Reflection
 import { TestimonialIcon } from '../../illustrations/icons/block_types/TestimonialIcon'
 import { WonderIcon } from '../../illustrations/icons/block_types/WonderIcon'
 import { IllustrationIcon } from '../../illustrations/icons/block_types/IllustrationIcon'
+import { MultipleChoiceIcon } from '../../illustrations/icons/block_types/MultipleChoiceIcon'
 
 
 const OPTIONS = [
@@ -25,6 +26,7 @@ const OPTIONS = [
   { value: 7, key: 'FLASHCARD', Icon: FlashcardIcon, label: 'Flashcard' },
   { value: 8, key: 'FACT', Icon: FactIcon, label: 'Fact' },
   { value: 10, key: 'QUESTION', Icon: QuestionIcon, label: 'Question' },
+  { value: 14, key: 'MULTICHOICE', Icon: MultipleChoiceIcon, label: 'Multichoice Question' },
   { value: 12, key: 'REFLECTION', Icon: ReflectionIcon, label: 'Reflection' },
   { value: 11, key: 'TESTIMONIAL', Icon: TestimonialIcon, label: 'Testimonial' },
   { value: 9, key: 'WONDER', Icon: WonderIcon, label: 'Wonder' },

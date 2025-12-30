@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { SelectTypeForm } from './SelectTypeForm'
-import { TextInput } from 'flowbite-react';
 import { FaMinus, FaPlus } from 'react-icons/fa';
 
 

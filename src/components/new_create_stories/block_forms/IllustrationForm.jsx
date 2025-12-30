@@ -1,10 +1,21 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { SelectTypeForm } from './SelectTypeForm';
+import { useWatch } from 'react-hook-form';
+
 
 export function IllustrationForm({ cardIndex, blockIndex, register, errors, globalMentor, globalSoftskill, showTypeSelector,
-  value, onSelect, imagePreviews, setImagePreviews, setValue
+  value, onSelect, imagePreviews, setImagePreviews, setValue, control
 }) {
   const color = globalMentor?.color || "#3DB1FF";
+  const name = `cards.${cardIndex}.blocks.${blockIndex}.content`;
+
+  const contentValue = useWatch({ control, name }) || "";
+
+  const rows = useMemo(() => {
+    const lines = contentValue.split("\n").length;
+    return Math.min(20, Math.max(3, lines));
+  }, [contentValue]);
+
   const handleAddImage = () => {
     const fileInput = document.querySelector(`input[name='cards.${cardIndex}.blocks.${blockIndex}.image']`);
     if (fileInput) {
@@ -58,7 +69,7 @@ export function IllustrationForm({ cardIndex, blockIndex, register, errors, glob
             placeholder="Insert content here *"
             {...register(`cards.${cardIndex}.blocks.${blockIndex}.content`, { required: "Content is required" })}
             className="w-full bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none py-1"
-            rows={1}
+            rows={rows}
             onInput={(e) => {
               e.target.style.height = "auto";
               e.target.style.height = `${e.target.scrollHeight}px`;

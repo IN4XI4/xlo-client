@@ -6,7 +6,7 @@ import { ImageContainer } from "./ImageContainer";
 const IllustrationContent = ({ children, additionalClass, image, color }) => (
   <div
     className={`flex-grow p-2 shadow rounded-2xl border-[5px] ${additionalClass}`} style={{ borderColor: color || "#3DB1FF" }}>
-    <div className="p-3 rounded-lg items-center text-xl bg-blue-500">
+    <div className="p-3 rounded-lg items-center text-xl">
       <ImageContainer image={image} additionalClass="border-t-0" />
       <MarkdownRenderer content={children} additionalClass="text-lg text-center italic" />
     </div>
