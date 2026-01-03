@@ -11,6 +11,8 @@ import { QuoteIcon } from '../../illustrations/icons/block_types/QuoteIcon'
 import { ReflectionIcon } from '../../illustrations/icons/block_types/ReflectionIcon'
 import { TestimonialIcon } from '../../illustrations/icons/block_types/TestimonialIcon'
 import { WonderIcon } from '../../illustrations/icons/block_types/WonderIcon'
+import { IllustrationIcon } from '../../illustrations/icons/block_types/IllustrationIcon'
+import { MultipleChoiceIcon } from '../../illustrations/icons/block_types/MultipleChoiceIcon'
 
 
 const OPTIONS = [
@@ -20,9 +22,11 @@ const OPTIONS = [
   { value: 2, key: 'MONSTER', Icon: MonsterIcon, label: 'Monster' },
   { value: 5, key: 'HIGHLIGHT', Icon: HighlightIcon, label: 'Highlight' },
   { value: 6, key: 'QUOTE', Icon: QuoteIcon, label: 'Quote' },
+  { value: 13, key: 'ILLUSTRATION', Icon: IllustrationIcon, label: 'Illustration' },
   { value: 7, key: 'FLASHCARD', Icon: FlashcardIcon, label: 'Flashcard' },
   { value: 8, key: 'FACT', Icon: FactIcon, label: 'Fact' },
   { value: 10, key: 'QUESTION', Icon: QuestionIcon, label: 'Question' },
+  { value: 14, key: 'MULTICHOICE', Icon: MultipleChoiceIcon, label: 'Multichoice Question' },
   { value: 12, key: 'REFLECTION', Icon: ReflectionIcon, label: 'Reflection' },
   { value: 11, key: 'TESTIMONIAL', Icon: TestimonialIcon, label: 'Testimonial' },
   { value: 9, key: 'WONDER', Icon: WonderIcon, label: 'Wonder' },
@@ -33,7 +37,7 @@ export function SelectTypeForm({ value, onSelect, size = "large" }) {
   const itemCls = size === "large" ? "w-9 h-9 md:w-12 md:h-12" : "w-8 h-8 md:w-9 md:h-9"
 
   return (
-    <div className={`grid grid-cols-6 md:grid-cols-12 gap-y-2 place-items-center pt-2
+    <div className={`grid grid-cols-7 md:flex justify-between gap-y-2 place-items-center pt-2
       ${size === "large" ? "" : "md:px-12"}`}>
       {OPTIONS.map(({ value: optionValue, key, Icon, label }) => {
         const selected = value === optionValue;

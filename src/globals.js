@@ -30,6 +30,8 @@ export const BLOCK_TYPES = {
   10: "QUESTION",
   11: "TESTIMONIAL",
   12: "REFLECTION",
+  13: "ILLUSTRATION",
+  14: "MULTICHOICE",
 };
 
 

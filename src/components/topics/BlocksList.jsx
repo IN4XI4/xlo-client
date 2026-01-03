@@ -13,6 +13,8 @@ import { deleteLike, getBlocksByCard, likeSomething } from '../../api/blog.api';
 import { FlashcardBlock } from '../blocks/FlashcardBlock';
 import { ReflectionBlock } from '../blocks/ReflectionBlock';
 import { QuestionBlock } from '../blocks/QuestionBlock';
+import { IllustrationBlock } from '../blocks/IllustrationBlock';
+import { MultiChoiceQuestionBlock } from '../blocks/MultiChoiceQuestionBlock';
 
 function getBlockComponent(block, card, handleLikeClick, isAuthenticated, onRecallUpdate, ownerAvatar, ownerColor) {
   const commonProps = {
@@ -52,12 +54,16 @@ function getBlockComponent(block, card, handleLikeClick, isAuthenticated, onReca
         ;
     case 'highlight':
       return <HighlightBlock {...commonProps} ownerColor={ownerColor} />;
+    case 'illustration':
+      return <IllustrationBlock {...commonProps} color={card.soft_skill_color}/>;
     case 'testimonial':
       return <TestimonialBlock {...commonProps} blockColor={block.block_color_string} />;
     case 'wonder':
       return <WonderBlock {...commonProps} blockTitle={block.title}/>;
     case 'question':
       return <QuestionBlock {...commonProps} blockOptions={block.options}/>;
+    case 'multichoice':
+      return <MultiChoiceQuestionBlock {...commonProps} blockOptions={block.options}/>;
     case 'fact':
       return <FactBlock {...commonProps} contentClass={block.content_class} color={card.soft_skill_color}/>;
     case 'flashcard':

@@ -32,7 +32,7 @@ export function TestimonialForm({ cardIndex, blockIndex, register, errors, globa
     setSelectedTestimonialColor(color.id);
     setValue(
       `cards.${cardIndex}.blocks.${blockIndex}.block_color`,
-      color.color,
+      color.id,
       { shouldDirty: true, shouldTouch: true }
     );
   };
