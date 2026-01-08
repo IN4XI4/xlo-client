@@ -61,3 +61,13 @@ export const flagMap = {
   IT: itFlag,
   PT: ptFlag,
 };
+
+export const ASSESSMENT_LANGUAGES = [
+  { code: "EN", label: "English" },
+  { code: "FR", label: "French" },
+  { code: "ES", label: "Spanish" },
+  { code: "DE", label: "German" },
+  { code: "IT", label: "Italian" },
+  { code: "PT", label: "Portuguese" },
+  { code: "OT", label: "Other" },
+];

@@ -27,6 +27,8 @@ import { SpacesPage } from './pages/SpacesPage';
 import { SpaceProvider } from './context/SpaceContext';
 import { SpaceMembersPage } from './pages/SpaceMembersPage';
 import { checkNewDay } from './utils/checkNewDay';
+import { AssessmentsPage } from './pages/AssessmentsPage';
+import { AssessmentDetailPage } from './pages/AssessmentDetailPage';
 
 
 const isProduction = import.meta.env.VITE_ENV === 'production';
@@ -136,6 +138,8 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login/" element={<LoginPage />} />
           <Route path="/topic/:slug" element={<TopicStoriesPage />} />
+          <Route path="/assessments" element={<AssessmentsPage />} />
+          <Route path="/assessments/:id" element={<AssessmentDetailPage />} />
           <Route path="/story/:slug" element={<StoryPage />} />
           <Route path="/profile/" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
           <Route path="/avatar/" element={<ProtectedRoute><AvatarPage /></ProtectedRoute>} />
