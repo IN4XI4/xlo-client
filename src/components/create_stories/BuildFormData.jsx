@@ -74,6 +74,7 @@ export function BuildFormData(data, setSubmitMessage, setIsSubmitError, setIsLoa
       const blockPrefix = `${cardPrefix}.blocks[${blockIndex}]`;
       formData.append(`${blockPrefix}.content`, block.content);
       formData.append(`${blockPrefix}.blockType`, Number(block.blockType));
+      formData.append(`${blockPrefix}.order`, blockIndex);
       appendIfNotNull(formData, `${blockPrefix}.quoted_by`, block.quoted_by);
       appendIfNotNull(formData, `${blockPrefix}.block_color`, block.block_color);
       appendIfNotNull(formData, `${blockPrefix}.title`, block.title);

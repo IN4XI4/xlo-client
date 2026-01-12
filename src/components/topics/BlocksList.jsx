@@ -46,14 +46,14 @@ function getBlockComponent(block, card, handleLikeClick, isAuthenticated, onReca
         mentor_job={card.mentor_job}
         mentor_profile={card.mentor_profile} />;
     case 'hero':
-      return <HeroBlock {...commonProps} color={card.mentor_color} ownerAvatar={ownerAvatar} />;
+      return <HeroBlock {...commonProps} color={card.soft_skill_color} ownerAvatar={ownerAvatar} />;
     case 'quote':
       return (<QuoteBlock
         {...commonProps} color={card.soft_skill_color} authorName={block.quoted_by} authorPicture={block.image_2}
       />)
         ;
     case 'highlight':
-      return <HighlightBlock {...commonProps} ownerColor={ownerColor} />;
+      return <HighlightBlock {...commonProps} color={card.soft_skill_color} />;
     case 'illustration':
       return <IllustrationBlock {...commonProps} color={card.soft_skill_color}/>;
     case 'testimonial':
@@ -61,9 +61,9 @@ function getBlockComponent(block, card, handleLikeClick, isAuthenticated, onReca
     case 'wonder':
       return <WonderBlock {...commonProps} blockTitle={block.title}/>;
     case 'question':
-      return <QuestionBlock {...commonProps} blockOptions={block.options}/>;
+      return <QuestionBlock {...commonProps} blockOptions={block.options} color={card.soft_skill_color}/>;
     case 'multichoice':
-      return <MultiChoiceQuestionBlock {...commonProps} blockOptions={block.options}/>;
+      return <MultiChoiceQuestionBlock {...commonProps} blockOptions={block.options} color={card.soft_skill_color}/>;
     case 'fact':
       return <FactBlock {...commonProps} contentClass={block.content_class} color={card.soft_skill_color}/>;
     case 'flashcard':

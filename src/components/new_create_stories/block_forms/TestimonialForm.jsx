@@ -11,6 +11,14 @@ export function TestimonialForm({ cardIndex, blockIndex, register, errors, globa
   const [selectedTestimonialColor, setSelectedTestimonialColor] = useState(null);
   const [error, setError] = useState([]);
 
+  const name = `cards.${cardIndex}.blocks.${blockIndex}.content`;
+  const reg = register(name, { required: "Content is required" });
+  const autosize = (el) => {
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  };
+
   useEffect(() => {
     loadProfileColors();
   }, []);
@@ -49,9 +57,14 @@ export function TestimonialForm({ cardIndex, blockIndex, register, errors, globa
           <textarea
             id="content"
             placeholder="Insert content here *"
-            {...register(`cards.${cardIndex}.blocks.${blockIndex}.content`, { required: "Content is required" })}
-            className="w-full bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none py-0"
-            rows={1}
+            {...reg}
+            ref={(el) => {
+              reg.ref(el);
+              if (!el) return;
+              requestAnimationFrame(() => autosize(el));
+            }}
+            className="w-full bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none py-0 text-white"
+            rows={3}
             onInput={(e) => {
               e.target.style.height = "auto";
               e.target.style.height = `${e.target.scrollHeight}px`;
@@ -62,7 +75,8 @@ export function TestimonialForm({ cardIndex, blockIndex, register, errors, globa
           )}
         </div>
         {imagePreviews[`cards.${cardIndex}.blocks.${blockIndex}.image`] ? (
-          <div className='col-span-2 md:col-span-4 flex items-center justify-center py-3'>
+          <div className='flex items-center justify-center py-3 border-t-2'
+            style={{ borderColor: `${selectedColor?.color || "#3DB1FF"}66` }}>
             <img
               src={imagePreviews[`cards.${cardIndex}.blocks.${blockIndex}.image`]}
               alt="Preview"

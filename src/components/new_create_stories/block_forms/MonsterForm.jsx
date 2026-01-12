@@ -11,6 +11,14 @@ export function MonsterForm({ cardIndex, blockIndex, register, errors, globalMen
   const soft_skill_name = globalSoftskill?.name;
   const monster_image = globalSoftskill?.monster_picture;
 
+  const name = `cards.${cardIndex}.blocks.${blockIndex}.content`;
+  const reg = register(name, { required: "Content is required" });
+  const autosize = (el) => {
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  };
+
   return (
     <div>
       <div className='pb-1 flex justify-end items-center'>
@@ -33,7 +41,12 @@ export function MonsterForm({ cardIndex, blockIndex, register, errors, globalMen
           <textarea
             id="content"
             placeholder="Insert content here *"
-            {...register(`cards.${cardIndex}.blocks.${blockIndex}.content`, { required: "Content is required" })}
+            {...reg}
+            ref={(el) => {
+              reg.ref(el);
+              if (!el) return;
+              requestAnimationFrame(() => autosize(el));
+            }}
             className="w-full bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none py-0"
             rows={1}
             onInput={(e) => {
@@ -46,7 +59,7 @@ export function MonsterForm({ cardIndex, blockIndex, register, errors, globalMen
           )}
         </div>
         {imagePreviews[`cards.${cardIndex}.blocks.${blockIndex}.image`] ? (
-          <div className='col-span-2 md:col-span-4 flex items-center justify-center py-3'>
+          <div className='flex items-center justify-center py-3 border-t-2' style={{ borderColor: color }}>
             <img
               src={imagePreviews[`cards.${cardIndex}.blocks.${blockIndex}.image`]}
               alt="Preview"

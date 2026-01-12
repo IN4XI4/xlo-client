@@ -15,7 +15,7 @@ const shuffle = (arr) => {
 };
 
 
-const MultichoiceQuestionContent = ({ children, additionalClass, image, blockOptions }) => {
+const MultichoiceQuestionContent = ({ children, additionalClass, image, blockOptions, color }) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [isCorrect, setIsCorrect] = useState(null);
   const [hasChecked, setHasChecked] = useState(false);
@@ -31,7 +31,7 @@ const MultichoiceQuestionContent = ({ children, additionalClass, image, blockOpt
   const [shuffledOptions, setShuffledOptions] = useState(null);
 
   useEffect(() => {
-    if (shuffledOptions !== null) return;   
+    if (shuffledOptions !== null) return;
     if (allOptions.length === 0) return;
     setShuffledOptions(shuffle(allOptions));
   }, [allOptions, shuffledOptions]);
@@ -62,7 +62,8 @@ const MultichoiceQuestionContent = ({ children, additionalClass, image, blockOpt
 
   if (!shuffledOptions) {
     return (
-      <div className={`flex-grow p-2 shadow rounded-2xl border-[5px] ${additionalClass}`}>
+      <div className={`flex-grow p-2 shadow rounded-2xl border-[5px] ${additionalClass}`}
+        style={{ borderColor: color || "#3DB1FF" }}>
         <div className="p-3 rounded-lg items-center">
           <MarkdownRenderer content={children} additionalClass="text-lg" />
         </div>
@@ -120,7 +121,7 @@ const MultichoiceQuestionContent = ({ children, additionalClass, image, blockOpt
 }
 
 export function MultiChoiceQuestionBlock({ content, image, user_has_liked, user_has_recalled, onLikeClick, isAuthenticated,
-  block_id, onRecallUpdate, blockOptions, isPreview = false, isRecall = false }) {
+  block_id, onRecallUpdate, color, blockOptions, isPreview = false, isRecall = false }) {
   const hasLiked = user_has_liked !== false;
   return (
     <div>
@@ -130,6 +131,7 @@ export function MultiChoiceQuestionBlock({ content, image, user_has_liked, user_
         onLikeClick={onLikeClick}
         isAuthenticated={isAuthenticated}
         block_id={block_id}
+        color={color}
         image={image}
         blockOptions={blockOptions}
         isPreview={isPreview}

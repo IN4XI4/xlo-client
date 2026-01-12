@@ -95,6 +95,6 @@ const DefaultContent = ({ children, color, additionalClass, image }) => (
     style={{ borderColor: color || "#3DB1FF" }}
   >
     <MarkdownRenderer content={children} />
-    <ImageContainer image={image} />
+    <ImageContainer image={image} color={color} />
   </div>
 );

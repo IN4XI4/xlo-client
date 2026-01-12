@@ -7,7 +7,7 @@ export function FlashcardForm({ cardIndex, blockIndex, register, errors, globalM
   value, onSelect, imagePreviews, setValue
 }) {
   const [isPrimaryActive, setIsPrimaryActive] = useState(true);
-  const color = globalMentor?.color || "#3DB1FF";
+  const color = globalSoftskill?.color || "#3DB1FF";
   useEffect(() => {
     setValue(
       `cards.${cardIndex}.blocks.${blockIndex}.isPrimaryActive`,
@@ -15,6 +15,16 @@ export function FlashcardForm({ cardIndex, blockIndex, register, errors, globalM
       { shouldDirty: true, shouldTouch: true }
     );
   }, [isPrimaryActive, cardIndex, blockIndex, setValue]);
+
+  const name = `cards.${cardIndex}.blocks.${blockIndex}.content`;
+  const name2 = `cards.${cardIndex}.blocks.${blockIndex}.content_2`;
+  const reg = register(name, { required: "Content is required" });
+  const reg2 = register(name2, { required: "Content is required" });
+  const autosize = (el) => {
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  };
 
   const toggleContent = () => {
     setIsPrimaryActive((prev) => !prev);
@@ -28,9 +38,14 @@ export function FlashcardForm({ cardIndex, blockIndex, register, errors, globalM
             <textarea
               id="content"
               placeholder="Insert content here *"
-              {...register(`cards.${cardIndex}.blocks.${blockIndex}.content`, { required: "Content is required" })}
+              {...reg}
+              ref={(el) => {
+                reg.ref(el);
+                if (!el) return;
+                requestAnimationFrame(() => autosize(el));
+              }}
               className="w-full bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none py-0"
-              rows={1}
+              rows={3}
               onInput={(e) => {
                 e.target.style.height = "auto";
                 e.target.style.height = `${e.target.scrollHeight}px`;
@@ -41,7 +56,7 @@ export function FlashcardForm({ cardIndex, blockIndex, register, errors, globalM
             )}
           </div>
           {imagePreviews[`cards.${cardIndex}.blocks.${blockIndex}.image`] ? (
-            <div className='flex items-center justify-center py-3'>
+            <div className='flex items-center justify-center py-3 border-t-2'  style={{ borderColor: color }}>
               <img
                 src={imagePreviews[`cards.${cardIndex}.blocks.${blockIndex}.image`]}
                 alt="Preview"
@@ -58,9 +73,14 @@ export function FlashcardForm({ cardIndex, blockIndex, register, errors, globalM
             <textarea
               id="content_2"
               placeholder="Insert content here"
-              {...register(`cards.${cardIndex}.blocks.${blockIndex}.content_2`, { required: false })}
+              {...reg2}
+              ref={(el) => {
+                reg2.ref(el);
+                if (!el) return;
+                requestAnimationFrame(() => autosize(el));
+              }}
               className="w-full bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none py-0"
-              rows={1}
+              rows={3}
               onInput={(e) => {
                 e.target.style.height = "auto";
                 e.target.style.height = `${e.target.scrollHeight}px`;
@@ -71,7 +91,7 @@ export function FlashcardForm({ cardIndex, blockIndex, register, errors, globalM
             )}
           </div>
           {imagePreviews[`cards.${cardIndex}.blocks.${blockIndex}.image_2`] ? (
-            <div className='flex items-center justify-center py-3'>
+            <div className='flex items-center justify-center py-3 border-t-2'  style={{ borderColor: color }}>
               <img
                 src={imagePreviews[`cards.${cardIndex}.blocks.${blockIndex}.image_2`]}
                 alt="Preview"

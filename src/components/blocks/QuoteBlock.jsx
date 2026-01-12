@@ -5,15 +5,15 @@ import { BiSolidQuoteAltLeft } from "react-icons/bi";
 import { BiSolidQuoteAltRight } from "react-icons/bi";
 
 
-const QuoteContent = ({ children, additionalClass, image, authorName, authorPicture }) => (
+const QuoteContent = ({ children, additionalClass, color, image, authorName, authorPicture }) => (
   <div
-    className={`flex-grow shadow rounded-2xl border-[5px] border-[#FFBA0A] ${additionalClass}`}
+    className={`flex-grow shadow rounded-2xl border-[5px] ${additionalClass}`} style={{ borderColor: color || "#3DB1FF" }}
   >
     <div className="p-3 rounded-lg items-center text-xl bg-[#374151] text-center">
       <div className="flex justify-center text-white text-2xl pb-4">
         <BiSolidQuoteAltLeft />
       </div>
-      <MarkdownRenderer content={children} additionalClass="text-xl text-white text-center font-semibold font-serif" />
+      <MarkdownRenderer content={children} additionalClass="text-lg text-white text-center font-semibold font-serif" />
       <div className="font-serif text-white text-base" style={{ fontWeight: 100 }}>
         <div>---</div>
         <div className="flex justify-center items-center">
@@ -32,7 +32,7 @@ const QuoteContent = ({ children, additionalClass, image, authorName, authorPict
       <div className="flex justify-center text-white text-2xl pt-4">
         <BiSolidQuoteAltRight />
       </div>
-      <ImageContainer image={image} />
+      <ImageContainer image={image} color={color} />
 
     </div>
   </div>
