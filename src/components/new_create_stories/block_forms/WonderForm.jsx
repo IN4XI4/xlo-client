@@ -6,6 +6,15 @@ import WonderIcon from "../../../assets/wonder.svg"
 export function WonderForm({ cardIndex, blockIndex, register, errors, globalMentor, globalSoftskill, showTypeSelector,
   value, onSelect, imagePreviews
 }) {
+
+  const name = `cards.${cardIndex}.blocks.${blockIndex}.content`;
+  const reg = register(name, { required: "Content is required" });
+  const autosize = (el) => {
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  };
+
   return (
     <div className=' p-3 bg-gray-50 shadow rounded-2xl border-[5px] border-[#B7880E]'>
       <div className="flex justify-center">
@@ -40,7 +49,12 @@ export function WonderForm({ cardIndex, blockIndex, register, errors, globalMent
         <textarea
           id="content"
           placeholder="Insert content here *"
-          {...register(`cards.${cardIndex}.blocks.${blockIndex}.content`, { required: "Content is required" })}
+          {...reg}
+          ref={(el) => {
+            reg.ref(el);
+            if (!el) return;
+            requestAnimationFrame(() => autosize(el));
+          }}
           className="w-full bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none py-0"
           rows={1}
           onInput={(e) => {

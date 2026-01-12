@@ -184,7 +184,7 @@ export function FocusedRecallBlocksPage() {
               <HeroBlock
                 content={currentBlock.content}
                 image={currentBlock.image}
-                color={currentBlock.mentor_color}
+                color={currentBlock.soft_skill_color}
                 ownerAvatar={currentBlock.owner_picture}
                 user_has_liked={currentBlock.user_has_liked}
                 user_has_recalled={currentBlock.user_has_recalled}
@@ -195,7 +195,7 @@ export function FocusedRecallBlocksPage() {
               <HighlightBlock
                 content={currentBlock.content}
                 image={currentBlock.image}
-                color={currentBlock.mentor_color}
+                color={currentBlock.soft_skill_color}
                 user_has_liked={currentBlock.user_has_liked}
                 user_has_recalled={currentBlock.user_has_recalled}
                 onLikeClick={() => handleLikeClick(currentBlock.id, currentBlock.user_has_liked)}
@@ -205,7 +205,7 @@ export function FocusedRecallBlocksPage() {
               <QuoteBlock
                 content={currentBlock.content}
                 image={currentBlock.image}
-                color={currentBlock.mentor_color}
+                color={currentBlock.soft_skill_color}
                 authorName={currentBlock.quoted_by}
                 authorPicture={currentBlock.image_2}
                 user_has_liked={currentBlock.user_has_liked}

@@ -1,20 +1,20 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { SelectTypeForm } from './SelectTypeForm';
-import { useWatch } from 'react-hook-form';
 
 
 export function IllustrationForm({ cardIndex, blockIndex, register, errors, globalMentor, globalSoftskill, showTypeSelector,
-  value, onSelect, imagePreviews, setImagePreviews, setValue, control
+  value, onSelect, imagePreviews, setImagePreviews, setValue
 }) {
-  const color = globalMentor?.color || "#3DB1FF";
+  const color = globalSoftskill?.color || "#3DB1FF";
   const name = `cards.${cardIndex}.blocks.${blockIndex}.content`;
 
-  const contentValue = useWatch({ control, name }) || "";
+  const reg = register(name, { required: "Content is required" });
 
-  const rows = useMemo(() => {
-    const lines = contentValue.split("\n").length;
-    return Math.min(20, Math.max(3, lines));
-  }, [contentValue]);
+  const autosize = (el) => {
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  };
 
   const handleAddImage = () => {
     const fileInput = document.querySelector(`input[name='cards.${cardIndex}.blocks.${blockIndex}.image']`);
@@ -59,7 +59,7 @@ export function IllustrationForm({ cardIndex, blockIndex, register, errors, glob
           </div>
         ) : (
           <div className='h-[300px] flex justify-center items-center text-gray-500 my-2 bg-gray-200 rounded-t-lg cursor-pointer'
-          onClick={handleAddImage}>
+            onClick={handleAddImage}>
             Insert image here *
           </div>
         )}
@@ -67,9 +67,14 @@ export function IllustrationForm({ cardIndex, blockIndex, register, errors, glob
           <textarea
             id="content"
             placeholder="Insert content here *"
-            {...register(`cards.${cardIndex}.blocks.${blockIndex}.content`, { required: "Content is required" })}
+            {...reg}
+            ref={(el) => {
+              reg.ref(el);
+              if (!el) return;
+              requestAnimationFrame(() => autosize(el));
+            }}
             className="w-full bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none py-1"
-            rows={rows}
+            rows={3}
             onInput={(e) => {
               e.target.style.height = "auto";
               e.target.style.height = `${e.target.scrollHeight}px`;

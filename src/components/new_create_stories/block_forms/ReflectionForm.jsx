@@ -8,7 +8,17 @@ export function ReflectionForm({ cardIndex, blockIndex, register, errors, global
   value, onSelect, imagePreviews, setValue
 }) {
   const [activeTab, setActiveTab] = useState("reflection");
-  const color = globalMentor?.color || "#3DB1FF";
+  const color = globalSoftskill?.color || "#3DB1FF";
+
+  const name = `cards.${cardIndex}.blocks.${blockIndex}.content`;
+  const name2 = `cards.${cardIndex}.blocks.${blockIndex}.content_2`;
+  const reg = register(name, { required: "Content is required" });
+  const reg2 = register(name2, { required: "Content is required" });
+  const autosize = (el) => {
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  };
 
   useEffect(() => {
     setValue(
@@ -36,8 +46,13 @@ export function ReflectionForm({ cardIndex, blockIndex, register, errors, global
             <textarea
               id="content"
               placeholder="Insert content here *"
-              {...register(`cards.${cardIndex}.blocks.${blockIndex}.content`, { required: "Content is required" })}
-              className="w-full bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none py-0"
+              {...reg}
+              ref={(el) => {
+                reg.ref(el);
+                if (!el) return;
+                requestAnimationFrame(() => autosize(el));
+              }}
+              className="w-full bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none py-0 italic text-[#657DFF]"
               rows={1}
               onInput={(e) => {
                 e.target.style.height = "auto";
@@ -49,7 +64,7 @@ export function ReflectionForm({ cardIndex, blockIndex, register, errors, global
             )}
           </div>
           {imagePreviews[`cards.${cardIndex}.blocks.${blockIndex}.image`] ? (
-            <div className='flex items-center justify-center py-3'>
+            <div className='flex items-center justify-center py-3 border-t-2' style={{ borderColor: color }}>
               <img
                 src={imagePreviews[`cards.${cardIndex}.blocks.${blockIndex}.image`]}
                 alt="Preview"
@@ -67,8 +82,13 @@ export function ReflectionForm({ cardIndex, blockIndex, register, errors, global
             <textarea
               id="content_2"
               placeholder="Insert content here"
-              {...register(`cards.${cardIndex}.blocks.${blockIndex}.content_2`, { required: false })}
-              className="w-full bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none py-0"
+              {...reg2}
+              ref={(el) => {
+                reg2.ref(el);
+                if (!el) return;
+                requestAnimationFrame(() => autosize(el));
+              }}
+              className="w-full bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none py-0 italic text-[#38AFFF]"
               rows={1}
               onInput={(e) => {
                 e.target.style.height = "auto";
@@ -80,7 +100,7 @@ export function ReflectionForm({ cardIndex, blockIndex, register, errors, global
             )}
           </div>
           {imagePreviews[`cards.${cardIndex}.blocks.${blockIndex}.image_2`] ? (
-            <div className='flex items-center justify-center py-3'>
+            <div className='flex items-center justify-center py-3 border-t-2' style={{ borderColor: color }}>
               <img
                 src={imagePreviews[`cards.${cardIndex}.blocks.${blockIndex}.image_2`]}
                 alt="Preview"

@@ -7,6 +7,15 @@ export function QuestionForm({ cardIndex, blockIndex, register, errors, globalMe
   value, onSelect, imagePreviews, getValues, setValue
 }) {
   const [extraOptions, setExtraOptions] = useState([]);
+  const color = globalSoftskill?.color || "#3DB1FF";
+
+  const name = `cards.${cardIndex}.blocks.${blockIndex}.content`;
+  const reg = register(name, { required: "Content is required" });
+  const autosize = (el) => {
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  };
 
   useEffect(() => {
     const incorrectAnswers = getValues(
@@ -37,12 +46,17 @@ export function QuestionForm({ cardIndex, blockIndex, register, errors, globalMe
     );
   };
   return (
-    <div className=' p-3 bg-gray-50 shadow rounded-2xl border-[4px]'>
-      <div className=''>
+    <div className=' p-3 bg-gray-50 shadow rounded-2xl border-[4px]' style={{ borderColor: color }}>
+      <div className='pb-2 border-b-2' style={{ borderColor: color }}>
         <textarea
           id="content"
           placeholder="Insert question here *"
-          {...register(`cards.${cardIndex}.blocks.${blockIndex}.content`, { required: "Content is required" })}
+          {...reg}
+          ref={(el) => {
+            reg.ref(el);
+            if (!el) return;
+            requestAnimationFrame(() => autosize(el));
+          }}
           className="w-full bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none py-0"
           rows={1}
           onInput={(e) => {
@@ -135,12 +149,12 @@ export function QuestionForm({ cardIndex, blockIndex, register, errors, globalMe
       ))}
       <div className="md:pt-2 pb-2">
         <button type="button" onClick={handleAddIncorrectAnswer}
-          className='flex bg-[#5B0FFE] items-center p-2 rounded-full md:rounded-lg text-white'>
-          <FaPlus /> <span className='hidden md:block md:ps-2'>Add Incorrect Answer</span>
+          className='flex bg-[#5B0FFE] items-center p-2 rounded-full text-white'>
+          <FaPlus />
         </button>
       </div>
       {imagePreviews[`cards.${cardIndex}.blocks.${blockIndex}.image`] ? (
-        <div className='col-span-2 md:col-span-4 flex items-center justify-center py-3'>
+        <div className='flex items-center justify-center py-3 border-t-2' style={{ borderColor: color }}>
           <img
             src={imagePreviews[`cards.${cardIndex}.blocks.${blockIndex}.image`]}
             alt="Preview"

@@ -102,7 +102,7 @@ export function BlocksListEditor({ fields, currentCardIndex, control, setValue, 
   const [showModal, setShowModal] = useState(false);
   const {
     fields: blockFields,
-    append: appendBlock,
+    insert: insertBlock, 
     remove: removeBlock,
   } = useFieldArray({
     control,
@@ -258,7 +258,7 @@ export function BlocksListEditor({ fields, currentCardIndex, control, setValue, 
                   setValue={setValue}
                   imagePreviews={imagePreviews}
                   setImagePreviews={setImagePreviews}
-                  appendBlock={appendBlock}
+                  insertBlock={insertBlock}
                   removeBlock={removeBlock}
                   typeSelectorVisibility={typeSelectorVisibility}
                   setTypeSelectorVisibility={setTypeSelectorVisibility}

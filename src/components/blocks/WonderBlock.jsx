@@ -14,12 +14,12 @@ const WonderContent = ({ children, additionalClass, image, blockTitle }) => (
       <div className="flex justify-center">
         <img src={WonderIcon} alt="" className='h-6 md:h-8' />
       </div>
-      <div className="flex justify-center text-[#6A4E04] uppercase py-3 font-semibold">
+      <div className="flex justify-center text-[#6A4E04] uppercase py-3 font-semibold  border-b-2 border-[#6A4E04]">
         {blockTitle}
       </div>
       <ImageContainer image={image} additionalClass="border-[#D6BF8E] flex justify-center" 
       additionalClassImg="rounded-none max-h-[800px]"/>
-      <div className="bg-[#D6BF8E] p-2 rounded-b-lg min-h-[5rem]">
+      <div className=" p-2 rounded-b-lg min-h-[4rem] bg-[#D6BF8E] mt-2">
         <MarkdownRenderer content={children} additionalClass="text-lg text-[#4A3809]" />
       </div>
     </div>
