@@ -7,7 +7,15 @@ import { BiSolidQuoteAltLeft, BiSolidQuoteAltRight } from 'react-icons/bi';
 export function QuoteForm({ cardIndex, blockIndex, register, errors, globalMentor, globalSoftskill, showTypeSelector,
   value, onSelect, imagePreviews, setImagePreviews, setValue
 }) {
-  const color = globalMentor?.color || "#3DB1FF";
+  const color = globalSoftskill?.color || "#3DB1FF";
+
+  const name = `cards.${cardIndex}.blocks.${blockIndex}.content`;
+  const reg = register(name, { required: "Content is required" });
+  const autosize = (el) => {
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  };
 
   const handleAddImage = () => {
     const fileInput = document.querySelector(`input[name='cards.${cardIndex}.blocks.${blockIndex}.image_2']`);
@@ -47,7 +55,12 @@ export function QuoteForm({ cardIndex, blockIndex, register, errors, globalMento
         <textarea
           id="content"
           placeholder="Insert quote here *"
-          {...register(`cards.${cardIndex}.blocks.${blockIndex}.content`, { required: "Content is required" })}
+          {...reg}
+          ref={(el) => {
+            reg.ref(el);
+            if (!el) return;
+            requestAnimationFrame(() => autosize(el));
+          }}
           className="w-full bg-transparent text-white text-center border-none focus:outline-none focus:ring-0 
           focus:shadow-none py-0 font-semibold"
           rows={1}
@@ -64,14 +77,14 @@ export function QuoteForm({ cardIndex, blockIndex, register, errors, globalMento
       <div className=''>
         <input
           type='text'
-          id="content_2"
+          id="quoted_by"
           placeholder="Insert here, the [Author-Name]"
-          {...register(`cards.${cardIndex}.blocks.${blockIndex}.content_2`, { required: false })}
+          {...register(`cards.${cardIndex}.blocks.${blockIndex}.quoted_by`, { required: false })}
           className="w-full bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none
            text-white py-0 text-center"
         />
-        {errors.cards?.blocks?.content_2 && (
-          <p className="text-red-500 text-sm mt-1">{errors.cards?.blocks?.content_2.message}</p>
+        {errors.cards?.blocks?.quoted_by && (
+          <p className="text-red-500 text-sm mt-1">{errors.cards?.blocks?.quoted_by.message}</p>
         )}
       </div>
       {imagePreviews[`cards.${cardIndex}.blocks.${blockIndex}.image_2`] ? (

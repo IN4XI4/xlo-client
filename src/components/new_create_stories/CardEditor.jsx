@@ -1,12 +1,12 @@
 import React from 'react'
-import { FileInput } from 'flowbite-react';
+import { FileInput, Tooltip } from 'flowbite-react';
 import { BsInfoCircleFill } from 'react-icons/bs'
 import { BlocksListEditor } from './BlocksListEditor';
 
 
 export function CardEditor({ register, append, errors, setValue, imagePreviews, setImagePreviews, fields, currentCardIndex, control,
   globalMentor, globalSoftSkill, setCurrentCardIndex, getValues }) {
-    
+
   return (
     <div className='pt-3 md:pt-6'>
       <div className='pb-3'>
@@ -14,9 +14,11 @@ export function CardEditor({ register, append, errors, setValue, imagePreviews, 
           <div className='pe-1 pb-1'>
             Thumbnail
           </div>
-          <BsInfoCircleFill
-            className="w-3 h-3 text-[#1C64F2]"
-          />
+          <Tooltip content="Add a “cover image” to this “story”." placement="top">
+            <BsInfoCircleFill
+              className="w-3 h-3 text-[#1C64F2]"
+            />
+          </Tooltip>
         </div>
         <div className='flex items-center'>
           {!imagePreviews['image'] ? (

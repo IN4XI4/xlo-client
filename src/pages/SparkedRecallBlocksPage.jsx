@@ -147,7 +147,7 @@ export function SparkedRecallBlocksPage() {
               <HeroBlock
                 content={block.block.content}
                 image={block.block.image}
-                color={block.block.mentor_color}
+                color={block.block.soft_skill_color}
                 ownerAvatar={block.block.owner_picture}
                 user_has_liked={block.block.user_has_liked}
                 user_has_recalled={block.block.user_has_recalled}
@@ -158,7 +158,7 @@ export function SparkedRecallBlocksPage() {
               <HighlightBlock
                 content={block.block.content}
                 image={block.block.image}
-                color={block.block.mentor_color}
+                color={block.block.soft_skill_color}
                 user_has_liked={block.block.user_has_liked}
                 user_has_recalled={block.block.user_has_recalled}
                 onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}
@@ -168,7 +168,7 @@ export function SparkedRecallBlocksPage() {
               <QuoteBlock
                 content={block.block.content}
                 image={block.block.image}
-                color={block.block.mentor_color}
+                color={block.block.soft_skill_color}
                 authorName={block.block.quoted_by}
                 authorPicture={block.block.image_2}
                 user_has_liked={block.block.user_has_liked}

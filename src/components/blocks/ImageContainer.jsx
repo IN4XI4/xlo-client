@@ -8,11 +8,14 @@ const getImageUrl = (image) => {
   return typeof image === "string" ? image : null;
 };
 
-export const ImageContainer = ({ image, additionalClass, additionalClassImg }) => {
+export const ImageContainer = ({ image, color, additionalClass, additionalClassImg, showTopBorder = true }) => {
   const imageUrl = getImageUrl(image);
-  
+
   return imageUrl ? (
-    <div className={`py-3 border-t-2 ${additionalClass || ''} flex items-center justify-center`}>
+    <div
+      className={`${additionalClass || ''} ${showTopBorder ? 'border-t-2 py-3' : ' border-b-2 pt-2 pb-3'} flex 
+      items-center justify-center`}
+      style={{ borderColor: color || "#3DB1FF" }}>
       <img
         src={imageUrl}
         alt="Block"

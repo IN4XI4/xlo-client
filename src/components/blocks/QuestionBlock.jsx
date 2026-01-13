@@ -5,7 +5,7 @@ import MarkdownRenderer from "../MardownRenderer";
 import { ImageContainer } from "./ImageContainer";
 
 
-const QuestionContent = ({ children, additionalClass, image, blockOptions }) => {
+const QuestionContent = ({ children, additionalClass, image, blockOptions, color }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [isCorrect, setIsCorrect] = useState(null);
   const [hasChecked, setHasChecked] = useState(false);
@@ -28,9 +28,8 @@ const QuestionContent = ({ children, additionalClass, image, blockOptions }) => 
   };
 
   return (
-    <div
-      className={`flex-grow p-2 shadow rounded-2xl border-[5px] ${additionalClass}`}
-    >
+    <div className={`flex-grow p-2 shadow rounded-2xl border-[5px] ${additionalClass}`}
+      style={{ borderColor: color || "#3DB1FF" }}>
       <div className="p-3 rounded-lg items-center">
         <MarkdownRenderer content={children} additionalClass="text-lg" />
         <div className="border-t-2 mt-3 bg-red-500">
@@ -76,7 +75,7 @@ const QuestionContent = ({ children, additionalClass, image, blockOptions }) => 
 
 
 export function QuestionBlock({ content, image, user_has_liked, user_has_recalled, onLikeClick, isAuthenticated, block_id,
-  onRecallUpdate, blockOptions, isPreview = false, isRecall = false }) {
+  onRecallUpdate, color, blockOptions, isPreview = false, isRecall = false }) {
   const hasLiked = user_has_liked !== false;
   return (
     <div>
@@ -86,6 +85,7 @@ export function QuestionBlock({ content, image, user_has_liked, user_has_recalle
         onLikeClick={onLikeClick}
         isAuthenticated={isAuthenticated}
         block_id={block_id}
+        color={color}
         image={image}
         blockOptions={blockOptions}
         isPreview={isPreview}

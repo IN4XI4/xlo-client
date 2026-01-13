@@ -8,16 +8,26 @@ import { getMentors, getSoftSkills } from '../../api/base.api';
 import { CREATOR_LEVEL_3 } from '../../globals';
 import { CreateMentorModal } from '../create_stories/CreateMentorModal';
 import { AddToSpaceModal } from '../create_stories/add_to_space/AddToSpaceModal';
-import { init } from 'emoji-mart';
+import { InfoModal } from '../modals/InfoModal';
+import { INFO_OPTIONS } from './StoryOptionsInfo';
 
 
-function LabelWithInfo({ label, required = false }) {
+function LabelWithInfo({ label, required = false, infoContent = "" }) {
+  const [showInfo, setShowInfo] = useState(false);
   return (
     <div className="flex items-center gap-1 font-semibold pb-1">
       <span>{label}{required && <span className="text-red-500 ml-0.5">*</span>}</span>
       <BsInfoCircleFill
-        className="w-3 h-3 text-[#1C64F2]"
+        onClick={() => setShowInfo(true)}
+        className="w-3 h-3 text-[#1C64F2] cursor-pointer"
       />
+      {showInfo && (
+        <InfoModal
+          title={label}
+          context={infoContent}
+          onClose={() => setShowInfo(false)}
+        />
+      )}
     </div>
   )
 }
@@ -34,7 +44,7 @@ export function StoryOptions({ initialData, control, errors, setValue, userLevel
   const softSkillId = useWatch({ control, name: 'globalSoftSkill' });
   const mentorId = useWatch({ control, name: 'globalMentor' });
 
-  
+
   useEffect(() => {
     if (initialData?.spaces) {
       setAddedSpaceIds(initialData.spaces);
@@ -111,7 +121,7 @@ export function StoryOptions({ initialData, control, errors, setValue, userLevel
   return (
     <div className='bg-[#E3F4FF] rounded-lg p-3 grid grid-cols-2 md:grid-cols-4 gap-3'>
       <div className=''>
-        <LabelWithInfo label="Life moments" />
+        <LabelWithInfo label="Life moments" infoContent={INFO_OPTIONS.life_moments}  />
         <Controller
           control={control}
           name="life_moments"
@@ -125,17 +135,18 @@ export function StoryOptions({ initialData, control, errors, setValue, userLevel
               <option value="2">Aged 10 to 15</option>
               <option value="3">Aged 15 to 20</option>
               <option value="4">Aged 20 to 30</option>
-              <option value="5">Aged 40 to 50</option>
-              <option value="6">Aged 50 to 60</option>
-              <option value="7">Aged 60 to 70</option>
-              <option value="8">Aged 70 and more</option>
+              <option value="5">Aged 30 to 40</option>
+              <option value="6">Aged 40 to 50</option>
+              <option value="7">Aged 50 to 60</option>
+              <option value="8">Aged 60 to 70</option>
+              <option value="9">Aged 70 and more</option>
             </Select>
           )}
         />
         {errors.life_moments && <p className="text-red-500">{errors.life_moments.message}</p>}
       </div>
       <div className=''>
-        <LabelWithInfo label="Story Identities" />
+        <LabelWithInfo label="Story Identities" infoContent={INFO_OPTIONS.story_identities} />
         <Controller
           control={control}
           name="story_identities"
@@ -154,7 +165,7 @@ export function StoryOptions({ initialData, control, errors, setValue, userLevel
         {errors.story_identities && <p className="text-red-500">{errors.story_identities.message}</p>}
       </div>
       <div className=''>
-        <LabelWithInfo label="Difficulty levels" />
+        <LabelWithInfo label="Difficulty levels" infoContent={INFO_OPTIONS.difficulty_levels} />
         <Controller
           control={control}
           name="difficulty_level"
@@ -175,7 +186,7 @@ export function StoryOptions({ initialData, control, errors, setValue, userLevel
         {errors.difficulty_level && <p className="text-red-500">{errors.difficulty_level.message}</p>}
       </div>
       <div className=''>
-        <LabelWithInfo label="Language" />
+        <LabelWithInfo label="Language" infoContent={INFO_OPTIONS.languages} />
         <Controller
           control={control}
           name="language"
@@ -198,7 +209,7 @@ export function StoryOptions({ initialData, control, errors, setValue, userLevel
         {errors.difficulty_level && <p className="text-red-500">{errors.difficulty_level.message}</p>}
       </div>
       <div className=''>
-        <LabelWithInfo label="Skill" required />
+        <LabelWithInfo label="Skills" required infoContent={INFO_OPTIONS.skills} />
         <div className=''>
           <Controller
             control={control}
@@ -265,7 +276,7 @@ export function StoryOptions({ initialData, control, errors, setValue, userLevel
       </div>
       <div className='flex flex-col pb-4'>
         <div className='font-semibold flex items-center pb-1'>
-          <LabelWithInfo label="Mentor" required />
+          <LabelWithInfo label="Mentor" required infoContent={INFO_OPTIONS.mentors} />
         </div>
         <div className='flex items-center space-x-2'>
           {showCreateMentorButton &&
@@ -303,7 +314,7 @@ export function StoryOptions({ initialData, control, errors, setValue, userLevel
       </div>
       <div className=''>
         <div className='pb-1'>
-          <LabelWithInfo label="Spaces" />
+          <LabelWithInfo label="Spaces" infoContent={INFO_OPTIONS.spaces} />
         </div>
         <div className='rounded-full bg-[#1C64F2] px-4 py-3 text-sm text-white cursor-pointer text-center'
           onClick={() => openAddToSpaceModal()}>

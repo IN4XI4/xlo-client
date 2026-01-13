@@ -7,7 +7,7 @@ import { TbPhotoPlus, TbPhotoMinus } from "react-icons/tb";
 import { FileInput } from 'flowbite-react';
 
 export function BlockNavigationBar({ control, register, currentCardIndex, currentBlockIndex, getValues, setValue, imagePreviews,
-  setImagePreviews, appendBlock, removeBlock, typeSelectorVisibility, setTypeSelectorVisibility, blockType,
+  setImagePreviews, insertBlock, removeBlock, typeSelectorVisibility, setTypeSelectorVisibility, blockType,
   showMainImage = true, showSecondImage = false }) {
 
   const blocks = useWatch({
@@ -89,6 +89,36 @@ export function BlockNavigationBar({ control, register, currentCardIndex, curren
     return newImagePreviews;
   }
 
+  function updateImagePreviewsForInsert(imagePreviews, cardIndex, insertAt) {
+    const newImagePreviews = {};
+    Object.keys(imagePreviews).forEach((key) => {
+      const match = key.match(/^cards\.(\d+)\.blocks\.(\d+)\.(image|image_2)$/);
+      if (!match) {
+        newImagePreviews[key] = imagePreviews[key];
+        return;
+      }
+
+      const matchedCardIndex = Number(match[1]);
+      const blockIndex = Number(match[2]);
+      const suffix = match[3];
+
+      if (matchedCardIndex !== cardIndex) {
+        newImagePreviews[key] = imagePreviews[key];
+        return;
+      }
+
+      // si está en/after insertAt, súbele 1
+      if (blockIndex >= insertAt) {
+        const newKey = `cards.${cardIndex}.blocks.${blockIndex + 1}.${suffix}`;
+        newImagePreviews[newKey] = imagePreviews[key];
+      } else {
+        newImagePreviews[key] = imagePreviews[key];
+      }
+    });
+
+    return newImagePreviews;
+  }
+
   const handleRemoveBlock = (cardIndex, blockIndex) => {
     const updatedImagePreviews = updateImagePreviewsForBlocks(imagePreviews, cardIndex, blockIndex);
     setImagePreviews(updatedImagePreviews);
@@ -161,9 +191,15 @@ export function BlockNavigationBar({ control, register, currentCardIndex, curren
             <FaMinusCircle />
           </button>
         )}
-        <button type="button" onClick={() => {
-          appendBlock({ content: '', blockType: '' })
-        }} className="bg-[#5B0FFE] p-2 rounded-full text-white flex items-center">
+        <button type="button"
+          onClick={() => {
+            const insertAt = currentBlockIndex + 1;
+            setImagePreviews((prev) =>
+              updateImagePreviewsForInsert(prev, currentCardIndex, insertAt)
+            );
+            insertBlock(insertAt, { content: "", blockType: "" });
+          }}
+          className="bg-[#5B0FFE] p-2 rounded-full text-white flex items-center">
           <FaPlusCircle />
         </button>
       </div>

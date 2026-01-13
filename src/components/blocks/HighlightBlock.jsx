@@ -2,25 +2,23 @@ import { BlockContainer } from "./BlockContainer";
 import MarkdownRenderer from "../MardownRenderer";
 import { ImageContainer } from "./ImageContainer";
 
-const HighlightContent = ({ children, additionalClass, image, ownerColor }) => (
+const HighlightContent = ({ children, additionalClass, image, color }) => (
   <div
     className={`flex-grow p-2 shadow rounded-2xl border-[5px] ${additionalClass}`}
-    style={{
-      borderColor: ownerColor || "#3DB1FF",
-    }}
+    style={{ borderColor: color || "#3DB1FF" }}
   >
-    <div className="p-3 rounded-lg items-center text-xl" style={{
-      backgroundColor: `${ownerColor || "#3DB1FF"}66`,
+    <div className="p-3 rounded-lg items-center" style={{
+      backgroundColor: `${color || "#3DB1FF"}66`,
     }}>
-      <MarkdownRenderer content={children} additionalClass="text-lg" />
-      <ImageContainer image={image} />
+      <MarkdownRenderer content={children} />
+      <ImageContainer image={image} color={color} />
     </div>
   </div>
 );
 
 
 export function HighlightBlock({ content, image, user_has_liked, user_has_recalled, onLikeClick, isAuthenticated, block_id,
-  onRecallUpdate, ownerColor, isPreview = false, isRecall = false }) {
+  onRecallUpdate, color, isPreview = false, isRecall = false }) {
   const hasLiked = user_has_liked !== false;
   return (
     <div>
@@ -31,7 +29,7 @@ export function HighlightBlock({ content, image, user_has_liked, user_has_recall
         isAuthenticated={isAuthenticated}
         block_id={block_id}
         image={image}
-        ownerColor={ownerColor}
+        color={color}
         isPreview={isPreview}
         isRecall={isRecall}
         CustomContent={HighlightContent}
