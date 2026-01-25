@@ -16,6 +16,8 @@ const shuffle = (arr) => {
 
 
 const MultichoiceQuestionContent = ({ children, additionalClass, image, blockOptions, color }) => {
+  console.log("color", color);
+
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [isCorrect, setIsCorrect] = useState(null);
   const [hasChecked, setHasChecked] = useState(false);
@@ -73,11 +75,11 @@ const MultichoiceQuestionContent = ({ children, additionalClass, image, blockOpt
 
   return (
     <div
-      className={`flex-grow p-2 shadow rounded-2xl border-[5px] ${additionalClass}`}
+      className={`flex-grow p-2 shadow rounded-2xl border-[5px] ${additionalClass}`} style={{ borderColor: color || "#3DB1FF" }}
     >
       <div className="p-3 rounded-lg items-center">
         <MarkdownRenderer content={children} additionalClass="text-lg" />
-        <div className="border-t-2 mt-3 bg-red-500">
+        <div className="border-t-2 mt-3 bg-red-500"  style={{ borderColor: color || "#3DB1FF" }}>
           {shuffledOptions.map((option, index) => (
             <label
               key={index}

@@ -22,3 +22,9 @@ export const finalizeAttempt = (attempt_id, data) => {
     return attemptsApi.post(endpoint, data, config);
 }
 export const globalStats = () => attemptsApi.get('global_stats/')
+
+
+export const getUsersByRankingCategory = (rankingType, category_id) => {
+    const orderBy = rankingType === '0' ? '-total_points' : '-average_score';
+    return attemptsApi.get(`userpoints/?ordering=${orderBy}&category=${category_id}`, { headers: getAuthHeaders() });
+}

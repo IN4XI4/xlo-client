@@ -8,7 +8,7 @@ import { RiQuestionnaireFill } from "react-icons/ri";
 const FactContent = ({ color, children, additionalClass, image, contentClass }) => {
   const [response, setResponse] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
-  
+
   const handleButtonClick = (selectedClass) => {
     if (isAnswered) return;
     if (selectedClass === contentClass) {
@@ -23,7 +23,7 @@ const FactContent = ({ color, children, additionalClass, image, contentClass }) 
     <div className={`flex-grow p-4 bg-gray-50 shadow rounded-2xl border-[4px] ${additionalClass}`}
       style={{ borderColor: color || "#3DB1FF" }}>
       <MarkdownRenderer content={children} />
-      <ImageContainer image={image} />
+      <ImageContainer image={image} color={color} />
       <div className="mt-3 border-t-2 flex space-x-2 text-white pt-3 items-center flex-wrap text-sm md:text-base">
         <div className="flex p-2 bg-[#50326C] rounded-lg cursor-pointer" onClick={() => handleButtonClick("FACT")}>
           FACT <span className="ps-2"><RiQuestionnaireFill /></span>
@@ -48,7 +48,7 @@ const FactContent = ({ color, children, additionalClass, image, contentClass }) 
 export function FactBlock({ content, image, color, user_has_liked, user_has_recalled, onLikeClick, isAuthenticated, block_id,
   onRecallUpdate, contentClass, isPreview = false, isRecall = false }) {
   const hasLiked = user_has_liked !== false;
-  
+
   return (
     <div>
       <BlockContainer color={color}

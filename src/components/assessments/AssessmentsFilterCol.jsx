@@ -110,7 +110,7 @@ export function AssessmentsFilterCol({ onNameFilterChange, onToggleTopic, onTogg
             <label className="ml-2 text-gray-500">{lang.label}</label>
           </div>
         ))}
-        <label htmlFor="category-input" className="block mb-2 py-2 text-2xl text-gray-500">By category</label>
+        <label htmlFor="category-input" className="block mb-2 py-2 text-2xl text-gray-500">By topic</label>
         {categories.map(category => (
           <div key={category.id} className="category-container">
             <div className="flex justify-between items-center mb-2 cursor-pointer" onClick={() => toggleCategoryExpansion(category.id)}>
@@ -127,14 +127,14 @@ export function AssessmentsFilterCol({ onNameFilterChange, onToggleTopic, onTogg
                   <div key={topic.id} className="flex items-center mb-1">
                     <div
                       className="flex w-full"
-                      onClick={() => onToggleTopic(topic.id, topic.name)}
+                      onClick={() => onToggleTopic(topic.id, topic.title)}
                     >
                       <input
                         type="checkbox"
                         checked={topic.id in filters.topics}
                         readOnly
                       />
-                      <label className="ml-2">{topic.name}</label>
+                      <label className="ml-2">{topic.title}</label>
                     </div>
                   </div>
                 ))}
