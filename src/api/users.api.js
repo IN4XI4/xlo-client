@@ -26,6 +26,13 @@ export const updateUser = (userId, data) => {
     const headers = getAuthHeaders();
     delete headers['Content-Type'];
     return usersApi.patch(`users/${userId}/`, data, { headers });
-  };
+};
 export const lostPassword = (data) => usersApi.post('users/send_reset_code/', data)
 export const resetPassword = (data) => usersApi.post('users/reset_password/', data)
+
+
+// Rankings
+export const getUsersByRanking = (rankingType) => {
+    const orderBy = rankingType === '0' ? '-points' : '-average_score';
+    return usersApi.get(`topusers/?ordering=${orderBy}`, { headers: getAuthHeaders() });
+}
