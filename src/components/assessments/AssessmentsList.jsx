@@ -35,7 +35,7 @@ export function AssessmentsList({ filters }) {
         setAssessments(res.data.results);
       } else {
         setAssessments([...assessments].concat(res.data.results));
-      }
+      }      
       if (!res.data.next) {
         setHasMore(false);
       }

@@ -27,7 +27,9 @@ export function TestimonialForm({ cardIndex, blockIndex, register, errors, globa
     try {
       const res = await getUserProfileColors();
       setProfileColors(res.data);
-
+      if (res.data.length > 0) {
+        setSelectedTestimonialColor(res.data[0].id);
+      }
     } catch (error) {
       setError(error);
     }
@@ -63,7 +65,7 @@ export function TestimonialForm({ cardIndex, blockIndex, register, errors, globa
               if (!el) return;
               requestAnimationFrame(() => autosize(el));
             }}
-            className="w-full bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none py-0 text-white"
+            className="w-full bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none py-0 text-white placeholder-white"
             rows={3}
             onInput={(e) => {
               e.target.style.height = "auto";

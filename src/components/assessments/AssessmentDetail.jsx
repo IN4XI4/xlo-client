@@ -71,50 +71,47 @@ export function AssessmentDetail({ assessment }) {
     }
   }
   return (
-    <div className="lg:w-2/3">
-      <div className="flex items-center">
-        <div>
-          <div className="flex justify-center items-center h-36 w-48 rounded-lg overflow-hidden">
-            {assessment.image ? (
+    <div className="lg:px-12">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
+          {assessment.image ? (
+            <div className="hidden md:block justify-center items-center h-36 w-48 rounded-lg overflow-hidden">
               <img
                 src={assessment.image}
                 alt={`${assessment.name} image`}
                 className="object-cover max-h-full max-w-full rounded-lg"
               />
-            ) : (
-              <div className='flex justify-center items-center bg-teal-900 rounded-lg w-full h-full'>
-                <CiImageOn size={32} className="text-white" />
+            </div>
+          ) : (
+            <div></div>
+          )}
+          <div>
+            <div className="">
+              <div className="text-4xl font-bold pb-1">{assessment.name}</div>
+              <div className='flex'>
+                <div className="text-gray-500 pe-3">
+                  Created by {assessment.user_first_name} {assessment.user_last_name}, {" "}
+                  {new Date(assessment.created_at).toLocaleDateString()}
+                </div>
+                {assessmentDetails.is_following !== null && (
+                  <FaStar className={`cursor-pointer
+                  ${typeof assessmentDetails.is_following === 'number' ? 'text-yellow-300 text-xl' : 'text-gray-500 text-xl'}`}
+                    onClick={handleFollowClick} />
+                )}
               </div>
-            )}
+            </div>
           </div>
         </div>
-        <div className="w-full ps-3 pb-3">
-          <div className="grid grid-cols-1 md:grid-cols-3">
-            <div className="col-span-2">
-              <div className="text-4xl font-bold pb-1">{assessment.name}</div>
-              <div className="text-gray-500 pb-1">
-                Created by {assessment.user_username}, {" "}
-                {new Date(assessment.created_at).toLocaleDateString()}
-              </div>
-              {assessmentDetails.is_following !== null && (
-                <FaStar className={`cursor-pointer
-                  ${typeof assessmentDetails.is_following === 'number' ? 'text-yellow-300 text-xl' : 'text-gray-500 text-xl'}`}
-                  onClick={handleFollowClick} />
-              )}
-            </div>
-            <div className='flex justify-end items-center'>
-              <div className=''>
-                <div className='bg-white text-gray-500 text-lg cursor-pointer rounded-lg border-gray-300 border-2 font-light
+        <div className='flex justify-end items-center'>
+          <div className=''>
+            <div className='bg-white text-gray-500 text-lg cursor-pointer rounded-lg border-[#3DB1FF] border-2 font-light
                 flex items-center justify-center px-4 py-3 hover:shadow hover:font-normal'
-                  onClick={handleStartClick}>
-                  Start attempt
-                </div>
-                <div className='text-sm text-gray-500 pt-1'>
-                  You have <span className='font-semibold'>{assessment.available_attempts}</span> attempts left
-                </div>
-              </div>
+              onClick={handleStartClick}>
+              Start attempt
             </div>
-
+            <div className='text-sm text-gray-500 pt-1'>
+              You have <span className='font-semibold'>{assessment.available_attempts}</span> attempts left
+            </div>
           </div>
         </div>
       </div>
@@ -188,7 +185,7 @@ export function AssessmentDetail({ assessment }) {
           </div>
         </div>
       </div>
-      <div className="py-2 px-4 flex bg-teal-900 text-white rounded-lg space-x-4 my-3">
+      <div className="py-2 px-4 flex bg-[#3DB1FF] text-white rounded-lg space-x-4 my-3">
         <div className="flex text-center items-center pe-2">
           <div className='pe-3'>
             Language
