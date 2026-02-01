@@ -35,10 +35,14 @@ export const updateSpace = (spaceId, data) => {
 };
 
 // Members
-export const getSpaceMembers = (spaceSlug, search = '') => spacesApi.get(`spaces/${spaceSlug}/members/?search=${search}`, { headers: getAuthHeaders() })
-export const getSpaceAdmins = (spaceSlug, search = '') => spacesApi.get(`spaces/${spaceSlug}/admins/?search=${search}`, { headers: getAuthHeaders() })
-export const getSpacePendingRequests = (spaceSlug, search = '') => {
-  return spacesApi.get(`spaces/${spaceSlug}/pending_requests/?search=${search}`, { headers: getAuthHeaders() })
+export const getSpaceMembers = (spaceSlug, search = '', page=1) => {
+  return spacesApi.get(`spaces/${spaceSlug}/members/?search=${search}&page=${page}`, { headers: getAuthHeaders() })
+}
+export const getSpaceAdmins = (spaceSlug, search = '', page=1) => { 
+  return spacesApi.get(`spaces/${spaceSlug}/admins/?search=${search}&page=${page}`, { headers: getAuthHeaders() })
+ } 
+export const getSpacePendingRequests = (spaceSlug, search = '', page = 1) => {
+  return spacesApi.get(`spaces/${spaceSlug}/pending_requests/?search=${search}&page=${page}`, { headers: getAuthHeaders() })
 }
 export const makeAdmin = (spaceId, data) => spacesApi.post(`spaces/${spaceId}/make-admin/`, data, { headers: getAuthHeaders() })
 export const makeMember = (spaceId, data) => spacesApi.post(`spaces/${spaceId}/make-member/`, data, { headers: getAuthHeaders() })

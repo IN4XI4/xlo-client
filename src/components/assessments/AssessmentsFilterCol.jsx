@@ -69,8 +69,8 @@ export function AssessmentsFilterCol({ onNameFilterChange, onToggleTopic, onTogg
         Order by
       </div>
       <div className="pb-3">
-        <Select
-          className="w-full p-2 rounded mt-2"
+        <select
+          className="w-full p-2 rounded mt-2 border-gray-200 text-gray-500"
           onChange={(e) => handleOrderByChange(e.target.value)}
           id="order_by"
         >
@@ -79,7 +79,7 @@ export function AssessmentsFilterCol({ onNameFilterChange, onToggleTopic, onTogg
           <option value="oldest">Oldest</option>
           <option value="most_difficult">Most Difficult</option>
           <option value="least_difficult">Least Difficult</option>
-        </Select>
+        </select>
       </div>
       <div className='text-3xl border-b pb-1 text-gray-500'>
         Filter
@@ -93,9 +93,9 @@ export function AssessmentsFilterCol({ onNameFilterChange, onToggleTopic, onTogg
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Search by name"
-            className="w-full p-2 border border-gray-300 rounded me-2"
+            className="w-full h-10 border border-gray-300 rounded-s"
           />
-          <button type="submit" className="bg-gray-200 text-gray-700 rounded-r p-3">
+          <button type="submit" className="bg-gray-200 text-gray-500 rounded-r h-10 w-12 flex items-center justify-center">
             <FaSearch />
           </button>
         </div>
@@ -129,12 +129,8 @@ export function AssessmentsFilterCol({ onNameFilterChange, onToggleTopic, onTogg
                       className="flex w-full"
                       onClick={() => onToggleTopic(topic.id, topic.title)}
                     >
-                      <input
-                        type="checkbox"
-                        checked={topic.id in filters.topics}
-                        readOnly
-                      />
-                      <label className="ml-2">{topic.title}</label>
+                      <input className="rounded" type="checkbox" checked={topic.id in filters.topics} readOnly />
+                      <label className="ml-2 text-gray-500">{topic.title}</label>
                     </div>
                   </div>
                 ))}

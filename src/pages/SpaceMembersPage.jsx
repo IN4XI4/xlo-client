@@ -23,7 +23,7 @@ export function SpaceMembersPage() {
 
   const [inputText, setInputText] = useState('');
   const [searchText, setSearchText] = useState('');
-  const [memberType, setMemberType] = useState('standard');
+  const [memberType, setMemberType] = useState(null);
   const [members, setMembers] = useState([]);
   const [hasMore, setHasMore] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -47,9 +47,10 @@ export function SpaceMembersPage() {
 
   useEffect(() => {
     if (memberType && isMember) {
+      window.scrollTo(0, 0);
       loadMembers(1);
     }
-  }, [searchText, memberType]);
+  }, [searchText, memberType, isMember]);
 
   useEffect(() => {
     if (currentPage > 1) {
@@ -91,14 +92,16 @@ export function SpaceMembersPage() {
       let res;
 
       if (memberType === 'pending') {
-        res = await getSpacePendingRequests(slug, searchText);
+        res = await getSpacePendingRequests(slug, searchText, page);
       } else if (memberType === 'admin') {
-        res = await getSpaceAdmins(slug, searchText);
+        res = await getSpaceAdmins(slug, searchText, page);
       } else {
-        res = await getSpaceMembers(slug, searchText);
+        res = await getSpaceMembers(slug, searchText, page);
       }
 
       const results = res.data.results
+      console.log("res data", res.data);
+
       if (page === 1) {
         setMembers(results);
       } else {
@@ -107,6 +110,7 @@ export function SpaceMembersPage() {
 
       setHasMore(!!res.data.next);
       if (page === 1) setCurrentPage(1);
+      console.log({ page, memberType, searchText, next: res.data.next, count: res.data.count, results: res.data.results.length });
 
     } catch (err) {
       console.error(err);
@@ -213,7 +217,7 @@ export function SpaceMembersPage() {
       {showInviteUsersModal && (
         <InviteUsersModal
           spaceId={spaceId}
-          onActionComplete={handleActionComplete} 
+          onActionComplete={handleActionComplete}
           onCancel={closeInviteUsersModal}
         />
       )}
