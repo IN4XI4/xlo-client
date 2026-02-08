@@ -21,7 +21,6 @@ export function HighlightForm({ cardIndex, blockIndex, register, errors, globalM
       <div className='p-2 rounded-lg' style={{ backgroundColor: `${color || "#3DB1FF"}66` }}>
         <div className=''>
           <textarea
-            id="content"
             placeholder="Insert content here *"
             {...reg}
             ref={(el) => {

@@ -22,12 +22,12 @@ const FlashcardContent = ({ children, additionalClass, color, image, content2, i
         {isPrimaryActive ? (
           <>
             <MarkdownRenderer content={children} />
-            <ImageContainer image={image} />
+            <ImageContainer image={image} color={color} />
           </>
         ) : (
           <>
             <MarkdownRenderer content={content2} />
-            <ImageContainer image={image2} />
+            <ImageContainer image={image2} color={color} />
           </>
         )}
       </div>

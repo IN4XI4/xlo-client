@@ -31,7 +31,6 @@ export function FactForm({ cardIndex, blockIndex, register, errors, globalMentor
     <div className=' p-3 bg-gray-50 shadow rounded-2xl border-[4px]' style={{ borderColor: color }}>
       <div className=''>
         <textarea
-          id="content"
           placeholder="Insert content here *"
           {...reg}
           ref={(el) => {

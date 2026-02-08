@@ -47,7 +47,6 @@ export function WonderForm({ cardIndex, blockIndex, register, errors, globalMent
       )}
       <div className='bg-[#D6BF8E] py-3 rounded-b-lg mt-3'>
         <textarea
-          id="content"
           placeholder="Insert content here *"
           {...reg}
           ref={(el) => {

@@ -53,7 +53,7 @@ const BLOCK_TYPE_COMPONENTS = {
   14: MultipleChoiceForm,   // MULTICHOICE QUESTION
 };
 
-function BlockRow({ cardIndex, blockIndex, getValues, setValue, register, errors, globalMentor, globalSoftSkill,
+function BlockRow({ cardIndex, blockIndex, getValues, setValue, register, unregister, errors, globalMentor, globalSoftSkill,
   showTypeSelector, blockType, imagePreviews, setImagePreviews, control }) {
 
   const BlockComponent = useMemo(
@@ -83,10 +83,11 @@ function BlockRow({ cardIndex, blockIndex, getValues, setValue, register, errors
   return (
     <div className="pb-2">
       {BlockComponent ? (
-        <BlockComponent cardIndex={cardIndex} blockIndex={blockIndex} globalMentor={globalMentor} globalSoftskill={globalSoftSkill}
-          register={register} errors={errors} showTypeSelector={showTypeSelector} value={blockType} onSelect={onSelectType}
+        <BlockComponent cardIndex={cardIndex} blockIndex={blockIndex} globalMentor={globalMentor}
+          globalSoftskill={globalSoftSkill} unregister={unregister} register={register} errors={errors}
+          showTypeSelector={showTypeSelector} value={blockType} onSelect={onSelectType} control={control}
           imagePreviews={imagePreviews} getValues={getValues} setValue={setValue} setImagePreviews={setImagePreviews}
-          control={control} />
+        />
       ) : (
         <div className="text-gray-400 italic">No form for this block type yet.</div>
       )}
@@ -95,14 +96,14 @@ function BlockRow({ cardIndex, blockIndex, getValues, setValue, register, errors
 }
 
 export function BlocksListEditor({ fields, currentCardIndex, control, setValue, register, errors, globalSoftSkill, globalMentor,
-  append, setCurrentCardIndex, getValues, imagePreviews, setImagePreviews,
+  append, setCurrentCardIndex, getValues, imagePreviews, setImagePreviews, unregister
 }) {
   const [typeSelectorVisibility, setTypeSelectorVisibility] = useState({});
   const [pendingDeleteCardIndex, setPendingDeleteCardIndex] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const {
     fields: blockFields,
-    insert: insertBlock, 
+    insert: insertBlock,
     remove: removeBlock,
   } = useFieldArray({
     control,
@@ -241,6 +242,7 @@ export function BlocksListEditor({ fields, currentCardIndex, control, setValue, 
                   getValues={getValues}
                   setValue={setValue}
                   register={register}
+                  unregister={unregister}
                   errors={errors}
                   globalMentor={globalMentor}
                   globalSoftSkill={globalSoftSkill}

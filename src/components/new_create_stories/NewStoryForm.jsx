@@ -59,7 +59,7 @@ export function NewStoryForm({ initialData, onSubmit, userLevel, submitMessage, 
     };
   }, [initialData]);
 
-  const { control, register, handleSubmit, formState: { errors }, getValues, setValue, trigger } = useForm({
+  const { control, register, handleSubmit, formState: { errors }, getValues, setValue, trigger, unregister } = useForm({
     defaultValues,
   });
 
@@ -154,6 +154,7 @@ export function NewStoryForm({ initialData, onSubmit, userLevel, submitMessage, 
         <CardEditor
           control={control}
           register={register}
+          unregister={unregister}
           append={append}
           errors={errors}
           getValues={getValues}

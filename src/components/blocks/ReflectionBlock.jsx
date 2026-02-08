@@ -23,15 +23,15 @@ const ReflectionContent = ({ children, additionalClass, color, image, content2, 
         </div>
       </div>
       {activeTab === "reflection" && (
-        <div className="p-3 rounded-lg items-center">
+        <div className="p-3 rounded-lg items-center space-y-1">
           <MarkdownRenderer content={children} additionalClass={'text-[#657DFF] italic'} />
-          <ImageContainer image={image} />
+          <ImageContainer image={image} color={color} />
         </div>
       )}
       {activeTab === "feedback" && (
-        <div className="p-3 rounded-lg items-center">
+        <div className="p-3 rounded-lg items-center space-y-1">
           <MarkdownRenderer content={content2} additionalClass={'text-[#38AFFF] italic'} />
-          <ImageContainer image={image2} />
+          <ImageContainer image={image2} color={color} />
         </div>
       )}
     </div>

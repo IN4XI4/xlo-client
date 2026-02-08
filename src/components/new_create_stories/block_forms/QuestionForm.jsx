@@ -49,7 +49,6 @@ export function QuestionForm({ cardIndex, blockIndex, register, errors, globalMe
     <div className=' p-3 bg-gray-50 shadow rounded-2xl border-[4px]' style={{ borderColor: color }}>
       <div className='pb-2 border-b-2' style={{ borderColor: color }}>
         <textarea
-          id="content"
           placeholder="Insert question here *"
           {...reg}
           ref={(el) => {

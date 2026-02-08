@@ -126,7 +126,7 @@ export function AssessmentsFilterCol({ onNameFilterChange, onToggleTopic, onTogg
                 {topics[category.id].map(topic => (
                   <div key={topic.id} className="flex items-center mb-1">
                     <div
-                      className="flex w-full"
+                      className="flex w-full items-center"
                       onClick={() => onToggleTopic(topic.id, topic.title)}
                     >
                       <input className="rounded" type="checkbox" checked={topic.id in filters.topics} readOnly />
