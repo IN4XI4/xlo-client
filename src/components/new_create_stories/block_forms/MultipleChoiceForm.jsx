@@ -133,7 +133,6 @@ export function MultipleChoiceForm({ cardIndex, blockIndex, register, errors, gl
     <div className=' p-3 bg-gray-50 shadow rounded-2xl border-[4px]' style={{ borderColor: color }}>
       <div className=''>
         <textarea
-          id="content"
           placeholder="Insert question here *"
           {...reg}
           ref={(el) => {

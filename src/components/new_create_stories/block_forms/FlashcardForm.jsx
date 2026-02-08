@@ -3,11 +3,12 @@ import { SelectTypeForm } from './SelectTypeForm'
 import { IoSync } from 'react-icons/io5';
 
 
-export function FlashcardForm({ cardIndex, blockIndex, register, errors, globalMentor, globalSoftskill, showTypeSelector,
+export function FlashcardForm({ cardIndex, blockIndex, register, unregister, errors, globalSoftskill, showTypeSelector,
   value, onSelect, imagePreviews, setValue
 }) {
   const [isPrimaryActive, setIsPrimaryActive] = useState(true);
   const color = globalSoftskill?.color || "#3DB1FF";
+
   useEffect(() => {
     setValue(
       `cards.${cardIndex}.blocks.${blockIndex}.isPrimaryActive`,
@@ -19,7 +20,7 @@ export function FlashcardForm({ cardIndex, blockIndex, register, errors, globalM
   const name = `cards.${cardIndex}.blocks.${blockIndex}.content`;
   const name2 = `cards.${cardIndex}.blocks.${blockIndex}.content_2`;
   const reg = register(name, { required: "Content is required" });
-  const reg2 = register(name2, { required: "Content is required" });
+  const reg2 = register(name2, { required: false });
   const autosize = (el) => {
     if (!el) return;
     el.style.height = "auto";
@@ -36,7 +37,6 @@ export function FlashcardForm({ cardIndex, blockIndex, register, errors, globalM
         <React.Fragment key="front">
           <div className=''>
             <textarea
-              id="content"
               placeholder="Insert content here *"
               {...reg}
               ref={(el) => {
@@ -56,7 +56,7 @@ export function FlashcardForm({ cardIndex, blockIndex, register, errors, globalM
             )}
           </div>
           {imagePreviews[`cards.${cardIndex}.blocks.${blockIndex}.image`] ? (
-            <div className='flex items-center justify-center py-3 border-t-2'  style={{ borderColor: color }}>
+            <div className='flex items-center justify-center py-3 border-t-2' style={{ borderColor: color }}>
               <img
                 src={imagePreviews[`cards.${cardIndex}.blocks.${blockIndex}.image`]}
                 alt="Preview"
@@ -91,7 +91,7 @@ export function FlashcardForm({ cardIndex, blockIndex, register, errors, globalM
             )}
           </div>
           {imagePreviews[`cards.${cardIndex}.blocks.${blockIndex}.image_2`] ? (
-            <div className='flex items-center justify-center py-3 border-t-2'  style={{ borderColor: color }}>
+            <div className='flex items-center justify-center py-3 border-t-2' style={{ borderColor: color }}>
               <img
                 src={imagePreviews[`cards.${cardIndex}.blocks.${blockIndex}.image_2`]}
                 alt="Preview"

@@ -65,7 +65,6 @@ export function IllustrationForm({ cardIndex, blockIndex, register, errors, glob
         )}
         <div className='border-t-2 pt-2' style={{ borderColor: color }}>
           <textarea
-            id="content"
             placeholder="Insert content here *"
             {...reg}
             ref={(el) => {

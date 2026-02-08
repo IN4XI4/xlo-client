@@ -4,7 +4,7 @@ import { BsInfoCircleFill } from 'react-icons/bs'
 import { BlocksListEditor } from './BlocksListEditor';
 
 
-export function CardEditor({ register, append, errors, setValue, imagePreviews, setImagePreviews, fields, currentCardIndex, control,
+export function CardEditor({ register, unregister, append, errors, setValue, imagePreviews, setImagePreviews, fields, currentCardIndex, control,
   globalMentor, globalSoftSkill, setCurrentCardIndex, getValues }) {
 
   return (
@@ -88,9 +88,10 @@ export function CardEditor({ register, append, errors, setValue, imagePreviews, 
           </div>
         </div>
       </div>
-      <BlocksListEditor key={currentCardIndex} fields={fields} currentCardIndex={currentCardIndex} control={control} setValue={setValue} register={register}
-        errors={errors} globalMentor={globalMentor} globalSoftSkill={globalSoftSkill} append={append} imagePreviews={imagePreviews}
-        setCurrentCardIndex={setCurrentCardIndex} getValues={getValues} setImagePreviews={setImagePreviews} />
+      <BlocksListEditor key={currentCardIndex} fields={fields} currentCardIndex={currentCardIndex} control={control}
+        setValue={setValue} register={register} unregister={unregister} errors={errors} globalMentor={globalMentor}
+        globalSoftSkill={globalSoftSkill} append={append} imagePreviews={imagePreviews} getValues={getValues}
+        setCurrentCardIndex={setCurrentCardIndex} setImagePreviews={setImagePreviews} />
     </div>
   )
 }

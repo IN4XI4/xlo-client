@@ -57,7 +57,6 @@ export function TestimonialForm({ cardIndex, blockIndex, register, errors, globa
         style={{ backgroundColor: selectedColor?.color || '#F9FAFB', borderColor: `${selectedColor?.color || "#3DB1FF"}66` }} >
         <div className=''>
           <textarea
-            id="content"
             placeholder="Insert content here *"
             {...reg}
             ref={(el) => {

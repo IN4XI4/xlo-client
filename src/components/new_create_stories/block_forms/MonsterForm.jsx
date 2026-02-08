@@ -39,7 +39,6 @@ export function MonsterForm({ cardIndex, blockIndex, register, errors, globalMen
         style={{ borderColor: color }}>
         <div className=''>
           <textarea
-            id="content"
             placeholder="Insert content here *"
             {...reg}
             ref={(el) => {

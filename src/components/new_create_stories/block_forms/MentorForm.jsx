@@ -41,7 +41,6 @@ export function MentorForm({ cardIndex, blockIndex, register, errors, globalMent
       <div className=' p-3 bg-gray-50 shadow rounded-2xl border-[4px] ms-8 md:ms-12 rounded-tl-none' style={{ borderColor: color }}>
         <div className=''>
           <textarea
-            id="content"
             placeholder="Insert content here *"
             {...reg}
             ref={(el) => {

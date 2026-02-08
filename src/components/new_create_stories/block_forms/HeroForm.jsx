@@ -48,7 +48,6 @@ export function HeroForm({ cardIndex, blockIndex, register, errors, globalMentor
           <AvatarRenderer avatar={renderAvatar} size="h-40" />
         </div>
         <textarea
-          id="content"
           placeholder="Insert content here *"
           {...reg}
           ref={(el) => {

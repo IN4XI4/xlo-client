@@ -53,7 +53,6 @@ export function QuoteForm({ cardIndex, blockIndex, register, errors, globalMento
       </div>
       <div className=''>
         <textarea
-          id="content"
           placeholder="Insert quote here *"
           {...reg}
           ref={(el) => {

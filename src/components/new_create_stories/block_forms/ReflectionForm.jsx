@@ -4,7 +4,7 @@ import ReflectionIcon from "../../../assets/reflection.svg"
 import FeedbackIcon from "../../../assets/feedback.svg"
 
 
-export function ReflectionForm({ cardIndex, blockIndex, register, errors, globalMentor, globalSoftskill, showTypeSelector,
+export function ReflectionForm({ cardIndex, blockIndex, register, unregister, errors, globalSoftskill, showTypeSelector,
   value, onSelect, imagePreviews, setValue
 }) {
   const [activeTab, setActiveTab] = useState("reflection");
@@ -13,7 +13,8 @@ export function ReflectionForm({ cardIndex, blockIndex, register, errors, global
   const name = `cards.${cardIndex}.blocks.${blockIndex}.content`;
   const name2 = `cards.${cardIndex}.blocks.${blockIndex}.content_2`;
   const reg = register(name, { required: "Content is required" });
-  const reg2 = register(name2, { required: "Content is required" });
+  const reg2 = register(name2, { required: false });
+
   const autosize = (el) => {
     if (!el) return;
     el.style.height = "auto";
@@ -44,7 +45,6 @@ export function ReflectionForm({ cardIndex, blockIndex, register, errors, global
         <>
           <div className=''>
             <textarea
-              id="content"
               placeholder="Insert content here *"
               {...reg}
               ref={(el) => {
