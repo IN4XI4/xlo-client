@@ -16,7 +16,6 @@ const shuffle = (arr) => {
 
 
 const MultichoiceQuestionContent = ({ children, additionalClass, image, blockOptions, color }) => {
-  console.log("color", color);
 
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [isCorrect, setIsCorrect] = useState(null);
