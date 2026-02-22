@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { FaCircleInfo } from "react-icons/fa6";
-import { getMyAvatar, getMyColors, getMyItems, updateAvatar } from '../../../api/avatar.api';
+import { HiInformationCircle } from 'react-icons/hi';
+import { Alert } from 'flowbite-react';
+import { getMyAvatar, getItemCatalog, getItemDefaults, updateAvatar, getColorCatalog, getSkinColorCatalog } from '../../../api/avatar.api';
+import { getUser } from '../../../api/users.api';
 import { AvatarRenderer } from './AvatarRenderer';
 import { AvatarSections } from './AvatarSections';
 import { SelectItem } from './SelectItem';
@@ -40,17 +43,19 @@ const SELECTED_COLOR_BY_SECTION = {
   SHOES: (a) => a?.shoes_color.hex ?? null,
 };
 
-const pickFirstByGender = (arr = [], gender) =>
-  (arr || []).find(it => it.gender === gender) || (arr || [])[0] || null;
-
 export function Details() {
   const [avatar, setAvatar] = useState(null)
+  const [originalAvatar, setOriginalAvatar] = useState(null) // Configuración guardada en BD
   const [loading, setLoading] = useState(true)
   const [itemsByType, setItemsByType] = useState(EMPTY_ITEMS_BY_TYPE)
   const [skinColors, setSkinColors] = useState([])
   const [itemColors, setItemColors] = useState([])
   const [itemsLoading, setItemsLoading] = useState(true)
   const [updateStatus, setUpdateStatus] = useState(null);
+  const [itemsRefreshKey, setItemsRefreshKey] = useState(0);
+  const [colorsRefreshKey, setColorsRefreshKey] = useState(0);
+  const [coinBalance, setCoinBalance] = useState(null);
+  const [showPurchaseSuccess, setShowPurchaseSuccess] = useState(false);
 
   const [activeSection, setActiveSection] = useState('GENDER')
   const [activeAvatarType, setActiveAvatarType] = useState('BOY')
@@ -72,30 +77,41 @@ export function Details() {
     setAvatar(prev => prev ? ({ ...prev, [field]: itemSvg }) : prev);
   };
 
-  const buildDefaultsFromItems = (gender, itemsByType) => ({
-    FACE: pickFirstByGender(itemsByType.FACE, gender),
-    HAIR: pickFirstByGender(itemsByType.HAIR, gender),
-    SHIRT: pickFirstByGender(itemsByType.SHIRT, gender),
-    PANTS: pickFirstByGender(itemsByType.PANTS, gender),
-    SHOES: pickFirstByGender(itemsByType.SHOES, gender),
-    ACCESSORY: null,
-  });
-
-  const handleChangeGender = (newGender) => {
+  const handleChangeGender = async (newGender) => {
     if (!avatar || newGender === avatar.avatar_type) return;
-    const defaults = buildDefaultsFromItems(newGender, itemsByType);
-    setAvatar(prev => ({
-      ...prev,
-      avatar_type: newGender,
-      [FIELD_BY_TYPE.FACE]: defaults.FACE,
-      [FIELD_BY_TYPE.HAIR]: defaults.HAIR,
-      [FIELD_BY_TYPE.SHIRT]: defaults.SHIRT,
-      [FIELD_BY_TYPE.PANTS]: defaults.PANTS,
-      [FIELD_BY_TYPE.SHOES]: defaults.SHOES,
-      [FIELD_BY_TYPE.ACCESSORY]: null,
-    }));
 
-    setActiveAvatarType(newGender);
+    setItemsLoading(true);
+
+    try {
+      // Si regresa al género original (guardado en BD), restaurar configuración real
+      if (originalAvatar && newGender === originalAvatar.avatar_type) {
+        setAvatar(originalAvatar);
+        setItemsByType(EMPTY_ITEMS_BY_TYPE);
+        setActiveAvatarType(newGender);
+      } else {
+        // Si es un género diferente al original, usar defaults
+        const response = await getItemDefaults(newGender);
+        const defaults = response.data;
+
+        setAvatar(prev => ({
+          ...prev,
+          avatar_type: newGender,
+          [FIELD_BY_TYPE.FACE]: defaults.FACE || null,
+          [FIELD_BY_TYPE.HAIR]: defaults.HAIR || null,
+          [FIELD_BY_TYPE.SHIRT]: defaults.SHIRT || null,
+          [FIELD_BY_TYPE.PANTS]: defaults.PANTS || null,
+          [FIELD_BY_TYPE.SHOES]: defaults.SHOES || null,
+          [FIELD_BY_TYPE.ACCESSORY]: null,
+        }));
+
+        setItemsByType(EMPTY_ITEMS_BY_TYPE);
+        setActiveAvatarType(newGender);
+      }
+    } catch (error) {
+      console.error('Error changing gender:', error);
+    } finally {
+      setItemsLoading(false);
+    }
   };
 
   const selectedColorHex = useMemo(() => {
@@ -129,44 +145,98 @@ export function Details() {
   useEffect(() => {
     const fetchAll = async () => {
       try {
-        const [avatarRes, itemsRes, colorsRes] = await Promise.all([
+        const [avatarRes, userRes] = await Promise.all([
           getMyAvatar(),
-          getMyItems(),
-          getMyColors(),
+          getUser(),
         ])
 
         setAvatar(avatarRes.data)
+        setOriginalAvatar(avatarRes.data) // Guardar configuración original de BD
         setActiveAvatarType(avatarRes.data.avatar_type)
-        setItemsByType(itemsRes.data)
-        setSkinColors(colorsRes.data.skin_colors)
-        setItemColors(colorsRes.data.item_colors)
+        setCoinBalance(userRes.data.coin_balance)
       } catch (error) {
         console.error('Error fetching avatar/items:', error)
       } finally {
         setLoading(false)
-        setItemsLoading(false)
       }
     }
     fetchAll()
   }, [])
 
+  useEffect(() => {
+    const fetchColors = async () => {
+      try {
+        const [itemColorsRes, skinColorsRes] = await Promise.all([
+          getColorCatalog(),
+          getSkinColorCatalog(),
+        ])
+        setItemColors(itemColorsRes.data.results || itemColorsRes.data)
+        setSkinColors(skinColorsRes.data.results || skinColorsRes.data)
+      } catch (error) {
+        console.error('Error fetching colors:', error)
+      }
+    }
+    fetchColors()
+  }, [colorsRefreshKey])
+
+  useEffect(() => {
+    const fetchItemsForSection = async () => {
+      if (activeSection === 'GENDER') {
+        setItemsLoading(false);
+        return;
+      }
+
+      setItemsLoading(true);
+      try {
+        const response = await getItemCatalog(activeSection, activeAvatarType);
+        const items = response.data.results || response.data;
+
+        setItemsByType(prev => ({
+          ...prev,
+          [activeSection]: items
+        }));
+      } catch (error) {
+        console.error('Error fetching items for section:', error);
+      } finally {
+        setItemsLoading(false);
+      }
+    };
+
+    if (activeAvatarType) {
+      fetchItemsForSection();
+    }
+  }, [activeSection, activeAvatarType, itemsRefreshKey])
+
+  const handleBuySuccess = async () => {
+    setItemsRefreshKey(k => k + 1);
+    setColorsRefreshKey(k => k + 1);
+    setShowPurchaseSuccess(true);
+    setTimeout(() => setShowPurchaseSuccess(false), 7000);
+    try {
+      const userRes = await getUser();
+      setCoinBalance(userRes.data.coin_balance);
+    } catch (error) {
+      console.error('Error refreshing coin balance:', error);
+    }
+  };
+
   const handleUpdateAvatar = async () => {
     if (!avatar) return;
     const payload = {
       avatar_type: avatar.avatar_type,
-      skin_color: avatar.skin_color?.id,
-      face_item: avatar.face_item?.id,
-      hair_item: avatar.hair_item?.id,
-      hair_color: avatar.hair_color?.id,
-      shirt_item: avatar.shirt_item?.id,
-      shirt_color: avatar.shirt_color?.id,
-      pants_item: avatar.pants_item?.id,
-      pants_color: avatar.pants_color?.id,
-      shoes_item: avatar.shoes_item?.id,
-      shoes_color: avatar.shoes_color?.id,
-      accessory_item: avatar.accessory_item?.id ?? null,
-      accessory_color: avatar.accessory_color?.id ?? null,
-      eyes_color: avatar.eyes_color?.id,
+      skin_color: avatar.skin_color?.unlocked_item_id ?? avatar.skin_color?.id,
+      face_item: avatar.face_item?.unlocked_item_id ?? avatar.face_item?.id,
+      hair_item: avatar.hair_item?.unlocked_item_id ?? avatar.hair_item?.id,
+      hair_color: avatar.hair_color?.unlocked_item_id ?? avatar.hair_color?.id,
+      shirt_item: avatar.shirt_item?.unlocked_item_id ?? avatar.shirt_item?.id,
+      shirt_color: avatar.shirt_color?.unlocked_item_id ?? avatar.shirt_color?.id,
+      pants_item: avatar.pants_item?.unlocked_item_id ?? avatar.pants_item?.id,
+      pants_color: avatar.pants_color?.unlocked_item_id ?? avatar.pants_color?.id,
+      shoes_item: avatar.shoes_item?.unlocked_item_id ?? avatar.shoes_item?.id,
+      shoes_color: avatar.shoes_color?.unlocked_item_id ?? avatar.shoes_color?.id,
+      accessory_item: avatar.accessory_item?.unlocked_item_id ?? avatar.accessory_item?.id ?? null,
+      accessory_color: avatar.accessory_color?.unlocked_item_id ?? avatar.accessory_color?.id ?? null,
+      eyes_color: avatar.eyes_color?.unlocked_item_id ?? avatar.eyes_color?.id,
     };
 
     try {
@@ -190,6 +260,11 @@ export function Details() {
 
   return (
     <div className='bg-white rounded border p-3 shadow'>
+      {showPurchaseSuccess && (
+        <Alert color="success" icon={HiInformationCircle} className='mb-4' onDismiss={() => setShowPurchaseSuccess(false)}>
+          <span className="font-medium">Item purchased successfully!</span>
+        </Alert>
+      )}
       <div className='font-semibold text-lg pb-3 md:pb-4 flex items-center'>
         My avatar
         <span className='ps-2'><FaCircleInfo className='text-sm text-gray-300' /></span>
@@ -216,6 +291,7 @@ export function Details() {
               setActiveAvatarType={handleChangeGender}
               selectedSvgByType={selectedSvgByType}
               onSelectItem={handleSelectItem}
+              onBuySuccess={handleBuySuccess}
             />
           </div>
           <SelectColor
@@ -223,7 +299,9 @@ export function Details() {
             skinColors={skinColors}
             itemColors={itemColors}
             selectedHex={selectedColorHex}
-            onPick={handlePickColor} />
+            onPick={handlePickColor}
+            coinBalance={coinBalance}
+            onBuySuccess={handleBuySuccess} />
         </div>
       </div>
       <div className='py-1 border-b '>
@@ -235,7 +313,7 @@ export function Details() {
             You're an: <span className='font-semibold text-[#3DB1FF]'>Apprentice Hero</span>
           </div>
           <div className='text-gray-500 text-sm'>
-            You have collected: <span className='font-semibold text-[#3DB1FF]'>0 $MC</span> [Mixelo Coins]
+            You have collected: <span className='font-semibold text-[#3DB1FF]'>{coinBalance ?? 0} $MC</span> [Mixelo Coins]
           </div>
         </div>
         <div className='flex flex-col items-end'>

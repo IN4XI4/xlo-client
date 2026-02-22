@@ -18,7 +18,6 @@ function QuestionsList({ attempt, questions, onEndAttempt }) {
       updatedResponses.push(response);
     }
     setUserResponses(updatedResponses);
-    console.log("User responses:", updatedResponses);
   };
 
   return (

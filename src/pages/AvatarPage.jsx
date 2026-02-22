@@ -10,12 +10,12 @@ export function AvatarPage() {
       <div className='text-3xl font-semibold pb-3'>
         MY JOURNEY
       </div>
-      <div className='grid grid-cols-1 md:grid-cols-3 mb-3'>
-        <div className='md:col-span-2 space-y-4'>
+      <div className='grid grid-cols-1 lg:grid-cols-3 mb-3'>
+        <div className='lg:col-span-2 space-y-4'>
           <Details />
           <Activities />
         </div>
-        <div className='py-4 md:py-0 md:ps-4'>
+        <div className='py-4 lg:py-0 lg:ps-4'>
           <Badges />
         </div>
       </div>

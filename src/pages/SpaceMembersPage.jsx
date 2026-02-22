@@ -100,7 +100,6 @@ export function SpaceMembersPage() {
       }
 
       const results = res.data.results
-      console.log("res data", res.data);
 
       if (page === 1) {
         setMembers(results);
