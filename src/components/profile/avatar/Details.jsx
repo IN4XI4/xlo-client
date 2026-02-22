@@ -292,6 +292,7 @@ export function Details() {
               selectedSvgByType={selectedSvgByType}
               onSelectItem={handleSelectItem}
               onBuySuccess={handleBuySuccess}
+              coinBalance={coinBalance}
             />
           </div>
           <SelectColor
