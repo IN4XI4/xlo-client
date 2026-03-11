@@ -1,6 +1,6 @@
 import { blendColor } from "../../../../utils/colorUtils"
 
-export const GirlShirt3 = ({ color = "#E8E8E8" }) => (
+export const GirlShirt3 = ({ color = "#404A4A" }) => (
   <g id="Girl-Top-[D]-03">
     <g id="[B-Secondary] - [Base]">
       <path id="[B-Hips]" d="M229.5 392C140.88 413.58 93.5 390 93.5 390C94.21 385.75 95.47 381.03 97 378C97 378 97.5062 378.38 97.5962 378.42C98.2462 378.75 100.826 380.07 100.836 380.07C101.696 380.45 144.486 400.26 219.216 382.19C221.496 381.64 224.16 380.62 226.5 380L229.5 392Z" fill={blendColor(color)} />
