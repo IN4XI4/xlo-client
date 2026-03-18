@@ -16,7 +16,8 @@ const EMPTY_ITEMS_BY_TYPE = {
   SHIRT: [],
   PANTS: [],
   SHOES: [],
-  ACCESSORY: []
+  ACCESSORY: [],
+  KI: [],
 };
 
 const FIELD_BY_TYPE = {
@@ -26,6 +27,7 @@ const FIELD_BY_TYPE = {
   PANTS: 'pants_item',
   SHOES: 'shoes_item',
   ACCESSORY: 'accessory_item',
+  KI: 'ki_item',
 }
 
 const COLOR_FIELD_BY_SECTION = {
@@ -33,6 +35,7 @@ const COLOR_FIELD_BY_SECTION = {
   SHIRT: 'shirt_color',
   PANTS: 'pants_color',
   SHOES: 'shoes_color',
+  KI: 'ki_color',
 };
 
 const SELECTED_COLOR_BY_SECTION = {
@@ -41,6 +44,7 @@ const SELECTED_COLOR_BY_SECTION = {
   SHIRT: (a) => a?.shirt_color.hex ?? null,
   PANTS: (a) => a?.pants_color.hex ?? null,
   SHOES: (a) => a?.shoes_color.hex ?? null,
+  KI: (a) => a?.ki_color?.hex ?? null,
 };
 
 export function Details() {
@@ -74,7 +78,21 @@ export function Details() {
   const handleSelectItem = (type, itemSvg) => {
     const field = FIELD_BY_TYPE[type];
     if (!field) return;
-    setAvatar(prev => prev ? ({ ...prev, [field]: itemSvg }) : prev);
+
+    setAvatar(prev => {
+      if (!prev) return prev;
+      const updated = { ...prev, [field]: itemSvg };
+
+      const colorField = COLOR_FIELD_BY_SECTION[type];
+      if (colorField && !prev[colorField]) {
+        const firstOwned = itemColors.find(c => c.owned !== false);
+        if (firstOwned) {
+          updated[colorField] = firstOwned;
+        }
+      }
+
+      return updated;
+    });
   };
 
   const handleChangeGender = async (newGender) => {
@@ -236,6 +254,8 @@ export function Details() {
       shoes_color: avatar.shoes_color?.unlocked_item_id ?? avatar.shoes_color?.id,
       accessory_item: avatar.accessory_item?.unlocked_item_id ?? avatar.accessory_item?.id ?? null,
       accessory_color: avatar.accessory_color?.unlocked_item_id ?? avatar.accessory_color?.id ?? null,
+      ki_item: avatar.ki_item?.unlocked_item_id ?? avatar.ki_item?.id ?? null,
+      ki_color: avatar.ki_color?.unlocked_item_id ?? avatar.ki_color?.id ?? null,
       eyes_color: avatar.eyes_color?.unlocked_item_id ?? avatar.eyes_color?.id,
     };
 

@@ -1,6 +1,6 @@
 import { blendColor } from "../../../../utils/colorUtils"
 
-export const BoyShirt4 = ({ color = "#3B3A3A" }) => (
+export const BoyShirt4 = ({ color = "#404A4A" }) => (
   <g id="Boy-Top-[D]-04">
     <g id="[A-Main] - [Base]">
       <g id="[A-Torso-Left]">

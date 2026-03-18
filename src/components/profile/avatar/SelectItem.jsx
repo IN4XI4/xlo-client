@@ -50,6 +50,7 @@ const TYPE_FOLDER = {
   PANTS: 'pants',
   SHOES: 'shoes',
   ACCESSORY: 'accessory',
+  KI: 'accessory',
 }
 
 export function SelectItem({ itemsByType, itemsLoading, activeSection, activeAvatarType, setActiveAvatarType,
@@ -57,7 +58,7 @@ export function SelectItem({ itemsByType, itemsLoading, activeSection, activeAva
   const [components, setComponents] = useState({})
   const [buyModalData, setBuyModalData] = useState(null)
 
-  const type = ['FACE', 'HAIR', 'SHIRT', 'PANTS', 'SHOES', 'ACCESSORY'].includes(activeSection)
+  const type = ['FACE', 'HAIR', 'SHIRT', 'PANTS', 'SHOES', 'ACCESSORY', 'KI'].includes(activeSection)
     ? activeSection
     : 'FACE'
 
@@ -125,14 +126,6 @@ export function SelectItem({ itemsByType, itemsLoading, activeSection, activeAva
             )
           })}
         </div>
-      </div>
-    )
-  }
-
-  if (activeSection === 'SHOP') {
-    return (
-      <div className="p-3">
-        <div className="text-gray-400">Coming soon!</div>
       </div>
     )
   }
