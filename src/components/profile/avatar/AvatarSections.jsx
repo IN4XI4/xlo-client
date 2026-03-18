@@ -6,7 +6,7 @@ import { IoShirt } from "react-icons/io5";
 import { PiPants } from "react-icons/pi";
 import { GiSteeltoeBoots } from "react-icons/gi";
 import { GiBroadsword } from "react-icons/gi";
-import { BsShop } from "react-icons/bs";
+import { BsLightningFill } from "react-icons/bs";
 
 
 const sections = [
@@ -17,7 +17,7 @@ const sections = [
   { key: 'PANTS', label: 'Pants', icon: <PiPants className="text-4xl" /> },
   { key: 'SHOES', label: 'Shoes', icon: <GiSteeltoeBoots className="text-4xl" /> },
   { key: 'ACCESSORY', label: 'Props', icon: <GiBroadsword className="text-4xl" /> },
-  { key: 'SHOP', label: 'Shop', icon: <BsShop className="text-4xl" /> },
+  { key: 'KI', label: 'Ki', icon: <BsLightningFill className="text-3xl" /> },
 ]
 
 export function AvatarSections({ activeSection, onChange }) {

@@ -31,6 +31,7 @@ export function AvatarRenderer({ avatar, size = "h-auto" }) {
         pants_item: `pants/${avatar.pants_item.svg}`,
         shoes_item: `shoes/${avatar.shoes_item.svg}`,
         accessory_item: avatar.accessory_item ? `accessory/${avatar.accessory_item.svg}` : null,
+        ki_item: avatar.ki_item ? `accessory/${avatar.ki_item.svg}` : null,
         body: `${avatar.avatar_type.toLowerCase()}_body.jsx`
       }
 
@@ -67,13 +68,15 @@ export function AvatarRenderer({ avatar, size = "h-auto" }) {
     shirt_item: Shirt,
     pants_item: Pants,
     shoes_item: Shoes,
-    accessory_item: Accessory
+    accessory_item: Accessory,
+    ki_item: Ki
   } = components
 
   return (
     <div className={`w-full max-w-[200px] md:max-w-[300px] aspect-[575/890] ${size}`}>
       <svg viewBox="0 0 575 890" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
         <g id="Avatar-Root">
+          {Ki && <Ki color={avatar.ki_color?.hex} />}
           {Body && (
             <Body
               main_color={avatar.skin_color?.main_color}
