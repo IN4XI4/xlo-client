@@ -7,7 +7,7 @@ import { getMyAvatar } from '../../api/avatar.api';
 import { AvatarRenderer } from '../profile/avatar/AvatarRenderer';
 
 
-export function MyAvatarTile() {
+export function MyAvatarTile({ coinBalance }) {
   const [isOpen, setIsOpen] = useState(true);
   const [myAvatar, setMyAvatar] = useState([]);
   const [error, setError] = useState(null);
@@ -64,7 +64,7 @@ export function MyAvatarTile() {
                   <AvatarRenderer avatar={renderAvatar} size="h-40" />
                   <div className='pt-4'>
                     <div className='text-[#3DB1FF] pb-2'>You're: <span className='font-semibold'>Apprentice hero</span> </div>
-                    <div className='text-[#3DB1FF]'>Collected: <span className='font-semibold'> 0 $MC</span></div>
+                    <div className='text-[#3DB1FF]'>Collected: <span className='font-semibold'>{coinBalance ?? 0} $MC</span></div>
 
                   </div>
                 </div>

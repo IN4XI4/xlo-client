@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Controller, useWatch } from 'react-hook-form'
-import { Select, ToggleSwitch, Tooltip } from 'flowbite-react'
+import { Select, Tooltip } from 'flowbite-react'
 import { BsInfoCircleFill } from "react-icons/bs";
 import { FaPlus } from 'react-icons/fa';
 
@@ -79,10 +79,14 @@ export function StoryOptions({ initialData, control, errors, setValue, userLevel
     loadSoftSkillsAndMentors();
   }, []);
 
-  const isPrivate = useWatch({
-    control,
-    name: 'is_private',
-  });
+  const isPrivateVal = useWatch({ control, name: 'is_private' });
+  const freeAccessVal = useWatch({ control, name: 'free_access' });
+
+  function getVisibilityValue() {
+    if (isPrivateVal) return 'private';
+    if (freeAccessVal) return 'free_access';
+    return 'community';
+  }
 
   useEffect(() => {
     if (userLevel >= CREATOR_LEVEL_3) {
@@ -235,44 +239,22 @@ export function StoryOptions({ initialData, control, errors, setValue, userLevel
             <p className="text-red-500">A skill is required.</p>}
         </div>
       </div>
-      <div className='flex justify-center md:items-center flex-col md:flex-row space-y-2 md:space-y-0'>
-        <div className='flex md:items-center md:justify-center pe-2'>
-          <div className='pe-4'>Is private</div>
-          <Controller
-            name="is_private"
-            control={control}
-            render={({ field }) => (
-              <ToggleSwitch
-                color="cyan"
-                checked={field.value}
-                onChange={(checked) => {
-                  setValue('is_private', checked);
-                  if (checked) {
-                    setValue('free_access', false);
-                  }
-                }}
-              />
-            )}
-          />
+      <div className='flex flex-col pb-2'>
+        <div className='font-semibold flex items-center pb-1'>
+          <LabelWithInfo label="Privacy" infoContent={INFO_OPTIONS.privacy} />
         </div>
-        {!isPrivate && (
-          <div className='flex md:items-center md:justify-center'>
-            <div className='pe-4'>
-              <Tooltip content="Public Url">Free Access</Tooltip>
-            </div>
-            <Controller
-              name="free_access"
-              control={control}
-              render={({ field }) => (
-                <ToggleSwitch
-                  color="cyan"
-                  checked={field.value}
-                  onChange={(checked) => setValue('free_access', checked)}
-                />
-              )}
-            />
-          </div>
-        )}
+        <Select
+          value={getVisibilityValue()}
+          onChange={(e) => {
+            const val = e.target.value;
+            setValue('is_private', val === 'private');
+            setValue('free_access', val === 'free_access');
+          }}
+        >
+          <option value="community">Mixelo community</option>
+          <option value="private">Privacy focus</option>
+          <option value="free_access">Open to public (Everybody)</option>
+        </Select>
       </div>
       <div className='flex flex-col pb-4'>
         <div className='font-semibold flex items-center pb-1'>
