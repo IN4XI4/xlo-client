@@ -73,7 +73,7 @@ export function HomePage() {
             <div className="sm:col-span-2 py-3">
               <MyFavoriteStoriesTile activeSpace={activeSpace} key={`topics-${activeSpace?.id || "none"}`} />
             </div>
-            <MyAvatarTile />
+            <MyAvatarTile coinBalance={user.coin_balance} />
             <MySpacesTile />
           </div> :
             <div className='w-full md:w-[45%] grid grid-cols-1 sm:grid-cols-2 md:ps-2'>

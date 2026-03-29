@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { FaStar } from 'react-icons/fa';
+import { FaStar, FaPlus } from 'react-icons/fa';
+import { Tooltip } from 'flowbite-react';
 import { startAttempt } from '../../api/attempts.api';
 import { useNavigate } from 'react-router-dom';
 import { followAssessment, unfollowAssessment } from '../../api/assessments.api';
-import { CiImageOn } from 'react-icons/ci';
+import { ConfirmationModal } from '../modals/ConfirmationModal';
 import { HiOutlineBadgeCheck } from "react-icons/hi";
 import { CiCircleQuestion, CiClock2 } from "react-icons/ci";
 import { AiOutlineLineChart } from "react-icons/ai";
@@ -15,6 +16,7 @@ import { AiOutlineNumber } from "react-icons/ai";
 export function AssessmentDetail({ assessment }) {
   const navigate = useNavigate();
   const [apiError, setApiError] = useState(null);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [assessmentDetails, setAssessmentDetails] = useState({
     ...assessment,
     is_following: assessment.is_following,
@@ -104,13 +106,17 @@ export function AssessmentDetail({ assessment }) {
         </div>
         <div className='flex justify-end items-center'>
           <div className=''>
-            <div className='bg-white text-gray-500 text-lg cursor-pointer rounded-lg border-[#3DB1FF] border-2 font-light
-                flex items-center justify-center px-4 py-3 hover:shadow hover:font-normal'
-              onClick={handleStartClick}>
+            <div className={`text-lg rounded-lg border-2 font-light flex items-center justify-center px-4 py-3
+                ${assessment.is_owner
+                  ? 'bg-gray-100 text-gray-400 border-gray-300 cursor-not-allowed'
+                  : 'bg-white text-gray-500 cursor-pointer border-[#3DB1FF] hover:shadow hover:font-normal'}`}
+              onClick={() => !assessment.is_owner && setShowConfirm(true)}>
               Start attempt
             </div>
             <div className='text-sm text-gray-500 pt-1'>
-              You have <span className='font-semibold'>{assessment.available_attempts}</span> attempts left
+              {assessment.is_owner
+                ? 'You own this assessment'
+                : <>You have <span className='font-semibold'>{assessment.available_attempts}</span> attempts left</>}
             </div>
           </div>
         </div>
@@ -140,6 +146,29 @@ export function AssessmentDetail({ assessment }) {
             </div>
             <div className='text-xl font-semibold pt-1'>
               {assessment.min_score} / 100
+            </div>
+          </div>
+        </div>
+        <div className='flex items-start justify-start'>
+          <div className='pt-2 text-lg text-gray-500 pe-2'>
+            <AiOutlineLineChart />
+          </div>
+          <div>
+            <div className='font-light text-xl flex items-center gap-2'>
+              Community Difficulty
+              {!assessment.is_owner && assessment.available_attempts < assessment.allowed_attempts && (
+                <Tooltip content="Rate difficulty">
+                  <button type="button" className='bg-[#1C64F2] p-1 rounded-full text-white flex items-center text-sm'>
+                    <FaPlus />
+                  </button>
+                </Tooltip>
+              )}
+            </div>
+            <div className='text-xl font-semibold pt-1'>
+              {assessment.user_difficulty_rating != null
+                ? <><span className={getDifficultyColor(assessment.user_difficulty_rating)}>
+                    {formatDifficulty(assessment.user_difficulty_rating)}</span> / 10.00</>
+                : <span className='text-gray-400 font-light text-base'>Not rated yet</span>}
             </div>
           </div>
         </div>
@@ -247,6 +276,14 @@ export function AssessmentDetail({ assessment }) {
           <p>{assessment.minimum_requirements}</p>
         </div>
       </div>
+      {showConfirm && (
+        <ConfirmationModal
+          message={`You're about to use one of your attempts, you only have ${assessment.available_attempts} left, make them count! Ready to go?`}
+          buttonColor="#3DB1FF"
+          onConfirm={() => { setShowConfirm(false); handleStartClick(); }}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
     </div>
   )
 }
