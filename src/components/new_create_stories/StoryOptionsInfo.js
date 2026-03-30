@@ -37,4 +37,10 @@ Link this “story” to “space(s)” that you have access to.
 Add a “cover image” to this “story”.
 `.trim(),
 
+  privacy: `
+Mixelo community | Make this story visible for all “Mixelo members”.
+Privacy focus | Make this story only visible for “you and your space”.
+Open to public | Make this story accecible for “Mixelo outsiders”.
+`.trim(),
+
 };
