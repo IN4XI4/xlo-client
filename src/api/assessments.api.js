@@ -36,3 +36,8 @@ export const followAssessment = (assessmentId) => {
 }
 export const unfollowAssessment = (id) => assessmentsApi.delete(`follow-assessments/${id}`, { headers: getAuthHeaders() })
 
+export const getMyDifficultyRating = (assessmentId) =>
+  assessmentsApi.get(`assessments-difficulty/my-rating/?assessment=${assessmentId}`, { headers: getAuthHeaders() })
+
+export const createOrUpdateDifficultyRating = (assessmentId, difficulty) =>
+  assessmentsApi.post(`assessments-difficulty/`, { assessment: assessmentId, difficulty }, { headers: getAuthHeaders() })

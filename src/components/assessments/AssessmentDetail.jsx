@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { FaStar, FaPlus } from 'react-icons/fa';
-import { Tooltip } from 'flowbite-react';
+import { Tooltip, Alert } from 'flowbite-react';
+import { HiInformationCircle } from 'react-icons/hi';
 import { startAttempt } from '../../api/attempts.api';
 import { useNavigate } from 'react-router-dom';
 import { followAssessment, unfollowAssessment } from '../../api/assessments.api';
 import { ConfirmationModal } from '../modals/ConfirmationModal';
+import { DifficultyRatingModal } from './DifficultyRatingModal';
 import { HiOutlineBadgeCheck } from "react-icons/hi";
 import { CiCircleQuestion, CiClock2 } from "react-icons/ci";
 import { AiOutlineLineChart } from "react-icons/ai";
@@ -13,10 +15,12 @@ import { FaRegChartBar } from "react-icons/fa6";
 import { AiOutlineNumber } from "react-icons/ai";
 
 
-export function AssessmentDetail({ assessment }) {
+export function AssessmentDetail({ assessment, onReload }) {
   const navigate = useNavigate();
   const [apiError, setApiError] = useState(null);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showDifficultyRating, setShowDifficultyRating] = useState(false);
+  const [ratingSuccess, setRatingSuccess] = useState(false);
   const [assessmentDetails, setAssessmentDetails] = useState({
     ...assessment,
     is_following: assessment.is_following,
@@ -74,6 +78,11 @@ export function AssessmentDetail({ assessment }) {
   }
   return (
     <div className="lg:px-12">
+      {ratingSuccess && (
+        <Alert color="success" icon={HiInformationCircle} className='mb-3' onDismiss={() => setRatingSuccess(false)}>
+          <span className="font-medium">Difficulty rating submitted successfully!</span>
+        </Alert>
+      )}
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           {assessment.image ? (
@@ -107,10 +116,10 @@ export function AssessmentDetail({ assessment }) {
         <div className='flex justify-end items-center'>
           <div className=''>
             <div className={`text-lg rounded-lg border-2 font-light flex items-center justify-center px-4 py-3
-                ${assessment.is_owner
-                  ? 'bg-gray-100 text-gray-400 border-gray-300 cursor-not-allowed'
-                  : 'bg-white text-gray-500 cursor-pointer border-[#3DB1FF] hover:shadow hover:font-normal'}`}
-              onClick={() => !assessment.is_owner && setShowConfirm(true)}>
+                ${assessment.is_owner || assessment.available_attempts <= 0
+                ? 'bg-gray-100 text-gray-400 border-gray-300 cursor-not-allowed'
+                : 'bg-white text-gray-500 cursor-pointer border-[#3DB1FF] hover:shadow hover:font-normal'}`}
+              onClick={() => !assessment.is_owner && assessment.available_attempts > 0 && setShowConfirm(true)}>
               Start attempt
             </div>
             <div className='text-sm text-gray-500 pt-1'>
@@ -156,9 +165,9 @@ export function AssessmentDetail({ assessment }) {
           <div>
             <div className='font-light text-xl flex items-center gap-2'>
               Community Difficulty
-              {!assessment.is_owner && assessment.available_attempts < assessment.allowed_attempts && (
+              {!assessment.is_owner && assessmentDetails.is_following !== null && assessment.available_attempts < assessment.allowed_attempts && (
                 <Tooltip content="Rate difficulty">
-                  <button type="button" className='bg-[#1C64F2] p-1 rounded-full text-white flex items-center text-sm'>
+                  <button type="button" className='bg-[#1C64F2] p-1 rounded-full text-white flex items-center text-sm' onClick={() => setShowDifficultyRating(true)}>
                     <FaPlus />
                   </button>
                 </Tooltip>
@@ -167,7 +176,7 @@ export function AssessmentDetail({ assessment }) {
             <div className='text-xl font-semibold pt-1'>
               {assessment.user_difficulty_rating != null
                 ? <><span className={getDifficultyColor(assessment.user_difficulty_rating)}>
-                    {formatDifficulty(assessment.user_difficulty_rating)}</span> / 10.00</>
+                  {formatDifficulty(assessment.user_difficulty_rating)}</span> / 10.00</>
                 : <span className='text-gray-400 font-light text-base'>Not rated yet</span>}
             </div>
           </div>
@@ -276,6 +285,18 @@ export function AssessmentDetail({ assessment }) {
           <p>{assessment.minimum_requirements}</p>
         </div>
       </div>
+      {showDifficultyRating && (
+        <DifficultyRatingModal
+          assessmentId={assessment.id}
+          onConfirm={() => {
+            setShowDifficultyRating(false);
+            setRatingSuccess(true);
+            setTimeout(() => setRatingSuccess(false), 8000);
+            onReload();
+          }}
+          onCancel={() => setShowDifficultyRating(false)}
+        />
+      )}
       {showConfirm && (
         <ConfirmationModal
           message={`You're about to use one of your attempts, you only have ${assessment.available_attempts} left, make them count! Ready to go?`}
