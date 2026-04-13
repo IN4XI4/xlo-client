@@ -123,6 +123,5 @@ export const getMyRecallBlocksSparked = (page, importanceOrder = '-importance_le
 };
 
 // Notifications
-export const listLikeNotifications = (page) => blogApi.get(`notifications/?notification_type=like&page=${page}`, { headers: getAuthHeaders() })
-export const listReplyNotifications = (page) => blogApi.get(`notifications/?notification_type=reply&page=${page}`, { headers: getAuthHeaders() })
+export const listNotifications = (page) => blogApi.get(`notifications/?page=${page}`, { headers: getAuthHeaders() })
 export const updateNotification = (id, data) => blogApi.patch(`notifications/${id}/`, data, { headers: getAuthHeaders() })

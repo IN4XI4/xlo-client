@@ -59,6 +59,8 @@ export function Details() {
   const [itemsRefreshKey, setItemsRefreshKey] = useState(0);
   const [colorsRefreshKey, setColorsRefreshKey] = useState(0);
   const [coinBalance, setCoinBalance] = useState(null);
+  const [levelName, setLevelName] = useState(null);
+  const [levelValue, setLevelValue] = useState(null);
   const [showPurchaseSuccess, setShowPurchaseSuccess] = useState(false);
 
   const [activeSection, setActiveSection] = useState('GENDER')
@@ -172,6 +174,8 @@ export function Details() {
         setOriginalAvatar(avatarRes.data) // Guardar configuración original de BD
         setActiveAvatarType(avatarRes.data.avatar_type)
         setCoinBalance(userRes.data.coin_balance)
+        setLevelName(userRes.data.user_level_display?.level_name ?? 'Basic')
+        setLevelValue(userRes.data.user_level_display?.level_value ?? 0)
       } catch (error) {
         console.error('Error fetching avatar/items:', error)
       } finally {
@@ -331,7 +335,7 @@ export function Details() {
       <div className='flex flex-col md:flex-row md:justify-between px-3 md:px-6 md:items-center my-3'>
         <div className='text-gray-500 pb-3 md:pb-0'>
           <div className='text-lg'>
-            You're an: <span className='font-semibold text-[#3DB1FF]'>Apprentice Hero</span>
+            You're an: <span className='font-semibold text-[#3DB1FF]'>{levelName}</span> <span className='text-gray-400 text-sm'>(level {levelValue})</span>
           </div>
           <div className='text-gray-500 text-sm'>
             You have collected: <span className='font-semibold text-[#3DB1FF]'>{coinBalance ?? 0} $MC</span> [Mixelo Coins]

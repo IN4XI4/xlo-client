@@ -236,7 +236,12 @@ export function StoryPage() {
           <CommentsList storyId={story.id} commentContentTypeId={commentContentTypeId} />
         </div>
       )}
-      {isCardsLoaded && (
+      {isCardsLoaded && cards.length === 0 && (
+        <div className="text-center py-10 text-gray-500">
+          This story has no content yet.
+        </div>
+      )}
+      {isCardsLoaded && cards.length > 0 && (
         <StoryNavBar
           topicSlug={story.topic_slug}
           goToPreviousCard={goToPreviousCard}
