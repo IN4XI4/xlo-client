@@ -206,8 +206,8 @@ export function Navigation() {
             <Dropdown.Divider />
             <Dropdown.Item onClick={() => openNotificationModal('like')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
-                <HiBellAlert className={`me-3 ${user.notifications && user.notifications.like_count > 0 ? "text-[#3DB1FF]" : ""}`} />
-                My notifications {user.notifications && user.notifications.like_count > 0 && <span>&nbsp;({user.notifications.like_count})</span>}
+                <HiBellAlert className={`me-3 ${user.notifications && user.notifications.total_unread > 0 ? "text-[#3DB1FF]" : ""}`} />
+                My notifications {user.notifications && user.notifications.total_unread > 0 && <span>&nbsp;({user.notifications.total_unread})</span>}
               </span>
             </Dropdown.Item>
             <Dropdown.Item onClick={() => navigate('/new-stories/')}>
