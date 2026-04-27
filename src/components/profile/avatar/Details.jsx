@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { FaCircleInfo } from "react-icons/fa6";
 import { HiInformationCircle } from 'react-icons/hi';
 import { Alert } from 'flowbite-react';
@@ -60,7 +61,7 @@ export function Details() {
   const [colorsRefreshKey, setColorsRefreshKey] = useState(0);
   const [coinBalance, setCoinBalance] = useState(null);
   const [levelName, setLevelName] = useState(null);
-  const [levelValue, setLevelValue] = useState(null);
+  const [userPoints, setUserPoints] = useState(null);
   const [showPurchaseSuccess, setShowPurchaseSuccess] = useState(false);
 
   const [activeSection, setActiveSection] = useState('GENDER')
@@ -136,7 +137,7 @@ export function Details() {
 
   const selectedColorHex = useMemo(() => {
     const picker = SELECTED_COLOR_BY_SECTION[activeSection];
-    
+
     return picker && avatar ? picker(avatar) : null;
   }, [activeSection, avatar]);
 
@@ -156,7 +157,7 @@ export function Details() {
     }
 
     const field = COLOR_FIELD_BY_SECTION[activeSection];
-    
+
     if (field && payload) {
       setAvatar(prev => ({ ...prev, [field]: payload }));
     }
@@ -175,7 +176,7 @@ export function Details() {
         setActiveAvatarType(avatarRes.data.avatar_type)
         setCoinBalance(userRes.data.coin_balance)
         setLevelName(userRes.data.user_level_display?.level_name ?? 'Basic')
-        setLevelValue(userRes.data.user_level_display?.level_value ?? 0)
+        setUserPoints(userRes.data.points ?? 0)
       } catch (error) {
         console.error('Error fetching avatar/items:', error)
       } finally {
@@ -334,11 +335,20 @@ export function Details() {
       </div>
       <div className='flex flex-col md:flex-row md:justify-between px-3 md:px-6 md:items-center my-3'>
         <div className='text-gray-500 pb-3 md:pb-0'>
-          <div className='text-lg'>
-            You're an: <span className='font-semibold text-[#3DB1FF]'>{levelName}</span> <span className='text-gray-400 text-sm'>(level {levelValue})</span>
+          <div className=''>
+            User level: <span className='font-semibold text-[#3DB1FF]'>{levelName}</span>
+            {userPoints != null && (
+              <span className='text-gray-400 text-sm'> ({userPoints.toLocaleString()} points)</span>
+            )}
           </div>
-          <div className='text-gray-500 text-sm'>
-            You have collected: <span className='font-semibold text-[#3DB1FF]'>{coinBalance ?? 0} $MC</span> [Mixelo Coins]
+          <div className='text-gray-500 text-sm pt-1'>
+            You have collected: <span className='font-semibold text-[#3DB1FF]'>{coinBalance ?? 0} $MXC</span>
+            <Link
+              to="/suitcase/"
+              className='ms-2 text-xs text-[#FF822C] border border-[#FF822C] rounded-full 
+                px-2 py-0.5 hover:bg-[#FF822C] hover:text-white transition-colors whitespace-nowrap self-start mt-1'>
+              My suitcase
+            </Link>
           </div>
         </div>
         <div className='flex flex-col items-end'>

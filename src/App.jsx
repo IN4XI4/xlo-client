@@ -31,6 +31,8 @@ import { AssessmentsPage } from './pages/AssessmentsPage';
 import { AssessmentDetailPage } from './pages/AssessmentDetailPage';
 import { AttemptPage } from './pages/AttemptPage';
 import { RankingsPage } from './pages/RankingsPage';
+import { SuitcasePage } from './pages/SuitcasePage';
+import { PurchaseSuccessPage } from './pages/PurchaseSuccessPage';
 
 
 const isProduction = import.meta.env.VITE_ENV === 'production';
@@ -156,6 +158,8 @@ function App() {
           <Route path="/recall-blocks-sparked/" element={<ProtectedRoute><SparkedRecallBlocksPage key="recalls-block-page-sparked" /></ProtectedRoute>} />
           <Route path="/create-story/:id/:slug" element={<ProtectedRoute><CreateStoryPage key="create-story-page" /></ProtectedRoute>} />
           <Route path="/edit-story/:id" element={<ProtectedRoute><EditStoryPage key="edit-story-page" /></ProtectedRoute>} />
+          <Route path="/suitcase/" element={<ProtectedRoute><SuitcasePage key="suitcase-page" /></ProtectedRoute>} />
+          <Route path="/purchase/success/" element={<ProtectedRoute><PurchaseSuccessPage key="purchase-success-page" /></ProtectedRoute>} />
           <Route path="/learn-softskills/" element={<ProtectedRoute><LearnSoftSkillsPage key="learn-page" /></ProtectedRoute>} />
           <Route path="/practice-softskills/:softskill"
             element={<ProtectedRoute><LearningProgramPage key="practice-page" /></ProtectedRoute>} />
