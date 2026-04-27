@@ -34,7 +34,7 @@ export function ItemThumb({ Comp }) {
   )
 }
 
-const getComponent = async (path) => {
+export const getComponent = async (path) => {
   const matchedKey = Object.keys(modules).find(key =>
     key.endsWith(`/items/${path}`)
   )
@@ -43,7 +43,7 @@ const getComponent = async (path) => {
   return mod.default || Object.values(mod)[0]
 }
 
-const TYPE_FOLDER = {
+export const TYPE_FOLDER = {
   FACE: 'face',
   HAIR: 'hair',
   SHIRT: 'shirt',
