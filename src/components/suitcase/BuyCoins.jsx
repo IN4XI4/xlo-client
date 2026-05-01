@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import ReactGA from 'react-ga4';
 import { getCoinPackages, createCheckoutSession } from '../../api/wallet.api';
 import { PackageCard } from './PackageCard';
 import { ConfirmPurchaseModal } from './ConfirmPurchaseModal';
@@ -23,6 +24,7 @@ export function BuyCoins() {
         success_url: `${window.location.origin}/purchase/success/`,
         cancel_url: `${window.location.origin}/suitcase/`,
       });
+      ReactGA.event('coin_purchase_initiated', { coins: selectedPkg.coins });
       window.location.href = res.data.checkout_url;
     } catch (err) {
       setError(err.response?.data?.detail || 'Something went wrong. Please try again.');

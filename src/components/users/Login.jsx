@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button, Label, TextInput } from 'flowbite-react';
+import ReactGA from 'react-ga4';
 
 import { login } from '../../api/base.api';
 import { checkNewDay } from '../../utils/checkNewDay';
@@ -23,6 +24,7 @@ export function Login() {
       const response = await login(apiData);
       if (response.data && response.data.token) {
         localStorage.setItem('token', response.data.token);
+        ReactGA.event('login', { method: 'email' });
         checkNewDay()
         navigate('/');
       } else {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { SEO } from '../components/SEO';
 import { getAssessment } from '../api/assessments.api';
 import { AssessmentDetail } from '../components/assessments/AssessmentDetail';
 
@@ -30,6 +31,11 @@ export function AssessmentDetailPage() {
 
   return (
     <div className='pt-24 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32'>
+      <SEO
+        title={`${assessment.name} Assessment`}
+        description={assessment.description || `Take the "${assessment.name}" assessment on Mixelo. Topic: ${assessment.topic_name}.`}
+        image={assessment.image}
+      />
       <AssessmentDetail assessment={assessment} onReload={loadAssessmentDetail} />
     </div>
   );

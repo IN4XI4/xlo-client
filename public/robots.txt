@@ -1,0 +1,18 @@
+User-agent: *
+Disallow: /avatar/
+Disallow: /suitcase/
+Disallow: /recall-cards/
+Disallow: /recall-blocks-focused/
+Disallow: /recall-blocks-sparked/
+Disallow: /create-story/
+Disallow: /edit-story/
+Disallow: /profile/
+Disallow: /spaces/
+Disallow: /new-stories/
+Disallow: /my-stories/
+Disallow: /purchase/
+Disallow: /learn-softskills/
+Disallow: /practice-softskills/
+Disallow: /attempts/
+
+Sitemap: https://mixelo.io/sitemap.xml

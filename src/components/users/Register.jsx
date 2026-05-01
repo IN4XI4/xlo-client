@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Button, Checkbox, Label, TextInput } from 'flowbite-react';
 import { Link, useNavigate } from 'react-router-dom';
+import ReactGA from 'react-ga4';
 import { registerUser } from '../../api/users.api';
 import { login } from '../../api/base.api';
 
@@ -32,6 +33,7 @@ export function Register() {
           password: data.password
         });
         localStorage.setItem('token', loginResponse.data.token);
+        ReactGA.event('sign_up', { method: 'email' });
         navigate('/');
         window.location.reload();
 

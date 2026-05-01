@@ -11,6 +11,7 @@ import { CommentsList } from '../components/topics/comments/CommentsList';
 import { RateStory } from '../components/topics/RateStory';
 import { StoryNavBar } from '../components/topics/StoryNavBar';
 
+import { SEO } from '../components/SEO';
 import { getContentTypes } from '../api/base.api';
 import { getCardsByStory, getStoryBySlug, userViewStory } from '../api/blog.api';
 
@@ -170,6 +171,11 @@ export function StoryPage() {
 
   return (
     <div className="pt-24 md:pt-28 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32">
+      <SEO
+        title={story.title}
+        description={story.description || `Read "${story.title}" — a learning story on Mixelo.`}
+        image={story.image}
+      />
       {showSuccessMessage && (
         <Alert color="success" icon={HiInformationCircle} className='mb-4'>
           <span className="font-medium">Story updated successfully!</span>
