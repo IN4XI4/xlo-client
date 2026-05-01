@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { FaStar, FaPlus } from 'react-icons/fa';
 import { Tooltip, Alert } from 'flowbite-react';
 import { HiInformationCircle } from 'react-icons/hi';
+import ReactGA from 'react-ga4';
 import { startAttempt } from '../../api/attempts.api';
 import { useNavigate } from 'react-router-dom';
 import { followAssessment, unfollowAssessment } from '../../api/assessments.api';
@@ -57,6 +58,7 @@ export function AssessmentDetail({ assessment, onReload }) {
       }
       const response = await startAttempt(data);
       setApiError(null);
+      ReactGA.event('assessment_started', { assessment_id: assessment.id, topic: assessment.topic_name });
       navigate(`/attempts/${response.data.id}`);
     } catch (error) {
       console.error(error);

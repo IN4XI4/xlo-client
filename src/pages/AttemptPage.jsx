@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
+import ReactGA from 'react-ga4';
 import { finalizeAttempt, getAttempt } from '../api/attempts.api';
 import QuestionsList from '../components/attempts/QuestionsList';
 
@@ -67,6 +68,11 @@ export function AttemptPage() {
   const handleEndAttempt = async (userResponses) => {
     try {
       const res = await finalizeAttempt(id, userResponses);
+      ReactGA.event('attempt_submitted', {
+        score: res.data.score,
+        passed: res.data.approved,
+        assessment_id: attempt?.assessment,
+      });
       setResults(res.data);
       setShowResults(true);
       localStorage.removeItem('questions');

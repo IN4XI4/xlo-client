@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { SEO } from '../components/SEO';
 import { getTopicBySlug } from '../api/base.api';
 import { FaArrowLeft, FaHeart, FaPlus, FaRegHeart, FaSearch } from 'react-icons/fa';
 import { Alert, TextInput } from 'flowbite-react';
@@ -108,6 +109,10 @@ export function TopicStoriesPage() {
   };
   return (
     <div className="pt-24 md:pt-28 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32">
+      <SEO
+        title={topic.title}
+        description={topic.description || `Explore stories about ${topic.title} on Mixelo.`}
+      />
       {showAlert && (
         <Alert
           color="info"
