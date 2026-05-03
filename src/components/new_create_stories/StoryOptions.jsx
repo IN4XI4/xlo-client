@@ -5,7 +5,7 @@ import { BsInfoCircleFill } from "react-icons/bs";
 import { FaPlus } from 'react-icons/fa';
 
 import { getMentors, getSoftSkills } from '../../api/base.api';
-import { CREATOR_LEVEL_3 } from '../../globals';
+import { CREATOR_LEVEL_1, CREATOR_LEVEL_3 } from '../../globals';
 import { CreateMentorModal } from '../create_stories/CreateMentorModal';
 import { AddToSpaceModal } from '../create_stories/add_to_space/AddToSpaceModal';
 import { InfoModal } from '../modals/InfoModal';
@@ -32,7 +32,7 @@ function LabelWithInfo({ label, required = false, infoContent = "" }) {
   )
 }
 
-export function StoryOptions({ initialData, control, errors, setValue, userLevel, onSoftSkillSelected = () => { },
+export function StoryOptions({ initialData, control, errors, setValue, userLevel, isCreator = false, onSoftSkillSelected = () => { },
   onMentorSelected = () => { }, }) {
   const [softSkills, setSoftSkills] = useState([]);
   const [mentors, setMentors] = useState([]);
@@ -89,7 +89,7 @@ export function StoryOptions({ initialData, control, errors, setValue, userLevel
   }
 
   useEffect(() => {
-    if (userLevel >= CREATOR_LEVEL_3) {
+    if (userLevel >= CREATOR_LEVEL_3 || (isCreator && userLevel < CREATOR_LEVEL_1)) {
       setSshowCreateMentorButton(true)
     }
   }, [])

@@ -108,6 +108,12 @@ function App() {
     checkNewDay(setNewBadges);
   }, []);
 
+  useEffect(() => {
+    const handler = (e) => setNewBadges(e.detail);
+    window.addEventListener('newBadgesEarned', handler);
+    return () => window.removeEventListener('newBadgesEarned', handler);
+  }, []);
+
   const handleCloseModal = () => {
     setNewBadges([]);
   };

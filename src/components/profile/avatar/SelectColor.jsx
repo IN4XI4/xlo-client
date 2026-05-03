@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import BuyIconSvg from "../../../assets/BuyIcon.svg"
 import BuyColorModal from './BuyColorModal'
 
-const NO_COLOR_SECTIONS = new Set(['FACE', 'ACCESSORY', 'SHOP'])
+const NO_COLOR_SECTIONS = new Set(['FACE', 'SHOP'])
 
 export function SelectColor({ section, skinColors = [], itemColors = [], selectedHex, onPick, coinBalance, onBuySuccess }) {
   const [buyModalData, setBuyModalData] = useState(null)

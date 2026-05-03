@@ -86,6 +86,14 @@ export const badgeTypeToComponentMap = {
   EXPLORER: ExplorerBadge,
 };
 
+export const CURRENCY_SYMBOLS = {
+  USD: '$',
+  EUR: '€',
+  GBP: '£',
+  CHF: 'CHF',
+  MXN: '$',
+};
+
 export const flagMap = {
   EN: enFlag,
   ES: esFlag,

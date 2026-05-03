@@ -4,7 +4,8 @@ import { FaCircleInfo } from "react-icons/fa6";
 import { HiInformationCircle } from 'react-icons/hi';
 import { Alert } from 'flowbite-react';
 import { getMyAvatar, getItemCatalog, getItemDefaults, updateAvatar, getColorCatalog, getSkinColorCatalog } from '../../../api/avatar.api';
-import { getUser } from '../../../api/users.api';
+import { getUser, updateUserBadges } from '../../../api/users.api';
+import { useAppState } from '../../../context/ScrollContext';
 import { AvatarRenderer } from './AvatarRenderer';
 import { AvatarSections } from './AvatarSections';
 import { SelectItem } from './SelectItem';
@@ -36,6 +37,7 @@ const COLOR_FIELD_BY_SECTION = {
   SHIRT: 'shirt_color',
   PANTS: 'pants_color',
   SHOES: 'shoes_color',
+  ACCESSORY: 'accessory_color',
   KI: 'ki_color',
 };
 
@@ -45,10 +47,30 @@ const SELECTED_COLOR_BY_SECTION = {
   SHIRT: (a) => a?.shirt_color.hex ?? null,
   PANTS: (a) => a?.pants_color.hex ?? null,
   SHOES: (a) => a?.shoes_color.hex ?? null,
+  ACCESSORY: (a) => a?.accessory_color?.hex ?? null,
   KI: (a) => a?.ki_color?.hex ?? null,
 };
 
 export function Details() {
+  const { refreshNavigation } = useAppState();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    const timer = setTimeout(async () => {
+      try {
+        const res = await updateUserBadges();
+        const { badges } = res.data;
+        if (badges && badges.length > 0) {
+          window.dispatchEvent(new CustomEvent('newBadgesEarned', { detail: badges }));
+        }
+      } catch (e) {
+        console.error('Error checking badges on avatar page:', e);
+      }
+    }, 2500);
+    return () => clearTimeout(timer);
+  }, []);
+
   const [avatar, setAvatar] = useState(null)
   const [originalAvatar, setOriginalAvatar] = useState(null) // Configuración guardada en BD
   const [loading, setLoading] = useState(true)
@@ -235,6 +257,7 @@ export function Details() {
     setColorsRefreshKey(k => k + 1);
     setShowPurchaseSuccess(true);
     setTimeout(() => setShowPurchaseSuccess(false), 7000);
+    refreshNavigation();
     try {
       const userRes = await getUser();
       setCoinBalance(userRes.data.coin_balance);
