@@ -216,7 +216,7 @@ export function Navigation() {
                 New stories
               </span>
             </Dropdown.Item>
-            {userLevel >= CREATOR_LEVEL_1 &&
+            {user?.is_creator &&
               <Dropdown.Item onClick={() => navigate('/my-stories/')}>
                 <span className='text-gray-500 flex items-center justify-items-center'>
                   <PiTextAlignJustifyFill className='me-3' />

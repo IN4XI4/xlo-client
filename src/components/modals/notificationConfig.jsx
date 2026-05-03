@@ -1,6 +1,7 @@
 import React from 'react';
-import { FaHeart, FaReply, FaLevelUpAlt, FaGift, FaClock, FaCoins } from "react-icons/fa";
+import { FaHeart, FaReply, FaLevelUpAlt, FaGift, FaClock, FaCoins, FaShoppingBag } from "react-icons/fa";
 import user_image from '../../assets/user_image.svg';
+import { ItemIcon } from '../suitcase/ItemIcon';
 
 const navigateTo = (path, { onClose, refreshNavigation, navigate }) => {
   onClose();
@@ -69,6 +70,44 @@ export const NOTIFICATION_CONFIG = {
       );
     },
     onClick: (ctx) => navigateTo('/suitcase/', ctx),
+  },
+  item_purchase: {
+    icon: <FaShoppingBag className="text-gray-400" />,
+    renderContent: ({ metadata }) => {
+      const { item_name, svg, item_type, coins } = metadata || {};
+      return (
+        <>
+          <div className='flex items-center justify-center flex-shrink-0 w-8'>
+            <ItemIcon item={{ svg, item_type }} />
+          </div>
+          <div className='flex-1'>
+            <span className='font-bold'>{item_name} </span> purchased!
+            <div className='text-red-500 font-medium pt-1'>🪙 -{coins} MXC</div>
+          </div>
+        </>
+      );
+    },
+    onClick: (ctx) => navigateTo('/avatar', ctx),
+  },
+  color_purchase: {
+    icon: <FaShoppingBag className="text-gray-400" />,
+    renderContent: ({ metadata }) => {
+      const { color_name, hex, main_color, coins, color_type } = metadata || {};
+      const isSkin = color_type === 'skin_color';
+      const swatchColor = isSkin ? main_color : hex;
+      return (
+        <>
+          <div className='flex items-center justify-center flex-shrink-0 w-8'>
+            <span className='inline-block w-6 h-6 rounded-full border border-gray-200' style={{ backgroundColor: swatchColor }} />
+          </div>
+          <div className='flex-1'>
+            <span className='font-bold'>{isSkin ? 'Skin color' : color_name}</span> purchased!
+            <div className='text-red-500 font-medium pt-1'>🪙 -{coins} MXC</div>
+          </div>
+        </>
+      );
+    },
+    onClick: (ctx) => navigateTo('/avatar', ctx),
   },
   like: {
     icon: <FaHeart className="text-gray-400" />,

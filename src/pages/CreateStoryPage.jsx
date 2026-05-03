@@ -32,7 +32,7 @@ export function CreateStoryPage() {
         setUserPicture(user_image)
         setUserColor(user_color)
 
-        if (user_level >= CREATOR_LEVEL_1) {
+        if (response.data.is_creator) {
           setIsCreator(true);
         }
       } catch (error) {
@@ -72,6 +72,7 @@ export function CreateStoryPage() {
   return <NewStoryForm
     initialData={null}
     userLevel={userLevel}
+    isCreator={isCreator}
     submitMessage={submitMessage}
     isSubmitError={isSubmitError}
     onSubmit={onSubmit} />

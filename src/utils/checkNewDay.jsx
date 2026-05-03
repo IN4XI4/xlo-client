@@ -1,6 +1,6 @@
 import { updateUserBadges } from '../api/users.api';
 
-export const checkNewDay = (setNewBadges) => {
+export const checkNewDay = (setNewBadges = () => {}) => {
   setTimeout(async () => {
     const token = localStorage.getItem('token');
     if (!token) {

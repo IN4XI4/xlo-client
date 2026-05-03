@@ -9,7 +9,15 @@ import { deleteStory } from '../../api/blog.api';
 import { CardsNavBar } from './CardsNavBar';
 
 
-export function NewStoryForm({ initialData, onSubmit, userLevel, submitMessage, isSubmitError, storyId = null }) {
+export function NewStoryForm({
+  initialData,
+  onSubmit,
+  userLevel,
+  isCreator = false,
+  submitMessage,
+  isSubmitError,
+  storyId = null
+}) {
   const [formKey, setFormKey] = useState(0);
   const [imagePreviews, setImagePreviews] = useState({});
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
@@ -149,7 +157,7 @@ export function NewStoryForm({ initialData, onSubmit, userLevel, submitMessage, 
         STORY {initialData ? "EDITION" : "CREATION"} MODULE
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className='py-6 mb-4' key={formKey}>
-        <StoryOptions initialData={initialData} control={control} errors={errors} setValue={setValue} userLevel={userLevel}
+        <StoryOptions initialData={initialData} control={control} errors={errors} setValue={setValue} userLevel={userLevel} isCreator={isCreator}
           onSoftSkillSelected={setSelectedSoftSkill} onMentorSelected={setSelectedMentor} />
         <CardEditor
           control={control}
