@@ -60,11 +60,19 @@ export function AssessmentsList({ filters }) {
 
 
   return (
-    <div className="md:col-span-8 p-4">
-      <div id="filters-summary">
+    <div className="lg:col-span-8 p-2 lg:me-3">
+      <div className=''>
+          <div className='text-gray-600 font-bold md:text-xl xl:text-2xl border-b-2 border-gray-600'>
+            Assessments
+          </div>
+          <div className='text-end text-gray-600 text-sm pb-1'>
+            [The Mixelo assessments collection]
+          </div>
+        </div>
+      <div id="filters-summary" className="text-gray-500">
         {generateFilterSummary()}
       </div>
-      <div className="text-xl text-gray-500">
+      <div className="text-[#3DB1FF]">
         Found <span className="font-semibold">{assessments.length}</span>  assessments
       </div>
       <InfiniteScroll
@@ -74,8 +82,8 @@ export function AssessmentsList({ filters }) {
         hasMore={hasMore}
         loader={<h4>Loading...</h4>}
         endMessage={
-          <p>
-            <b>Yay! You have seen it all</b>
+          <p className="pt-3">
+            <b>You have seen it all!</b>
           </p>
         }
       >
