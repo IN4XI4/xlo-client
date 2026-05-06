@@ -2,6 +2,7 @@ import { useState } from "react";
 import { SEO } from "../components/SEO";
 import { AssessmentsList } from "../components/assessments/AssessmentsList";
 import { AssessmentsFilterCol } from "../components/assessments/AssessmentsFilterCol";
+import { AssessmentsFilterBar } from "../components/assessments/AssessmentsFilterBar";
 import { useSearchParams } from "react-router-dom";
 
 
@@ -15,6 +16,7 @@ export function AssessmentsPage() {
     topics: searchTopicId ? { [searchTopicId]: searchTopicName } : {},
     languages: {}
   });
+
   const handleNameFilterChange = (name) => {
     setFilters(prevFilters => ({ ...prevFilters, name }));
   };
@@ -23,7 +25,6 @@ export function AssessmentsPage() {
     setFilters(prevFilters => {
       const { topics } = prevFilters;
       let newTopics = { ...topics };
-
       if (topicId in topics) {
         delete newTopics[topicId];
       } else {
@@ -42,30 +43,26 @@ export function AssessmentsPage() {
     });
   };
 
-
   const handleToggleOrderBy = (orderByValue) => {
-    setFilters(prevFilters => {
-      return {
-        ...prevFilters,
-        ordering: orderByValue
-      };
-    });
+    setFilters(prevFilters => ({ ...prevFilters, ordering: orderByValue }));
   };
 
+  const filterProps = {
+    onNameFilterChange: handleNameFilterChange,
+    onToggleTopic: handleToggleTopic,
+    onToggleLanguage: handleToggleLanguage,
+    onToggleOrderBy: handleToggleOrderBy,
+    filters,
+  };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 w-full p-4 pt-16 md:pt-24">
+    <div className="grid grid-cols-1 lg:grid-cols-12 xl:grid-cols-10 gap-2 w-full p-4 pt-16 md:pt-24">
       <SEO
         title="Assessments"
         description="Browse and take knowledge assessments on Mixelo. Filter by topic, language, and difficulty to find the right challenge for you."
       />
-      <AssessmentsFilterCol
-        onNameFilterChange={handleNameFilterChange}
-        onToggleTopic={handleToggleTopic}
-        onToggleLanguage={handleToggleLanguage}
-        onToggleOrderBy={handleToggleOrderBy}
-        filters={filters}
-      />
+      <AssessmentsFilterBar {...filterProps} />
+      <AssessmentsFilterCol {...filterProps} />
       <AssessmentsList filters={filters} />
     </div>
   );
