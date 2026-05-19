@@ -49,7 +49,13 @@ export function Navigation() {
     if (!user && token) {
       loadUser();
     }
-  }, [navigationKey, token]);
+  }, [token]);
+
+  useEffect(() => {
+    if (navigationKey > 0 && token) {
+      loadUser();
+    }
+  }, [navigationKey]);
 
 
   async function loadUser() {

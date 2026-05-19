@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { FaSpinner } from 'react-icons/fa';
-import { getMyDifficultyRating, createOrUpdateDifficultyRating } from '../../api/assessments.api';
+import { getMyDifficultyRating, createOrUpdateDifficultyRating } from '../../../api/assessments.api';
 
 export function DifficultyRatingModal({ assessmentId, onConfirm, onCancel }) {
   const [selected, setSelected] = useState(null);

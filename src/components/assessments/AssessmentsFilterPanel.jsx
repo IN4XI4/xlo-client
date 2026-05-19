@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { FaSearch, FaFire, FaChevronDown, FaChevronRight } from 'react-icons/fa';
+import { FaSearch, FaFire, FaChevronDown, FaChevronRight, FaGlobe } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import SortIcon from '../../assets/assessments/Sort.svg';
 import SearchIcon from '../../assets/assessments/Search.svg';
@@ -7,8 +7,16 @@ import OrderIcon from '../../assets/assessments/Order.svg';
 import FilterIcon from '../../assets/assessments/Filter.svg';
 import TopicIcon from '../../assets/assessments/Topic.svg';
 import LanguageIcon from '../../assets/assessments/Language.svg';
+import flagEN from '../../assets/flags/gb.svg';
+import flagES from '../../assets/flags/es.svg';
+import flagFR from '../../assets/flags/fr.svg';
+import flagDE from '../../assets/flags/de.svg';
+import flagIT from '../../assets/flags/it.svg';
+import flagPT from '../../assets/flags/pt.svg';
 import { getTopicTags, getTopicsByCategory } from '../../api/base.api';
 import { ASSESSMENT_LANGUAGES } from '../../globals';
+
+const FLAG_MAP = { EN: flagEN, ES: flagES, FR: flagFR, DE: flagDE, IT: flagIT, PT: flagPT };
 
 
 const ORDER_OPTIONS = [
@@ -157,7 +165,11 @@ export function FilterPanel({ onNameFilterChange, onToggleTopic, onToggleLanguag
               onClick={() => onToggleLanguage(lang.code, lang.label)}
             >
               <input type="checkbox" checked={lang.code in filters.languages} readOnly className="rounded cursor-pointer" />
-              <label className="ml-2 text-gray-500 cursor-pointer">{lang.label}</label>
+              {FLAG_MAP[lang.code]
+                ? <img src={FLAG_MAP[lang.code]} className="ml-2 w-4 h-4 rounded-full object-cover flex-shrink-0" alt="" />
+                : <FaGlobe className="ml-2 text-gray-400 flex-shrink-0" />
+              }
+              <label className="ml-1 text-gray-500 cursor-pointer">{lang.label}</label>
             </div>
           ))}
         </div>
