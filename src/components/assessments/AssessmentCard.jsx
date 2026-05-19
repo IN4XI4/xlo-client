@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { FaUser, FaChartLine, FaClock, FaStar, FaGlobe } from "react-icons/fa";
+import { FaRepeat } from "react-icons/fa6";
 import { Tooltip } from 'flowbite-react';
 import flagEN from '../../assets/flags/gb.svg';
 import flagES from '../../assets/flags/es.svg';
@@ -86,6 +87,14 @@ export function AssessmentCard({ assessment }) {
               <Tag approved={approved}>
                 <FaStar className="text-xs flex-shrink-0" />
                 {assessment.user_difficulty_rating.toFixed(1)}
+              </Tag>
+            </Tooltip>
+          )}
+          {assessment.attempts_count != null && (
+            <Tooltip content="Attempts">
+              <Tag approved={approved}>
+                <FaRepeat className="text-xs flex-shrink-0" />
+                {assessment.attempts_count}
               </Tag>
             </Tooltip>
           )}

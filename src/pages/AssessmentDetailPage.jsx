@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { SEO } from '../components/SEO';
 import { getAssessment } from '../api/assessments.api';
-import { AssessmentDetail } from '../components/assessments/AssessmentDetail';
+import { AssessmentDetail } from '../components/assessments/detail/AssessmentDetail';
+import { AssessmentDetailSidebarCol } from '../components/assessments/detail/AssessmentDetailSidebarCol';
+import { AssessmentDetailSidebar } from '../components/assessments/detail/AssessmentDetailSidebar';
 
 
 export function AssessmentDetailPage() {
@@ -21,22 +23,27 @@ export function AssessmentDetailPage() {
       setError(error);
     }
   }
+
   if (error) {
-    return <p className="text-4xl text-red-500">Error loading assessment!</p>;
+    return <div className="text-4xl text-red-500">Error loading assessment!</div>;
   }
 
   if (!assessment) {
-    return <p>Loading...</p>;
+    return <div>Loading...</div>;
   }
 
   return (
-    <div className='pt-24 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32'>
+    <div className="grid grid-cols-1 lg:grid-cols-12 xl:grid-cols-10 gap-2 w-full p-4 pt-16 md:pt-24">
       <SEO
         title={`${assessment.name} Assessment`}
         description={assessment.description || `Take the "${assessment.name}" assessment on Mixelo. Topic: ${assessment.topic_name}.`}
         image={assessment.image}
       />
-      <AssessmentDetail assessment={assessment} onReload={loadAssessmentDetail} />
+      <AssessmentDetailSidebar assessment={assessment} />
+      <AssessmentDetailSidebarCol assessment={assessment} />
+      <div className="lg:col-span-8 lg:px-2 lg:me-3">
+        <AssessmentDetail assessment={assessment} onReload={loadAssessmentDetail} />
+      </div>
     </div>
   );
 }

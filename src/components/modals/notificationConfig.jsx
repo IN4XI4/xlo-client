@@ -81,7 +81,7 @@ export const NOTIFICATION_CONFIG = {
             <ItemIcon item={{ svg, item_type }} />
           </div>
           <div className='flex-1'>
-            <span className='font-bold'>{item_name} </span> purchased!
+            Item <span className='font-bold'> {item_name} </span> purchased!
             <div className='text-red-500 font-medium pt-1'>🪙 -{coins} MXC</div>
           </div>
         </>
@@ -101,7 +101,7 @@ export const NOTIFICATION_CONFIG = {
             <span className='inline-block w-6 h-6 rounded-full border border-gray-200' style={{ backgroundColor: swatchColor }} />
           </div>
           <div className='flex-1'>
-            <span className='font-bold'>{isSkin ? 'Skin color' : color_name}</span> purchased!
+            Color <span className='font-bold'>{isSkin ? 'Skin color' : color_name}</span> purchased!
             <div className='text-red-500 font-medium pt-1'>🪙 -{coins} MXC</div>
           </div>
         </>
