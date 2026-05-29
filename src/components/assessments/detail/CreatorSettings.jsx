@@ -22,7 +22,7 @@ import { TimeDurationIcon } from '../../illustrations/icons/TimeDurationIcon';
 
 const FLAG_MAP = { EN: flagEN, ES: flagES, FR: flagFR, DE: flagDE, IT: flagIT, PT: flagPT };
 
-export function CreatorSettings({ assessment }) {
+export function CreatorSettings({ assessment, setActiveView }) {
   const [showRequirements, setShowRequirements] = useState(false);
   const pill = "bg-[#E6E2FF] text-[#846EFF] rounded-full px-2 py-0.5 text-sm font-medium w-fit";
   const plain = "text-[#846EFF] text-sm font-medium";
@@ -38,7 +38,8 @@ export function CreatorSettings({ assessment }) {
         <div>
           <div className={row}>
             <div className={label}><CreatorIcon color="#6B7280" className={icon} />Creator name</div>
-            <div className={`${pill} flex items-center gap-1 max-w-[10.5rem] overflow-hidden`}>
+            <div className={`${pill} flex items-center gap-1 max-w-[10.5rem] overflow-hidden cursor-pointer`}
+              onClick={() => setActiveView('creator')}>
               {assessment.user_avatar
                 ? <img src={assessment.user_avatar} className="w-3.5 h-3.5 rounded-full object-cover flex-shrink-0" alt="" />
                 : <FaUser className="text-xs flex-shrink-0" />}
@@ -56,7 +57,8 @@ export function CreatorSettings({ assessment }) {
           </div>
           <div className={row}>
             <div className={label}><AllowedAttemptsIcon color="#6B7280" className={icon} />Allowed attempts</div>
-            <div className={`${pill} flex items-center gap-1`}>
+            <div className={`${pill} flex items-center gap-1 cursor-pointer`}
+              onClick={() => setActiveView('attempts')}>
               <AllowedAttemptsIcon color="#846EFF" className="w-4 h-4 flex-shrink-0" />
               {assessment.available_attempts} / {assessment.allowed_attempts}
             </div>
@@ -65,14 +67,14 @@ export function CreatorSettings({ assessment }) {
         <div>
           <div className={row}>
             <div className={label}><CategoryIcon color="#6B7280" className={icon} />Related category</div>
-            <div className={`${pill} flex items-center gap-1`}>
+            <div className={`${pill} flex items-center gap-1 cursor-pointer`} onClick={() => setActiveView('category')}>
               <SearchIcon color="#846EFF" className="w-3.5 h-3.5 flex-shrink-0" />
               {assessment.category_name}
             </div>
           </div>
           <div className={row}>
             <div className={label}><TopicIcon color="#6B7280" className={icon} />Related topic</div>
-            <div className={`${pill} flex items-center gap-1`}>
+            <div className={`${pill} flex items-center gap-1 cursor-pointer`} onClick={() => setActiveView('topics')}>
               <SearchIcon color="#846EFF" className="w-3.5 h-3.5 flex-shrink-0" />
               {assessment.topic_name}
             </div>
@@ -116,13 +118,13 @@ export function CreatorSettings({ assessment }) {
             <div className={label}><RequirementIcon color="#6B7280" className={icon} />Minimum requirements</div>
             {assessment.minimum_requirements
               ? <div className={`${plain} flex items-center gap-1 cursor-pointer`} onClick={() => setShowRequirements(true)}>
-                  <RequirementIcon color="#846EFF" className={icon} />
-                  See info
-                </div>
+                <RequirementIcon color="#846EFF" className={icon} />
+                See info
+              </div>
               : <div className={`${plain} flex items-center gap-1`}>
-                  <RequirementIcon color="#846EFF" className={icon} />
-                  —
-                </div>}
+                <RequirementIcon color="#846EFF" className={icon} />
+                —
+              </div>}
           </div>
           <div className={row}>
             <div className={label}><QuestionsIcon color="#6B7280" className={icon} />Number of questions</div>
