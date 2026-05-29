@@ -5,12 +5,23 @@ import { getAssessment } from '../api/assessments.api';
 import { AssessmentDetail } from '../components/assessments/detail/AssessmentDetail';
 import { AssessmentDetailSidebarCol } from '../components/assessments/detail/AssessmentDetailSidebarCol';
 import { AssessmentDetailSidebar } from '../components/assessments/detail/AssessmentDetailSidebar';
+import { DEFAULT_VIEW } from '../components/assessments/detail/sidebarViews';
 
 
 export function AssessmentDetailPage() {
   const { id } = useParams();
   const [assessment, setAssessment] = useState(null);
   const [error, setError] = useState(null);
+  const [isLg, setIsLg] = useState(() => window.matchMedia('(min-width: 1024px)').matches);
+  const [activeView, setActiveView] = useState(DEFAULT_VIEW);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)');
+    const handler = (e) => setIsLg(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
   useEffect(() => {
     loadAssessmentDetail();
   }, [id]);
@@ -39,10 +50,11 @@ export function AssessmentDetailPage() {
         description={assessment.description || `Take the "${assessment.name}" assessment on Mixelo. Topic: ${assessment.topic_name}.`}
         image={assessment.image}
       />
-      <AssessmentDetailSidebar assessment={assessment} />
-      <AssessmentDetailSidebarCol assessment={assessment} />
+      {isLg
+        ? <AssessmentDetailSidebarCol assessment={assessment} activeView={activeView} setActiveView={setActiveView} />
+        : <AssessmentDetailSidebar assessment={assessment} activeView={activeView} setActiveView={setActiveView} />}
       <div className="lg:col-span-8 lg:px-2 lg:me-3">
-        <AssessmentDetail assessment={assessment} onReload={loadAssessmentDetail} />
+        <AssessmentDetail assessment={assessment} onReload={loadAssessmentDetail} setActiveView={setActiveView} />
       </div>
     </div>
   );

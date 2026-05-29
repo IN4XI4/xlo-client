@@ -23,17 +23,12 @@ export const getStories = (page, page_size = 10, ordering = null, searchText = '
   }
   return blogApi.get(url, { headers: getAuthHeaders() });
 };
-export const getStoriesByTopic = (topic_id, page, ordering = null, searchText = '', spaceId = null) => {
+export const getStoriesByTopic = (topic_id, page, ordering = null, searchText = '', spaceId = null, pageSize = null) => {
   let url = `stories/?topic=${topic_id}&page=${page}`;
-  if (ordering) {
-    url += `&ordering=${ordering}`;
-  }
-  if (searchText) {
-    url += `&title__icontains=${encodeURIComponent(searchText)}`;
-  }
-  if (spaceId) {
-    url += `&spaces=${spaceId}`;
-  }
+  if (pageSize) url += `&page_size=${pageSize}`;
+  if (ordering) url += `&ordering=${ordering}`;
+  if (searchText) url += `&title__icontains=${encodeURIComponent(searchText)}`;
+  if (spaceId) url += `&spaces=${spaceId}`;
   return blogApi.get(url, { headers: getAuthHeaders() });
 };
 

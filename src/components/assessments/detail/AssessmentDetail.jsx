@@ -52,7 +52,7 @@ function DescriptionSection({ description }) {
   );
 }
 
-export function AssessmentDetail({ assessment, onReload }) {
+export function AssessmentDetail({ assessment, onReload, setActiveView }) {
   const navigate = useNavigate();
   const [apiError, setApiError] = useState(null);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -161,7 +161,7 @@ export function AssessmentDetail({ assessment, onReload }) {
           START ATTEMPT
         </div>
       </div>
-      <CreatorSettings assessment={assessment} />
+      <CreatorSettings assessment={assessment} setActiveView={setActiveView} />
       <DescriptionSection description={assessment.description} />
       <CommunityReview
         assessment={assessment}
