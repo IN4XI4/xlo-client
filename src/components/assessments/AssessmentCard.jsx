@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { assessmentUrl } from '../../utils/slugify';
 import { FaUser, FaChartLine, FaClock, FaStar, FaGlobe } from "react-icons/fa";
 import { FaRepeat } from "react-icons/fa6";
 import { Tooltip } from 'flowbite-react';
@@ -25,7 +26,7 @@ export function AssessmentCard({ assessment }) {
   const creatorName = [assessment.user_first_name, assessment.user_last_name].filter(Boolean).join(' ');
 
   return (
-    <Link to={`/assessments/${assessment.id}`}
+    <Link to={assessmentUrl(assessment)}
       className={`flex p-2 my-3 rounded-3xl border ${approved ? 'bg-[#3DB1FF]/40' : 'bg-gray-100'}`}>
       {assessment.image && (
         <div className="w-24 h-20 flex-shrink-0 overflow-hidden rounded-xl mr-2 self-center">

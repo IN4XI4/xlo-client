@@ -9,7 +9,8 @@ import { DEFAULT_VIEW } from '../components/assessments/detail/sidebarViews';
 
 
 export function AssessmentDetailPage() {
-  const { id } = useParams();
+  const { idSlug } = useParams();
+  const id = idSlug.split('-')[0];
   const [assessment, setAssessment] = useState(null);
   const [error, setError] = useState(null);
   const [isLg, setIsLg] = useState(() => window.matchMedia('(min-width: 1024px)').matches);
@@ -47,8 +48,9 @@ export function AssessmentDetailPage() {
     <div className="grid grid-cols-1 lg:grid-cols-12 xl:grid-cols-10 gap-2 w-full p-4 pt-16 md:pt-24">
       <SEO
         title={`${assessment.name} Assessment`}
-        description={assessment.description || `Take the "${assessment.name}" assessment on Mixelo. Topic: ${assessment.topic_name}.`}
+        description={assessment.description || `Take the "${assessment.name}" assessment on Mixelo. Topic: ${assessment.topic_name}. ${assessment.number_of_questions} questions, ${assessment.time_limit} min time limit.`}
         image={assessment.image}
+        type="article"
       />
       {isLg
         ? <AssessmentDetailSidebarCol assessment={assessment} activeView={activeView} setActiveView={setActiveView} />

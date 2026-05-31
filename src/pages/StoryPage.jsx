@@ -173,8 +173,9 @@ export function StoryPage() {
     <div className="pt-24 md:pt-28 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32">
       <SEO
         title={story.title}
-        description={story.description || `Read "${story.title}" — a learning story on Mixelo.`}
+        description={story.description || `Read "${story.title}"${story.owner_name ? ` by ${story.owner_name}` : ''} — a learning story on Mixelo.`}
         image={story.image}
+        type="article"
       />
       {showSuccessMessage && (
         <Alert color="success" icon={HiInformationCircle} className='mb-4'>
