@@ -71,6 +71,18 @@ export function AssessmentsPage() {
     });
   };
 
+  const pageTitle = useMemo(() => {
+    const topicParts = Object.values(filters.topics).filter(Boolean);
+    const langParts = Object.values(filters.languages).filter(Boolean);
+    if (!topicParts.length && !langParts.length && !filters.name) return 'Assessments';
+    const parts = [];
+    if (topicParts.length) parts.push(topicParts.join(' & '));
+    else if (filters.name) parts.push(`"${filters.name}"`);
+    let title = parts.length ? `${parts.join(' ')} Assessments` : 'Assessments';
+    if (langParts.length) title += ` in ${langParts.join(' & ')}`;
+    return title;
+  }, [filters]);
+
   const filterProps = {
     onNameFilterChange: handleNameFilterChange,
     onToggleTopic: handleToggleTopic,
@@ -82,7 +94,7 @@ export function AssessmentsPage() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 xl:grid-cols-10 gap-2 w-full p-4 pt-16 md:pt-24">
       <SEO
-        title="Assessments"
+        title={pageTitle}
         description="Browse and take knowledge assessments on Mixelo. Filter by topic, language, and difficulty to find the right challenge for you."
       />
       <AssessmentsFilterBar {...filterProps} />

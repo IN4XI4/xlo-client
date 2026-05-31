@@ -149,7 +149,7 @@ function App() {
           <Route path="/login/" element={<LoginPage />} />
           <Route path="/topic/:slug" element={<TopicStoriesPage />} />
           <Route path="/assessments" element={<AssessmentsPage />} />
-          <Route path="/assessments/:id" element={<AssessmentDetailPage />} />
+          <Route path="/assessments/:idSlug" element={<AssessmentDetailPage />} />
           <Route path="/attempts/:id" element={<AttemptPage />} />
           <Route path="/rankings" element={<RankingsPage />} />
           <Route path="/story/:slug" element={<StoryPage />} />

@@ -110,8 +110,9 @@ export function TopicStoriesPage() {
   return (
     <div className="pt-24 md:pt-28 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32">
       <SEO
-        title={topic.title}
-        description={topic.description || `Explore stories about ${topic.title} on Mixelo.`}
+        title={topic.title ? `${topic.title} Stories` : undefined}
+        description={topic.description || `Explore stories about ${topic.title} on Mixelo. Discover learning content on this topic.`}
+        type="website"
       />
       {showAlert && (
         <Alert
