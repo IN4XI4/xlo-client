@@ -1,50 +1,74 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { SEO } from "../components/SEO";
 import { AssessmentsList } from "../components/assessments/AssessmentsList";
 import { AssessmentsFilterCol } from "../components/assessments/AssessmentsFilterCol";
 import { AssessmentsFilterBar } from "../components/assessments/AssessmentsFilterBar";
-import { useSearchParams } from "react-router-dom";
+import { ASSESSMENT_LANGUAGES } from "../globals";
 
+const getLangLabel = (code) => ASSESSMENT_LANGUAGES.find(l => l.code === code)?.label ?? code;
 
 export function AssessmentsPage() {
-  const [searchParams] = useSearchParams();
-  const searchQuery = searchParams.get("search") || '';
-  const searchTopicId = searchParams.get("topic") || '';
-  const searchTopicName = searchParams.get("topicName") ? decodeURIComponent(searchParams.get("topicName")) : '';
-  const [filters, setFilters] = useState({
-    name: searchQuery,
-    topics: searchTopicId ? { [searchTopicId]: searchTopicName } : {},
-    languages: {}
-  });
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [topicNames, setTopicNames] = useState({});
+
+  const filters = useMemo(() => ({
+    name: searchParams.get('name') ?? '',
+    topics: Object.fromEntries(
+      searchParams.getAll('topic').map(id => [id, topicNames[id] ?? ''])
+    ),
+    languages: Object.fromEntries(
+      searchParams.getAll('lang').map(code => [code, getLangLabel(code)])
+    ),
+    ordering: searchParams.get('ordering') ?? undefined,
+  }), [searchParams, topicNames]);
 
   const handleNameFilterChange = (name) => {
-    setFilters(prevFilters => ({ ...prevFilters, name }));
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      if (name) next.set('name', name);
+      else next.delete('name');
+      return next;
+    }, { replace: true });
   };
 
   const handleToggleTopic = (topicId, topicName) => {
-    setFilters(prevFilters => {
-      const { topics } = prevFilters;
-      let newTopics = { ...topics };
-      if (topicId in topics) {
-        delete newTopics[topicId];
+    const id = String(topicId);
+    setTopicNames(prev => ({ ...prev, [id]: topicName }));
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      const existing = next.getAll('topic');
+      if (existing.includes(id)) {
+        next.delete('topic');
+        existing.filter(t => t !== id).forEach(t => next.append('topic', t));
       } else {
-        newTopics[topicId] = topicName;
+        next.append('topic', id);
       }
-      return { ...prevFilters, topics: newTopics };
+      return next;
     });
   };
 
-  const handleToggleLanguage = (langCode, langLabel) => {
-    setFilters((prev) => {
-      const newLanguages = { ...prev.languages };
-      if (langCode in newLanguages) delete newLanguages[langCode];
-      else newLanguages[langCode] = langLabel;
-      return { ...prev, languages: newLanguages };
+  const handleToggleLanguage = (langCode) => {
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      const existing = next.getAll('lang');
+      if (existing.includes(langCode)) {
+        next.delete('lang');
+        existing.filter(l => l !== langCode).forEach(l => next.append('lang', l));
+      } else {
+        next.append('lang', langCode);
+      }
+      return next;
     });
   };
 
   const handleToggleOrderBy = (orderByValue) => {
-    setFilters(prevFilters => ({ ...prevFilters, ordering: orderByValue }));
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      if (orderByValue) next.set('ordering', orderByValue);
+      else next.delete('ordering');
+      return next;
+    });
   };
 
   const filterProps = {

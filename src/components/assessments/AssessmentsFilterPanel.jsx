@@ -162,7 +162,7 @@ export function FilterPanel({ onNameFilterChange, onToggleTopic, onToggleLanguag
             <div
               key={lang.code}
               className="flex items-center mb-1 px-2 cursor-pointer select-none"
-              onClick={() => onToggleLanguage(lang.code, lang.label)}
+              onClick={() => onToggleLanguage(lang.code)}
             >
               <input type="checkbox" checked={lang.code in filters.languages} readOnly className="rounded cursor-pointer" />
               {FLAG_MAP[lang.code]
