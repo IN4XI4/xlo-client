@@ -48,7 +48,6 @@ export function CreatorInfoView({ assessment }) {
             <span className="font-semibold text-gray-700 truncate">{user.first_name} {user.last_name}</span>
           </div>
           {user.birth_year && <span className="text-xs">{user.birth_year}</span>}
-          {user.email && <span className="text-xs truncate">{user.email}</span>}
         </div>
       </div>
 
