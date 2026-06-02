@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import ReactGA from 'react-ga4';
 import { finalizeAttempt, getAttempt } from '../api/attempts.api';
 import QuestionsList from '../components/attempts/QuestionsList';
+import { AttemptResults } from '../components/attempts/AttemptResults';
 
 
 export function AttemptPage() {
@@ -17,6 +18,12 @@ export function AttemptPage() {
   const isActiveRef = useRef(false);
 
   useEffect(() => {
+    setAttempt(null);
+    setResults(null);
+    setShowResults(false);
+    setFinalizing(false);
+    setFinalizeError(false);
+    setError(null);
     loadAttempt();
   }, [id]);
 
@@ -83,6 +90,7 @@ export function AttemptPage() {
         assessment_id: attempt?.assessment,
       });
       setResults(res.data);
+      setAttempt(prev => ({ ...prev, ...res.data }));
       setShowResults(true);
       localStorage.removeItem('attempt_session');
     } catch (err) {
@@ -147,16 +155,11 @@ export function AttemptPage() {
   }
 
   if (showResults) {
-    return <div className="pt-28 flex flex-col items-center">
-      <div className='text-2xl pb-2'>Your score is:</div>
-      <div className="text-8xl font-bold mb-4">{results.score} <span className='text-7xl'>/ 100</span></div>
-      <div className={`text-3xl font-medium ${results.approved ? 'text-green-500' : 'text-red-500'}`}>
-        {results.approved ? 'You passed' : 'You failed!'}
+    return (
+      <div className="pt-28">
+        <AttemptResults attempt={attempt} results={results} />
       </div>
-      <div>
-        Points Obtained: {results.points_obtained}
-      </div>
-    </div>
+    );
   }
 
   if (finalizing) {
