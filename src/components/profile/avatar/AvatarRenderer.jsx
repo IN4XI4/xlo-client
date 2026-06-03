@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 const modules = import.meta.glob(
   '../../illustrations/items/**/*.{jsx,js}',
@@ -21,6 +21,19 @@ const getComponent = async (path) => {
 
 export function AvatarRenderer({ avatar, size = "h-auto" }) {
   const [components, setComponents] = useState({})
+  const svgRef = useRef(null)
+
+  useLayoutEffect(() => {
+    const svg = svgRef.current
+    if (!svg) return
+    const group = svg.querySelector('#Avatar-Root')
+    if (group && group.getBBox) {
+      const { x, y, width, height } = group.getBBox()
+      if (width > 0 && height > 0) {
+        svg.setAttribute('viewBox', `${x} ${y} ${width} ${height}`)
+      }
+    }
+  }, [components])
 
   useEffect(() => {
     const loadComponents = async () => {
@@ -73,8 +86,8 @@ export function AvatarRenderer({ avatar, size = "h-auto" }) {
   } = components
 
   return (
-    <div className={`w-full max-w-[200px] md:max-w-[300px] aspect-[575/890] ${size}`}>
-      <svg viewBox="0 0 575 890" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+    <div className={`${size}`}>
+      <svg ref={svgRef} viewBox="0 0 575 890" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
         <g id="Avatar-Root">
           {Ki && <Ki color={avatar.ki_color?.hex} />}
           {Body && (
@@ -91,6 +104,6 @@ export function AvatarRenderer({ avatar, size = "h-auto" }) {
           {Accessory && <Accessory color={avatar.accessory_color?.hex} />}
         </g>
       </svg>
-    </div >
+    </div>
   )
 }
