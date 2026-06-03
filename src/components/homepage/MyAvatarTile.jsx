@@ -7,7 +7,7 @@ import { getMyAvatar } from '../../api/avatar.api';
 import { AvatarRenderer } from '../profile/avatar/AvatarRenderer';
 
 
-export function MyAvatarTile({ coinBalance, userLevel }) {
+export function MyAvatarTile({ coinBalance, userLevel, activeDays }) {
   const [isOpen, setIsOpen] = useState(true);
   const [myAvatar, setMyAvatar] = useState([]);
   const [error, setError] = useState(null);
@@ -54,18 +54,34 @@ export function MyAvatarTile({ coinBalance, userLevel }) {
         </div>
         {isOpen && (
           <div className='flex-grow flex flex-col py-2 md:py-0'>
-            <div className='flex items-center justify-center py-3 md:pb-4 bg-white rounded-lg mb-2'>
+            <div className='flex items-center justify-center py-3 md:pb-4'>
               {isLoading ? (
                 <div className='flex justify-center items-center pt-3'>
                   <FaSpinner className="text-[#3DB1FF] text-4xl animate-spin" />
                 </div>
               ) : (
-                <div className='flex px-4 flex-grow'>
-                  <AvatarRenderer avatar={renderAvatar} size="h-40" />
-                  <div className='pt-4'>
-                    <div className='text-[#3DB1FF] pb-2'>User lvl: <span className='font-semibold'>{userLevel ?? 'Basic'}</span> </div>
-                    <div className='text-[#3DB1FF]'>Collected: <span className='font-semibold'>{coinBalance ?? 0} $MC</span></div>
-
+                <div className='flex px-3 flex-grow gap-2'>
+                  <div className='bg-white rounded-lg p-2'>
+                    <AvatarRenderer avatar={renderAvatar} size="h-40" />
+                  </div>
+                  <div className='flex-1 text-[#3DB1FF] flex flex-col'>
+                    <div className='flex items-end'>
+                      <div className='text-5xl font-semibold pe-1'>{activeDays != null && activeDays < 10 ? `0${activeDays}` : (activeDays ?? 0)}</div>
+                      <div className='text-xs pb-1'>
+                        <div>Active</div>
+                        <div>days</div>
+                      </div>
+                    </div>
+                    <div className='flex flex-col gap-1'>
+                      <div className='flex items-center'>
+                        <span className='text-5xl'>{coinBalance ?? 0}</span>
+                        <span className='text-xs'>$MXC </span>
+                      </div>
+                      <div className=''>
+                        <span className='text-2xl'>{userLevel ?? 'Basic'} </span>
+                        <span className='text-xs'>Level</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}

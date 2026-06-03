@@ -11,6 +11,7 @@ import { MyRewardsTile } from '../components/homepage/MyRewardsTile';
 import { useUser } from '../context/UserContext';
 import { MyAvatarTile } from '../components/homepage/MyAvatarTile';
 import { MySpacesTile } from '../components/homepage/MySpacesTile';
+import { MyAssessmentsTile } from '../components/homepage/MyAssessmentsTile';
 import { useSpace } from '../context/SpaceContext';
 
 
@@ -68,12 +69,12 @@ export function HomePage() {
             {!user && <div className="pt-3 md:py-3"><MyActivitiesTile isAuthenticated={isAuthenticated} /></div>}
           </div>
           {user ? <div className='w-full md:w-[45%] grid grid-cols-1 sm:grid-cols-2 md:ps-2'>
-            <MyActivitiesTile activeDays={user.active_days} userData={user} isAuthenticated={isAuthenticated} />
+            <MyAssessmentsTile />
             <MyRewardsTile user={user} />
             <div className="sm:col-span-2 py-3">
               <MyFavoriteStoriesTile activeSpace={activeSpace} key={`topics-${activeSpace?.id || "none"}`} />
             </div>
-            <MyAvatarTile coinBalance={user.coin_balance} userLevel={user.user_level_display?.level_name} />
+            <MyAvatarTile coinBalance={user.coin_balance} userLevel={user.user_level_display?.level_name} activeDays={user.active_days} />
             <MySpacesTile />
           </div> :
             <div className='w-full md:w-[45%] grid grid-cols-1 sm:grid-cols-2 md:ps-2'>

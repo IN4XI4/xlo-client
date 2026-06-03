@@ -22,6 +22,7 @@ export const filterAssessments = (params) => {
         ...(params.allowedAttempts && { 'allowed_attempts__gte': params.allowedAttempts }),
         ...(params.difficulty && { 'difficulty__gte': params.difficulty }),
         ...(params.ordering && { 'ordering': params.ordering }),
+        ...(params.pageSize && { 'page_size': params.pageSize }),
         page: params.page || 1,
     };
 
