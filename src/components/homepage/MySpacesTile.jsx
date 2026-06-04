@@ -57,7 +57,7 @@ export function MySpacesTile() {
   };
 
   return (
-    <div className='flex flex-col'>
+    <div className='h-full flex flex-col'>
       <div className={`bg-[#F0DEA4] rounded-xl p-3 mb-3 sm:mb-0  sm:ms-2 ${isOpen ? "flex-grow flex flex-col" : ""}`}>
         <div className='flex items-center' onClick={() => setIsOpen(!isOpen)}>
           <div className='flex-grow pe-3 cursor-pointer'>
@@ -75,7 +75,8 @@ export function MySpacesTile() {
           </div>
         </div>
         {isOpen && (
-          <div className='flex-grow flex flex-col justify-between'>
+          <div className='flex-grow flex flex-col'>
+            <div className="flex-grow" />
             <div className="pb-6">
               {isLoading ? (
                 <div className='flex justify-center items-center pt-3'>
@@ -115,6 +116,7 @@ export function MySpacesTile() {
                 <div></div>
               ))}
             </div>
+            <div className="flex-grow" />
             <div className='flex justify-end items-end pt-1'>
               <Link to={`/spaces`} className='bg-[#D6A400] px-4 py-1 rounded-lg text-white cursor-pointer'
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>

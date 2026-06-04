@@ -69,7 +69,7 @@ export function MyAssessmentsTile() {
   }, []);
 
   return (
-    <div className="flex flex-col">
+    <div className="h-full flex flex-col">
       <div className={`bg-[#DFDDFD] rounded-xl px-6 py-3 lg:p-3 mb-3 sm:mb-0 sm:ms-2 ${isOpen ? 'flex-grow flex flex-col' : ''}`}>
         <div className="flex items-center" onClick={() => setIsOpen(!isOpen)}>
           <div className="flex-grow pe-3 cursor-pointer">

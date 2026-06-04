@@ -6,12 +6,15 @@ import { SearchIcon } from '../../../illustrations/icons/SearchIcon';
 
 export function TopicsView({ assessment }) {
   const [stories, setStories] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
+    setLoading(true);
     getStoriesByTopic(assessment.topic, 1, null, '', null, 5)
       .then(r => setStories(r.data.results ?? r.data))
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, [assessment.topic]);
 
   return (
@@ -23,7 +26,13 @@ export function TopicsView({ assessment }) {
         </div>
       </div>
 
-      {stories.length > 0 && (
+      {loading && (
+        <div className="flex justify-center py-4">
+          <div className="w-6 h-6 border-2 border-[#846EFF] border-t-transparent rounded-full animate-spin" />
+        </div>
+      )}
+
+      {!loading && stories.length > 0 && (
         <div className="flex flex-col gap-2">
           <div className="font-semibold text-gray-700">Available Topic Stories</div>
           <div className="text-sm text-gray-500">
