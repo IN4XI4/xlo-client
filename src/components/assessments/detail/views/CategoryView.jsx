@@ -6,10 +6,12 @@ import { SearchIcon } from '../../../illustrations/icons/SearchIcon';
 
 export function CategoryView({ assessment }) {
   const [topics, setTopics] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const currentTopicId = assessment.topic;
 
   useEffect(() => {
+    setLoading(true);
     getTopic(currentTopicId)
       .then(r => {
         const tagId = typeof r.data.tag === 'object' ? r.data.tag?.id : r.data.tag;
@@ -17,7 +19,8 @@ export function CategoryView({ assessment }) {
         return getTopicsByCategory(tagId);
       })
       .then(r => r && setTopics(r.data.results ?? r.data))
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, [currentTopicId]);
 
   const otherTopics = topics.filter(t => t.id !== currentTopicId);
@@ -31,7 +34,13 @@ export function CategoryView({ assessment }) {
         </div>
       </div>
 
-      {otherTopics.length > 0 && (
+      {loading && (
+        <div className="flex justify-center py-4">
+          <div className="w-6 h-6 border-2 border-[#846EFF] border-t-transparent rounded-full animate-spin" />
+        </div>
+      )}
+
+      {!loading && otherTopics.length > 0 && (
         <div className="flex flex-col gap-2">
           <div className="font-semibold text-gray-700">Other available topics</div>
           <div className="text-sm text-gray-500">

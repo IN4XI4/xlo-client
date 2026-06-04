@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FaChevronDown, FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { SIDEBAR_VIEWS, DEFAULT_VIEW } from './sidebarViews';
@@ -14,7 +14,11 @@ export function AssessmentDetailSidebar({ assessment, activeView, setActiveView 
     if (open) setHasOpened(true);
   }, [open]);
 
+  const prevActiveView = useRef(activeView);
+
   useEffect(() => {
+    if (prevActiveView.current === activeView) return;
+    prevActiveView.current = activeView;
     setOpen(true);
     setHasOpened(true);
   }, [activeView]);

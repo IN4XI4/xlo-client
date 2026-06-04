@@ -35,7 +35,7 @@ export function MyAvatarTile({ coinBalance, userLevel, activeDays }) {
   }
   const renderAvatar = useMemo(() => myAvatar, [myAvatar]);
   return (
-    <div className='flex flex-col '>
+    <div className='h-full flex flex-col'>
       <div className={`bg-[#B8E3FF] rounded-xl p-3 mb-3 sm:mb-0 ${isOpen ? "flex-grow flex flex-col" : ""}`}>
         <div className='flex items-center' onClick={() => setIsOpen(!isOpen)}>
           <div className='flex-grow pe-3 cursor-pointer'>
@@ -54,6 +54,7 @@ export function MyAvatarTile({ coinBalance, userLevel, activeDays }) {
         </div>
         {isOpen && (
           <div className='flex-grow flex flex-col py-2 md:py-0'>
+            <div className="flex-grow" />
             <div className='flex items-center justify-center py-3 md:pb-4'>
               {isLoading ? (
                 <div className='flex justify-center items-center pt-3'>
@@ -73,12 +74,12 @@ export function MyAvatarTile({ coinBalance, userLevel, activeDays }) {
                       </div>
                     </div>
                     <div className='flex flex-col gap-1'>
-                      <div className='flex items-center'>
-                        <span className='text-5xl'>{coinBalance ?? 0}</span>
-                        <span className='text-xs'>$MXC </span>
+                      <div className='flex items-end'>
+                        <span className='text-5xl font-semibold'>{coinBalance ?? 0}</span>
+                        <span className='text-xs pb-1'>$MXC </span>
                       </div>
                       <div className=''>
-                        <span className='text-2xl'>{userLevel ?? 'Basic'} </span>
+                        <span className='text-2xl font-semibold'>{userLevel ?? 'Basic'} </span>
                         <span className='text-xs'>Level</span>
                       </div>
                     </div>
