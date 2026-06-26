@@ -24,7 +24,9 @@ export const finalizeAttempt = (attempt_id, data) => {
 export const globalStats = () => attemptsApi.get('global_stats/')
 
 
-export const getUsersByRankingCategory = (rankingType, category_id) => {
+export const getUsersByRankingCategory = (rankingType, category_id, page = 1, search = '') => {
     const orderBy = rankingType === '0' ? '-total_points' : '-average_score';
-    return attemptsApi.get(`userpoints/?ordering=${orderBy}&category=${category_id}`, { headers: getAuthHeaders() });
+    const params = new URLSearchParams({ ordering: orderBy, category: category_id, page });
+    if (search) params.append('search', search);
+    return attemptsApi.get(`userpoints/?${params}`, { headers: getAuthHeaders() });
 }

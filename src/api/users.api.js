@@ -32,7 +32,9 @@ export const resetPassword = (data) => usersApi.post('users/reset_password/', da
 
 
 // Rankings
-export const getUsersByRanking = (rankingType) => {
+export const getUsersByRanking = (rankingType, page = 1, search = '') => {
     const orderBy = rankingType === '0' ? '-points' : '-average_score';
-    return usersApi.get(`topusers/?ordering=${orderBy}`, { headers: getAuthHeaders() });
+    const params = new URLSearchParams({ ordering: orderBy, page });
+    if (search) params.append('search', search);
+    return usersApi.get(`topusers/?${params}`, { headers: getAuthHeaders() });
 }
