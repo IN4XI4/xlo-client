@@ -6,6 +6,7 @@ import ReactGA from 'react-ga4';
 
 import { login } from '../../api/base.api';
 import { checkNewDay } from '../../utils/checkNewDay';
+import { GoogleLoginButton } from './GoogleLoginButton';
 
 export function Login() {
   const {
@@ -94,6 +95,12 @@ export function Login() {
         <div >
           <Button type="submit" className='w-full bg-[#3DB1FF]'>Login to your account</Button>
         </div>
+        <div className="flex items-center my-4">
+          <div className="flex-grow border-t border-gray-200"></div>
+          <span className="mx-2 text-sm text-gray-500">or</span>
+          <div className="flex-grow border-t border-gray-200"></div>
+        </div>
+        <GoogleLoginButton onError={setServerError} />
         <div className="mt-4">
           <span className="text-sm text-gray-900 font-bold">Not registered yet? </span>
           <Link to="/login?view=register" className="text-sm text-blue-500 hover:underline">Create an account</Link>

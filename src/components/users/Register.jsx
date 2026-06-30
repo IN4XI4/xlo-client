@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import ReactGA from 'react-ga4';
 import { registerUser } from '../../api/users.api';
 import { login } from '../../api/base.api';
+import { GoogleLoginButton } from './GoogleLoginButton';
 
 
 export function Register() {
@@ -148,6 +149,12 @@ export function Register() {
         <div >
           <Button type="submit" className='w-full bg-[#3DB1FF]'>Create account</Button>
         </div>
+        <div className="flex items-center my-4">
+          <div className="flex-grow border-t border-gray-200"></div>
+          <span className="mx-2 text-sm text-gray-500">or</span>
+          <div className="flex-grow border-t border-gray-200"></div>
+        </div>
+        <GoogleLoginButton onError={setServerError} />
         <div className="mt-4">
           <span className="text-sm text-gray-900 font-bold">Already have an account? </span>
           <Link to="" className="text-sm text-blue-500 hover:underline">Login</Link>
