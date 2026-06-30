@@ -19,6 +19,7 @@ export const getUserBadges = (userId) => usersApi.get(`user-badges/?user=${userI
 export const getCountries = () => usersApi.get(`countries/`, { headers: getAuthHeaders() })
 export const getUserBadgeInfo = () => usersApi.get(`users/user-badge-information/`, { headers: getAuthHeaders() })
 export const registerUser = (data) => usersApi.post('users/', data)
+export const googleLogin = (idToken) => usersApi.post('users/google_login/', { id_token: idToken })
 export const updateUserBadges = () => usersApi.post(`user-badges/update-badges/`, null, { headers: getAuthHeaders() })
 
 export const updatePassword = (data) => usersApi.put(`users/update_password/`, data, { headers: getAuthHeaders() })

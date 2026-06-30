@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import ReactGA from "react-ga4";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import { HomePage } from './pages/HomePage'
 import { LoginPage } from './pages/LoginPage';
@@ -179,14 +180,16 @@ function App() {
 
 export default function Root() {
   return (
-    <BrowserRouter>
-      <AppStateProvider>
-        <SpaceProvider>
-          <UserProvider>
-            <App />
-          </UserProvider>
-        </SpaceProvider>
-      </AppStateProvider>
-    </BrowserRouter>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <BrowserRouter>
+        <AppStateProvider>
+          <SpaceProvider>
+            <UserProvider>
+              <App />
+            </UserProvider>
+          </SpaceProvider>
+        </AppStateProvider>
+      </BrowserRouter>
+    </GoogleOAuthProvider>
   );
 }
