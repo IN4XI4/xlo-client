@@ -1,45 +1,19 @@
-const CACHE_NAME = 'my-pwa-cache-v1';
-const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png'
-];
-
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache);
-      })
-  );
-});
-
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        if (response) {
-          return response;
-        }
-        return fetch(event.request);
-      })
-  );
+// This legacy service worker permanently froze an old cached index.html
+// (hardcoded CACHE_NAME that never versioned) causing a stale white-screen
+// bug. It's replaced with a kill switch so already-installed copies clean
+// themselves up: unregister, clear caches, and reload once.
+self.addEventListener('install', () => {
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
-  const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
+    (async () => {
+      const cacheNames = await caches.keys();
+      await Promise.all(cacheNames.map((name) => caches.delete(name)));
+      await self.registration.unregister();
+      const clientsList = await self.clients.matchAll({ type: 'window' });
+      clientsList.forEach((client) => client.navigate(client.url));
+    })()
   );
 });
