@@ -16,21 +16,36 @@ function QuestionsList({ attempt, questions, onEndAttempt }) {
     localStorage.setItem('attempt_session', JSON.stringify({ ...session, responses: userResponses }));
   }, [userResponses]);
 
-  const handleChoiceChange = (questionId, choiceId) => {
+  const handleChoiceChange = (questionId, choiceId, isMultipleChoice) => {
     const updatedResponses = [...userResponses];
-    let response = updatedResponses.find(r => r.question_id === questionId);
-    if (response) {
-      response.choices = [choiceId];
+    const index = updatedResponses.findIndex(r => r.question_id === questionId);
+    if (isMultipleChoice) {
+      if (index !== -1) {
+        const current = updatedResponses[index].choices;
+        const toggled = current.includes(choiceId)
+          ? current.filter(id => id !== choiceId)
+          : [...current, choiceId];
+        if (toggled.length === 0) {
+          updatedResponses.splice(index, 1);
+        } else {
+          updatedResponses[index] = { question_id: questionId, choices: toggled };
+        }
+      } else {
+        updatedResponses.push({ question_id: questionId, choices: [choiceId] });
+      }
     } else {
-      response = { question_id: questionId, choices: [choiceId] };
-      updatedResponses.push(response);
+      if (index !== -1) {
+        updatedResponses[index] = { question_id: questionId, choices: [choiceId] };
+      } else {
+        updatedResponses.push({ question_id: questionId, choices: [choiceId] });
+      }
     }
     setUserResponses(updatedResponses);
   };
 
-  const getSelectedChoice = (questionId) => {
+  const getSelectedChoices = (questionId) => {
     const response = userResponses.find(r => r.question_id === questionId);
-    return response?.choices?.[0] ?? null;
+    return response?.choices ?? [];
   };
 
   return (
@@ -62,7 +77,7 @@ function QuestionsList({ attempt, questions, onEndAttempt }) {
             key={index}
             question={question}
             index={index}
-            selectedChoiceId={getSelectedChoice(question.question_id)}
+            selectedChoiceIds={getSelectedChoices(question.question_id)}
             onChoiceChange={handleChoiceChange}
           />
         ))}
