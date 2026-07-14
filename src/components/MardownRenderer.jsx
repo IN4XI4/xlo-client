@@ -15,11 +15,12 @@ const ensureAbsoluteUrls = () => (tree) => {
   });
 };
 
-const MarkdownRenderer = ({ content, additionalClass }) => (
+const MarkdownRenderer = ({ content, additionalClass, disableCopy }) => (
   <MDEditor.Markdown
     source={content}
     style={{ whiteSpace: 'pre-wrap' }}
     className={`bg-transparent ${additionalClass || 'text-black'}`}
+    disableCopy={disableCopy}
     remarkPlugins={[remarkGfm]}
     rehypePlugins={[
       rehypeRaw,
