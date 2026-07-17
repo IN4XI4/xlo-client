@@ -6,6 +6,8 @@ import { getUsersByRankingCategory } from '../../api/attempts.api';
 import { RankingRow } from './RankingRow';
 
 
+const MAX_RANKING_PAGES = 5; // backend page_size is fixed at 20 -> 5 pages = top 100 users
+
 export function RankingList({ categoryId, rankingType, search, onUsersLoaded, selectedUserId, onUserSelect }) {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,7 +48,7 @@ export function RankingList({ categoryId, rankingType, search, onUsersLoaded, se
       } else {
         setUsers(prev => [...prev, ...newUsers]);
       }
-      setHasMore(!!response.data.next);
+      setHasMore(!!response.data.next && page < MAX_RANKING_PAGES);
     } catch (err) {
       setError(err.message || 'Error fetching users');
       setHasMore(false);

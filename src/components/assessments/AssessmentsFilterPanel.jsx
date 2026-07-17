@@ -181,7 +181,7 @@ export function FilterPanel({ onNameFilterChange, onToggleTopic, onToggleLanguag
           <div className="flex-1 px-2 text-gray-700 text-sm">Topic</div>
           <FaChevronDown className={`flex-shrink-0 text-gray-500 text-xs transition-transform ${topicOpen ? 'rotate-180' : ''}`} />
         </div>
-        <div className={`pb-2 overflow-hidden transition-all duration-200 ${topicOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'}`}>
+        <div className={`pb-2 overflow-hidden transition-all duration-200 ${topicOpen ? 'max-h-[5000px] opacity-100' : 'max-h-0 opacity-0'}`}>
           {categories.map(category => (
             <div key={category.id}>
               <div className="flex justify-between items-center mb-2 cursor-pointer px-2" onClick={() => toggleCategoryExpansion(category.id)}>

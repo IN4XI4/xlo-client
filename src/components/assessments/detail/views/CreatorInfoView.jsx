@@ -15,12 +15,21 @@ export function CreatorInfoView({ assessment }) {
   const [user, setUser] = useState(null);
   const [badges, setBadges] = useState([]);
   const userId = assessment?.user;
+  const isAuthenticated = !!localStorage.getItem('token');
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId || !isAuthenticated) return;
     getUserModal(userId).then(r => setUser(r.data)).catch(() => {});
     getUserBadges(userId).then(r => setBadges(r.data)).catch(() => {});
-  }, [userId]);
+  }, [userId, isAuthenticated]);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="py-6 text-center text-gray-400 text-sm">
+        Sign in to see full info
+      </div>
+    );
+  }
 
   if (!user) return null;
 

@@ -1,10 +1,16 @@
+import MarkdownRenderer from '../MardownRenderer';
+
 export function QuestionBlock({ question, index, selectedChoiceIds, onChoiceChange }) {
   const isMultiple = question.is_multiple_choice;
 
   return (
     <div className="border-4 border-[#CEC5FF] rounded-xl mb-4 overflow-hidden p-1">
       <div className="px-5 pt-4 pb-2">
-        <div className="font-bold text-gray-800 text-base">{question.description}</div>
+        <MarkdownRenderer
+          content={question.description}
+          additionalClass="text-gray-800 text-base [&_p]:!mt-0 [&_p]:!mb-1 [&_pre]:!mt-0"
+          disableCopy
+        />
         {isMultiple && (
           <div className="text-xs text-[#846EFF] mt-1">Select all that apply</div>
         )}
@@ -38,7 +44,11 @@ export function QuestionBlock({ question, index, selectedChoiceIds, onChoiceChan
                     )}
                   </div>
                 )}
-                <span className="text-gray-700 text-sm">{choice.description}</span>
+                <MarkdownRenderer
+                  content={choice.description}
+                  additionalClass="text-gray-700 text-sm [&_p]:!m-0"
+                  disableCopy
+                />
               </div>
               {cIndex < question.choices.length - 1 && (
                 <div className="border-b border-gray-200 mx-5" />

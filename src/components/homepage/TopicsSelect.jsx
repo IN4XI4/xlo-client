@@ -25,10 +25,10 @@ export function TopicsSelect({ isAuthenticated, activeSpace }) {
       const spaceId = activeSpace?.id ?? null;
 
       const res = await getTopicTags(spaceId);
-      const shuffledResults = res.data.results.sort(() => Math.random() - 0.5);
-      setTopicTags(shuffledResults);
-      if (shuffledResults.length > 0) {
-        setSelectedTopicTag(shuffledResults[0]);
+      const results = res.data.results;
+      setTopicTags(results);
+      if (results.length > 0) {
+        setSelectedTopicTag(results[0]);
       }
     } catch (error) {
       setError(error);

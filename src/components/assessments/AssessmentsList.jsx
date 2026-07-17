@@ -6,6 +6,7 @@ import { AssessmentCard } from "./AssessmentCard";
 
 export function AssessmentsList({ filters }) {
   const [assessments, setAssessments] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
@@ -31,6 +32,7 @@ export function AssessmentsList({ filters }) {
         page: currentPage
       };
       const res = await filterAssessments(params);
+      setTotalCount(res.data.count || 0);
       if (currentPage === 1) {
         setAssessments(res.data.results);
       } else {
@@ -73,7 +75,7 @@ export function AssessmentsList({ filters }) {
         {generateFilterSummary()}
       </div>
       <div className="text-[#3DB1FF]">
-        Found <span className="font-semibold">{assessments.length}</span>  assessments
+        Found <span className="font-semibold">{totalCount}</span>  assessments
       </div>
       <InfiniteScroll
         dataLength={assessments.length}

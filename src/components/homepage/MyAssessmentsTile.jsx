@@ -21,8 +21,9 @@ function Pill({ children }) {
   );
 }
 
-function AssessmentRow({ assessment, index }) {
+function AssessmentRow({ assessment, index, variant }) {
   const pills = [];
+  const visibleOnlyOnMobile = variant !== 'full';
 
   if (assessment.language) {
     const flag = FLAG_MAP[assessment.language.toUpperCase()];
@@ -47,18 +48,30 @@ function AssessmentRow({ assessment, index }) {
   }
 
   return (
-    <Link to={assessmentUrl(assessment)} className="bg-[#EFEEFE] rounded-xl flex flex-col gap-1 mb-1 ps-2 py-1 border-gray-100 last:mb-0">
-      <div className="flex items-center gap-1.5">
-        <span className="text-gray-500 font-semibold text-sm truncate">{assessment.name}</span>
-      </div>
-      {pills.length > 0 && (
-        <div className="flex gap-1">{pills.slice(0, 3)}</div>
+    <Link to={assessmentUrl(assessment)} className="bg-[#EFEEFE] rounded-xl flex items-center gap-2 mb-1 p-1.5 border-gray-100 last:mb-0">
+      {assessment.image && (
+        <img
+          src={assessment.image}
+          alt=""
+          className={`${visibleOnlyOnMobile ? 'sm:hidden' : ''} w-12 h-10 flex-shrink-0 rounded-lg object-cover`}
+        />
       )}
+      <div className="min-w-0 flex-1 flex flex-col gap-1">
+        {assessment.topic_name && (
+          <span className={`${visibleOnlyOnMobile ? 'sm:hidden' : ''} text-gray-400 italic text-xs truncate`}>{assessment.topic_name}</span>
+        )}
+        <div className="flex items-center gap-1.5">
+          <span className="text-gray-500 font-semibold text-sm truncate">{assessment.name}</span>
+        </div>
+        {pills.length > 0 && (
+          <div className="flex gap-1">{pills.slice(0, 3)}</div>
+        )}
+      </div>
     </Link>
   );
 }
 
-export function MyAssessmentsTile() {
+export function MyAssessmentsTile({ variant = 'compact' }) {
   const [isOpen, setIsOpen] = useState(true);
   const [topAssessments, setTopAssessments] = useState([]);
 
@@ -70,7 +83,7 @@ export function MyAssessmentsTile() {
 
   return (
     <div className="h-full flex flex-col">
-      <div className={`bg-[#DFDDFD] rounded-xl px-6 py-3 lg:p-3 mb-3 sm:mb-0 sm:ms-2 ${isOpen ? 'flex-grow flex flex-col' : ''}`}>
+      <div className={`bg-[#DFDDFD] rounded-xl px-6 py-3 lg:p-3 mb-3 sm:mb-0 ${variant === 'full' ? '' : 'sm:ms-2'} ${isOpen ? 'flex-grow flex flex-col' : ''}`}>
         <div className="flex items-center" onClick={() => setIsOpen(!isOpen)}>
           <div className="flex-grow pe-3 cursor-pointer">
             <div className="text-[#6155F5] font-bold md:text-xl xl:text-2xl border-b-2 border-[#6155F5]">
@@ -90,7 +103,7 @@ export function MyAssessmentsTile() {
               <div className="bg-white rounded-xl px-2 py-1">
                 <div className="text-[#6155F5] font-semibold text-lg pb-1">Top assessments</div>
                 {topAssessments.length > 0 ? topAssessments.map((a, i) => (
-                  <AssessmentRow key={a.id} assessment={a} index={i} />
+                  <AssessmentRow key={a.id} assessment={a} index={i} variant={variant} />
                 )) : (
                   <div className="text-[#6155F5] text-xs opacity-60 py-2">No assessments yet</div>
                 )}
