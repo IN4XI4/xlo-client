@@ -29,17 +29,14 @@ export function AssessmentCard({ assessment }) {
     <Link to={assessmentUrl(assessment)}
       className={`flex p-2 my-3 rounded-3xl border ${approved ? 'bg-[#3DB1FF]/40' : 'bg-gray-100'}`}>
       {assessment.image && (
-        <div className="w-24 h-20 flex-shrink-0 overflow-hidden rounded-xl mr-2 self-center">
+        <div className="w-16 h-14 sm:w-24 sm:h-20 flex-shrink-0 overflow-hidden rounded-xl mr-2 self-center">
           <img src={assessment.image} alt={`${assessment.name} image`} className="w-full h-full object-cover" />
         </div>
       )}
       <div className="w-full overflow-hidden">
-        <div className="flex justify-between pb-1">
-          <div className="text-base font-bold leading-tight">{assessment.name}</div>
-          <div className="text-gray-500 flex items-center gap-1 flex-shrink-0 ml-2 text-sm">
-            {assessment.topic_image && (
-              <img src={assessment.topic_image} alt="icon" className="w-5 h-5 rounded" />
-            )}
+        <div className="flex flex-col-reverse sm:flex-row sm:justify-between">
+          <div className="text-sm sm:text-base font-bold leading-tight">{assessment.name}</div>
+          <div className="text-gray-500 italic flex items-center gap-1 flex-shrink-0 text-sm mb-1 sm:mb-0 pe-1">
             {assessment.topic_name}
           </div>
         </div>

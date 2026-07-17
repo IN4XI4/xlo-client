@@ -60,15 +60,15 @@ export function HomePage() {
             <span className="font-medium">Story deleted successfully!</span>
           </Alert>
         )}
-        <div className='flex flex-col md:flex-row items-start'>
-          <div className='w-full md:w-[55%] md:pe-1'>
+        <div className='flex flex-col lg:flex-row items-start'>
+          <div className='w-full lg:w-[55%] lg:pe-1'>
             <TopicsSelect isAuthenticated={isAuthenticated} activeSpace={activeSpace} key={`topics-${activeSpace?.id || "none"}`} />
             {user && <div className="py-3">
               <AtGlanceTile isAuthenticated={isAuthenticated} activeSpace={activeSpace} key={`topics-${activeSpace?.id || "none"}`} />
             </div>}
-            {!user && <div className="pt-3 md:py-3"><MyActivitiesTile isAuthenticated={isAuthenticated} /></div>}
+            {!user && <div className="pt-3 lg:py-3"><MyActivitiesTile isAuthenticated={isAuthenticated} /></div>}
           </div>
-          {user ? <div className='w-full md:w-[45%] grid grid-cols-1 sm:grid-cols-2 md:ps-2'>
+          {user ? <div className='w-full lg:w-[45%] grid grid-cols-1 sm:grid-cols-2 lg:ps-2'>
             <MyAssessmentsTile />
             <MyRewardsTile user={user} />
             <div className="sm:col-span-2 py-3">
@@ -77,8 +77,9 @@ export function HomePage() {
             <MyAvatarTile coinBalance={user.coin_balance} userLevel={user.user_level_display?.level_name} activeDays={user.active_days} />
             <MySpacesTile />
           </div> :
-            <div className='w-full md:w-[45%] grid grid-cols-1 sm:grid-cols-2 md:ps-2'>
-              <div className="sm:col-span-2 pb-3"><AtGlanceTile isAuthenticated={isAuthenticated} /></div>
+            <div className='w-full lg:w-[45%] grid grid-cols-1 lg:ps-2'>
+              <MyAssessmentsTile variant="full" />
+              <div className="pt-3"><AtGlanceTile isAuthenticated={isAuthenticated} /></div>
             </div>}
         </div>
 
