@@ -11,6 +11,7 @@ import { TestimonialBlock } from '../components/blocks/TestimonialBlock';
 import { HeroBlock } from '../components/blocks/HeroBlock';
 import { QuoteBlock } from '../components/blocks/QuoteBlock';
 import { deleteLike, deleteRecallBlock, getBlock, getMyRecallBlocksFocused, likeSomething } from '../api/blog.api';
+import { getUserAvatar } from '../api/avatar.api';
 import { WonderBlock } from '../components/blocks/WonderBlock';
 import { FactBlock } from '../components/blocks/FactBlock';
 import { FlashcardBlock } from '../components/blocks/FlashcardBlock';
@@ -29,8 +30,10 @@ export function FocusedRecallBlocksPage() {
   const [error, setError] = useState(null);
   const [isBlockLoaded, setIsBlockLoaded] = useState(false);
   const [isBlocksLoaded, setIsBlocksLoaded] = useState(false);
+  const [heroAvatar, setHeroAvatar] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const isAuthenticated = Boolean(localStorage.getItem('token'));
 
   useEffect(() => {
     loadRecallBlocks();
@@ -42,6 +45,22 @@ export function FocusedRecallBlocksPage() {
       loadBlock(recallBlocks[currentIndex]);
     }
   }, [currentIndex, recallBlocks]);
+
+  useEffect(() => {
+    setHeroAvatar(null);
+    if (currentBlock?.block_type_name === 'HERO' && currentBlock.owner_id && isAuthenticated) {
+      loadHeroAvatar(currentBlock.owner_id);
+    }
+  }, [currentBlock?.id, currentBlock?.block_type_name, currentBlock?.owner_id, isAuthenticated]);
+
+  async function loadHeroAvatar(ownerId) {
+    try {
+      const res = await getUserAvatar(ownerId);
+      setHeroAvatar(res.data);
+    } catch (error) {
+      console.error('Error loading owner avatar', error);
+    }
+  }
 
   async function loadRecallBlocks() {
     try {
@@ -185,7 +204,7 @@ export function FocusedRecallBlocksPage() {
                 content={currentBlock.content}
                 image={currentBlock.image}
                 color={currentBlock.soft_skill_color}
-                ownerAvatar={currentBlock.owner_picture}
+                avatar={heroAvatar}
                 user_has_liked={currentBlock.user_has_liked}
                 user_has_recalled={currentBlock.user_has_recalled}
                 onLikeClick={() => handleLikeClick(currentBlock.id, currentBlock.user_has_liked)}

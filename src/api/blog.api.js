@@ -109,9 +109,9 @@ export const recallComment = (data) => blogApi.post(`recall-comments/`, data, { 
 export const deleteRecallCard = (recallId) => blogApi.delete(`recalls/${recallId}/`, { headers: getAuthHeaders() })
 export const deleteRecallBlock = (recallId) => blogApi.delete(`recall-blocks/${recallId}/`, { headers: getAuthHeaders() })
 export const deleteRecallComment = (recallId) => blogApi.delete(`recall-comments/${recallId}/`, { headers: getAuthHeaders() })
-export const getMyRecallCards = () => blogApi.get(`recalls/user-recall-cards`, { headers: getAuthHeaders() })
+export const getMyRecallCards = () => blogApi.get(`recalls/user-recall-cards/`, { headers: getAuthHeaders() })
 // TODO: dynamic ordering and filtering for recallBlocks
-export const getMyRecallBlocksFocused = () => blogApi.get(`recall-blocks/random-recalled-block-ids`, { headers: getAuthHeaders() })
+export const getMyRecallBlocksFocused = () => blogApi.get(`recall-blocks/random-recalled-block-ids/`, { headers: getAuthHeaders() })
 export const getMyRecallBlocksSparked = (page, importanceOrder = '-importance_level', createdTimeOrder = '-created_time') => {
   const ordering = `${importanceOrder},${createdTimeOrder}`;
   return blogApi.get(`recall-blocks/?ordering=${ordering}&page=${page}`, { headers: getAuthHeaders() });

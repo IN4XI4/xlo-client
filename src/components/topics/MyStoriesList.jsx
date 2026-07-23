@@ -11,6 +11,7 @@ export function MyStoriesList({ searchText }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (currentPage === 1) return;
     loadStories(currentPage);
   }, [currentPage]);
 

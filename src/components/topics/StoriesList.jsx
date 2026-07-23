@@ -28,6 +28,7 @@ export function StoriesList({ topicId, categoryId, searchText }) {
   }, []);
 
   useEffect(() => {
+    if (currentPage === 1) return;
     loadStories(currentPage);
   }, [currentPage]);
 

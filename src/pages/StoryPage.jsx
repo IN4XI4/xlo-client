@@ -210,12 +210,10 @@ export function StoryPage() {
             {cards[currentCardIndex].title}
           </div>
           <div className='md:px-16 lg:px-24 mb-3'>
-            <BlocksList 
-            card={cards[currentCardIndex]} 
-            blockContentTypeId={blockContentTypeId} 
-            ownerAvatar={story.user_picture}
-            ownerColor={story.user_color}
-             />
+            <BlocksList
+            card={cards[currentCardIndex]}
+            blockContentTypeId={blockContentTypeId}
+            ownerId={story.user} />
           </div>
           <div className='md:px-16 lg:px-24 mb-4'>
             <div className='text-end text-sm text-gray-500'>

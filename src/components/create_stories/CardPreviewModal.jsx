@@ -102,7 +102,6 @@ export function CardPreviewModal({ onClose, card, userPicture, userColor }) {
                     content={block.content}
                     image={block.image}
                     color={mentor.color}
-                    ownerAvatar={userPicture}
                     isPreview={true}
                   />
                 ) : getBlockTypeName(block.blockType) === "QUOTE" ? (

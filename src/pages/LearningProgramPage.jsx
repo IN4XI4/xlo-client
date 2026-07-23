@@ -94,9 +94,7 @@ export function LearningProgramPage() {
           <div className='md:px-16 lg:px-24 mb-3'>
             <BlocksList card={softskillCards[currentCardIndex]}
               blockContentTypeId={blockContentTypeId}
-              ownerAvatar={softskillCards[currentCardIndex].owner_picture}
-              ownerColor={softskillCards[currentCardIndex].owner_color}
-               />
+              ownerId={softskillCards[currentCardIndex].owner_id} />
           </div>
         </>
       )}

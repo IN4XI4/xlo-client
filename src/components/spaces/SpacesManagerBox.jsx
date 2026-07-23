@@ -14,7 +14,7 @@ import { CreateSpaceModal } from './create/CreateSpaceModal';
 import { JoinSpaceModal } from './join/JoinSpaceModal';
 
 
-export function SpacesManagerBox({ onActionComplete, user }) {
+export function SpacesManagerBox({ user }) {
   const [mySpaces, setMySpaces] = useState([]);
   const [error, setError] = useState(null);
   const { activeSpace, setActiveSpace } = useSpace();
@@ -32,12 +32,6 @@ export function SpacesManagerBox({ onActionComplete, user }) {
   useEffect(() => {
     loadMySpaces();
   }, []);
-
-  useEffect(() => {
-    if (onActionComplete) {
-      loadMySpaces();
-    }
-  }, [onActionComplete]);
 
   async function loadMySpaces() {
     try {
@@ -203,7 +197,7 @@ export function SpacesManagerBox({ onActionComplete, user }) {
         </div>
       </div>
       {showCreateSpaceModal && (
-        <CreateSpaceModal onCancel={closeCreateSpaceModal} />
+        <CreateSpaceModal onCancel={closeCreateSpaceModal} onCreated={loadMySpaces} />
       )}
       {showJoinSpaceModal && (
         <JoinSpaceModal

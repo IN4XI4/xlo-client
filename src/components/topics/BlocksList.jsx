@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { MonsterBlock } from '../blocks/MonsterBlock';
 import { MentorBlock } from '../blocks/MentorBlock';
@@ -10,13 +10,14 @@ import { TestimonialBlock } from '../blocks/TestimonialBlock';
 import { WonderBlock } from '../blocks/WonderBlock';
 import { FactBlock } from '../blocks/FactBlock';
 import { deleteLike, getBlocksByCard, likeSomething } from '../../api/blog.api';
+import { getUserAvatar } from '../../api/avatar.api';
 import { FlashcardBlock } from '../blocks/FlashcardBlock';
 import { ReflectionBlock } from '../blocks/ReflectionBlock';
 import { QuestionBlock } from '../blocks/QuestionBlock';
 import { IllustrationBlock } from '../blocks/IllustrationBlock';
 import { MultiChoiceQuestionBlock } from '../blocks/MultiChoiceQuestionBlock';
 
-function getBlockComponent(block, card, handleLikeClick, isAuthenticated, onRecallUpdate, ownerAvatar, ownerColor) {
+function getBlockComponent(block, card, handleLikeClick, isAuthenticated, onRecallUpdate, ownerAvatar) {
   const commonProps = {
     content: block.content,
     block_id: block.id,
@@ -46,7 +47,7 @@ function getBlockComponent(block, card, handleLikeClick, isAuthenticated, onReca
         mentor_job={card.mentor_job}
         mentor_profile={card.mentor_profile} />;
     case 'hero':
-      return <HeroBlock {...commonProps} color={card.soft_skill_color} ownerAvatar={ownerAvatar} />;
+      return <HeroBlock {...commonProps} color={card.soft_skill_color} avatar={ownerAvatar} />;
     case 'quote':
       return (<QuoteBlock
         {...commonProps} color={card.soft_skill_color} authorName={block.quoted_by} authorPicture={block.image_2}
@@ -75,10 +76,12 @@ function getBlockComponent(block, card, handleLikeClick, isAuthenticated, onReca
   }
 }
 
-export function BlocksList({ card, blockContentTypeId, ownerAvatar = null, ownerColor = null }) {
+export function BlocksList({ card, blockContentTypeId, ownerId = null }) {
   const [blocks, setBlocks] = useState([]);
   const [error, setError] = useState(null);
+  const [ownerAvatar, setOwnerAvatar] = useState(null);
   const isAuthenticated = Boolean(localStorage.getItem('token'));
+  const lastOwnerIdRef = useRef(null);
 
   useEffect(() => {
     if (card) {
@@ -90,8 +93,27 @@ export function BlocksList({ card, blockContentTypeId, ownerAvatar = null, owner
     try {
       const res = await getBlocksByCard(card.id);
       setBlocks(res.data.results);
+      if (ownerId !== lastOwnerIdRef.current) {
+        lastOwnerIdRef.current = ownerId;
+        setOwnerAvatar(null);
+        if (ownerId && isAuthenticated) {
+          const hasHeroBlock = res.data.results.some(b => b.block_type_name?.toLowerCase() === 'hero');
+          if (hasHeroBlock) {
+            loadOwnerAvatar();
+          }
+        }
+      }
     } catch (error) {
       setError(error);
+    }
+  }
+
+  async function loadOwnerAvatar() {
+    try {
+      const res = await getUserAvatar(ownerId);
+      setOwnerAvatar(res.data);
+    } catch (error) {
+      console.error('Error loading owner avatar', error);
     }
   }
 
@@ -137,7 +159,7 @@ export function BlocksList({ card, blockContentTypeId, ownerAvatar = null, owner
     <div className='bg-white rounded-lg p-4 md:p-8 lg:p-12'>
       {blocks.map((block, index) => (
         <React.Fragment key={index}>
-          {getBlockComponent(block, card, handleLikeClick, isAuthenticated, handleRecallUpdate, ownerAvatar, ownerColor)}
+          {getBlockComponent(block, card, handleLikeClick, isAuthenticated, handleRecallUpdate, ownerAvatar)}
         </React.Fragment>
       ))}
     </div>
