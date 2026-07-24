@@ -30,18 +30,22 @@ const HeroContent = ({ children, color, additionalClass, image, ownerAvatar }) =
 );
 
 export function HeroBlock({ content, image, color, user_has_liked, user_has_recalled, onLikeClick, isAuthenticated, block_id,
-  onRecallUpdate, ownerAvatar, isPreview = false, isRecall = false }) {
+  onRecallUpdate, isPreview = false, isRecall = false, avatar: avatarProp }) {
   const hasLiked = user_has_liked !== false;
-  const [avatar, setAvatar] = useState(null);
+  const isAvatarManagedByParent = avatarProp !== undefined;
+  const [ownAvatar, setOwnAvatar] = useState(null);
+  const avatar = isAvatarManagedByParent ? avatarProp : ownAvatar;
 
   useEffect(() => {
-    loadAvatar();
-  }, []);
+    if (!isAvatarManagedByParent) {
+      loadAvatar();
+    }
+  }, [isAvatarManagedByParent]);
 
   async function loadAvatar() {
     try {
       const response = await getMyAvatar();
-      setAvatar(response.data);
+      setOwnAvatar(response.data);
     } catch (e) {
       console.error("Error loading avatar", e);
     }

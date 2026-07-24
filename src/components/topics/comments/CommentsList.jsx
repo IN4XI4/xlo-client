@@ -30,7 +30,6 @@ export function CommentsList({ storyId, commentContentTypeId }) {
     if (isAuthenticated) {
       checkIfUserIsCommentor();
     }
-    loadInitialComments();
   }, []);
 
   useEffect(() => {
@@ -43,12 +42,6 @@ export function CommentsList({ storyId, commentContentTypeId }) {
     setCurrentPage(1);
     loadComments(1, newestValue);
   };
-
-  const loadInitialComments = async () => {
-    setCurrentPage(1);
-    await loadComments(1);
-  };
-
 
   const toggleNewness = () => {
     const newNewestValue = !newest;

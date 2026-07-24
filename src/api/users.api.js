@@ -1,4 +1,5 @@
 import axios from "axios";
+import { cachedGet } from "../utils/apiCache";
 
 const usersApi = axios.create({
     baseURL: `${import.meta.env.VITE_API_BASE_URL}users/`
@@ -12,11 +13,11 @@ const getAuthHeaders = () => {
 export const getUser = () => usersApi.get(`users/me/`, { headers: getAuthHeaders() })
 export const getUserProfile = () => usersApi.get(`users/profile/`, { headers: getAuthHeaders() })
 export const getUserModal = (userId) => usersApi.get(`users/${userId}/`, { headers: getAuthHeaders() })
-export const getUserProfileColors = () => usersApi.get(`profile_colors/`, { headers: getAuthHeaders() })
-export const getUserExperience = () => usersApi.get(`experience/`, { headers: getAuthHeaders() })
-export const getUserGenders = () => usersApi.get(`genders/`, { headers: getAuthHeaders() })
+export const getUserProfileColors = () => cachedGet('cache:users:profile_colors', () => usersApi.get(`profile_colors/`, { headers: getAuthHeaders() }))
+export const getUserExperience = () => cachedGet('cache:users:experience', () => usersApi.get(`experience/`, { headers: getAuthHeaders() }))
+export const getUserGenders = () => cachedGet('cache:users:genders', () => usersApi.get(`genders/`, { headers: getAuthHeaders() }))
 export const getUserBadges = (userId) => usersApi.get(`user-badges/?user=${userId}`, { headers: getAuthHeaders() })
-export const getCountries = () => usersApi.get(`countries/`, { headers: getAuthHeaders() })
+export const getCountries = () => cachedGet('cache:users:countries', () => usersApi.get(`countries/`, { headers: getAuthHeaders() }))
 export const getUserBadgeInfo = () => usersApi.get(`users/user-badge-information/`, { headers: getAuthHeaders() })
 export const registerUser = (data) => usersApi.post('users/', data)
 export const googleLogin = (idToken) => usersApi.post('users/google_login/', { id_token: idToken })

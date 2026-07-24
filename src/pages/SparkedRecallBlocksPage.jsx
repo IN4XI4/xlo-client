@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { HeroBlock } from '../components/blocks/HeroBlock';
@@ -7,6 +7,7 @@ import { MonsterBlock } from '../components/blocks/MonsterBlock';
 import { MentorBlock } from '../components/blocks/MentorBlock';
 import { HighlightBlock } from '../components/blocks/HighlightBlock';
 import { deleteLike, getMyRecallBlocksSparked, likeSomething } from '../api/blog.api';
+import { getUserAvatar } from '../api/avatar.api';
 import { QuoteBlock } from '../components/blocks/QuoteBlock';
 import { TestimonialBlock } from '../components/blocks/TestimonialBlock';
 import { WonderBlock } from '../components/blocks/WonderBlock';
@@ -25,7 +26,10 @@ export function SparkedRecallBlocksPage() {
   const [hasMore, setHasMore] = useState(true);
   const [importanceOrder, setImportanceOrder] = useState('');
   const [createdTimeOrder, setCreatedTimeOrder] = useState('');
+  const [ownerAvatars, setOwnerAvatars] = useState({});
+  const requestedOwnerIds = useRef(new Set());
   const blockContentTypeId = 12;
+  const isAuthenticated = Boolean(localStorage.getItem('token'));
 
   useEffect(() => {
     setImportanceOrder(getRandomImportanceValue());
@@ -37,6 +41,29 @@ export function SparkedRecallBlocksPage() {
       loadBlocks(currentPage);
     }
   }, [importanceOrder, createdTimeOrder, currentPage]);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    const missingOwnerIds = [...new Set(
+      blocks
+        .filter(b => b.block.block_type_name === 'HERO' && b.block.owner_id)
+        .map(b => b.block.owner_id)
+    )].filter(ownerId => !requestedOwnerIds.current.has(ownerId));
+
+    missingOwnerIds.forEach(ownerId => {
+      requestedOwnerIds.current.add(ownerId);
+      loadOwnerAvatar(ownerId);
+    });
+  }, [blocks, isAuthenticated]);
+
+  async function loadOwnerAvatar(ownerId) {
+    try {
+      const res = await getUserAvatar(ownerId);
+      setOwnerAvatars(prev => ({ ...prev, [ownerId]: res.data }));
+    } catch (error) {
+      console.error('Error loading owner avatar', error);
+    }
+  }
 
   function getRandomImportanceValue() {
     const orderValues = ['importance_level', '-importance_level',];
@@ -148,7 +175,7 @@ export function SparkedRecallBlocksPage() {
                 content={block.block.content}
                 image={block.block.image}
                 color={block.block.soft_skill_color}
-                ownerAvatar={block.block.owner_picture}
+                avatar={ownerAvatars[block.block.owner_id] ?? null}
                 user_has_liked={block.block.user_has_liked}
                 user_has_recalled={block.block.user_has_recalled}
                 onLikeClick={() => handleLikeClick(block.block.id, block.block.user_has_liked)}

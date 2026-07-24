@@ -5,7 +5,7 @@ import { createSpace } from '../../../api/spaces.api';
 import { useNavigate } from 'react-router-dom';
 
 
-export function CreateSpaceForm({ profileColors, newSpaceData, setNewSpaceData, setPage, onCancel }) {
+export function CreateSpaceForm({ profileColors, newSpaceData, setNewSpaceData, setPage, onCancel, onCreated }) {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
@@ -70,6 +70,7 @@ export function CreateSpaceForm({ profileColors, newSpaceData, setNewSpaceData, 
       }
 
       const response = await createSpace(formData);
+      onCreated?.();
       onCancel();
       navigate('/spaces', { state: { spaceCreated: true } });
     }  catch (error) {

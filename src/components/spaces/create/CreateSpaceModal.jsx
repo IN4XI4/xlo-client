@@ -8,7 +8,7 @@ import { getTopicTags } from '../../../api/base.api';
 import { getUserProfileColors } from '../../../api/users.api';
 
 
-export function CreateSpaceModal({ onCancel }) {
+export function CreateSpaceModal({ onCancel, onCreated }) {
   const [page, setPage] = useState(1);
   const [allCategories, setAllCategories] = useState([]);
   const [allColors, setAllColors] = useState([]);
@@ -121,7 +121,8 @@ export function CreateSpaceModal({ onCancel }) {
             newSpaceData={newSpaceData}
             setNewSpaceData={setNewSpaceData}
             setPage={setPage}
-            onCancel={onCancel} />
+            onCancel={onCancel}
+            onCreated={onCreated} />
         )}
       </div>
     </div>

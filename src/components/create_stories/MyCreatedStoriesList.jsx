@@ -11,6 +11,7 @@ export function MyCreatedStoriesList({ searchText }) {
   const [selectedButton, setSelectedButton] = useState('Latest');
 
   useEffect(() => {
+    if (currentPage === 1) return;
     loadStories(currentPage);
   }, [currentPage]);
 

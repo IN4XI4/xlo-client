@@ -249,7 +249,7 @@ export function SpacesPage() {
             <SpaceInfoBox spaceInfo={spaceInfo} />
           </div>
           <div className=''>
-            <SpacesManagerBox onActionComplete={handleActionComplete} user={user} />
+            <SpacesManagerBox user={user} />
           </div>
           <div className=''>
             <SpacesInvitationsBox onActionComplete={handleActionComplete} />

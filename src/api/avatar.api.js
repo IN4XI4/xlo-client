@@ -10,6 +10,7 @@ const getAuthHeaders = () => {
 };
 
 export const getMyAvatar = () => avatarApi.get(`avatars/my-avatar/`, { headers: getAuthHeaders() })
+export const getUserAvatar = (userId) => avatarApi.get(`avatars/user-avatar/`, { headers: getAuthHeaders(), params: { user_id: userId } })
 export const getMyItems = () => avatarApi.get(`user-items/grouped/`, { headers: getAuthHeaders() })
 export const getMyColors = () => avatarApi.get(`user-items/colors/`, { headers: getAuthHeaders() })
 export const getColorCatalog = (page = 1, pageSize = 100) => {

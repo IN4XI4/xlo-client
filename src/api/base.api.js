@@ -18,7 +18,7 @@ export const getTopicTags = (spaceId = null) => {
   return baseApi.get(url, { headers: getAuthHeaders() });
 };
 
-export const getTopic = (topic_id) => baseApi.get(`base/topics/${topic_id}`, { headers: getAuthHeaders() })
+export const getTopic = (topic_id) => baseApi.get(`base/topics/${topic_id}/`, { headers: getAuthHeaders() })
 export const getTopicBySlug = (slug) => baseApi.get(`base/topics/find-by-slug/${slug}/`, { headers: getAuthHeaders() })
 export const getTopics = () => baseApi.get('base/topics/', { headers: getAuthHeaders() })
 export const getTopicsByCategory = (categoryId) => baseApi.get(`base/topics/?tag=${categoryId}`, { headers: getAuthHeaders() })

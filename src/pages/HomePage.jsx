@@ -19,16 +19,10 @@ export function HomePage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
+  const [isAuthenticated] = useState(() => !!localStorage.getItem('token'));
+  const [showAlert, setShowAlert] = useState(() => !localStorage.getItem('token'));
   const { user } = useUser();
   const { activeSpace } = useSpace();
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    setIsAuthenticated(!!token);
-    setShowAlert(!token);
-  }, []);
 
   useEffect(() => {
     if (location.state?.storyDeleted) {
@@ -63,18 +57,18 @@ export function HomePage() {
         <div className='flex flex-col lg:flex-row items-start'>
           <div className='w-full lg:w-[55%] lg:pe-1'>
             <TopicsSelect isAuthenticated={isAuthenticated} activeSpace={activeSpace} key={`topics-${activeSpace?.id || "none"}`} />
-            {user && <div className="py-3">
+            {isAuthenticated && <div className="py-3">
               <AtGlanceTile isAuthenticated={isAuthenticated} activeSpace={activeSpace} key={`topics-${activeSpace?.id || "none"}`} />
             </div>}
-            {!user && <div className="pt-3 lg:py-3"><MyActivitiesTile isAuthenticated={isAuthenticated} /></div>}
+            {!isAuthenticated && <div className="pt-3 lg:py-3"><MyActivitiesTile isAuthenticated={isAuthenticated} /></div>}
           </div>
-          {user ? <div className='w-full lg:w-[45%] grid grid-cols-1 sm:grid-cols-2 lg:ps-2'>
+          {isAuthenticated ? <div className='w-full lg:w-[45%] grid grid-cols-1 sm:grid-cols-2 lg:ps-2'>
             <MyAssessmentsTile />
             <MyRewardsTile user={user} />
             <div className="sm:col-span-2 py-3">
               <MyFavoriteStoriesTile activeSpace={activeSpace} key={`topics-${activeSpace?.id || "none"}`} />
             </div>
-            <MyAvatarTile coinBalance={user.coin_balance} userLevel={user.user_level_display?.level_name} activeDays={user.active_days} />
+            <MyAvatarTile coinBalance={user?.coin_balance} userLevel={user?.user_level_display?.level_name} activeDays={user?.active_days} />
             <MySpacesTile />
           </div> :
             <div className='w-full lg:w-[45%] grid grid-cols-1 lg:ps-2'>
