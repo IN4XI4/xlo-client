@@ -137,6 +137,14 @@ export function TopicStoriesPage() {
           {topic.description}
         </div>
       )}
+      {topic.id && (
+        <Link
+          to={`/assessments?topic=${topic.id}`}
+          className='inline-block text-xs md:text-sm text-[#3DB1FF] hover:underline mt-1'
+        >
+          Looking for assessments on this topic? →
+        </Link>
+      )}
       <div className='flex items-center py-4 border-b-4 border-[#D9D9D9]'>
         <div className='flex-none pe-2 md:pe-6'>
           <Link to="/">
