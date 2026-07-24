@@ -8,7 +8,10 @@ import { startAttempt } from '../../../api/attempts.api';
 import { useNavigate } from 'react-router-dom';
 import { followAssessment, unfollowAssessment } from '../../../api/assessments.api';
 import { ConfirmationModal } from '../../modals/ConfirmationModal';
+import { AuthRequiredModal } from '../../modals/auth/AuthRequiredModal';
+import { InfoModal } from '../../modals/InfoModal';
 import { DifficultyRatingModal } from './DifficultyRatingModal';
+import { useAppState } from '../../../context/ScrollContext';
 import { HiOutlineBadgeCheck } from "react-icons/hi";
 import { CiCircleQuestion, CiClock2 } from "react-icons/ci";
 import { AiOutlineLineChart } from "react-icons/ai";
@@ -54,8 +57,12 @@ function DescriptionSection({ description }) {
 
 export function AssessmentDetail({ assessment, onReload, setActiveView }) {
   const navigate = useNavigate();
-  const [apiError, setApiError] = useState(null);
+  const { refreshNavigation } = useAppState();
+  const isLoggedIn = !!localStorage.getItem('token');
+  const [startAttemptError, setStartAttemptError] = useState(null);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmAttemptsLeft, setConfirmAttemptsLeft] = useState(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [showDifficultyRating, setShowDifficultyRating] = useState(false);
   const [ratingSuccess, setRatingSuccess] = useState(false);
   const [assessmentDetails, setAssessmentDetails] = useState({
@@ -83,22 +90,33 @@ export function AssessmentDetail({ assessment, onReload, setActiveView }) {
     }
   };
 
-  const handleStartClick = async () => {
+  const startAttemptRequest = async () => {
     try {
       const data = {
         assessment: assessment.id,
         user: assessment.user
       };
-      if (assessment.available_attempts <= 0) {
-        return
-      }
       const response = await startAttempt(data);
-      setApiError(null);
       ReactGA.event('assessment_started', { assessment_id: assessment.id, topic: assessment.topic_name });
       navigate(`/attempts/${response.data.id}`);
     } catch (error) {
       console.error(error);
-      setApiError(error.response?.data ?? 'An error occurred');
+      setStartAttemptError(error.response?.data?.[0] ?? 'An error occurred while starting the attempt.');
+    }
+  };
+
+  const handleAuthSuccess = async () => {
+    setShowAuthModal(false);
+    refreshNavigation();
+    try {
+      const fresh = await onReload();
+      if (!fresh.is_owner && fresh.available_attempts > 0) {
+        setConfirmAttemptsLeft(fresh.available_attempts);
+        setShowConfirm(true);
+      }
+    } catch (error) {
+      console.error(error);
+      startAttemptRequest();
     }
   };
   const formatDifficulty = (difficulty) => {
@@ -150,13 +168,23 @@ export function AssessmentDetail({ assessment, onReload, setActiveView }) {
         )}
         <div
           className={`flex items-center gap-3 rounded-full px-5 py-2 font-semibold text-sm
-            ${assessment.is_owner || assessment.available_attempts <= 0
+            ${assessment.is_owner || (isLoggedIn && assessment.available_attempts <= 0)
               ? 'bg-gray-300 text-gray-400 cursor-not-allowed'
               : 'bg-[#3DB1FF] text-white cursor-pointer'}`}
-          onClick={() => !assessment.is_owner && assessment.available_attempts > 0 && setShowConfirm(true)}
+          onClick={() => {
+            if (assessment.is_owner) return;
+            if (!isLoggedIn) {
+              setShowAuthModal(true);
+              return;
+            }
+            if (assessment.available_attempts > 0) {
+              setConfirmAttemptsLeft(assessment.available_attempts);
+              setShowConfirm(true);
+            }
+          }}
         >
           <div className="bg-white rounded-full p-1 flex items-center justify-center">
-            <FaArrowRight className={`text-sm ${assessment.is_owner || assessment.available_attempts <= 0 ? 'text-gray-400' : 'text-[#3DB1FF]'}`} />
+            <FaArrowRight className={`text-sm ${assessment.is_owner || (isLoggedIn && assessment.available_attempts <= 0) ? 'text-gray-400' : 'text-[#3DB1FF]'}`} />
           </div>
           START ATTEMPT
         </div>
@@ -184,10 +212,23 @@ export function AssessmentDetail({ assessment, onReload, setActiveView }) {
       )}
       {showConfirm && (
         <ConfirmationModal
-          message={`You're about to use one of your attempts, you only have ${assessment.available_attempts} left, make them count! Ready to go?`}
+          message={`You're about to use one of your attempts, you only have ${confirmAttemptsLeft} left, make them count! Ready to go?`}
           buttonColor="#3DB1FF"
-          onConfirm={() => { setShowConfirm(false); handleStartClick(); }}
+          onConfirm={() => { setShowConfirm(false); startAttemptRequest(); }}
           onCancel={() => setShowConfirm(false)}
+        />
+      )}
+      {showAuthModal && (
+        <AuthRequiredModal
+          onClose={() => setShowAuthModal(false)}
+          onSuccess={handleAuthSuccess}
+        />
+      )}
+      {startAttemptError && (
+        <InfoModal
+          title="Unable to start attempt"
+          context={startAttemptError}
+          onClose={() => setStartAttemptError(null)}
         />
       )}
     </div>

@@ -10,7 +10,7 @@ const getAuthHeaders = () => {
 };
 
 
-export const getAssessment = (assessment_id) => assessmentsApi.get(`assessments/${assessment_id}`, { headers: getAuthHeaders() })
+export const getAssessment = (assessment_id) => assessmentsApi.get(`assessments/${assessment_id}/`, { headers: getAuthHeaders() })
 export const getAllAssessments = () => assessmentsApi.get('assessments/')
 export const filterAssessmentsByName = (name) => assessmentsApi.get(`assessments/?name__icontains=${name}`)
 export const filterAssessments = (params) => {
@@ -35,7 +35,7 @@ export const getFollowedAssessments = (user_id) => assessmentsApi.get(`follow-as
 export const followAssessment = (assessmentId) => {
     return assessmentsApi.post(`follow-assessments/`, { "assessment": assessmentId }, { headers: getAuthHeaders() })
 }
-export const unfollowAssessment = (id) => assessmentsApi.delete(`follow-assessments/${id}`, { headers: getAuthHeaders() })
+export const unfollowAssessment = (id) => assessmentsApi.delete(`follow-assessments/${id}/`, { headers: getAuthHeaders() })
 
 export const getMyDifficultyRating = (assessmentId) =>
   assessmentsApi.get(`assessments-difficulty/my-rating/?assessment=${assessmentId}`, { headers: getAuthHeaders() })

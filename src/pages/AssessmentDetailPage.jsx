@@ -31,6 +31,7 @@ export function AssessmentDetailPage() {
     try {
       const res = await getAssessment(id);
       setAssessment(res.data);
+      return res.data;
     } catch (error) {
       setError(error);
     }

@@ -20,7 +20,7 @@ export const getSpaces = (page, page_size = 20, searchText = '') => {
   });
 };
 
-export const getSpace = (spaceId) => spacesApi.get(`spaces/${spaceId}`, { headers: getAuthHeaders() })
+export const getSpace = (spaceId) => spacesApi.get(`spaces/${spaceId}/`, { headers: getAuthHeaders() })
 export const getActiveSpace = (spaceId) => spacesApi.get(`spaces/${spaceId}/active-space/`, { headers: getAuthHeaders() })
 export const getSpaceBySlug = (spaceSlug) => spacesApi.get(`spaces/find-by-slug/${spaceSlug}/`, { headers: getAuthHeaders() })
 export const getMySpaces = (search) =>
