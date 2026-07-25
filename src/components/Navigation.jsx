@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Avatar, Dropdown } from 'flowbite-react';
 
-import { FaBookmark } from 'react-icons/fa';
+import { FaBookmark, FaFire } from 'react-icons/fa';
 import { HiBellAlert } from "react-icons/hi2";
 import { FaCartFlatbedSuitcase } from "react-icons/fa6";
 import { BiSolidBellRing } from "react-icons/bi";
@@ -195,7 +195,7 @@ export function Navigation() {
               )}
             </span>
           )}>
-            <Dropdown.Item>
+            <Dropdown.Item className='py-1.5'>
               <div className='flex flex-col text-start mb-0 pb-0' onClick={goToSettings} >
                 <div className="font-semibold">{user.first_name}</div>
                 <div className="text-gray-500 pb-1">{user.email}</div>
@@ -203,39 +203,39 @@ export function Navigation() {
               </div>
             </Dropdown.Item>
             <Dropdown.Divider />
-            <Dropdown.Item onClick={() => navigate('/spaces/')}>
+            <Dropdown.Item className='py-1.5' onClick={() => navigate('/spaces/')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
                 <IoPlanetSharp className='me-3' />
                 Spaces
               </span>
             </Dropdown.Item>
             <Dropdown.Divider />
-            <Dropdown.Item onClick={() => openNotificationModal('like')}>
+            <Dropdown.Item className='py-1.5' onClick={() => openNotificationModal('like')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
                 <HiBellAlert className={`me-3 ${user.notifications && user.notifications.total_unread > 0 ? "text-[#3DB1FF]" : ""}`} />
                 My notifications {user.notifications && user.notifications.total_unread > 0 && <span>&nbsp;({user.notifications.total_unread})</span>}
               </span>
             </Dropdown.Item>
-            <Dropdown.Item onClick={() => navigate('/new-stories/')}>
+            <Dropdown.Item className='py-1.5' onClick={() => navigate('/new-stories/')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
                 <BiSolidBellRing className='me-3' />
                 New stories
               </span>
             </Dropdown.Item>
             {user?.is_creator &&
-              <Dropdown.Item onClick={() => navigate('/my-stories/')}>
+              <Dropdown.Item className='py-1.5' onClick={() => navigate('/my-stories/')}>
                 <span className='text-gray-500 flex items-center justify-items-center'>
                   <PiTextAlignJustifyFill className='me-3' />
                   My stories
                 </span>
               </Dropdown.Item>}
-            <Dropdown.Item onClick={openRecallsModal}>
+            <Dropdown.Item className='py-1.5' onClick={openRecallsModal}>
               <span className='text-gray-500 flex items-center justify-items-center'>
                 <FaBookmark className='me-3' />
                 My recalls
               </span>
             </Dropdown.Item>
-            <Dropdown.Item onClick={handleLearningProgramClick}>
+            <Dropdown.Item className='py-1.5' onClick={handleLearningProgramClick}>
               <span className='text-gray-500 flex items-center justify-items-center'>
                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className='text-[#3DB1FF] h-[0.9rem] w-[0.9rem] me-3'>
                   <path d="M25.8519 16.963H21.8193L12.5186 26.2637C12.1128 26.6659 11.6659 27.0244 11.1853 27.3333H25.8519C26.2448 27.3333 26.6217 27.1772 26.8995 26.8994C27.1773 26.6216 27.3334 26.2448 27.3334 25.8518V18.4444C27.3334 18.0515 27.1773 17.6747 26.8995 17.3969C26.6217 17.119 26.2448 16.963 25.8519 16.963Z" fill="currentColor" />
@@ -245,14 +245,20 @@ export function Navigation() {
                 My skills
               </span>
             </Dropdown.Item>
-            <Dropdown.Item onClick={() => navigate('/suitcase/')}>
+            <Dropdown.Item className='py-1.5' onClick={() => navigate('/suitcase/')}>
               <span className='text-gray-500 flex items-center justify-items-center'>
                 <FaCartFlatbedSuitcase className='me-3 text-[#FF822C]' />
                 My suitcase
               </span>
             </Dropdown.Item>
+            <Dropdown.Item className='py-1.5' onClick={() => navigate('/rankings/')}>
+              <span className='text-gray-500 flex items-center justify-items-center'>
+                <FaFire className='me-3 text-[#FF822C]' />
+                Rankings
+              </span>
+            </Dropdown.Item>
             <Dropdown.Divider />
-            <Dropdown.Item onClick={handleLogout} className='text-gray-500'>Logout</Dropdown.Item>
+            <Dropdown.Item className='py-1.5 text-gray-500' onClick={handleLogout}>Logout</Dropdown.Item>
           </Dropdown>
           ) : (
             <div className="flex space-x-4">

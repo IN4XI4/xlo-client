@@ -13,6 +13,15 @@ npm run preview    # preview production build
 
 No test suite is configured.
 
+## Working with Claude Code in this repo
+
+Focus is on modifying code correctly, not on running/verifying it. Specifically:
+
+- Don't start `npm run dev` (or any dev/preview server) to poke at it with `curl` or similar just to "confirm it compiles." Static checks are enough: read the diff back and run `npx eslint <touched files>`.
+- Don't run Docker commands against this project.
+- Don't run git commands beyond what's explicitly asked (no `git stash`, no commits/branches/pushes) unless the user requests it.
+- The user runs the dev server and tests changes in the browser themselves — hand off to them for functional/visual verification instead of trying to do it yourself.
+
 ## Stack
 
 - **React 18** + **Vite** (ESM, no CJS)

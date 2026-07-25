@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { filterAssessments } from "../../api/assessments.api";
 import { AssessmentCard } from "./AssessmentCard";
@@ -7,20 +7,19 @@ import { AssessmentCard } from "./AssessmentCard";
 export function AssessmentsList({ filters }) {
   const [assessments, setAssessments] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const pageRef = useRef(1);
 
   useEffect(() => {
+    const controller = new AbortController();
+    pageRef.current = 1;
     setAssessments([]);
-    setCurrentPage(1);
     setHasMore(true);
+    loadAssessments(1, true, controller.signal);
+    return () => controller.abort();
   }, [filters]);
 
-  useEffect(() => {
-    loadAssessments();
-  }, [currentPage, filters]);
-
-  async function loadAssessments() {
+  async function loadAssessments(page, replace, signal) {
     try {
       const topicIds = filters.topics ? Object.keys(filters.topics) : [];
       const languageCodes = filters.languages ? Object.keys(filters.languages) : [];
@@ -29,22 +28,22 @@ export function AssessmentsList({ filters }) {
         ...(topicIds.length && { topic: topicIds.join(',') }),
         ...(languageCodes.length && { languages: languageCodes }),
         ...(filters.ordering && { ordering: filters.ordering }),
-        page: currentPage
+        page
       };
-      const res = await filterAssessments(params);
+      const res = await filterAssessments(params, signal);
       setTotalCount(res.data.count || 0);
-      if (currentPage === 1) {
-        setAssessments(res.data.results);
-      } else {
-        setAssessments([...assessments].concat(res.data.results));
-      }      
-      if (!res.data.next) {
-        setHasMore(false);
-      }
+      setAssessments(prev => replace ? res.data.results : [...prev, ...res.data.results]);
+      setHasMore(Boolean(res.data.next));
     } catch (error) {
+      if (error.code === 'ERR_CANCELED') return;
       console.error('Failed to load assessments:', error);
     }
   }
+
+  const loadMore = () => {
+    pageRef.current += 1;
+    loadAssessments(pageRef.current, false);
+  };
 
   const generateFilterSummary = () => {
     const filterEntries = [
@@ -80,7 +79,7 @@ export function AssessmentsList({ filters }) {
       <InfiniteScroll
         dataLength={assessments.length}
         scrollThreshold="95%"
-        next={() => setCurrentPage(prevPage => prevPage + 1)}
+        next={loadMore}
         hasMore={hasMore}
         loader={<h4>Loading...</h4>}
         endMessage={

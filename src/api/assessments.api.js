@@ -13,7 +13,7 @@ const getAuthHeaders = () => {
 export const getAssessment = (assessment_id) => assessmentsApi.get(`assessments/${assessment_id}/`, { headers: getAuthHeaders() })
 export const getAllAssessments = () => assessmentsApi.get('assessments/')
 export const filterAssessmentsByName = (name) => assessmentsApi.get(`assessments/?name__icontains=${name}`)
-export const filterAssessments = (params) => {
+export const filterAssessments = (params, signal) => {
     const queryParameters = {
         ...(params.name && { 'name__icontains': params.name }),
         ...(params.topic && { 'topic__in': Array.isArray(params.topic) ? params.topic.join(',') : params.topic }),
@@ -29,7 +29,7 @@ export const filterAssessments = (params) => {
     const queryString = new URLSearchParams(queryParameters).toString();
     const url = `assessments/?${queryString}`;
 
-    return assessmentsApi.get(url);
+    return assessmentsApi.get(url, { signal });
 };
 export const getFollowedAssessments = (user_id) => assessmentsApi.get(`follow-assessments/?follower=${user_id}`, { headers: getAuthHeaders() })
 export const followAssessment = (assessmentId) => {
