@@ -22,6 +22,9 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: {
+        navigateFallbackDenylist: [/^\/sitemap\.xml$/, /^\/robots\.txt$/, /^\/manifest\.json$/],
+      },
       manifest: {
         name: 'Mixelo PWA',
         short_name: 'Mixelo',
