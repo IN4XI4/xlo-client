@@ -50,6 +50,8 @@ export function AttemptResults({ attempt, results }) {
 
   const canRetry = attempt.available_attempts > 0;
 
+  const formattedScore = typeof score === 'number' ? Number(score.toFixed(2)) : score;
+
   const handleTryAgain = async () => {
     try {
       const res = await startAttempt({ assessment: attempt.assessment });
@@ -76,7 +78,7 @@ export function AttemptResults({ attempt, results }) {
         <div className="bg-white rounded-2xl p-4">
           <div className="flex flex-col lg:flex-row gap-4 pb-4">
             <div className="bg-blue-50 py-3 rounded-xl lg:w-36 lg:flex-shrink-0 flex flex-col items-center justify-center">
-              <div className="text-5xl font-bold text-[#3DB1FF]">{score}</div>
+              <div className="text-4xl font-bold text-[#3DB1FF]">{formattedScore}</div>
               <div className="text-xs text-[#3DB1FF] text-center">Your total score</div>
             </div>
             <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-x-8">
