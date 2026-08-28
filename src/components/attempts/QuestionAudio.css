@@ -1,0 +1,51 @@
+.question-audio .rhap_container {
+  padding: 8px 12px;
+  box-shadow: none;
+  background-color: #fff;
+  border-radius: 0.75rem;
+  border: 1px solid #3db1ff;
+}
+
+.question-audio .rhap_additional-controls {
+  display: none;
+}
+
+.question-audio .rhap_time {
+  color: #3db1ff;
+  font-size: 0.75rem;
+}
+
+.question-audio .rhap_main-controls-button {
+  color: #3db1ff;
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 1.75rem;
+}
+
+.question-audio .rhap_play-pause-button {
+  width: 2rem;
+  height: 2rem;
+  font-size: 2rem;
+}
+
+.question-audio .rhap_progress-filled,
+.question-audio .rhap_progress-indicator,
+.question-audio .rhap_volume-indicator {
+  background-color: #3db1ff;
+}
+
+.question-audio .rhap_progress-indicator {
+  width: 0.875rem;
+  height: 0.875rem;
+  top: -6px;
+  margin-left: -7px;
+}
+
+.question-audio .rhap_volume-controls {
+  flex: 1 1 auto;
+  padding-right: 4px;
+}
+
+.question-audio .rhap_volume-container {
+  flex: 1 1 auto;
+}
