@@ -4,10 +4,12 @@ import ReactGA from 'react-ga4';
 import { finalizeAttempt, getAttempt } from '../api/attempts.api';
 import QuestionsList from '../components/attempts/QuestionsList';
 import { AttemptResults } from '../components/attempts/AttemptResults';
+import { useAppState } from '../context/ScrollContext';
 
 
 export function AttemptPage() {
   const { id } = useParams();
+  const { refreshNavigation } = useAppState();
   const [attempt, setAttempt] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [showResults, setShowResults] = useState(false);
@@ -93,6 +95,7 @@ export function AttemptPage() {
       setAttempt(prev => ({ ...prev, ...res.data }));
       setShowResults(true);
       localStorage.removeItem('attempt_session');
+      refreshNavigation();
     } catch (err) {
       console.error(err);
       if (retryCount < 1) {
