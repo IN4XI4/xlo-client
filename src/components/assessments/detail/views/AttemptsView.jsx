@@ -19,7 +19,7 @@ function formatDate(startTime) {
 function AttemptSummaryRow({ attempt }) {
   const duration = formatDuration(attempt.duration_seconds);
   const date = formatDate(attempt.start_time);
-  const score = typeof attempt.score === 'number' ? attempt.score.toFixed(2) : '—';
+  const score = typeof attempt.score === 'number' ? `${attempt.score.toFixed(2)} / 100.00` : '—';
 
   return (
     <div className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2">
