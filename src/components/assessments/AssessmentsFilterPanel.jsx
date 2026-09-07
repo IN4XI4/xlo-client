@@ -33,7 +33,6 @@ export function FilterPanel({ onNameFilterChange, onToggleTopic, onToggleLanguag
   const [expandedCategories, setExpandedCategories] = useState({});
   const [inputValue, setInputValue] = useState('');
   const [orderOpen, setOrderOpen] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState('popularity');
   const [languageOpen, setLanguageOpen] = useState(false);
   const [topicOpen, setTopicOpen] = useState(false);
   const navigate = useNavigate();
@@ -81,8 +80,12 @@ export function FilterPanel({ onNameFilterChange, onToggleTopic, onToggleLanguag
     []
   );
 
+  const selectedOrder = useMemo(
+    () => Object.keys(orderByMapping).find(key => orderByMapping[key] === filters.ordering) ?? 'popularity',
+    [orderByMapping, filters.ordering]
+  );
+
   const handleOrderByChange = (value) => {
-    setSelectedOrder(value);
     onToggleOrderBy(orderByMapping[value]);
     setOrderOpen(false);
   };
@@ -139,10 +142,11 @@ export function FilterPanel({ onNameFilterChange, onToggleTopic, onToggleLanguag
           <input
             type="text"
             id="search-input"
+            autoComplete="off"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Search by name"
-            className="flex-1 outline-none focus:outline-none focus:ring-0 px-2 bg-transparent border-0"
+            className="flex-1 outline-none focus:outline-none focus:ring-0 px-2 bg-transparent border-0 autofill:shadow-[inset_0_0_0_1000px_white] autofill:[-webkit-text-fill-color:#374151]"
           />
         </div>
         <div className='text-xl border-b pb-1 flex items-center gap-2 mb-3'>

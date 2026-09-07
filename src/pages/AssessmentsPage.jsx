@@ -20,7 +20,7 @@ export function AssessmentsPage() {
     languages: Object.fromEntries(
       searchParams.getAll('lang').map(code => [code, getLangLabel(code)])
     ),
-    ordering: searchParams.get('ordering') ?? undefined,
+    ordering: searchParams.get('ordering') ?? '-attempts_count',
   }), [searchParams, topicNames]);
 
   const handleNameFilterChange = (name) => {
@@ -62,6 +62,16 @@ export function AssessmentsPage() {
     });
   };
 
+  const handleClearFilters = () => {
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      next.delete('name');
+      next.delete('topic');
+      next.delete('lang');
+      return next;
+    });
+  };
+
   const handleToggleOrderBy = (orderByValue) => {
     setSearchParams(prev => {
       const next = new URLSearchParams(prev);
@@ -99,7 +109,13 @@ export function AssessmentsPage() {
       />
       <AssessmentsFilterBar {...filterProps} />
       <AssessmentsFilterCol {...filterProps} />
-      <AssessmentsList filters={filters} />
+      <AssessmentsList
+        filters={filters}
+        onNameFilterChange={handleNameFilterChange}
+        onToggleTopic={handleToggleTopic}
+        onToggleLanguage={handleToggleLanguage}
+        onClearFilters={handleClearFilters}
+      />
     </div>
   );
 }
