@@ -13,6 +13,8 @@ export function FactForm({ cardIndex, blockIndex, register, errors, globalMentor
 
   const name = `cards.${cardIndex}.blocks.${blockIndex}.content`;
   const reg = register(name, { required: "Content is required" });
+  const name2 = `cards.${cardIndex}.blocks.${blockIndex}.content_2`;
+  const reg2 = register(name2, { required: false });
   const autosize = (el) => {
     if (!el) return;
     el.style.height = "auto";
@@ -77,6 +79,25 @@ export function FactForm({ cardIndex, blockIndex, register, errors, globalMentor
           onClick={() => handleButtonClick("OPINION")}>
           OPINION <span className="ps-2"><RiQuestionnaireFill /></span>
         </div>
+      </div>
+      <div className='border-t-2 pt-3 mb-3' style={{ borderColor: color }}>
+        <div className='text-sm font-semibold underline'>Explanation</div>
+        <textarea
+          id="content_2"
+          placeholder="Add an optional explanation (markdown supported)"
+          {...reg2}
+          ref={(el) => {
+            reg2.ref(el);
+            if (!el) return;
+            requestAnimationFrame(() => autosize(el));
+          }}
+          className="w-full bg-transparent border-none focus:outline-none focus:ring-0 focus:shadow-none px-0 py-1 text-sm"
+          rows={2}
+          onInput={(e) => {
+            e.target.style.height = "auto";
+            e.target.style.height = `${e.target.scrollHeight}px`;
+          }}
+        />
       </div>
       {showTypeSelector &&
         <div className='text-gray-500 pb-1 border-t-2 border-gray-200'>
