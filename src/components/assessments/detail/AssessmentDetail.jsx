@@ -5,7 +5,8 @@ import { Tooltip, Alert } from 'flowbite-react';
 import { HiInformationCircle } from 'react-icons/hi';
 import ReactGA from 'react-ga4';
 import { startAttempt } from '../../../api/attempts.api';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { assessmentUrl } from '../../../utils/slugify';
 import { followAssessment, unfollowAssessment } from '../../../api/assessments.api';
 import { ConfirmationModal } from '../../modals/ConfirmationModal';
 import { AuthRequiredModal } from '../../modals/auth/AuthRequiredModal';
@@ -54,6 +55,39 @@ function DescriptionSection({ description }) {
     </div>
   );
 }
+
+function PrerequisiteMessage({ assessment }) {
+  const nameClass = "truncate max-w-[25ch]";
+  return (
+    <div className="flex items-center gap-1 min-w-0">
+      <span className="whitespace-nowrap">Prerequisite not met: pass</span>
+      {assessment.prerequisite
+        ? <Link to={assessmentUrl({ id: assessment.prerequisite, name: assessment.prerequisite_name })}
+          className={`${nameClass} text-[#3DB1FF] hover:underline`}
+          title={assessment.prerequisite_name}>
+          {assessment.prerequisite_name}
+        </Link>
+        : <span className={nameClass}>{assessment.prerequisite_name}</span>}
+      <span className="whitespace-nowrap">first.</span>
+    </div>
+  );
+}
+
+// Ordered by priority: the first blocker that applies is the one shown to the user.
+const START_BLOCKERS = [
+  {
+    applies: ({ assessment }) => assessment.is_owner,
+    message: () => "You can't take your own assessment.",
+  },
+  {
+    applies: ({ assessment, isLoggedIn }) => isLoggedIn && !assessment.prerequisite_met,
+    message: ({ assessment }) => <PrerequisiteMessage assessment={assessment} />,
+  },
+  {
+    applies: ({ assessment, isLoggedIn }) => isLoggedIn && assessment.available_attempts <= 0,
+    message: () => 'No attempts left.',
+  },
+];
 
 export function AssessmentDetail({ assessment, onReload, setActiveView }) {
   const navigate = useNavigate();
@@ -110,7 +144,7 @@ export function AssessmentDetail({ assessment, onReload, setActiveView }) {
     refreshNavigation();
     try {
       const fresh = await onReload();
-      if (!fresh.is_owner && fresh.available_attempts > 0) {
+      if (!fresh.is_owner && fresh.prerequisite_met && fresh.available_attempts > 0) {
         setConfirmAttemptsLeft(fresh.available_attempts);
         setShowConfirm(true);
       }
@@ -132,6 +166,11 @@ export function AssessmentDetail({ assessment, onReload, setActiveView }) {
       return 'text-red-600';
     }
   }
+
+  const blockerContext = { assessment, isLoggedIn };
+  const startBlocker = START_BLOCKERS.find(blocker => blocker.applies(blockerContext));
+  const isStartBlocked = !!startBlocker;
+
   return (
     <div className="bg-white rounded-xl p-4">
       {ratingSuccess && (
@@ -168,7 +207,7 @@ export function AssessmentDetail({ assessment, onReload, setActiveView }) {
         )}
         <div
           className={`flex items-center gap-3 rounded-full px-5 py-2 font-semibold text-sm
-            ${assessment.is_owner || (isLoggedIn && assessment.available_attempts <= 0)
+            ${isStartBlocked
               ? 'bg-gray-300 text-gray-400 cursor-not-allowed'
               : 'bg-[#3DB1FF] text-white cursor-pointer'}`}
           onClick={() => {
@@ -177,18 +216,22 @@ export function AssessmentDetail({ assessment, onReload, setActiveView }) {
               setShowAuthModal(true);
               return;
             }
-            if (assessment.available_attempts > 0) {
-              setConfirmAttemptsLeft(assessment.available_attempts);
-              setShowConfirm(true);
-            }
+            if (isStartBlocked) return;
+            setConfirmAttemptsLeft(assessment.available_attempts);
+            setShowConfirm(true);
           }}
         >
           <div className="bg-white rounded-full p-1 flex items-center justify-center">
-            <FaArrowRight className={`text-sm ${assessment.is_owner || (isLoggedIn && assessment.available_attempts <= 0) ? 'text-gray-400' : 'text-[#3DB1FF]'}`} />
+            <FaArrowRight className={`text-sm ${isStartBlocked ? 'text-gray-400' : 'text-[#3DB1FF]'}`} />
           </div>
           START ATTEMPT
         </div>
       </div>
+      {startBlocker && (
+        <div className="flex lg:justify-end mt-1 text-xs text-gray-500">
+          {startBlocker.message(blockerContext)}
+        </div>
+      )}
       <CreatorSettings assessment={assessment} setActiveView={setActiveView} />
       <DescriptionSection description={assessment.description} />
       <CommunityReview
