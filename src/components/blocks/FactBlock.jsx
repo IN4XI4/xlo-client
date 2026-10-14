@@ -5,7 +5,7 @@ import { ImageContainer } from "./ImageContainer";
 import { RiQuestionnaireFill } from "react-icons/ri";
 
 
-const FactContent = ({ color, children, additionalClass, image, contentClass }) => {
+const FactContent = ({ color, children, additionalClass, image, contentClass, content2 }) => {
   const [response, setResponse] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
 
@@ -40,13 +40,19 @@ const FactContent = ({ color, children, additionalClass, image, contentClass }) 
           </div>
         )}
       </div>
+      {isAnswered && content2 && (
+        <div className="mt-3 border-t-2 pt-3" style={{ borderColor: color || "#3DB1FF" }}>
+          <div className="font-semibold underline text-sm md:text-base">Explanation</div>
+          <MarkdownRenderer content={content2} />
+        </div>
+      )}
     </div>
   )
 };
 
 
 export function FactBlock({ content, image, color, user_has_liked, user_has_recalled, onLikeClick, isAuthenticated, block_id,
-  onRecallUpdate, contentClass, isPreview = false, isRecall = false }) {
+  onRecallUpdate, contentClass, content2 = null, isPreview = false, isRecall = false }) {
   const hasLiked = user_has_liked !== false;
 
   return (
@@ -58,6 +64,7 @@ export function FactBlock({ content, image, color, user_has_liked, user_has_reca
         onLikeClick={onLikeClick}
         isAuthenticated={isAuthenticated}
         contentClass={contentClass}
+        content2={content2}
         block_id={block_id}
         image={image}
         isPreview={isPreview}

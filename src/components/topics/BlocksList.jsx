@@ -66,7 +66,7 @@ function getBlockComponent(block, card, handleLikeClick, isAuthenticated, onReca
     case 'multichoice':
       return <MultiChoiceQuestionBlock {...commonProps} blockOptions={block.options} color={card.soft_skill_color}/>;
     case 'fact':
-      return <FactBlock {...commonProps} contentClass={block.content_class} color={card.soft_skill_color}/>;
+      return <FactBlock {...commonProps} contentClass={block.content_class} color={card.soft_skill_color} content2={block.content_2}/>;
     case 'flashcard':
       return <FlashcardBlock {...commonProps} color={card.soft_skill_color} content2={block.content_2} image2={block.image_2}/>;
     case 'reflection':

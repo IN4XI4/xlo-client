@@ -31,12 +31,12 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://mixelo.io/assessments/22-python-basics-concepts-tools</loc>
+    <loc>https://mixelo.io/assessments/22-python-basics-quiz-concepts-tools</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://mixelo.io/assessments/23-python-basics-2-concepts-tools</loc>
+    <loc>https://mixelo.io/assessments/23-python-basics-quiz-2-concepts-tools</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -96,12 +96,12 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://mixelo.io/assessments/35-mixelo-continium-saison-1-lpreuve-des-cinq-traces</loc>
+    <loc>https://mixelo.io/assessments/35-lpreuve-des-cinq-traces-continium-saison-1</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://mixelo.io/assessments/36-python-basics-3-list-methods</loc>
+    <loc>https://mixelo.io/assessments/36-python-basics-quiz-3-list-methods</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -151,7 +151,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://mixelo.io/assessments/46-english-a2-vocabulary-everyday-words-meanings</loc>
+    <loc>https://mixelo.io/assessments/46-english-a2-vocabulary-quiz-everyday-words-meanings</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -167,6 +167,161 @@
   </url>
   <url>
     <loc>https://mixelo.io/assessments/49-javascript-fundamentals-conditionals-and-loops-3</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/50-python-basics-quiz-4-modules-and-methods</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/51-python-basics-quiz-5-modules-and-methods</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/52-python-oop-1-classes-methods-and-objects</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/53-python-oop-2-classes-methods-and-objects</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/54-python-oop-3-classes-methods-and-objects</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/55-english-b1-level-grammar-essentials-1</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/56-english-b1-level-grammar-essentials-2</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/57-english-b1-level-grammar-essentials-3</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/58-english-b1-level-mixed-grammar-reading-usage-review</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/59-english-b1-level-vocabulary-everyday-communication</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/60-javascript-fundamentals-functions</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/61-javascript-fundamentals-exceptions-and-errors-1</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/62-javascript-fundamentals-exceptions-and-errors-2</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/63-javascript-fundamentals-i-first-level-assessment</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/64-javascript-fundamentals-ii-first-level-assessment</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/65-python-fundamentals-second-level-assessment-i</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/66-python-fundamentals-second-level-assessment-ii</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/67-english-a1-quiz-objects-animals-everyday-life-part-1</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/68-english-a1-quiz-objects-animals-everyday-life-part-2</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/69-lpreuve-des-voix-et-des-repres-continium-saison-2</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/70-ciencias-naturales-quiz-nivel-1-seres-vivos-cuerpo-humano-y-tierra</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/71-ciencias-naturales-quiz-nivel-2-parte-1-vida-y-ecosistemas</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/72-ciencias-naturales-quiz-nivel-2-parte-2-tierra-espacio-y-mtodo-cientfico</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/73-ciencias-naturales-quiz-nivel-3-parte-1-biologa-animal-y-vegetal</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/74-ciencias-naturales-quiz-nivel-3-parte-2-tierra-y-espacio</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/75-ciencias-naturales-quiz-nivel-3-parte-3-biologa-celular-y-cuerpo-humano</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/76-ciencias-naturales-quiz-nivel-3-parte-4-medio-ambiente-y-mtodo-cientfico</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/77-ciencias-naturales-quiz-nivel-4-parte-1-tierra-y-medio-ambiente</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/78-ciencias-naturales-quiz-nivel-4-parte-2-animales-plantas-y-evolucin</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/79-ciencias-naturales-quiz-nivel-4-parte-3-clulas-cuerpo-humano-y-mtodo-cientfico</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/assessments/80-aux-origines-de-lagriculture-continium-saison-3</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -767,6 +922,46 @@
   </url>
   <url>
     <loc>https://mixelo.io/story/la-voix-qui-prenait-toute-la-place</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/story/la-plume-qui-changeait-les-mots</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/story/la-porte-du-nom-retrouve</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/story/la-graine-oubliee</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/story/le-panier-qui-ne-suffisait-plus</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/story/les-graines-que-mira-choisissait-s3-c3</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/story/le-grenier-des-saisons-s3-c4</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/story/le-premier-village-s3-c5</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://mixelo.io/story/leau-qui-dessinait-les-champs-s3-c6</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

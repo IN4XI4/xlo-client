@@ -5,7 +5,8 @@ import flagDE from '../../../assets/flags/de.svg';
 import flagIT from '../../../assets/flags/it.svg';
 import flagPT from '../../../assets/flags/pt.svg';
 import { FaGlobe, FaUser } from 'react-icons/fa';
-import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { assessmentUrl } from '../../../utils/slugify';
 import { CreatorIcon } from '../../illustrations/icons/CreatorIcon';
 import { LanguageIcon } from '../../illustrations/icons/LanguageIcon';
 import { AllowedAttemptsIcon } from '../../illustrations/icons/AllowedAttemptsIcon';
@@ -23,7 +24,6 @@ import { TimeDurationIcon } from '../../illustrations/icons/TimeDurationIcon';
 const FLAG_MAP = { EN: flagEN, ES: flagES, FR: flagFR, DE: flagDE, IT: flagIT, PT: flagPT };
 
 export function CreatorSettings({ assessment, setActiveView }) {
-  const [showRequirements, setShowRequirements] = useState(false);
   const pill = "bg-[#E6E2FF] text-[#846EFF] rounded-full px-2 py-0.5 text-sm font-medium w-fit";
   const plain = "text-[#846EFF] text-sm font-medium";
   const label = "text-gray-500 text-sm flex items-center gap-1.5";
@@ -115,12 +115,13 @@ export function CreatorSettings({ assessment, setActiveView }) {
         </div>
         <div>
           <div className={row}>
-            <div className={label}><RequirementIcon color="#6B7280" className={icon} />Minimum requirements</div>
-            {assessment.minimum_requirements
-              ? <div className={`${plain} flex items-center gap-1 cursor-pointer`} onClick={() => setShowRequirements(true)}>
+            <div className={label}><RequirementIcon color="#6B7280" className={icon} />Prerequisite</div>
+            {assessment.prerequisite
+              ? <Link to={assessmentUrl({ id: assessment.prerequisite, name: assessment.prerequisite_name })}
+                className={`${plain} flex items-center gap-1 hover:underline`}>
                 <RequirementIcon color="#846EFF" className={icon} />
-                See info
-              </div>
+                <span className="truncate">{assessment.prerequisite_name}</span>
+              </Link>
               : <div className={`${plain} flex items-center gap-1`}>
                 <RequirementIcon color="#846EFF" className={icon} />
                 —
@@ -142,19 +143,6 @@ export function CreatorSettings({ assessment, setActiveView }) {
           </div>
         </div>
       </div>
-      {showRequirements && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-40" onClick={() => setShowRequirements(false)}>
-          <div className="bg-white rounded-xl p-6 w-[90%] max-w-md shadow-lg" onClick={e => e.stopPropagation()}>
-            <div className="font-semibold text-gray-700 mb-3">Minimum requirements</div>
-            <div className="text-gray-500 text-sm">{assessment.minimum_requirements}</div>
-            <div className="flex justify-end mt-4">
-              <div className="bg-gray-200 text-gray-500 px-4 py-2 rounded-xl text-sm cursor-pointer" onClick={() => setShowRequirements(false)}>
-                Close
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
