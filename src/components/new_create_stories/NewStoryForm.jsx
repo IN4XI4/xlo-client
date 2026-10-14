@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom';
 import { HiMiniTrash } from 'react-icons/hi2';
 
 import { StoryOptions } from './StoryOptions'
+import { StoryTopicSelector } from './StoryTopicSelector';
 import { CardEditor } from './CardEditor';
 import { ConfirmationModal } from '../modals/ConfirmationModal';
 import { deleteStory } from '../../api/blog.api';
@@ -16,8 +18,11 @@ export function NewStoryForm({
   isCreator = false,
   submitMessage,
   isSubmitError,
-  storyId = null
+  storyId = null,
+  withTopicSelector = false,
+  isSubmitting = false
 }) {
+  const navigate = useNavigate();
   const [formKey, setFormKey] = useState(0);
   const [imagePreviews, setImagePreviews] = useState({});
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
@@ -47,6 +52,7 @@ export function NewStoryForm({
       free_access: false,
       globalSoftSkill: '',
       globalMentor: '',
+      ...(withTopicSelector && { topic: '' }),
       cards: [{
         id: null,
         cardTitle: '',
@@ -65,7 +71,7 @@ export function NewStoryForm({
         }]
       }]
     };
-  }, [initialData]);
+  }, [initialData, withTopicSelector]);
 
   const { control, register, handleSubmit, formState: { errors }, getValues, setValue, trigger, unregister } = useForm({
     defaultValues,
@@ -108,6 +114,7 @@ export function NewStoryForm({
   const handleDeleteStory = async () => {
     setValue('title', '');
     setValue('subtitle', '');
+    if (withTopicSelector) setValue('topic', '');
     setValue('cards', [{
       cardTitle: '',
       selectedSoftSkill: '',
@@ -157,6 +164,7 @@ export function NewStoryForm({
         STORY {initialData ? "EDITION" : "CREATION"} MODULE
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className='py-6 mb-4' key={formKey}>
+        {withTopicSelector && <StoryTopicSelector control={control} errors={errors} setValue={setValue} />}
         <StoryOptions initialData={initialData} control={control} errors={errors} setValue={setValue} userLevel={userLevel} isCreator={isCreator}
           onSoftSkillSelected={setSelectedSoftSkill} onMentorSelected={setSelectedMentor} />
         <CardEditor
@@ -180,8 +188,9 @@ export function NewStoryForm({
               className='bg-[#FD4E3F] p-3 rounded-full text-white flex items-center me-3'>
               <HiMiniTrash />
             </button>
-            <button type="submit" className='bg-[#3DB1FF] px-3 md:px-6 md:py-2 rounded-full text-white flex items-center'>
-              SUBMIT STORY
+            <button type="submit" disabled={isSubmitting}
+              className='bg-[#3DB1FF] px-3 md:px-6 md:py-2 rounded-full text-white flex items-center disabled:opacity-60'>
+              {isSubmitting ? 'SUBMITTING...' : 'SUBMIT STORY'}
             </button>
           </div>
           {submitMessage && (

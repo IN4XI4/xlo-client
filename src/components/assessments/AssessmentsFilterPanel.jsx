@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { FaSearch, FaFire, FaChevronDown, FaChevronRight, FaGlobe } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import SortIcon from '../../assets/assessments/Sort.svg';
@@ -13,7 +13,6 @@ import flagFR from '../../assets/flags/fr.svg';
 import flagDE from '../../assets/flags/de.svg';
 import flagIT from '../../assets/flags/it.svg';
 import flagPT from '../../assets/flags/pt.svg';
-import { getTopicTags, getTopicsByCategory } from '../../api/base.api';
 import { ASSESSMENT_LANGUAGES } from '../../globals';
 
 const FLAG_MAP = { EN: flagEN, ES: flagES, FR: flagFR, DE: flagDE, IT: flagIT, PT: flagPT };
@@ -27,9 +26,7 @@ const ORDER_OPTIONS = [
   { value: 'least_difficult', label: 'Least Difficult' },
 ];
 
-export function FilterPanel({ onNameFilterChange, onToggleTopic, onToggleLanguage, onToggleOrderBy, filters }) {
-  const [categories, setCategories] = useState([]);
-  const [topics, setTopics] = useState({});
+export function FilterPanel({ onNameFilterChange, onToggleTopic, onToggleLanguage, onToggleOrderBy, filters, categories }) {
   const [expandedCategories, setExpandedCategories] = useState({});
   const [inputValue, setInputValue] = useState('');
   const [orderOpen, setOrderOpen] = useState(false);
@@ -37,37 +34,9 @@ export function FilterPanel({ onNameFilterChange, onToggleTopic, onToggleLanguag
   const [topicOpen, setTopicOpen] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    loadCategories();
-  }, []);
-
-  async function loadCategories() {
-    try {
-      const res = await getTopicTags();
-      setCategories(res.data.results);
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-    }
-  }
-
-  async function toggleCategoryExpansion(categoryId) {
-    setExpandedCategories(prev => {
-      const isExpanded = !prev[categoryId];
-      if (isExpanded && !topics[categoryId]) {
-        loadTopics(categoryId);
-      }
-      return { ...prev, [categoryId]: isExpanded };
-    });
-  }
-
-  async function loadTopics(categoryId) {
-    try {
-      const res = await getTopicsByCategory(categoryId);
-      setTopics(prev => ({ ...prev, [categoryId]: res.data.results }));
-    } catch (error) {
-      console.error('Error fetching topics:', error);
-    }
-  }
+  const toggleCategoryExpansion = (categoryId) => {
+    setExpandedCategories(prev => ({ ...prev, [categoryId]: !prev[categoryId] }));
+  };
 
   const orderByMapping = useMemo(
     () => ({
@@ -194,9 +163,9 @@ export function FilterPanel({ onNameFilterChange, onToggleTopic, onToggleLanguag
                   {expandedCategories[category.id] ? <FaChevronDown /> : <FaChevronRight />}
                 </div>
               </div>
-              {expandedCategories[category.id] && topics[category.id] && (
+              {expandedCategories[category.id] && (
                 <div className="ml-4">
-                  {topics[category.id].map(topic => (
+                  {category.topics.map(topic => (
                     <div key={topic.id} className="flex items-center mb-1">
                       <div
                         className="flex w-full items-center cursor-pointer"

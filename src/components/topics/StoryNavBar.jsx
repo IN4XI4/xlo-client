@@ -7,7 +7,7 @@ import { HiArrowNarrowLeft, HiArrowNarrowRight } from "react-icons/hi";
 import { CgArrowTopLeft } from "react-icons/cg";
 
 
-export function StoryNavBar({ topicSlug, goToPreviousCard, goToNextCard, user_has_recalled, recall_level, recall_id, card_id, onUpdateRecall, isAuthenticated, previousStorySlug, nextStorySlug }) {
+export function StoryNavBar({ topicId,goToPreviousCard, goToNextCard, user_has_recalled, recall_level, recall_id, card_id, onUpdateRecall, isAuthenticated, previousStorySlug, nextStorySlug }) {
   const [userHasRecalled, setUserHasRecalled] = useState(user_has_recalled);
   const [selectedRecallLevel, setSelectedRecallLevel] = useState(recall_level);
   const [recallId, setRecallId] = useState(recall_id);
@@ -137,7 +137,7 @@ export function StoryNavBar({ topicSlug, goToPreviousCard, goToNextCard, user_ha
           onClick={goToPreviousCard}>
           <HiArrowNarrowLeft className='text-lg md:text-xl' />
         </div>
-        <Link to={`/topic/${topicSlug}`} className=''>
+        <Link to={topicId ? `/stories?topic=${topicId}` : '/stories'} className=''>
           <div className='p-1 md:p-2 text-gray-500 bg-gray-200 border rounded-full me-4 md:me-6'>
             <CgArrowTopLeft className='text-xl' />
           </div>

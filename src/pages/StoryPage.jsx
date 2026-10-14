@@ -248,7 +248,7 @@ export function StoryPage() {
       )}
       {isCardsLoaded && cards.length > 0 && (
         <StoryNavBar
-          topicSlug={story.topic_slug}
+          topicId={story.topic}
           goToPreviousCard={goToPreviousCard}
           goToNextCard={goToNextCard}
           previousStorySlug={story.previous_story_slug}

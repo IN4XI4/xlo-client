@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Alert } from 'flowbite-react';
 import { HiInformationCircle } from 'react-icons/hi2';
 
-import { TopicsSelect } from '../components/homepage/TopicsSelect';
+import { TopicsTileV2 } from '../components/homepage/TopicsTileV2';
 import { AtGlanceTile } from '../components/homepage/AtGlanceTile';
 import { MyActivitiesTile } from '../components/homepage/MyActivitiesTile';
 import { MyFavoriteStoriesTile } from '../components/homepage/MyFavoriteStoriesTile';
@@ -13,6 +13,7 @@ import { MyAvatarTile } from '../components/homepage/MyAvatarTile';
 import { MySpacesTile } from '../components/homepage/MySpacesTile';
 import { MyAssessmentsTile } from '../components/homepage/MyAssessmentsTile';
 import { useSpace } from '../context/SpaceContext';
+import { SEO } from '../components/SEO';
 
 
 export function HomePage() {
@@ -38,6 +39,10 @@ export function HomePage() {
 
   return (
     <div className="pt-24 md:pt-24 px-4 md:px-12 lg:px-24 xl:px-28 3xl:px-32">
+      <SEO
+        title="Learn with Stories, Quizzes & Tests"
+        description="Mixelo is a learning platform where you explore stories and take online quizzes, tests and assessments to grow your knowledge."
+      />
       <div>
         {showAlert && (
           <Alert
@@ -56,7 +61,7 @@ export function HomePage() {
         )}
         <div className='flex flex-col lg:flex-row items-start'>
           <div className='w-full lg:w-[55%] lg:pe-1'>
-            <TopicsSelect isAuthenticated={isAuthenticated} activeSpace={activeSpace} key={`topics-${activeSpace?.id || "none"}`} />
+            <TopicsTileV2 isAuthenticated={isAuthenticated} activeSpace={activeSpace} key={`topics-${activeSpace?.id || "none"}`} />
             {isAuthenticated && <div className="py-3">
               <AtGlanceTile isAuthenticated={isAuthenticated} activeSpace={activeSpace} key={`topics-${activeSpace?.id || "none"}`} />
             </div>}

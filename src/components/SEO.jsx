@@ -5,11 +5,14 @@ const CANONICAL_ORIGIN = 'https://mixelo.io';
 const DEFAULT_DESCRIPTION = 'Mixelo is a learning platform where you explore stories, complete assessments, and grow through knowledge. Join and start learning today.';
 const DEFAULT_IMAGE = '/icons/icon-512x512.png';
 
-export function SEO({ title, description, image, type = 'website' }) {
+// canonicalPath: optional path (may include a query) for pages whose filtered
+// views deserve their own canonical; defaults to the current pathname.
+export function SEO({ title, description, image, type = 'website', canonicalPath }) {
   const fullTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
   const metaDescription = description || DEFAULT_DESCRIPTION;
   const metaImage = image || DEFAULT_IMAGE;
-  const canonicalUrl = typeof window !== 'undefined' ? `${CANONICAL_ORIGIN}${window.location.pathname}` : '';
+  const path = canonicalPath ?? (typeof window !== 'undefined' ? window.location.pathname : '');
+  const canonicalUrl = path ? `${CANONICAL_ORIGIN}${path}` : '';
 
   return (
     <Helmet>

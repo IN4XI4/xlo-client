@@ -12,7 +12,7 @@ import { InfoModal } from '../modals/InfoModal';
 import { INFO_OPTIONS } from './StoryOptionsInfo';
 
 
-function LabelWithInfo({ label, required = false, infoContent = "" }) {
+export function LabelWithInfo({ label, required = false, infoContent = "" }) {
   const [showInfo, setShowInfo] = useState(false);
   return (
     <div className="flex items-center gap-1 font-semibold pb-1">
