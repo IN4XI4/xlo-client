@@ -51,7 +51,7 @@ export function CategoryView({ assessment }) {
               <div
                 key={topic.id}
                 className="flex items-center gap-1.5 bg-[#E6E2FF] text-[#846EFF] rounded-full px-3 py-1 text-sm font-medium cursor-pointer"
-                onClick={() => navigate(`/topic/${topic.slug}`)}
+                onClick={() => navigate(`/stories?topic=${topic.id}`)}
               >
                 <SearchIcon color="#846EFF" className="w-3.5 h-3.5 flex-shrink-0" />
                 {topic.title}

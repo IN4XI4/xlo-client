@@ -1,4 +1,12 @@
 export const INFO_OPTIONS = {
+  category: `
+Select the “category” this “story” belongs to.
+`.trim(),
+
+  topic: `
+Select the “topic” of this “story” within the chosen “category”.
+`.trim(),
+
   life_moments: `
 Select the “age group” this “story” is created for.
 `.trim(),

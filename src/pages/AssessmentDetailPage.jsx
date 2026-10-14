@@ -48,8 +48,8 @@ export function AssessmentDetailPage() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 xl:grid-cols-10 gap-2 w-full p-4 pt-16 md:pt-24">
       <SEO
-        title={`${assessment.name} Assessment`}
-        description={assessment.description || `Take the "${assessment.name}" assessment on Mixelo. Topic: ${assessment.topic_name}. ${assessment.number_of_questions} questions, ${assessment.time_limit} min time limit.`}
+        title={`${assessment.name} – Online Quiz & Test`}
+        description={assessment.description || `Take the "${assessment.name}" online quiz on Mixelo. Topic: ${assessment.topic_name}. ${assessment.number_of_questions} questions, ${assessment.time_limit} min time limit.`}
         image={assessment.image}
         type="article"
       />

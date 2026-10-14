@@ -59,6 +59,7 @@ function buildSitemap(assessments, topics, stories) {
   const staticUrls = [
     { loc: '/', changefreq: 'weekly', priority: '1.0' },
     { loc: '/assessments', changefreq: 'daily', priority: '0.9' },
+    { loc: '/stories', changefreq: 'daily', priority: '0.9' },
     { loc: '/rankings', changefreq: 'daily', priority: '0.7' },
   ];
 
@@ -74,13 +75,20 @@ function buildSitemap(assessments, topics, stories) {
     priority: '0.5',
   }));
 
+  // Matches the canonical StoriesPage sets for a view filtered by a single topic.
+  const topicStoriesUrls = topics.map((topic) => ({
+    loc: `/stories?topic=${topic.id}`,
+    changefreq: 'weekly',
+    priority: '0.6',
+  }));
+
   const storyUrls = stories.map((story) => ({
     loc: `/story/${story.slug}`,
     changefreq: 'monthly',
     priority: '0.6',
   }));
 
-  const entries = [...staticUrls, ...assessmentUrls, ...topicUrls, ...storyUrls]
+  const entries = [...staticUrls, ...assessmentUrls, ...topicUrls, ...topicStoriesUrls, ...storyUrls]
     .map(({ loc, changefreq, priority }) =>
       `  <url>\n    <loc>${SITE_URL}${loc}</loc>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`
     )
@@ -99,7 +107,7 @@ async function main() {
     ]);
     const xml = buildSitemap(assessments, topics, stories);
     writeFileSync(OUTPUT_PATH, xml);
-    console.log(`sitemap.xml generated with ${assessments.length} assessment(s), ${topics.length} topic(s), and ${stories.length} stor(y/ies) from ${apiBaseUrl}`);
+    console.log(`sitemap.xml generated with ${assessments.length} assessment(s), ${topics.length} topic(s) (each as /topic/ and /stories?topic=), and ${stories.length} stor(y/ies) from ${apiBaseUrl}`);
   } catch (error) {
     console.warn(`Skipping sitemap regeneration, keeping existing public/sitemap.xml. Reason: ${error.message}`);
   }

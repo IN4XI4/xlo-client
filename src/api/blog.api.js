@@ -31,6 +31,24 @@ export const getStoriesByTopic = (topic_id, page, ordering = null, searchText = 
   if (spaceId) url += `&spaces=${spaceId}`;
   return blogApi.get(url, { headers: getAuthHeaders() });
 };
+const toCsv = (value) => Array.isArray(value) ? value.join(',') : value;
+const hasValue = (value) => Array.isArray(value) ? value.length > 0 : Boolean(value);
+export const filterStories = (params, signal) => {
+  const queryParameters = {
+    ...(params.title && { 'title__icontains': params.title }),
+    ...(hasValue(params.topics) && { 'topic__in': toCsv(params.topics) }),
+    ...(hasValue(params.categories) && { 'topic__tag__in': toCsv(params.categories) }),
+    ...(hasValue(params.languages) && { 'language__in': toCsv(params.languages) }),
+    ...(hasValue(params.difficulties) && { 'difficulty_level__in': toCsv(params.difficulties) }),
+    ...(params.spaceId && { 'spaces': params.spaceId }),
+    ...(params.ordering && { 'ordering': params.ordering }),
+    ...(params.pageSize && { 'page_size': params.pageSize }),
+    page: params.page || 1,
+  };
+
+  const queryString = new URLSearchParams(queryParameters).toString();
+  return blogApi.get(`stories/?${queryString}`, { headers: getAuthHeaders(), signal });
+};
 
 
 export const getLikedStories = (page, page_size = 10, ordering = null, spaceId = null) => {

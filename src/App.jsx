@@ -11,6 +11,7 @@ import { ProfilePage } from './pages/ProfilePage'
 import { MyNewStoriesPage } from './pages/MyNewStoriesPage'
 import { MyCreatedStoriesPage } from './pages/MyCreatedStoriesPage'
 import { CreateStoryPage } from './pages/CreateStoryPage'
+import { CreateTopicStoryPage } from './pages/CreateTopicStoryPage'
 import { RecallsPage } from './pages/RecallsPage'
 import { EditStoryPage } from './pages/EditStoryPage'
 import { LearnSoftSkillsPage } from './pages/LearnSoftSkillsPage'
@@ -21,6 +22,7 @@ import { AvatarPage } from './pages/AvatarPage';
 import { BadgeUpdateModal } from './components/modals/BadgesUpdateModal';
 import { Navigation } from './components/Navigation'
 import { Footer } from './components/Footer'
+import { SEO } from './components/SEO';
 import { AppStateProvider } from './context/ScrollContext'
 import { UserProvider } from './context/UserContext';
 import useBeforeInstallPrompt from './hooks/UseBeforeInstallPrompt';
@@ -29,6 +31,7 @@ import { SpaceProvider } from './context/SpaceContext';
 import { SpaceMembersPage } from './pages/SpaceMembersPage';
 import { checkNewDay } from './utils/checkNewDay';
 import { AssessmentsPage } from './pages/AssessmentsPage';
+import { StoriesPage } from './pages/StoriesPage';
 import { AssessmentDetailPage } from './pages/AssessmentDetailPage';
 import { AttemptPage } from './pages/AttemptPage';
 import { RankingsPage } from './pages/RankingsPage';
@@ -145,10 +148,14 @@ function App() {
             Install App
           </button>
         )}
+        {/* Default meta for pages without their own SEO; any page-level SEO overrides it.
+            Without it the tab keeps the previous page's title. */}
+        <SEO />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login/" element={<LoginPage />} />
           <Route path="/topic/:slug" element={<TopicStoriesPage />} />
+          <Route path="/stories" element={<StoriesPage />} />
           <Route path="/assessments" element={<AssessmentsPage />} />
           <Route path="/assessments/:idSlug" element={<AssessmentDetailPage />} />
           <Route path="/attempts/:id" element={<AttemptPage />} />
@@ -163,7 +170,8 @@ function App() {
           <Route path="/recall-cards/" element={<ProtectedRoute><RecallsPage key="recalls-page" /></ProtectedRoute>} />
           <Route path="/recall-blocks-focused/" element={<ProtectedRoute><FocusedRecallBlocksPage key="recalls-block-page" /></ProtectedRoute>} />
           <Route path="/recall-blocks-sparked/" element={<ProtectedRoute><SparkedRecallBlocksPage key="recalls-block-page-sparked" /></ProtectedRoute>} />
-          <Route path="/create-story/:id/:slug" element={<ProtectedRoute><CreateStoryPage key="create-story-page" /></ProtectedRoute>} />
+          <Route path="/create-story" element={<ProtectedRoute><CreateStoryPage /></ProtectedRoute>} />
+          <Route path="/create-story/:id/:slug" element={<ProtectedRoute><CreateTopicStoryPage key="create-story-page" /></ProtectedRoute>} />
           <Route path="/edit-story/:id" element={<ProtectedRoute><EditStoryPage key="edit-story-page" /></ProtectedRoute>} />
           <Route path="/suitcase/" element={<ProtectedRoute><SuitcasePage key="suitcase-page" /></ProtectedRoute>} />
           <Route path="/purchase/success/" element={<ProtectedRoute><PurchaseSuccessPage key="purchase-success-page" /></ProtectedRoute>} />

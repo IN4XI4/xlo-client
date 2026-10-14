@@ -22,6 +22,7 @@ import profile_pic from '../assets/Profile-pic.svg';
 import { SelectRecallsModal } from './modals/SelectRecallsModal';
 import { useUser } from '../context/UserContext';
 import { RocketIcon } from './illustrations/icons/RocketIcon';
+import { MixeloWordmark } from './MixeloWordmark';
 
 export function Navigation() {
   const navigate = useNavigate();
@@ -162,7 +163,7 @@ export function Navigation() {
                 {currentCardTitle && <div className="text-sm py-0 truncate">{currentCardTitle}</div>}
               </>
             ) : (
-              <span className="text-xl font-semibold">Mixelo</span>
+              <MixeloWordmark />
             )}
           </div>
         </div>

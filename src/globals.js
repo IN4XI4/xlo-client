@@ -112,3 +112,11 @@ export const ASSESSMENT_LANGUAGES = [
   { code: "PT", label: "Portuguese" },
   { code: "OT", label: "Other" },
 ];
+
+export const STORY_DIFFICULTY_LEVELS = [
+  { value: 1, label: "Beginner" },
+  { value: 2, label: "Amateur" },
+  { value: 3, label: "Intermediate" },
+  { value: 4, label: "Professional" },
+  { value: 5, label: "Expert" },
+];
