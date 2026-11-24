@@ -105,8 +105,8 @@ export function Navigation() {
     };
   }, []);
 
-  const goToSettings = () => {
-    navigate(`/profile/`);
+  const goToProfile = () => {
+    navigate(`/profile/${user.id}`);
     window.scrollTo(0, 0);
   };
 
@@ -197,10 +197,10 @@ export function Navigation() {
             </span>
           )}>
             <Dropdown.Item className='py-1.5'>
-              <div className='flex flex-col text-start mb-0 pb-0' onClick={goToSettings} >
+              <div className='flex flex-col text-start mb-0 pb-0' onClick={goToProfile} >
                 <div className="font-semibold">{user.first_name}</div>
                 <div className="text-gray-500 pb-1">{user.email}</div>
-                <div className='text-gray-500'>Profile & parameters</div>
+                <div className='text-gray-500'>View profile and configuration</div>
               </div>
             </Dropdown.Item>
             <Dropdown.Divider />

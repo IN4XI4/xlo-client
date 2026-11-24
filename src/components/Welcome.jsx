@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useLocation } from 'react-router-dom';
 import logo from "../assets/Logo-long.svg";
 
-export function Welcome() {
+function useWelcomeMessages() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const view = queryParams.get('view');
@@ -27,12 +27,34 @@ export function Welcome() {
     }
   };
 
-  const currentMessages = messages[view] || messages.default;
+  return messages[view] || messages.default;
+}
+
+// Rendered on its own above the form below lg, where Welcome hides its header.
+export function WelcomeHeader({ className = '' }) {
+  const currentMessages = useWelcomeMessages();
+  return (
+    <div className={`text-3xl md:text-5xl font-bold pb-6 ${className}`}>
+      {currentMessages.header}
+    </div>
+  );
+}
+
+// Same as WelcomeHeader: shown above the form below lg, at the end of Welcome from lg up.
+export function WelcomeLogo({ className = 'flex' }) {
+  const currentMessages = useWelcomeMessages();
+  return (
+    <Link to={currentMessages.linkTo} className={`items-center ${className}`}>
+      <img src={logo} alt="" className='h-12 md:h-24' />
+    </Link>
+  );
+}
+
+export function Welcome() {
+  const currentMessages = useWelcomeMessages();
   return (
     <div className=''>
-      <div className="text-3xl md:text-5xl font-bold pb-6">
-        {currentMessages.header}
-      </div>
+      <WelcomeHeader className="hidden lg:block" />
       <div className="text-[1.04rem] lg:text-xl pb-6 text-gray-500">
         {currentMessages.description}
       </div>
@@ -46,9 +68,7 @@ export function Welcome() {
           </svg>
         </Link>
       </div>
-      <Link to={currentMessages.linkTo} className='flex items-center'>
-        <img src={logo} alt="" className='h-12 md:h-24' />
-        </Link>
+      <WelcomeLogo className="hidden lg:flex" />
     </div>
   )
 }

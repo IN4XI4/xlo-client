@@ -29,7 +29,6 @@ Focus is on modifying code correctly, not on running/verifying it. Specifically:
 - **React Router v6** for routing
 - **Axios** for all API calls — token auth via `localStorage.getItem("token")`
 - **react-icons** for icons
-- PWA via `vite-plugin-pwa`
 
 ## Environment
 

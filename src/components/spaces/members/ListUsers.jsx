@@ -31,12 +31,10 @@ export function ListUsers({ users, hasMore, loadMore, addedUsers, onAdd, onRemov
                         alt="Profile"
                         className="h-12 w-12 border-2 rounded-full cursor-pointer"
                       />
-                    ) : user.id ? (
+                    ) : (
                       <div className='h-12 w-12 rounded-full cursor-pointer border-2 bg-gray-50 items-center flex justify-center'>
                         <FaUser className="h-6 w-6 text-gray-500" />
                       </div>
-                    ) : (
-                      <img src={logo} alt="" />
                     )}
                   </div>
                   <div className='truncate text-start ps-2 text-gray-500'>

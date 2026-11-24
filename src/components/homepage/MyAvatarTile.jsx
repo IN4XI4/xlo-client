@@ -1,10 +1,26 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
-import { FaSpinner } from 'react-icons/fa6';
 
 import { getMyAvatar } from '../../api/avatar.api';
 import { AvatarRenderer } from '../profile/avatar/AvatarRenderer';
+
+const AVATAR_FETCH_DELAY_MS = 1500;
+
+function AvatarTileSkeleton() {
+  return (
+    <div className='flex px-3 flex-grow gap-2 animate-pulse'>
+      <div className='bg-white/60 rounded-lg p-2'>
+        <div className='h-40 w-28 rounded-lg bg-[#B8E3FF]' />
+      </div>
+      <div className='flex-1 flex flex-col gap-3 pt-1'>
+        <div className='h-10 w-20 rounded-lg bg-white/60' />
+        <div className='h-10 w-24 rounded-lg bg-white/60' />
+        <div className='h-6 w-28 rounded-lg bg-white/60' />
+      </div>
+    </div>
+  );
+}
 
 
 export function MyAvatarTile({ coinBalance, userLevel, activeDays }) {
@@ -14,29 +30,23 @@ export function MyAvatarTile({ coinBalance, userLevel, activeDays }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
     const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+      getMyAvatar()
+        .then(response => { if (!cancelled) setMyAvatar(response.data); })
+        .catch(err => { if (!cancelled) setError(err); })
+        .finally(() => { if (!cancelled) setIsLoading(false); });
+    }, AVATAR_FETCH_DELAY_MS);
 
-    return () => clearTimeout(timer);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
   }, []);
-
-  useEffect(() => {
-    loadMyAvatar();
-  }, []);
-
-  async function loadMyAvatar() {
-    try {
-      const response = await getMyAvatar();
-      setMyAvatar(response.data);
-    } catch (error) {
-      setError(error);
-    }
-  }
   const renderAvatar = useMemo(() => myAvatar, [myAvatar]);
   return (
     <div className='h-full flex flex-col'>
-      <div className={`bg-[#B8E3FF] rounded-xl p-3 mb-3 sm:mb-0 ${isOpen ? "flex-grow flex flex-col" : ""}`}>
+      <div className={`bg-[#B8E3FF] rounded-xl p-3 ${isOpen ? "flex-grow flex flex-col" : ""}`}>
         <div className='flex items-center' onClick={() => setIsOpen(!isOpen)}>
           <div className='flex-grow pe-3 cursor-pointer'>
             <div className='text-[#3DB1FF] font-bold md:text-xl xl:text-2xl border-b-2 border-[#3DB1FF]'>
@@ -57,9 +67,9 @@ export function MyAvatarTile({ coinBalance, userLevel, activeDays }) {
             <div className="flex-grow" />
             <div className='flex items-center justify-center py-3 md:pb-4'>
               {isLoading ? (
-                <div className='flex justify-center items-center pt-3'>
-                  <FaSpinner className="text-[#3DB1FF] text-4xl animate-spin" />
-                </div>
+                <AvatarTileSkeleton />
+              ) : error ? (
+                <div className='text-center text-gray-500 text-sm py-6'>Could not load your avatar</div>
               ) : (
                 <div className='flex px-3 flex-grow gap-2'>
                   <div className='bg-white rounded-lg p-2'>
