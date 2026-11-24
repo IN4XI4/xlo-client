@@ -159,7 +159,7 @@ export function TopicsTileV2({ isAuthenticated, activeSpace }) {
       <div className='flex justify-center pt-3'>
         <button className='bg-[#19A2FF] text-white uppercase text-sm tracking-wide rounded-full px-8 py-2 hover:bg-[#0E8FE6]'
           onClick={() => navigate('/stories')}>
-          See all categories
+          See all stories
         </button>
       </div>
     </div>

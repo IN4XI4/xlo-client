@@ -2,6 +2,9 @@ import { useLayoutEffect, useRef, useState } from 'react';
 
 const SESSION_KEY = 'mixelo-wordmark-animated';
 const DURATION = 1800;
+// The wordmark mounts along with the rest of the page; starting a bit later keeps the
+// animation off the busiest frames of the initial load.
+const START_DELAY = 300;
 
 function shouldAnimate() {
   try {
@@ -29,20 +32,21 @@ export function MixeloWordmark() {
       // storage unavailable: animation just plays again next time
     }
 
-    const fs = parseFloat(getComputedStyle(dot).fontSize);
-    const dotRect = dot.getBoundingClientRect();
-    const dotCenter = dotRect.left + dotRect.width / 2;
-    const dxOver = (el) => {
-      const r = el.getBoundingClientRect();
-      return r.left + r.width / 2 - dotCenter;
-    };
-    // y is in em: how far above the baseline the bottom of the dot sits
-    const pos = (dx, y, sx = 1, sy = 1) => `translate(${dx}px, ${-y * fs}px) scale(${sx}, ${sy})`;
+    const buildKeyframes = () => {
+      const fs = parseFloat(getComputedStyle(dot).fontSize);
+      // The dot's resting center, derived from the "o" because the dot itself may already
+      // carry the animation's transform (ms-[0.06em] + half of w-[0.2em] = 0.16em).
+      const dotCenter = o.getBoundingClientRect().right + 0.16 * fs;
+      const dxOver = (el) => {
+        const r = el.getBoundingClientRect();
+        return r.left + r.width / 2 - dotCenter;
+      };
+      // y is in em: how far above the baseline the bottom of the dot sits
+      const pos = (dx, y, sx = 1, sy = 1) => `translate(${dx}px, ${-y * fs}px) scale(${sx}, ${sy})`;
 
-    const dxI = dxOver(i);
-    const dxO = dxOver(o);
-    const dotAnim = dot.animate(
-      [
+      const dxI = dxOver(i);
+      const dxO = dxOver(o);
+      return [
         { offset: 0, transform: pos(dxI, 0.6) },
         { offset: 0.16, transform: pos(dxI, 0.6), easing: 'ease-in' },
         { offset: 0.34, transform: pos(dxOver(x), 0.55) },
@@ -53,16 +57,26 @@ export function MixeloWordmark() {
         { offset: 0.84, transform: pos(0, 0, 1.3, 0.7), easing: 'ease-out' },
         { offset: 0.92, transform: pos(0, 0.14), easing: 'ease-in' },
         { offset: 1, transform: pos(0, 0) },
-      ],
-      { duration: DURATION, fill: 'both' },
-    );
+      ];
+    };
+
+    // fill 'both' holds the first frame (blue dot over the "i") during the start delay.
+    const dotAnim = dot.animate(buildKeyframes(), { duration: DURATION, delay: START_DELAY, fill: 'both' });
     // the dark dot of the "i" fades in once the blue dot has left it
     const tittleAnim = tittle.animate(
       [{ opacity: 0 }, { opacity: 1 }],
-      { duration: 300, delay: DURATION * 0.3, fill: 'both' },
+      { duration: 300, delay: START_DELAY + DURATION * 0.3, fill: 'both' },
     );
 
+    // The bold web font can still be loading at mount; when it arrives the letters change
+    // width, so re-measure on the same animation (no restart) to keep the dot on the letters.
+    let cancelled = false;
+    document.fonts?.ready.then(() => {
+      if (!cancelled) dotAnim.effect.setKeyframes(buildKeyframes());
+    });
+
     return () => {
+      cancelled = true;
       dotAnim.cancel();
       tittleAnim.cancel();
     };
@@ -90,7 +104,7 @@ export function MixeloWordmark() {
         <span ref={setRef('o')}>o</span>
         <span
           ref={setRef('dot')}
-          className="ms-[0.06em] inline-block h-[0.2em] w-[0.2em] origin-bottom rounded-full bg-[#3DB1FF]"
+          className={`ms-[0.06em] inline-block h-[0.2em] w-[0.2em] origin-bottom rounded-full bg-[#3DB1FF] ${animate ? 'will-change-transform' : ''}`}
         />
       </span>
     </span>

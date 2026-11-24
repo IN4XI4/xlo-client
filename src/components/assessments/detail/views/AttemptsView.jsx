@@ -61,7 +61,7 @@ export function AttemptsView({ assessment }) {
     return () => { cancelled = true; };
   }, [user?.id, assessment?.id]);
 
-  const completedAttempts = attempts.filter(a => a.is_finished).slice(0, 2);
+  const completedAttempts = attempts.filter(a => a.is_finished);
 
   return (
     <div className="py-4 flex flex-col gap-4">

@@ -5,7 +5,7 @@ import { IoMale, IoFemale, IoLogoLinkedin } from "react-icons/io5";
 import { BiWorld } from "react-icons/bi";
 import { GrMail } from "react-icons/gr";
 
-import { getUserBadges, getUserModal } from '../../api/users.api';
+import { getUserBadges, getUserById } from '../../api/users.api';
 import { badgeTypeToComponentMap } from '../../globals';
 
 
@@ -32,7 +32,7 @@ export function ProfileModal({ userId, onClose }) {
 
   async function loadUser() {
     try {
-      const res = await getUserModal(userId);
+      const res = await getUserById(userId);
       setUser(res.data);
       const badgesRes = await getUserBadges(userId);
       setUserBadges(badgesRes.data);
@@ -63,9 +63,6 @@ export function ProfileModal({ userId, onClose }) {
             <div className='ps-2 flex flex-col'>
               <span className='font-bold text-base'>
                 {user.first_name} {user.last_name}
-              </span>
-              <span className='text-sm'>
-                {user.email}
               </span>
             </div>
           </div>

@@ -3,7 +3,7 @@ import { Tooltip } from 'flowbite-react';
 import { FaUser } from 'react-icons/fa';
 import { IoMale, IoFemale, IoLogoLinkedin } from 'react-icons/io5';
 import { BiWorld } from 'react-icons/bi';
-import { getUserModal, getUserBadges } from '../../../../api/users.api';
+import { getUserById, getUserBadges } from '../../../../api/users.api';
 import { badgeTypeToComponentMap } from '../../../../globals';
 
 function capitalize(text) {
@@ -19,7 +19,7 @@ export function CreatorInfoView({ assessment }) {
 
   useEffect(() => {
     if (!userId || !isAuthenticated) return;
-    getUserModal(userId).then(r => setUser(r.data)).catch(() => {});
+    getUserById(userId).then(r => setUser(r.data)).catch(() => {});
     getUserBadges(userId).then(r => setBadges(r.data)).catch(() => {});
   }, [userId, isAuthenticated]);
 

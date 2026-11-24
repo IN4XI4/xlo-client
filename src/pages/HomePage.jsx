@@ -67,18 +67,18 @@ export function HomePage() {
             </div>}
             {!isAuthenticated && <div className="pt-3 lg:py-3"><MyActivitiesTile isAuthenticated={isAuthenticated} /></div>}
           </div>
-          {isAuthenticated ? <div className='w-full lg:w-[45%] grid grid-cols-1 sm:grid-cols-2 lg:ps-2'>
+          {isAuthenticated ? <div className='w-full lg:w-[45%] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 2xl:grid-cols-2 gap-x-2 gap-y-3 lg:ps-2'>
             <MyAssessmentsTile />
-            <MyRewardsTile user={user} />
-            <div className="sm:col-span-2 py-3">
+            <MySpacesTile />
+            <div className="sm:col-span-2 lg:col-span-1 2xl:col-span-2">
               <MyFavoriteStoriesTile activeSpace={activeSpace} key={`topics-${activeSpace?.id || "none"}`} />
             </div>
             <MyAvatarTile coinBalance={user?.coin_balance} userLevel={user?.user_level_display?.level_name} activeDays={user?.active_days} />
-            <MySpacesTile />
+            <MyRewardsTile user={user} />
           </div> :
-            <div className='w-full lg:w-[45%] grid grid-cols-1 lg:ps-2'>
+            <div className='w-full lg:w-[45%] grid grid-cols-1 gap-y-3 lg:ps-2'>
               <MyAssessmentsTile variant="full" />
-              <div className="pt-3"><AtGlanceTile isAuthenticated={isAuthenticated} /></div>
+              <AtGlanceTile isAuthenticated={isAuthenticated} />
             </div>}
         </div>
 

@@ -8,6 +8,7 @@ import { LoginPage } from './pages/LoginPage';
 import { TopicStoriesPage } from './pages/TopicStoriesPage'
 import { StoryPage } from './pages/StoryPage'
 import { ProfilePage } from './pages/ProfilePage'
+import { UserProfilePage } from './pages/UserProfilePage'
 import { MyNewStoriesPage } from './pages/MyNewStoriesPage'
 import { MyCreatedStoriesPage } from './pages/MyCreatedStoriesPage'
 import { CreateStoryPage } from './pages/CreateStoryPage'
@@ -25,7 +26,6 @@ import { Footer } from './components/Footer'
 import { SEO } from './components/SEO';
 import { AppStateProvider } from './context/ScrollContext'
 import { UserProvider } from './context/UserContext';
-import useBeforeInstallPrompt from './hooks/UseBeforeInstallPrompt';
 import { SpacesPage } from './pages/SpacesPage';
 import { SpaceProvider } from './context/SpaceContext';
 import { SpaceMembersPage } from './pages/SpaceMembersPage';
@@ -90,10 +90,7 @@ function ProtectedRoute({ children }) {
 }
 function App() {
   const location = useLocation();
-  const isHomePage = location.pathname === "/";
   const title = formatTitle(location.pathname);
-  const deferredPrompt = useBeforeInstallPrompt();
-  const [isInstallable, setIsInstallable] = useState(false);
   const [newBadges, setNewBadges] = useState([]);
 
   useEffect(() => {
@@ -101,12 +98,6 @@ function App() {
       ReactGA.send({ hitType: "pageview", page: location.pathname, title: title });
     }
   }, [location]);
-
-  useEffect(() => {
-    if (deferredPrompt) {
-      setIsInstallable(true);
-    }
-  }, [deferredPrompt]);
 
   useEffect(() => {
     checkNewDay(setNewBadges);
@@ -122,32 +113,11 @@ function App() {
     setNewBadges([]);
   };
 
-  const handleInstallClick = async () => {
-    if (deferredPrompt) {
-      console.log('Prompting installation...');
-      deferredPrompt.prompt();
-      const choiceResult = await deferredPrompt.userChoice;
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the install prompt');
-      } else {
-        console.log('User dismissed the install prompt');
-      }
-    } else {
-      console.log('No deferred prompt available');
-    }
-  };
-
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       {newBadges.length > 0 && <BadgeUpdateModal badges={newBadges} onClose={handleCloseModal} />}
       <ConditionalNavigationBar />
       <div className="flex-grow">
-        {isInstallable && isHomePage && (
-          <button onClick={handleInstallClick}
-            className="fixed bottom-4 right-4 z-40 p-2 border-2 rounded-lg border-[#3DB1FF] text-[#3DB1FF] shadow bg-white">
-            Install App
-          </button>
-        )}
         {/* Default meta for pages without their own SEO; any page-level SEO overrides it.
             Without it the tab keeps the previous page's title. */}
         <SEO />
@@ -162,6 +132,7 @@ function App() {
           <Route path="/rankings" element={<RankingsPage />} />
           <Route path="/story/:slug" element={<StoryPage />} />
           <Route path="/profile/" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+          <Route path="/profile/:id" element={<UserProfilePage />} />
           <Route path="/avatar/" element={<ProtectedRoute><AvatarPage /></ProtectedRoute>} />
           <Route path="/new-stories/" element={<ProtectedRoute><MyNewStoriesPage key="mystories-page" /></ProtectedRoute>} />
           <Route path="/my-stories/" element={<ProtectedRoute><MyCreatedStoriesPage key="my-createdstories-page" /></ProtectedRoute>} />
